@@ -1,21 +1,22 @@
 # path: z_realism_ai/src/infrastructure/mock_generator.py
-# description: Mock implementation of the AI generator.
-#              FIXED: Updated signature to comply with the final ImageGeneratorPort 
-#              contract, accepting feature_prompt and resolution_anchor.
-#              This ensures the system's safety net works, upholding the DIP principle.
+# description: Technical Mock Implementation.
+#              UPDATED: Replaced simple inversion with a "Safe Simulation Mode".
+#              It now applies grayscale and a technical watermark to indicate 
+#              that the Neural Engine is not active.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageDraw, ImageFont
 from src.domain.ports import ImageGeneratorPort
 import asyncio
+import time
 from typing import Callable, Optional
 
 class MockImageGenerator(ImageGeneratorPort):
     """
-    MockImageGenerator
+    MockImageGenerator (Safe Mode)
     
-    A temporary adapter that simulates AI behavior by applying a simple filter.
-    It exists primarily to validate the data pipeline and the Dependency Inversion Principle.
+    A fallback adapter that visually communicates its status to the researcher.
+    Used when hardware requirements (VRAM/RAM) are not met.
     """
     
     async def generate_live_action(
@@ -27,18 +28,31 @@ class MockImageGenerator(ImageGeneratorPort):
         progress_callback: Optional[Callable[[int, int], None]] = None
     ) -> Image.Image:
         """
-        Simulates an AI transformation by inverting the image colors.
-        All new parameters are accepted but ignored for simplicity.
+        Simulates AI processing by applying a grayscale filter and a 
+        'MOCK MODE' watermark for system transparency.
         """
-        # Simulate AI processing time
+        # Simulate neural latency (0.5s)
         await asyncio.sleep(0.5) 
         
-        print(f"MOCK AI: Transformation requested for prompt: '{prompt_guidance}'")
-        print(f"MOCK AI: Ignoring features: '{feature_prompt}' at anchor: {resolution_anchor}px")
+        print(f"MOCK_SYSTEM: AI Engine is OFFLINE. Generating safe simulation.")
         
-        # Simple transformation (Invert + Grayscale) to confirm the pipeline execution
-        try:
-            return ImageOps.invert(source_image.convert("RGB"))
-        except Exception as e:
-            print(f"MOCK AI ERROR: Failed to apply mock filter: {str(e)}")
-            raise RuntimeError("Mock Generator pipeline failure.")
+        # 1. Base Transformation (Grayscale for visual distinction)
+        canvas = source_image.convert("RGB")
+        processed = ImageOps.grayscale(canvas).convert("RGB")
+        
+        # 2. Apply Technical Watermark
+        draw = ImageDraw.Draw(processed)
+        width, height = processed.size
+        
+        # Draw a semi-transparent warning bar at the bottom
+        bar_height = height // 8
+        draw.rectangle([0, height - bar_height, width, height], fill=(255, 0, 0))
+        
+        # Add warning text (Using basic drawing if custom fonts are missing in Docker)
+        warning_text = "SIMULATION MODE: NO AI ENGINE DETECTED"
+        
+        # Center the text approximately
+        text_pos = (width // 10, height - (bar_height // 1.5))
+        draw.text(text_pos, warning_text, fill=(255, 255, 255))
+        
+        return processed

@@ -1,125 +1,88 @@
 # path: z_realism_ai/src/infrastructure/sd_generator.py
-# description: AI Engine implementation using SDXL and IP-Adapter.
-#              CRITICAL FIX: Corrected the model identifier for the T2I adapter 
-#              to ensure successful download and loading on startup.
+# description: AI Engine implementation utilizing RealVisXL V4.0.
+#              FIXED: Optimized prompt concatenation to stay under 77 tokens
+#              and adjusted logic for "extreme" character synthesis.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import torch
 import asyncio
+import numpy as np
+import cv2
+import os
 from typing import Callable, Optional, Tuple
 from PIL import Image
 from diffusers import (
-    StableDiffusionXLAdapterPipeline, 
-    T2IAdapter, 
+    StableDiffusionXLControlNetPipeline, 
+    ControlNetModel, 
     DDIMScheduler
 )
 from src.domain.ports import ImageGeneratorPort
 
-# -----------------------------------------------------------------------------
-# SDXL Generator (IP-Adapter based)
-# -----------------------------------------------------------------------------
-
 class StableDiffusionGenerator(ImageGeneratorPort):
-    """
-    Adapter for Stable Diffusion XL utilizing the IP-Adapter technique.
-    Provides high-resolution photorealism while maintaining the 
-    character's pose and aesthetic from the source image.
-    """
-
     def __init__(self, device: str = "cpu"):
-        print(f"INFRA_AI: Initializing SDXL + IP-Adapter on {device}...")
-        
-        # Core SDXL Model for Photorealism
-        base_model_id = "stabilityai/stable-diffusion-xl-base-1.0"
-        
-        # CRITICAL FIX: Correct and robust model ID for the structural adapter (Canny)
-        adapter_model_id = "Tencent/t2i-adapter-sdxl-canny-mid"
-        
+        self._offline = os.getenv("OFFLINE_MODE", "false").lower() == "true"
+        base_model_id = "SG161222/RealVisXL_V4.0"
+        controlnet_id = "xinsir/controlnet-canny-sdxl-1.0"
         self._device = device
-        
-        # 1. Load the Adapter (using float32 for CPU stability)
-        self._adapter = T2IAdapter.from_pretrained(adapter_model_id, torch_dtype=torch.float32)
+        torch_dtype = torch.float16 if device == "cuda" else torch.float32
 
-        # 2. Load the Pipeline (Combining Adapter and Base Model)
-        self._pipe = StableDiffusionXLAdapterPipeline.from_pretrained(
-            base_model_id,
-            adapter=self._adapter,
-            torch_dtype=torch.float32, 
-            use_safetensors=True
-        ).to(self._device)
-
-        self._pipe.scheduler = DDIMScheduler.from_config(self._pipe.scheduler.config)
-        self._pipe.safety_checker = None
-        
-        # Memory optimization
-        if self._device == "cpu":
-            self._pipe.enable_attention_slicing()
-            
-        print(f"INFRA_AI: SDXL + IP-Adapter Engine Loaded.")
+        try:
+            self._controlnet = ControlNetModel.from_pretrained(
+                controlnet_id, torch_dtype=torch_dtype, local_files_only=self._offline
+            ).to(self._device)
+            self._pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+                base_model_id, controlnet=self._controlnet, torch_dtype=torch_dtype, 
+                low_cpu_mem_usage=True, local_files_only=self._offline
+            ).to(self._device)
+            self._pipe.scheduler = DDIMScheduler.from_config(self._pipe.scheduler.config)
+            self._pipe.safety_checker = None
+            print(f"INFRA_AI: Engine ready.")
+        except Exception as e:
+            raise e
 
     def _calculate_proportional_dimensions(self, width: int, height: int, resolution_anchor: int) -> Tuple[int, int]:
-        """
-        Calculates optimal dimensions (multiples of 8) strictly preserving aspect ratio.
-        """
-        short_side_anchor = resolution_anchor
-        aspect_ratio = width / height
-        max_dim = 1024 # SDXL max standard resolution
-        
+        aspect = width / height
         if width < height: 
-            new_w = short_side_anchor
-            new_h = int(short_side_anchor / aspect_ratio)
+            new_w, new_h = resolution_anchor, int(resolution_anchor / aspect)
         else: 
-            new_h = short_side_anchor
-            new_w = int(short_side_anchor * aspect_ratio)
-            
-        # Snap to nearest multiple of 8
-        new_w = (min(new_w, max_dim) // 8) * 8
-        new_h = (min(new_h, max_dim) // 8) * 8
-        
-        return new_w, new_h
+            new_h, new_w = resolution_anchor, int(resolution_anchor * aspect)
+        return (min(new_w, 1024) // 8) * 8, (min(new_h, 1024) // 8) * 8
 
     async def generate_live_action(
-        self, 
-        source_image: Image.Image, 
-        prompt_guidance: str,
-        feature_prompt: str,
-        resolution_anchor: int,
-        progress_callback: Optional[Callable[[int, int], None]] = None
+        self, source_image, prompt_guidance, feature_prompt, resolution_anchor, progress_callback=None
     ) -> Image.Image:
-        """
-        Generates HD image using the source image's structure via the Adapter.
-        """
-        orig_w, orig_h = source_image.size
-        target_w, target_h = self._calculate_proportional_dimensions(orig_w, orig_h, resolution_anchor)
         
+        target_w, target_h = self._calculate_proportional_dimensions(source_image.width, source_image.height, resolution_anchor)
         input_image = source_image.convert("RGB").resize((target_w, target_h), Image.LANCZOS)
-        control_image = input_image 
         
-        full_prompt = f"{prompt_guidance}, {feature_prompt}, 8k UHD, photorealistic"
-        
-        negative_prompt = (
-            "drawing, 2d, illustration, sketch, low quality, deformed anatomy, "
-            "ugly, jpeg artifacts, monochrome, cartoon, animation, signature, "
-            "deformed face, melted head, plastic"
-        )
-        
-        num_inference_steps = 30
-        
-        def callback_on_step_end(pipe, i, t, callback_kwargs):
-            if progress_callback:
-                progress_callback(i + 1, num_inference_steps)
-            return callback_kwargs
+        img_np = np.array(input_image)
+        img_canny = cv2.Canny(img_np, 100, 200)
+        img_canny = np.stack([img_canny]*3, axis=-1)
+        control_image = Image.fromarray(img_canny)
 
-        print(f"INFRA_AI: Starting SDXL Synthesis ({target_w}x{target_h}, {num_inference_steps} steps)...")
+        # PH.D. TOKEN OPTIMIZATION: Key features first. No filler.
+        # This structure ensures all quality modifiers are seen by CLIP.
+        full_prompt = f"RAW photo, human muscular man, {prompt_guidance}, {feature_prompt}, detailed skin pores, sweat, 8k, high quality"
+        
+        negative_prompt = "anime, cartoon, illustration, drawing, 2d, neon, aura, glowing, (worst quality:1.4), plastic"
+        
+        num_inference_steps = 25
+        controlnet_conditioning_scale = 0.45 
+        guidance_scale = 7.5
+
+        def callback_on_step_end(pipe, i, t, callback_kwargs):
+            if progress_callback: progress_callback(i + 1, num_inference_steps)
+            return callback_kwargs
 
         with torch.no_grad():
             output = self._pipe(
                 prompt=full_prompt,
                 negative_prompt=negative_prompt,
-                image=control_image, # Source image provides structure/style reference
+                image=control_image,
                 height=target_h,
                 width=target_w,
-                guidance_scale=7.5,
+                guidance_scale=guidance_scale,
+                controlnet_conditioning_scale=controlnet_conditioning_scale,
                 num_inference_steps=num_inference_steps,
                 callback_on_step_end=callback_on_step_end
             ).images[0]

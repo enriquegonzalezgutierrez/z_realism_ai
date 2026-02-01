@@ -1,49 +1,37 @@
 # path: z_realism_ai/src/application/use_cases.py
-# description: Application Business Logic - SDXL Orchestration.
-#              UPDATED: Simplified prompt and execution to fit SDXL parameters.
+# description: Optimized Business Logic.
+#              FIXED: Shortened base prompt to avoid CLIP token truncation (77 limit).
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
-from typing import Callable, Optional
+import time
+from typing import Callable, Optional, Tuple
 from PIL import Image
-from src.domain.ports import ImageGeneratorPort
+from src.domain.ports import ImageGeneratorPort, ScientificEvaluatorPort, AssessmentReport
 
 class TransformCharacterUseCase:
-    """
-    UseCase: TransformCharacterUseCase
-    
-    Orchestrates the SDXL generation process, combining base cinematic prompt 
-    with user-defined features and resolution.
-    """
-
-    def __init__(self, generator: ImageGeneratorPort):
+    def __init__(self, generator: ImageGeneratorPort, evaluator: ScientificEvaluatorPort):
         self._generator = generator
+        self._evaluator = evaluator
 
     async def execute(
-        self, 
-        image_file: Image.Image, 
-        character_name: str,
-        feature_prompt: str,
-        resolution_anchor: int,
-        callback: Optional[Callable[[int, int], None]] = None
-    ) -> Image.Image:
-        """
-        Executes the SDXL synthesis using a powerful base prompt.
-        """
+        self, image_file, character_name, feature_prompt, resolution_anchor, callback=None
+    ) -> Tuple[Image.Image, AssessmentReport]:
         
-        # SDXL Base Prompt: Focus on high-quality human texture and lighting
-        base_prompt = (
-            f"cinematic full body shot of a real human person as {character_name}, "
-            f"hyper-realistic skin texture, movie character makeup, "
-            f"natural lighting, professional photography, masterpiece"
-        )
+        # Dense keywords only. No filler words like "cinematic full body shot of a..."
+        base_prompt = f"cinematic human {character_name}, realistic skin, movie makeup, natural light"
 
-        print(f"USE_CASE: Orchestrating SDXL synthesis for: {character_name}")
-        
-        # Dispatch to the generator with all user-defined parameters
-        return await self._generator.generate_live_action(
+        start_time = time.time()
+        generated_image = await self._generator.generate_live_action(
             source_image=image_file, 
             prompt_guidance=base_prompt,
             feature_prompt=feature_prompt,
             resolution_anchor=resolution_anchor,
             progress_callback=callback
         )
+        
+        elapsed_time = time.time() - start_time
+        report = self._evaluator.assess_quality(image_file, generated_image)
+        report.inference_time = round(elapsed_time, 2)
+        report.is_mock = "Mock" in self._generator.__class__.__name__
+        
+        return generated_image, report

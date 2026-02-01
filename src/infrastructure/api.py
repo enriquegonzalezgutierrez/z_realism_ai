@@ -1,103 +1,88 @@
 # path: z_realism_ai/src/infrastructure/api.py
-# description: FastAPI Web Controller. 
-#              UPDATED: /transform endpoint now accepts feature prompt and 
-#              dynamic resolution control parameters.
+# description: FastAPI Web Controller with Smart Mutex.
+#              UPDATED: The lock now stores the specific Task ID to allow 
+#              the owner to track progress while blocking others.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import io
-import torch
 import base64
+import redis
+import os
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse
 from celery.result import AsyncResult
 
-# Import the task and celery app for communication
 from src.infrastructure.worker import transform_character_task, celery_app
 
-# -----------------------------------------------------------------------------
-# API Configuration & Metadata
-# -----------------------------------------------------------------------------
-app = FastAPI(
-    title="Z-Realism AI API",
-    description="Photorealistic transformation engine for Dragon Ball characters.",
-    version="1.4.0"
-)
+app = FastAPI(title="Z-Realism Research API", version="1.9.5")
 
-# -----------------------------------------------------------------------------
-# Endpoints
-# -----------------------------------------------------------------------------
+redis_client = redis.from_url(os.getenv("CELERY_BROKER_URL", "redis://z-realism-broker:6379/0"))
+SYSTEM_LOCK_KEY = "z_realism_global_mutex"
+LOCK_TIMEOUT = 900 
 
-@app.post(
-    "/transform", 
-    summary="Accepts image and configuration to start the AI process.",
-    response_description="Returns a Task ID for tracking."
-)
+@app.post("/transform")
 async def transform_image(
-    file: UploadFile = File(..., description="The source anime image."),
-    character_name: str = Form(..., description="The name of the character."),
-    # NEW PARAMETERS FROM UI:
-    feature_prompt: str = Form("", description="User-guided features (e.g., 'wearing specific boots', 'barefoot')."),
-    resolution_anchor: int = Form(512, description="Target pixel size for the shortest side (e.g., 512, 640).")
+    file: UploadFile = File(...),
+    character_name: str = Form(...),
+    feature_prompt: str = Form(""),
+    resolution_anchor: int = Form(512)
 ):
-    """
-    Validates input and dispatches a background task with full configuration.
-    """
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="The uploaded file must be an image.")
-
-    # Validation: Ensure resolution is sensible and multiple of 8
-    if resolution_anchor < 256 or resolution_anchor % 8 != 0:
-        raise HTTPException(status_code=400, detail="Resolution anchor must be a multiple of 8 (min 256).")
+    # Check if a lock exists
+    if redis_client.exists(SYSTEM_LOCK_KEY):
+        raise HTTPException(status_code=429, detail="SYSTEM_LOCKED")
 
     try:
         content = await file.read()
         image_b64 = base64.b64encode(content).decode('utf-8')
 
-        # Dispatch task with all user-defined parameters
         task = transform_character_task.delay(
-            image_b64, 
-            character_name,
-            feature_prompt,
-            resolution_anchor
+            image_b64, character_name, feature_prompt, resolution_anchor
         )
 
-        return {
-            "task_id": task.id,
-            "status": "QUEUED",
-            "message": f"Task queued at {resolution_anchor}px anchor."
-        }
+        # PH.D. FIX: Store the task_id as the lock value
+        redis_client.set(SYSTEM_LOCK_KEY, task.id, ex=LOCK_TIMEOUT)
+
+        return {"task_id": task.id, "status": "QUEUED"}
     except Exception as e:
-        print(f"API_ERROR: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error during task dispatch.")
+        redis_client.delete(SYSTEM_LOCK_KEY)
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/status/{task_id}")
 async def get_task_status(task_id: str):
     task_result = AsyncResult(task_id, app=celery_app)
     
-    response = {
+    # Auto-release if the task assigned to the lock is finished
+    if task_result.ready():
+        current_lock_owner = redis_client.get(SYSTEM_LOCK_KEY)
+        if current_lock_owner and current_lock_owner.decode('utf-8') == task_id:
+            redis_client.delete(SYSTEM_LOCK_KEY)
+
+    return {
         "task_id": task_id,
         "status": task_result.status,
         "ready": task_result.ready(),
-        "progress": None
+        "progress": task_result.info if task_result.status == 'PROGRESS' else None
     }
 
-    if task_result.status == 'PROGRESS':
-        response["progress"] = task_result.info
-    
-    return response
+@app.get("/system/status")
+async def get_system_status():
+    lock_owner = redis_client.get(SYSTEM_LOCK_KEY)
+    return {
+        "locked": bool(lock_owner),
+        "owner_id": lock_owner.decode('utf-8') if lock_owner else None
+    }
+
+@app.post("/system/unlock")
+async def manual_unlock():
+    redis_client.delete(SYSTEM_LOCK_KEY)
+    return {"message": "Unlocked"}
 
 @app.get("/result/{task_id}")
 async def get_task_result(task_id: str):
     task_result = AsyncResult(task_id, app=celery_app)
-    
     if not task_result.ready(): raise HTTPException(status_code=202)
-    if task_result.failed(): raise HTTPException(status_code=500, detail="AI worker failed.")
-
-    result_b64 = task_result.result
-    image_data = base64.b64decode(result_b64)
-    
-    return StreamingResponse(io.BytesIO(image_data), media_type="image/png")
+    return JSONResponse(content=task_result.result)
 
 @app.get("/health")
 async def health_check():
-    return {"status": "online", "hardware": "cuda" if torch.cuda.is_available() else "cpu"}
+    return {"status": "online", "hardware": "cpu", "api_version": "1.9.5-mutex"}

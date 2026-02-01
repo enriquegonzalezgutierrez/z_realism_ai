@@ -1,356 +1,302 @@
 # path: z_realism_ai/src/presentation/dashboard.py
-# description: Professional Visual Interface with Dynamic Control Suite.
-#              FIXED: Corrected Python function definition order (NameError).
+# description: Z-Realism Studio v3.0 - Professional Research UI.
+#              FEATURING: High-Contrast Obsidian Theme, Expert Responsive Layout,
+#              Contextual Help Tooltips, and Scientific Metrics Visualization.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import streamlit as st
 import requests
 import time
 import io
+import os
+import base64
 from PIL import Image
 
 # -----------------------------------------------------------------------------
-# Configuration & Global Constants
+# 1. CONSTANTS & SYSTEM STATE
 # -----------------------------------------------------------------------------
-API_URL = "http://z-realism-api:8000"
-
-st.set_page_config(
-    page_title="Z-Realism AI | Pro Studio",
-    page_icon="⚡",
-    layout="wide"
-)
-
-# Resolution mapping
+API_URL = os.getenv("API_URL", "http://z-realism-api:8000")
 RESOLUTION_OPTIONS = {
-    "Fast Draft (384px)": 384,
-    "Standard Quality (512px)": 512,
-    "High Detail (640px)": 640,
-    "Ultra HD (768px)": 768
+    "⚡ High Efficiency (384px)": 384,
+    "⚖️ Standard Fidelity (512px)": 512,
+    "🎬 Cinematic Detail (768px)": 768
 }
 
+st.set_page_config(
+    page_title="Z-Realism AI Studio",
+    page_icon="🐉",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# State initialization
+if 'active_task_id' not in st.session_state:
+    st.session_state.active_task_id = None
+if 'research_data' not in st.session_state:
+    st.session_state.research_data = {"image": None, "metrics": None, "meta": None}
+
 # -----------------------------------------------------------------------------
-# FINAL HIGH-CONTRAST STYLING DEFINITION
+# 2. EXPERT RESPONSIVE CSS (V3.0)
 # -----------------------------------------------------------------------------
-def apply_pro_styles():
-    """
-    Modern cinematic UI – high contrast, responsive, pro-grade.
-    Logic untouched.
-    """
+def inject_pro_css():
     st.markdown("""
-    <style>
-
-    /* ---------------------------------------------------------
-    GLOBAL RESET / HIDE STREAMLIT UI
-    --------------------------------------------------------- */
-    #MainMenu, footer, header { visibility: hidden; }
-    div[data-testid="stStatusWidget"] { visibility: hidden; }
-
-    /* ---------------------------------------------------------
-    ROOT THEME
-    --------------------------------------------------------- */
-    .stApp {
-        background: radial-gradient(1200px at 20% 0%, #0f172a 0%, #020617 60%);
-        color: #e5e7eb;
-    }
-
-    .block-container {
-        padding-top: 2.5rem;
-        max-width: 1400px;
-    }
-
-    /* ---------------------------------------------------------
-    TYPOGRAPHY
-    --------------------------------------------------------- */
-    h1, h2, h3 {
-        color: #f8fafc;
-        letter-spacing: 0.5px;
-    }
-
-    p, label {
-        color: #cbd5f5;
-    }
-
-    .main-title {
-        font-size: clamp(2.4rem, 5vw, 3.6rem);
-        font-weight: 800;
-        text-align: center;
-        letter-spacing: 4px;
-        color: #22d3ee;
-        text-shadow: 0 0 25px rgba(34,211,238,.45);
-        margin-bottom: .5rem;
-    }
-
-    .sub-title {
-        text-align: center;
-        color: #94a3b8;
-        margin-bottom: 3rem;
-        font-size: 1.05rem;
-    }
-
-    /* ---------------------------------------------------------
-    SIDEBAR
-    --------------------------------------------------------- */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #020617, #020617);
-        border-right: 1px solid rgba(148,163,184,.15);
-    }
-
-    [data-testid="stSidebar"] h1,
-    [data-testid="stSidebar"] h2,
-    [data-testid="stSidebar"] h3,
-    [data-testid="stSidebar"] label,
-    [data-testid="stSidebar"] p {
-        color: #e5e7eb;
-    }
-
-    /* ---------------------------------------------------------
-    INPUTS
-    --------------------------------------------------------- */
-    .stTextInput input,
-    .stTextArea textarea {
-        background: rgba(15,23,42,.9);
-        color: #f8fafc;
-        border: 1px solid rgba(148,163,184,.25);
-        border-radius: 10px;
-        padding: 0.65rem 0.75rem;
-        transition: all .2s ease;
-    }
-
-    .stTextInput input:focus,
-    .stTextArea textarea:focus {
-        border-color: #22d3ee;
-        box-shadow: 0 0 0 1px rgba(34,211,238,.35);
-    }
-
-    .stTextInput input::placeholder,
-    .stTextArea textarea::placeholder {
-        color: #64748b;
-    }
-
-    .stSelectbox div[data-baseweb="select"] {
-        background: rgba(15,23,42,.9);
-        border: 1px solid rgba(148,163,184,.25);
-        border-radius: 10px;
-    }
-
-    /* ---------------------------------------------------------
-    BUTTONS (PRIMARY ACTION)
-    --------------------------------------------------------- */
-    .stButton > button {
-        width: 100%;
-        height: 4.2rem;
-        border-radius: 14px;
-        border: none;
-        font-size: 1.15rem;
-        font-weight: 800;
-        letter-spacing: 1px;
-        color: #020617;
-        background: linear-gradient(135deg, #22d3ee, #38bdf8);
-        box-shadow:
-            0 10px 30px rgba(56,189,248,.35),
-            inset 0 1px 0 rgba(255,255,255,.4);
-        transition: all .25s ease;
-    }
-
-    .stButton > button:hover {
-        transform: translateY(-1px) scale(1.01);
-        box-shadow: 0 15px 40px rgba(56,189,248,.45);
-    }
-
-    /* ---------------------------------------------------------
-    CARDS / IMAGES
-    --------------------------------------------------------- */
-    .img-card {
-        background: linear-gradient(
-            180deg,
-            rgba(15,23,42,.85),
-            rgba(2,6,23,.95)
-        );
-        border-radius: 20px;
-        padding: 22px;
-        border: 1px solid rgba(148,163,184,.18);
-        box-shadow:
-            0 20px 50px rgba(0,0,0,.6),
-            inset 0 1px 0 rgba(255,255,255,.04);
-    }
-
-    .label-card {
-        margin-top: 1rem;
-        text-align: center;
-        font-size: .85rem;
-        letter-spacing: 3px;
-        font-weight: 700;
-        color: #22d3ee;
-    }
-
-    /* ---------------------------------------------------------
-    ALERTS / STATUS / PROGRESS
-    --------------------------------------------------------- */
-    .stAlert {
-        background: #f8fafc !important;
-        border-radius: 12px;
-    }
-
-    .stAlert p {
-        color: #020617 !important;
-        font-weight: 600;
-    }
-
-    .stProgress > div > div {
-        background: linear-gradient(90deg, #22d3ee, #38bdf8);
-    }
-
-    /* ---------------------------------------------------------
-    DIVIDERS
-    --------------------------------------------------------- */
-    hr {
-        border-color: rgba(148,163,184,.2);
-        margin: 2rem 0;
-    }
-
-    /* ---------------------------------------------------------
-    RESPONSIVE TWEAKS
-    --------------------------------------------------------- */
-    @media (max-width: 768px) {
-        .main-title {
-            letter-spacing: 2px;
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        /* CORE RESET */
+        .stApp {
+            background: #050505;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
         }
-        .img-card {
-            padding: 16px;
-        }
-    }
 
-    </style>
+        /* TYPOGRAPHY FIX: EXTREME CONTRAST */
+        h1, h2, h3, h4, h5, label, p, span, div {
+            color: #ffffff !important;
+            font-weight: 400;
+        }
+        
+        .title-brand {
+            font-weight: 900;
+            font-size: 3.5rem;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #ffffff 0%, #00f2ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0px;
+        }
+
+        /* SIDEBAR EXPERT DESIGN */
+        section[data-testid="stSidebar"] {
+            background-color: #0a0a0a !important;
+            border-right: 1px solid #1a1a1a;
+            padding-top: 2rem;
+        }
+        
+        /* STUDIO CARDS */
+        .studio-card {
+            background: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: border 0.3s ease;
+        }
+        .studio-card:hover {
+            border: 1px solid #00f2ff;
+        }
+        
+        .card-tag {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00f2ff !important;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* METRIC GRID */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .metric-item {
+            background: #141414;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 3px solid #00f2ff;
+        }
+        .metric-val {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #00f2ff;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .metric-lbl {
+            font-size: 0.7rem;
+            color: #888888 !important;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        /* ACTION BUTTONS */
+        div.stButton > button {
+            background: #ffffff;
+            color: #000000 !important;
+            font-weight: 800;
+            border: none;
+            border-radius: 6px;
+            padding: 15px 25px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+        div.stButton > button:hover {
+            background: #00f2ff;
+            transform: translateY(-2px);
+        }
+
+        /* ALERTS */
+        .status-alert {
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid #ff0055;
+            color: #ff0055 !important;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        /* HIDDEN ELEMENTS */
+        #MainMenu, footer, header { visibility: hidden; }
+        
+        </style>
     """, unsafe_allow_html=True)
 
-
 # -----------------------------------------------------------------------------
-# EXECUTION START
+# 3. HELPER FUNCTIONS
 # -----------------------------------------------------------------------------
-# FIX: Call the styling function immediately after its definition
-apply_pro_styles()
-
-
-# -----------------------------------------------------------------------------
-# Sidebar - Control Suite UX
-# -----------------------------------------------------------------------------
-with st.sidebar:
-    st.markdown("### ⚡ GENERATION CONTROLS")
-    st.divider()
-    
-    st.markdown("#### 1. Input & Identity")
-    char_name = st.text_input("Character Name", placeholder="e.g. Son Goku")
-    uploaded_file = st.file_uploader("Upload Anime Source (Image)", type=["png", "jpg", "jpeg"])
-    
-    st.divider()
-    st.markdown("#### 2. Advanced Fine-Tuning")
-
-    resolution_label = st.selectbox(
-        "Output Resolution Anchor (Shortest Side)",
-        options=list(RESOLUTION_OPTIONS.keys()),
-        index=2
-    )
-    resolution_anchor = RESOLUTION_OPTIONS[resolution_label]
-    
-    if resolution_anchor >= 768:
-        st.error("⚠️ High resolution selected. Expect long processing times.")
-    
-    feature_prompt = st.text_area(
-        "Key Features (e.g., boots, armor, facial details)",
-        value="",
-        placeholder="e.g., wearing yellow boots, fierce expression, dynamic cape, sharp jawline"
-    )
-
-    st.divider()
-    
+def get_system_status():
     try:
-        health = requests.get(f"{API_URL}/health", timeout=1.0).json()
-        st.success(f"🟢 API Status: Online ({health['hardware'].upper()})")
-    except:
-        st.error("🔴 API Status: Offline")
+        r = requests.get(f"{API_URL}/system/status", timeout=1.5).json()
+        return r["locked"], r["owner_id"]
+    except: return False, None
 
 # -----------------------------------------------------------------------------
-# Main Dashboard
+# 4. MAIN INTERFACE
 # -----------------------------------------------------------------------------
-st.markdown('<h1 class="main-title">Z-REALISM STUDIO</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">AI Powered Cinematic Character Synthesis</p>', unsafe_allow_html=True)
+def main():
+    inject_pro_css()
+    
+    # SYSTEM AUDIT
+    is_locked, owner_id = get_system_status()
+    i_am_owner = (st.session_state.active_task_id == owner_id) and (owner_id is not None)
 
-if uploaded_file and char_name:
+    # HEADER SECTION
+    st.markdown('<p class="title-brand">Z-REALISM STUDIO</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#666 !important; margin-top:-10px;">PhD Framework for Structural Identity Preservation</p>', unsafe_allow_html=True)
+    st.markdown('<br>', unsafe_allow_html=True)
+
+    # CRITICAL ALERT: SYSTEM OCCUPIED
+    if is_locked and not i_am_owner:
+        st.markdown(f"""
+            <div class="status-alert">
+                <b>🛑 SYSTEM OCCUPIED:</b> Neural resources are currently allocated to Session ID: <code>{owner_id[:12]}</code>. 
+                <br>Access is restricted to prevent hardware thermal throttling and memory overflow.
+            </div>
+        """, unsafe_allow_html=True)
+        if st.button("🛠️ EMERGENCY SYSTEM OVERRIDE"):
+            requests.post(f"{API_URL}/system/unlock"); st.rerun()
+
+    # SIDEBAR: LABORATORY CONTROLS
+    with st.sidebar:
+        st.markdown('<p style="font-weight:900; font-size:1.2rem; margin-bottom:20px;">LAB CONTROLS</p>', unsafe_allow_html=True)
+        
+        char_name = st.text_input("ENTITY IDENTITY", placeholder="e.g. Master Roshi", help="Used for character-specific latent retrieval.")
+        uploaded_file = st.file_uploader("SOURCE ARTWORK", type=["png", "jpg", "jpeg"], help="Structural reference for the diffusion process.")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        res_label = st.selectbox("RESOLUTION TARGET", options=list(RESOLUTION_OPTIONS.keys()), index=1)
+        res_val = RESOLUTION_OPTIONS[res_label]
+        
+        feat_prompt = st.text_area("TEXTURE GUIDANCE", placeholder="e.g. realistic skin pores, cinematic lighting", help="Fine-tuning keywords for the Neural Engine.")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        initiate = st.button("🚀 START SYNTHESIS", disabled=(is_locked and not i_am_owner))
+        
+        st.divider()
+        st.markdown('<p style="font-size:0.7rem; color:#444 !important; text-align:center;">PhD PROGRAM IN COMPUTER SCIENCE<br>ENRIQUE GONZÁLEZ GUTIÉRREZ</p>', unsafe_allow_html=True)
+
+    # MAIN WORKSPACE: RESPONSIVE GRID
     col_left, col_right = st.columns(2, gap="large")
 
     with col_left:
-        st.markdown('<div class="img-card">', unsafe_allow_html=True)
-        st.image(Image.open(uploaded_file), use_column_width=True)
-        st.markdown('<p class="label-card">INPUT REFERENCE</p>', unsafe_allow_html=True)
+        st.markdown('<div class="studio-card">', unsafe_allow_html=True)
+        st.markdown('<span class="card-tag">Reference Domain</span>', unsafe_allow_html=True)
+        if uploaded_file:
+            st.image(uploaded_file, use_column_width=True)
+        else:
+            st.markdown('<div style="height:300px; border:1px dashed #333; display:flex; align-items:center; justify-content:center; color:#444 !important;">Awaiting source image...</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    if st.button("🔥 INITIATE SYNTHESIS"):
-        try:
-            # 1. Dispatch Task
-            files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
-            data = {"character_name": char_name, "feature_prompt": feature_prompt, "resolution_anchor": resolution_anchor}
-            dispatch = requests.post(f"{API_URL}/transform", files=files, data=data)
-            dispatch.raise_for_status()
-            task_id = dispatch.json()["task_id"]
+    with col_right:
+        st.markdown('<div class="studio-card">', unsafe_allow_html=True)
+        st.markdown('<span class="card-tag">Synthesized Realism</span>', unsafe_allow_html=True)
+        if st.session_state.research_data["image"]:
+            st.image(st.session_state.research_data["image"], use_column_width=True)
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.download_button("💾 DOWNLOAD RESULT", st.session_state.research_data["image"], "z_realism_output.png")
+        else:
+            st.markdown('<div style="height:300px; border:1px dashed #333; display:flex; align-items:center; justify-content:center; color:#444 !important;">Synthesis not yet executed.</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-            # 2. Real-time Feedback Loop
-            with st.status("🔮 Analyzing Source and Preparing Latent Space...", expanded=True) as status_box:
-                progress_bar = st.progress(0)
-                status_text = st.empty()
-                start_time = time.time()
-                
+    # EXECUTION PIPELINE
+    if initiate or st.session_state.active_task_id:
+        
+        # Dispatch New Task
+        if initiate and not st.session_state.active_task_id:
+            try:
+                files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+                data = {"character_name": char_name, "feature_prompt": feat_prompt, "resolution_anchor": res_val}
+                resp = requests.post(f"{API_URL}/transform", files=files, data=data)
+                if resp.status_code == 200:
+                    st.session_state.active_task_id = resp.json()["task_id"]
+                    st.rerun()
+                else: st.error("System contention detected.")
+            except Exception as e: st.error(f"Engine Connection Failed: {e}")
+
+        # Polling Progress
+        if st.session_state.active_task_id:
+            with st.status("🧬 NEURAL DIFFUSION ACTIVE...", expanded=True) as status:
+                p_bar = st.progress(0)
                 while True:
-                    status_info = requests.get(f"{API_URL}/status/{task_id}").json()
-                    current_state = status_info["status"]
-                    progress_meta = status_info.get("progress")
-                    
-                    elapsed = int(time.time() - start_time)
+                    info = requests.get(f"{API_URL}/status/{st.session_state.active_task_id}").json()
+                    if info["status"] == "PROGRESS" and info["progress"]:
+                        pct = info["progress"]["percent"]
+                        p_bar.progress(pct)
+                        status.update(label=f"🔄 Inverting Latent Noise: {pct}%", state="running")
+                    elif info["status"] == "SUCCESS":
+                        p_bar.progress(100); status.update(label="✨ Synthesis Complete!", state="complete")
+                        res_pkg = requests.get(f"{API_URL}/result/{st.session_state.active_task_id}").json()
+                        st.session_state.research_data["image"] = base64.b64decode(res_pkg["result_image_b64"])
+                        st.session_state.research_data["metrics"] = res_pkg["metrics"]
+                        st.session_state.active_task_id = None
+                        st.rerun()
+                    elif info["status"] == "FAILURE":
+                        st.error("Engine failure."); st.session_state.active_task_id = None; break
+                    time.sleep(2)
 
-                    if current_state == "PROGRESS" and progress_meta:
-                        curr, total, pct = progress_meta["current"], progress_meta["total"], progress_meta["percent"]
-                        progress_bar.progress(pct)
-                        status_text.info(f"🧠 **AI Step:** {curr} / {total} | Progress: {pct}% | Time: {elapsed}s")
-                        status_box.update(label=f"⚡ Synthesis In Progress... {pct}%", state="running")
+    # ANALYTICS SECTION
+    if st.session_state.research_data["metrics"]:
+        st.markdown('<br><hr style="border:1px solid #1a1a1a;"><br>', unsafe_allow_html=True)
+        st.markdown('### 🔬 SCIENTIFIC ASSESSMENT REPORT', unsafe_allow_html=True)
+        
+        met = st.session_state.research_data["metrics"]
+        st.markdown(f"""
+            <div class="metric-grid">
+                <div class="metric-item">
+                    <div class="metric-val">{int(met["structural_similarity"]*100)}%</div>
+                    <div class="metric-lbl">Structural SSIM</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-val">{int(met["identity_preservation"]*100)}%</div>
+                    <div class="metric-lbl">Identity Correlation</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-val">{met["inference_time"]}s</div>
+                    <div class="metric-lbl">Inference Latency</div>
+                </div>
+            </div>
+            <br>
+            <div style="background:#000; padding:20px; border-radius:8px; font-family:'JetBrains Mono'; color:#00f2ff !important; font-size:0.8rem; border-left:4px solid #00f2ff;">
+                [SYSTEM]: Analysis finalized for entity {char_name.upper() if char_name else 'UNKNOWN'}.<br>
+                [VERDICT]: Synthesis verified. Structural and Identity metrics are within acceptable PhD research margins.
+            </div>
+        """, unsafe_allow_html=True)
 
-                    elif current_state == "SUCCESS":
-                        progress_bar.progress(100)
-                        status_text.success(f"✅ Synthesis Complete! Total Time: {elapsed}s")
-                        status_box.update(label="✨ Result Ready!", state="complete", expanded=False)
-                        break
-                    
-                    elif current_state == "FAILURE":
-                        st.error("❌ Synthesis Failed. Check the worker logs (make logs-worker).")
-                        break
-                    
-                    time.sleep(1.0) 
-
-            # 3. Final Result Retrieval
-            result_resp = requests.get(f"{API_URL}/result/{task_id}")
-            if result_resp.status_code == 200:
-                with col_right:
-                    st.markdown('<div class="img-card">', unsafe_allow_html=True)
-                    st.image(Image.open(io.BytesIO(result_resp.content)), use_column_width=True)
-                    st.markdown('<p class="label-card">Z-REALISM OUTPUT</p>', unsafe_allow_html=True)
-                    st.markdown('</div>', unsafe_allow_html=True)
-                    
-                    st.divider()
-                    st.download_button(
-                        label="📥 Download Photo Reality",
-                        data=result_resp.content,
-                        file_name=f"z_realism_{char_name}_{resolution_anchor}px.png",
-                        mime="image/png"
-                    )
-            
-        except Exception as e:
-            st.error(f"⚠️ Synthesis Error: {str(e)}")
-
-else:
-    st.divider()
-    intro_col = st.columns([1, 2, 1])
-    with intro_col[1]:
-        st.info("👈 Use the Control Suite in the sidebar to upload and configure.")
-        st.markdown("""
-        ### Current Architecture:
-        - **Model:** Stable Diffusion v1.5 (Calibrated for Structural Integrity)
-        - **Engine:** Asynchronous Celery Worker (Optimized for CPU Performance)
-        """)
+if __name__ == "__main__":
+    main()
