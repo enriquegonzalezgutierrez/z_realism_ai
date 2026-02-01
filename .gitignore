@@ -1,0 +1,25 @@
+# path: z_realism_ai/.gitignore
+# description: Specifies intentionally untracked files to ignore.
+
+# Virtual Environments
+venv/
+.venv/
+__pycache__
+*.pyc
+
+# Docker Files and Data
+# CRITICAL: Do not commit the large AI model weights (SDXL/IP-Adapter)
+hf_cache/ 
+*.volume.data/
+
+# OS generated files
+.DS_Store
+.vscode/
+
+# Python specific
+*.egg-info/
+dist/
+
+# Logs and temporary files
+*.log
+.coverage

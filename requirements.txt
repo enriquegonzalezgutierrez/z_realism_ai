@@ -1,0 +1,33 @@
+# path: z_realism_ai/requirements.txt
+# description: Project dependencies for Z-Realism AI.
+#              FINAL UPGRADE: Switched to Stable Diffusion XL (SDXL) and IP-Adapter.
+# author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+
+# --- Web Framework & API Interface ---
+fastapi==0.109.0
+uvicorn==0.27.0
+pydantic==2.6.0
+python-multipart==0.0.9
+requests==2.31.0
+
+# --- Image Processing ---
+pillow==10.2.0
+
+# --- Artificial Intelligence & Deep Learning Core (SDXL Stack) ---
+# SDXL requires higher versions of the core libraries
+torch==2.3.0  # Upgraded PyTorch
+diffusers==0.31.0
+transformers==4.46.1
+accelerate==1.1.0
+scipy==1.12.0
+huggingface-hub==0.26.2
+# NEW: IP-Adapter requires the latest stable version of insightface
+insightface==0.7.3 
+onnxruntime==1.17.3 # Required by insightface for CPU inference
+
+# --- Asynchronous Task Queue & Messaging ---
+celery==5.3.6
+redis==5.0.1
+
+# --- Presentation Layer ---
+streamlit==1.30.0

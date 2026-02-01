@@ -1,0 +1,28 @@
+// path: z_realism_ai/.devcontainer/devcontainer.json
+// description: Configuration for VS Code Dev Containers.
+//              Tells VS Code to use the 'z-realism-api' service as the 
+//              primary development environment.
+// author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+{
+    "name": "Z-Realism AI Development",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "z-realism-api",
+    "workspaceFolder": "/app",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "charliermarsh.ruff"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.analysis.typeCheckingMode": "basic",
+                "python.analysis.extraPaths": ["/app/src"]
+            }
+        }
+    },
+    "remoteUser": "root"
+}

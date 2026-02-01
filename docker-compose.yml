@@ -1,0 +1,87 @@
+# path: z_realism_ai/docker-compose.yml
+# description: Docker Compose orchestration definition.
+#              Manages the lifecycle of the Z-Realism services.
+#              Key features: Hot-reloading code and Persisting large AI models.
+#              UPDATED (Phase 3): Added Redis broker and Celery Worker for 
+#              asynchronous AI task processing.
+#              UPDATED (Phase 4): Added Streamlit Dashboard for the visual interface.
+# author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # Service: Redis (The Message Broker)
+  # Acts as the bridge between the API and the Worker.
+  # ---------------------------------------------------------------------------
+  z-realism-broker:
+    image: redis:7-alpine
+    container_name: z_realism_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Service: API Core (The Request Handler)
+  # ---------------------------------------------------------------------------
+  z-realism-api:
+    build: .
+    container_name: z_realism_container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - hf_cache:/app/model_cache
+    environment:
+      - ENVIRONMENT=development
+      - HF_HOME=/app/model_cache
+      - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
+      - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
+    depends_on:
+      - z-realism-broker
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Service: Worker (The AI Processor)
+  # This is the heavy service that loads the AI models.
+  # ---------------------------------------------------------------------------
+  z-realism-worker:
+    build: .
+    container_name: z_realism_worker
+    command: celery -A src.infrastructure.worker worker --loglevel=info --concurrency=1
+    volumes:
+      - ./src:/app/src
+      - hf_cache:/app/model_cache
+    environment:
+      - ENVIRONMENT=development
+      - HF_HOME=/app/model_cache
+      - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
+      - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
+    depends_on:
+      - z-realism-broker
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Service: Dashboard (The Visual Frontend) - New in Phase 4
+  # Provides the web interface for end users.
+  # ---------------------------------------------------------------------------
+  z-realism-dashboard:
+    build: .
+    container_name: z_realism_dashboard
+    # Overrides the CMD to start Streamlit
+    command: streamlit run src/presentation/dashboard.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src:/app/src
+    environment:
+      - ENVIRONMENT=development
+    depends_on:
+      - z-realism-api
+    restart: unless-stopped
+
+# -----------------------------------------------------------------------------
+# Volumes Definition
+# -----------------------------------------------------------------------------
+volumes:
+  hf_cache:
