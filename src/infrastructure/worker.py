@@ -1,14 +1,13 @@
 # path: z_realism_ai/src/infrastructure/worker.py
 # description: Celery Worker with Multiprocessing Spawn support.
-#              FIXED: Added set_start_method('spawn') to allow multiple 
-#              AI workers to run in parallel without memory pointer conflicts.
+#              FIXED: Removed asyncio (now purely synchronous).
+#              FIXED: Aligned TOTAL_STEPS with the SD 1.5 generator configuration.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import os
 import io
 import base64
 import torch
-import asyncio
 import multiprocessing
 from celery import Celery
 from celery.signals import worker_ready
@@ -67,10 +66,11 @@ def at_start(sender, **k):
 
 @celery_app.task(name="transform_character_task", bind=True)
 def transform_character_task(self, image_b64, character_name, feature_prompt, resolution_anchor):
-    SDXL_TOTAL_STEPS = 25 
+    # UPDATED: Matches the 30 steps defined in sd_generator.py
+    SD_TOTAL_STEPS = 30 
 
     # Safe, clamped progress updater
-    def on_safe_progress(current, total=SDXL_TOTAL_STEPS):
+    def on_safe_progress(current, total=SD_TOTAL_STEPS):
         if total <= 0:
             pct = 0
         else:
@@ -84,7 +84,7 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
         # Get or initialize the use case instance
         use_case = get_use_case()
 
-        # Synchronous execution (no asyncio.run)
+        # Synchronous execution (await removed)
         result_pil, report = use_case.execute(
             image_file=source_pil, 
             character_name=character_name,

@@ -16,10 +16,15 @@ from PIL import Image
 # 1. CONSTANTS & SYSTEM STATE
 # -----------------------------------------------------------------------------
 API_URL = os.getenv("API_URL", "http://z-realism-api:8000")
+
+# UPDATED: Expanded resolution targets for Ph.D. analysis
 RESOLUTION_OPTIONS = {
-    "⚡ High Efficiency (384px)": 384,
-    "⚖️ Standard Fidelity (512px)": 512,
-    "🎬 Cinematic Detail (768px)": 768
+    "⚡ Preview Mode (320px)": 320,
+    "⚖️ High Efficiency (384px)": 384,
+    "🎯 Standard Fidelity (512px)": 512,
+    "🎨 High Definition (640px)": 640,
+    "🎬 Cinematic Detail (768px)": 768,
+    "🔬 Research Max (1024px)": 1024  # Warning: SD 1.5 might duplicate features here
 }
 
 st.set_page_config(

@@ -1,9 +1,8 @@
 # path: z_realism_ai/docker-compose.yml
-# description: Orchestration with Horizontal Scaling.
-#              UPDATED: Reduced worker replicas to 1 to conserve RAM resources.
+# description: Orchestration with GPU acceleration.
+#              FIXED: Switched to the robust 'runtime: nvidia' method for GPU access,
+#              which is more compatible with local development environments.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
-
-version: '3.8'
 
 services:
   z-realism-broker:
@@ -28,8 +27,6 @@ services:
 
   z-realism-worker:
     build: .
-    # FIXED: Reverted to default pool with concurrency 1 per container.
-    # We scale by adding more containers (replicas) to manage RAM safely.
     command: celery -A src.infrastructure.worker worker --loglevel=info --concurrency=1
     volumes:
       - ./src:/app/src
@@ -38,10 +35,17 @@ services:
       - HF_HOME=/app/model_cache
       - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
       - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
-      - OFFLINE_MODE=false
-    # PH.D. SCALING: Reduced to 1 replica to save RAM resources (approx 15GB usage).
+    
+    # --- ROBUST GPU CONFIGURATION (runtime: nvidia) ---
     deploy:
-      replicas: 1
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    # --------------------------------------------------
+    
     depends_on:
       - z-realism-broker
 
