@@ -1,11 +1,10 @@
 # path: z_realism_ai/src/infrastructure/sd_generator.py
 # description: AI Engine implementation utilizing RealVisXL V4.0.
-#              FIXED: Optimized prompt concatenation to stay under 77 tokens
+#              FIXED: Optimized prompt structure for SDXL dual-encoder attention
 #              and adjusted logic for "extreme" character synthesis.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import torch
-import asyncio
 import numpy as np
 import cv2
 import os
@@ -48,7 +47,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             new_h, new_w = resolution_anchor, int(resolution_anchor * aspect)
         return (min(new_w, 1024) // 8) * 8, (min(new_h, 1024) // 8) * 8
 
-    async def generate_live_action(
+    def generate_live_action(
         self, source_image, prompt_guidance, feature_prompt, resolution_anchor, progress_callback=None
     ) -> Image.Image:
         
@@ -56,35 +55,65 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         input_image = source_image.convert("RGB").resize((target_w, target_h), Image.LANCZOS)
         
         img_np = np.array(input_image)
-        img_canny = cv2.Canny(img_np, 100, 200)
+        img_blur = cv2.GaussianBlur(img_np, (5, 5), 0)
+        img_canny = cv2.Canny(img_blur, 50, 150)
         img_canny = np.stack([img_canny]*3, axis=-1)
         control_image = Image.fromarray(img_canny)
 
         # PH.D. TOKEN OPTIMIZATION: Key features first. No filler.
         # This structure ensures all quality modifiers are seen by CLIP.
-        full_prompt = f"RAW photo, human muscular man, {prompt_guidance}, {feature_prompt}, detailed skin pores, sweat, 8k, high quality"
+        full_prompt = (
+            "RAW photo, live action, ultra realistic, cinematic lighting, "
+            "real skin texture, visible pores, natural imperfections, subsurface scattering, "
+            "35mm lens, shallow depth of field, sharp focus, "
+            f"{prompt_guidance}, {feature_prompt}"
+        )
         
-        negative_prompt = "anime, cartoon, illustration, drawing, 2d, neon, aura, glowing, (worst quality:1.4), plastic"
+        negative_prompt = (
+            "anime, manga, cartoon, illustration, drawing, 2d, "
+            "cgi, 3d render, unreal engine, video game, toy, doll, statue, "
+            "plastic skin, smooth skin, wax skin, neon, glowing aura, "
+            "oversaturated, low detail, worst quality"
+        )
         
-        num_inference_steps = 25
-        controlnet_conditioning_scale = 0.45 
-        guidance_scale = 7.5
+        num_inference_steps = 30
+        controlnet_conditioning_scale = 0.70
+        guidance_scale = 6.0
 
         def callback_on_step_end(pipe, i, t, callback_kwargs):
             if progress_callback: progress_callback(i + 1, num_inference_steps)
             return callback_kwargs
 
         with torch.no_grad():
-            output = self._pipe(
-                prompt=full_prompt,
-                negative_prompt=negative_prompt,
-                image=control_image,
-                height=target_h,
-                width=target_w,
-                guidance_scale=guidance_scale,
-                controlnet_conditioning_scale=controlnet_conditioning_scale,
-                num_inference_steps=num_inference_steps,
-                callback_on_step_end=callback_on_step_end
-            ).images[0]
+            generator = torch.Generator(device=self._device).manual_seed(42)
+
+            if self._device.startswith("cuda"):
+                with torch.autocast("cuda"):
+                    output = self._pipe(
+                        prompt=full_prompt,
+                        negative_prompt=negative_prompt,
+                        image=control_image,
+                        height=target_h,
+                        width=target_w,
+                        guidance_scale=guidance_scale,
+                        controlnet_conditioning_scale=controlnet_conditioning_scale,
+                        num_inference_steps=num_inference_steps,
+                        generator=generator,
+                        callback_on_step_end=callback_on_step_end
+                    ).images[0]
+            else:
+                output = self._pipe(
+                    prompt=full_prompt,
+                    negative_prompt=negative_prompt,
+                    image=control_image,
+                    height=target_h,
+                    width=target_w,
+                    guidance_scale=guidance_scale,
+                    controlnet_conditioning_scale=controlnet_conditioning_scale,
+                    num_inference_steps=num_inference_steps,
+                    generator=generator,
+                    callback_on_step_end=callback_on_step_end
+                ).images[0]
+
 
         return output

@@ -68,23 +68,37 @@ def at_start(sender, **k):
 @celery_app.task(name="transform_character_task", bind=True)
 def transform_character_task(self, image_b64, character_name, feature_prompt, resolution_anchor):
     SDXL_TOTAL_STEPS = 25 
+
+    # Safe, clamped progress updater
     def on_safe_progress(current, total=SDXL_TOTAL_STEPS):
-        pct = int((current / total) * 100) if total > 0 else 0
+        if total <= 0:
+            pct = 0
+        else:
+            pct = min(max(int((current / total) * 100), 0), 100)  # clamp 0-100
         self.update_state(state='PROGRESS', meta={'percent': pct})
 
     try:
+        # Decode the uploaded image
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
+
+        # Get or initialize the use case instance
         use_case = get_use_case()
-        result_pil, report = asyncio.run(use_case.execute(
+
+        # Synchronous execution (no asyncio.run)
+        result_pil, report = use_case.execute(
             image_file=source_pil, 
             character_name=character_name,
             feature_prompt=feature_prompt,
             resolution_anchor=resolution_anchor,
             callback=on_safe_progress
-        ))
+        )
+
+        # Convert result image to base64
         buffered = io.BytesIO()
         result_pil.save(buffered, format="PNG")
         final_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        # Return both image and metrics
         return {
             "result_image_b64": final_b64,
             "metrics": {
@@ -94,6 +108,7 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
                 "is_mock": report.is_mock
             }
         }
+
     except Exception as e:
         print(f"WORKER_TASK_ERROR: {str(e)}")
         raise e

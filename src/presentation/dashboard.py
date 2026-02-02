@@ -42,118 +42,151 @@ def inject_pro_css():
     st.markdown("""
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
-        
-        /* CORE RESET */
+
+        /* === CORE APP === */
         .stApp {
-            background: #050505;
+            background: #0a0a0a;
             color: #ffffff;
             font-family: 'Inter', sans-serif;
+            padding: 0 !important;
         }
 
-        /* TYPOGRAPHY FIX: EXTREME CONTRAST */
+        /* === HEADINGS & BRAND === */
         h1, h2, h3, h4, h5, label, p, span, div {
             color: #ffffff !important;
             font-weight: 400;
         }
-        
         .title-brand {
             font-weight: 900;
-            font-size: 3.5rem;
-            letter-spacing: -2px;
+            font-size: 3rem;
+            letter-spacing: -1.5px;
             background: linear-gradient(135deg, #ffffff 0%, #00f2ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0px;
+            margin-bottom: 5px;
+        }
+        .sub-brand {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: -8px;
         }
 
-        /* SIDEBAR EXPERT DESIGN */
+        /* === SIDEBAR === */
         section[data-testid="stSidebar"] {
-            background-color: #0a0a0a !important;
+            background-color: #111 !important;
             border-right: 1px solid #1a1a1a;
             padding-top: 2rem;
         }
-        
-        /* STUDIO CARDS */
+
+        /* === CARDS / PANELS === */
         .studio-card {
-            background: #0f0f0f;
-            border: 1px solid #1a1a1a;
+            background: #121212;
+            border: 1px solid #1f1f1f;
             border-radius: 12px;
-            padding: 30px;
+            padding: 20px;
             margin-bottom: 20px;
-            transition: border 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
         .studio-card:hover {
             border: 1px solid #00f2ff;
+            box-shadow: 0 6px 20px rgba(0,242,255,0.4);
         }
-        
         .card-tag {
             font-family: 'JetBrains Mono', monospace;
             color: #00f2ff !important;
             font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             margin-bottom: 10px;
             display: block;
         }
 
-        /* METRIC GRID */
+        /* === METRICS GRID === */
         .metric-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
             margin-top: 20px;
         }
         .metric-item {
-            background: #141414;
-            padding: 20px;
+            background: #181818;
+            padding: 15px;
             border-radius: 10px;
             text-align: center;
             border-left: 3px solid #00f2ff;
+            transition: all 0.3s ease;
+        }
+        .metric-item:hover {
+            background: #222;
         }
         .metric-val {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: #00f2ff;
             font-family: 'JetBrains Mono', monospace;
         }
         .metric-lbl {
             font-size: 0.7rem;
-            color: #888888 !important;
+            color: #888 !important;
             text-transform: uppercase;
-            margin-top: 5px;
+            margin-top: 3px;
         }
 
-        /* ACTION BUTTONS */
+        /* === BUTTONS === */
         div.stButton > button {
-            background: #ffffff;
+            background: linear-gradient(135deg, #00f2ff, #00b0ff);
             color: #000000 !important;
-            font-weight: 800;
+            font-weight: 700;
             border: none;
-            border-radius: 6px;
-            padding: 15px 25px;
+            border-radius: 8px;
+            padding: 12px 25px;
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.2s;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
         }
         div.stButton > button:hover {
-            background: #00f2ff;
+            background: linear-gradient(135deg, #ffffff, #00f2ff);
+            color: #000 !important;
             transform: translateY(-2px);
         }
 
-        /* ALERTS */
+        /* === STATUS ALERT === */
         .status-alert {
             background: rgba(255, 0, 85, 0.1);
             border: 1px solid #ff0055;
             color: #ff0055 !important;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
         }
 
-        /* HIDDEN ELEMENTS */
+        /* === PLACEHOLDER BOXES === */
+        .placeholder-box {
+            height: 300px;
+            border: 1px dashed #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555 !important;
+            font-style: italic;
+        }
+
+        /* === HIDE MENU / FOOTER === */
         #MainMenu, footer, header { visibility: hidden; }
-        
+
+        /* === RESPONSIVE FIXES === */
+        @media (max-width: 768px) {
+            .title-brand {
+                font-size: 2.2rem;
+            }
+            .metric-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
         </style>
     """, unsafe_allow_html=True)
 

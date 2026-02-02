@@ -1,6 +1,6 @@
 # path: z_realism_ai/docker-compose.yml
 # description: Orchestration with Horizontal Scaling.
-#              UPDATED: Added multiple worker replicas for parallel users.
+#              UPDATED: Reduced worker replicas to 1 to conserve RAM resources.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 version: '3.8'
@@ -39,10 +39,9 @@ services:
       - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
       - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
       - OFFLINE_MODE=false
-    # PH.D. SCALING: We spin up 2 parallel containers. 
-    # Total RAM usage: ~30GB. Fits your 32GB Ubuntu system.
+    # PH.D. SCALING: Reduced to 1 replica to save RAM resources (approx 15GB usage).
     deploy:
-      replicas: 2
+      replicas: 1
     depends_on:
       - z-realism-broker
 
