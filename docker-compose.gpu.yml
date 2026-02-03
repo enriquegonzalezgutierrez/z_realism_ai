@@ -1,0 +1,31 @@
+# path: z_realism_ai/docker-compose.gpu.yml
+# description: Hardware Acceleration Layer for NVIDIA GPUs.
+#              This file extends the base configuration to enable CUDA support
+#              within the Docker container. It requires the NVIDIA Container Toolkit 
+#              installed on the host machine.
+# author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+
+services:
+  z-realism-worker:
+    # --- GPU Resource Allocation ---
+    # The 'deploy' section allows the Docker daemon to communicate with the 
+    # NVIDIA driver and map the physical GPU into the container's namespace.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              # Capabilities needed for Deep Learning (CUDA, Tensor Cores)
+              capabilities: [gpu]
+
+    # --- Hardware-Specific Environment ---
+    environment:
+      # Ensures that the container only 'sees' the first available GPU.
+      # Prevents multi-GPU contention if other processes are running.
+      - NVIDIA_VISIBLE_DEVICES=all
+      # Allows the container to use the specialized NVIDIA runtime drivers 
+      # for Compute (CUDA) and Utility (nvidia-smi).
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      # Optimization: Tells the AI Engine to prioritize CUDA over CPU
+      - DEVICE_TARGET=cuda

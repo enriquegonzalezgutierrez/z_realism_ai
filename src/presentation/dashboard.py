@@ -1,340 +1,257 @@
 # path: z_realism_ai/src/presentation/dashboard.py
-# description: Z-Realism Studio v3.0 - Professional Research UI.
-#              FEATURING: High-Contrast Obsidian Theme, Expert Responsive Layout,
-#              Contextual Help Tooltips, and Scientific Metrics Visualization.
+# description: Z-Realism Research Studio v5.5 - Universal Edition.
+#              FEATURING: White-labeled UI (No Streamlit branding) and 
+#              Multi-Modal Expert reactivity for 50+ Dragon Ball archetypes.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import streamlit as st
 import requests
 import time
-import io
-import os
 import base64
+import os
+import io
 from PIL import Image
 
-# -----------------------------------------------------------------------------
-# 1. CONSTANTS & SYSTEM STATE
-# -----------------------------------------------------------------------------
+# --- System Environment ---
 API_URL = os.getenv("API_URL", "http://z-realism-api:8000")
 
-# UPDATED: Expanded resolution targets for Ph.D. analysis
-RESOLUTION_OPTIONS = {
-    "⚡ Preview Mode (320px)": 320,
-    "⚖️ High Efficiency (384px)": 384,
-    "🎯 Standard Fidelity (512px)": 512,
-    "🎨 High Definition (640px)": 640,
-    "🎬 Cinematic Detail (768px)": 768,
-    "🔬 Research Max (1024px)": 1024  # Warning: SD 1.5 might duplicate features here
-}
-
 st.set_page_config(
-    page_title="Z-Realism AI Studio",
+    page_title="Z-Realism Expert Studio v5.5",
     page_icon="🐉",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# State initialization
-if 'active_task_id' not in st.session_state:
-    st.session_state.active_task_id = None
-if 'research_data' not in st.session_state:
-    st.session_state.research_data = {"image": None, "metrics": None, "meta": None}
+# --- Session State Persistence ---
+if 'cfg_val' not in st.session_state: st.session_state.cfg_val = 7.5
+if 'cn_val' not in st.session_state: st.session_state.cn_val = 0.40
+if 'steps_val' not in st.session_state: st.session_state.steps_val = 20
+if 'prompt_val' not in st.session_state: st.session_state.prompt_val = "detailed human face"
+if 'last_analyzed_file' not in st.session_state: st.session_state.last_analyzed_file = None
+if 'last_analyzed_name' not in st.session_state: st.session_state.last_analyzed_name = ""
+if 'analysis_essence' not in st.session_state: st.session_state.analysis_essence = "Awaiting Input"
 
-# -----------------------------------------------------------------------------
-# 2. EXPERT RESPONSIVE CSS (V3.0)
-# -----------------------------------------------------------------------------
-def inject_pro_css():
+# --- White-Labeled Premium Obsidian CSS ---
+def inject_white_labeled_styles():
+    """Removes Streamlit branding and applies premium research aesthetics."""
     st.markdown("""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono&display=swap');
 
-        /* === CORE APP === */
+        /* === HIDE STREAMLIT BRANDING === */
+        header {visibility: hidden;}
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        .stDeployButton {display:none;}
+        [data-testid="stHeader"] {background: rgba(0,0,0,0); height: 0px;}
+
+        /* === BASE DOMAIN THEME === */
         .stApp {
-            background: #0a0a0a;
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            padding: 0 !important;
-        }
-
-        /* === HEADINGS & BRAND === */
-        h1, h2, h3, h4, h5, label, p, span, div {
+            background: radial-gradient(circle at top, #0d0d1a 0%, #050505 100%);
             color: #ffffff !important;
-            font-weight: 400;
-        }
-        .title-brand {
-            font-weight: 900;
-            font-size: 3rem;
-            letter-spacing: -1.5px;
-            background: linear-gradient(135deg, #ffffff 0%, #00f2ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
-        }
-        .sub-brand {
-            font-size: 0.9rem;
-            color: #888;
-            margin-top: -8px;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* === SIDEBAR === */
-        section[data-testid="stSidebar"] {
-            background-color: #111 !important;
-            border-right: 1px solid #1a1a1a;
-            padding-top: 2rem;
+        /* === TEXT VISIBILITY === */
+        h1, h2, h3, h4, h5, p, label, span, div, .stMarkdown {
+            color: #ffffff !important;
+            text-shadow: 0px 2px 5px rgba(0,0,0,0.9);
         }
 
-        /* === CARDS / PANELS === */
-        .studio-card {
-            background: #121212;
-            border: 1px solid #1f1f1f;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        /* === RESEARCH PANELS === */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 242, 255, 0.15);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            margin-bottom: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
         }
-        .studio-card:hover {
-            border: 1px solid #00f2ff;
-            box-shadow: 0 6px 20px rgba(0,242,255,0.4);
-        }
-        .card-tag {
-            font-family: 'JetBrains Mono', monospace;
+
+        /* === INPUT STYLING === */
+        .stTextInput > div > div > input, 
+        .stTextArea > div > div > textarea {
+            background-color: #000000 !important;
             color: #00f2ff !important;
-            font-size: 0.7rem;
-            text-transform: uppercase;
+            border: 1px solid #222 !important;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .stSlider > div > div > div { background-color: #00f2ff !important; }
+
+        /* === ACTION BUTTON === */
+        .stButton > button {
+            background: linear-gradient(135deg, #00f2ff 0%, #0077ff 100%) !important;
+            color: #000000 !important;
+            font-weight: 900 !important;
+            border: none !important;
+            border-radius: 6px !important;
+            height: 54px;
             letter-spacing: 2px;
-            margin-bottom: 10px;
-            display: block;
+            text-transform: uppercase;
+            transition: 0.3s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .stButton > button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 242, 255, 0.6);
+        }
+        
+        [data-testid="stSidebar"] {
+            background-color: #000000 !important;
+            border-right: 1px solid #1a1a1a;
         }
 
-        /* === METRICS GRID === */
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .metric-item {
-            background: #181818;
+        /* === METRICS === */
+        .stMetric {
+            background: rgba(0,0,0,0.4);
             padding: 15px;
             border-radius: 10px;
-            text-align: center;
             border-left: 3px solid #00f2ff;
-            transition: all 0.3s ease;
-        }
-        .metric-item:hover {
-            background: #222;
-        }
-        .metric-val {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #00f2ff;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .metric-lbl {
-            font-size: 0.7rem;
-            color: #888 !important;
-            text-transform: uppercase;
-            margin-top: 3px;
-        }
-
-        /* === BUTTONS === */
-        div.stButton > button {
-            background: linear-gradient(135deg, #00f2ff, #00b0ff);
-            color: #000000 !important;
-            font-weight: 700;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 25px;
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s ease-in-out;
-            cursor: pointer;
-        }
-        div.stButton > button:hover {
-            background: linear-gradient(135deg, #ffffff, #00f2ff);
-            color: #000 !important;
-            transform: translateY(-2px);
-        }
-
-        /* === STATUS ALERT === */
-        .status-alert {
-            background: rgba(255, 0, 85, 0.1);
-            border: 1px solid #ff0055;
-            color: #ff0055 !important;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
-        }
-
-        /* === PLACEHOLDER BOXES === */
-        .placeholder-box {
-            height: 300px;
-            border: 1px dashed #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #555 !important;
-            font-style: italic;
-        }
-
-        /* === HIDE MENU / FOOTER === */
-        #MainMenu, footer, header { visibility: hidden; }
-
-        /* === RESPONSIVE FIXES === */
-        @media (max-width: 768px) {
-            .title-brand {
-                font-size: 2.2rem;
-            }
-            .metric-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            }
         }
         </style>
     """, unsafe_allow_html=True)
 
-# -----------------------------------------------------------------------------
-# 3. HELPER FUNCTIONS
-# -----------------------------------------------------------------------------
-def get_system_status():
+# --- Logic: Universal Multi-Modal Analysis ---
+def trigger_universal_analysis(file_bytes, file_name, char_name):
+    """
+    Communicates with the /analyze endpoint to retrieve expert lore parameters.
+    """
     try:
-        r = requests.get(f"{API_URL}/system/status", timeout=1.5).json()
-        return r["locked"], r["owner_id"]
-    except: return False, None
+        files = {"file": (file_name, file_bytes)}
+        data = {"character_name": char_name}
+        response = requests.post(f"{API_URL}/analyze", files=files, data=data).json()
+        
+        if response.get("status") == "success":
+            recs = response["recommendations"]
+            # Reactive Update of Session State
+            st.session_state.cfg_val = recs["cfg_scale"]
+            st.session_state.cn_val = recs["cn_scale"]
+            st.session_state.steps_val = recs["steps"]
+            st.session_state.prompt_val = recs["texture_prompt"]
+            st.session_state.analysis_essence = response["detected_essence"]
+            st.session_state.last_analyzed_file = file_name
+            st.session_state.last_analyzed_name = char_name
+            return True
+    except Exception as e:
+        st.sidebar.error(f"Universal Engine Link Failed: {e}")
+    return False
 
-# -----------------------------------------------------------------------------
-# 4. MAIN INTERFACE
-# -----------------------------------------------------------------------------
+# --- Main Application Layout ---
 def main():
-    inject_pro_css()
+    inject_white_labeled_styles()
     
-    # SYSTEM AUDIT
-    is_locked, owner_id = get_system_status()
-    i_am_owner = (st.session_state.active_task_id == owner_id) and (owner_id is not None)
+    # 1. Branding (Custom Logo/Header)
+    st.markdown('''
+        <div style="text-align: left; padding: 20px 0 40px 0;">
+            <h1 style="font-weight: 900; font-size: 3rem; margin-bottom: 0; letter-spacing: -2px;">Z-REALISM <span style="color:#00f2ff">STUDIO</span></h1>
+            <p style="color:#444 !important; letter-spacing: 6px; font-size: 0.8rem; font-weight: 900;">UNIVERSAL NEURAL TRANSFORMER v5.5</p>
+        </div>
+    ''', unsafe_allow_html=True)
 
-    # HEADER SECTION
-    st.markdown('<p class="title-brand">Z-REALISM STUDIO</p>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#666 !important; margin-top:-10px;">PhD Framework for Structural Identity Preservation</p>', unsafe_allow_html=True)
-    st.markdown('<br>', unsafe_allow_html=True)
-
-    # CRITICAL ALERT: SYSTEM OCCUPIED
-    if is_locked and not i_am_owner:
-        st.markdown(f"""
-            <div class="status-alert">
-                <b>🛑 SYSTEM OCCUPIED:</b> Neural resources are currently allocated to Session ID: <code>{owner_id[:12]}</code>. 
-                <br>Access is restricted to prevent hardware thermal throttling and memory overflow.
-            </div>
-        """, unsafe_allow_html=True)
-        if st.button("🛠️ EMERGENCY SYSTEM OVERRIDE"):
-            requests.post(f"{API_URL}/system/unlock"); st.rerun()
-
-    # SIDEBAR: LABORATORY CONTROLS
+    # 2. Sidebar: Expert Input & Triggers
     with st.sidebar:
-        st.markdown('<p style="font-weight:900; font-size:1.2rem; margin-bottom:20px;">LAB CONTROLS</p>', unsafe_allow_html=True)
+        st.markdown("### 🔬 ENTITY DEFINITION")
+        char_name = st.text_input("ENTITY NAME", "Ten Shin Han", help="Species-specific heuristics will be applied based on this name.")
+        uploaded_file = st.file_uploader("SOURCE ARTWORK", type=["png", "jpg", "jpeg"])
         
-        char_name = st.text_input("ENTITY IDENTITY", placeholder="e.g. Master Roshi", help="Used for character-specific latent retrieval.")
-        uploaded_file = st.file_uploader("SOURCE ARTWORK", type=["png", "jpg", "jpeg"], help="Structural reference for the diffusion process.")
+        # UNIVERSAL REACTIVITY: Triggered by Name or File changes
+        file_changed = uploaded_file and st.session_state.last_analyzed_file != uploaded_file.name
+        name_changed = char_name != st.session_state.last_analyzed_name
         
-        st.markdown("<br>", unsafe_allow_html=True)
-        res_label = st.selectbox("RESOLUTION TARGET", options=list(RESOLUTION_OPTIONS.keys()), index=1)
-        res_val = RESOLUTION_OPTIONS[res_label]
-        
-        feat_prompt = st.text_area("TEXTURE GUIDANCE", placeholder="e.g. realistic skin pores, cinematic lighting", help="Fine-tuning keywords for the Neural Engine.")
-        
-        st.markdown("<br>", unsafe_allow_html=True)
-        initiate = st.button("🚀 START SYNTHESIS", disabled=(is_locked and not i_am_owner))
-        
+        if uploaded_file and (file_changed or name_changed):
+            with st.spinner("🧬 Consulting Knowledge Base..."):
+                if trigger_universal_analysis(uploaded_file.getvalue(), uploaded_file.name, char_name):
+                    st.toast(f"Status: {st.session_state.analysis_essence}", icon="👽")
+                    st.rerun()
+
         st.divider()
-        st.markdown('<p style="font-size:0.7rem; color:#444 !important; text-align:center;">PhD PROGRAM IN COMPUTER SCIENCE<br>ENRIQUE GONZÁLEZ GUTIÉRREZ</p>', unsafe_allow_html=True)
+        
+        # PARAMETERS: Pre-filled by v5.5 Expert Logic
+        with st.expander("🛠️ NEURAL ENGINE CONFIG", expanded=True):
+            res_val = st.select_slider("Resolution Anchor", options=[384, 512, 640, 768, 1024], value=640)
+            steps = st.slider("Sampling Steps", 10, 80, st.session_state.steps_val)
+            cfg = st.slider("Guidance Scale (CFG)", 1.0, 20.0, st.session_state.cfg_val, 0.5)
+            cn_weight = st.slider("Structural Adherence", 0.0, 1.0, st.session_state.cn_val, 0.01)
+            prompt = st.text_area("Textural Booster", st.session_state.prompt_val, height=130)
 
-    # MAIN WORKSPACE: RESPONSIVE GRID
-    col_left, col_right = st.columns(2, gap="large")
+        st.divider()
+        
+        # System Hardware Guard
+        try:
+            status = requests.get(f"{API_URL}/system/status", timeout=0.5).json()
+            is_locked = status["locked"]
+        except: is_locked = False
+        
+        initiate = st.button("🚀 EXECUTE SYNTHESIS", disabled=is_locked)
+        if is_locked:
+            st.caption(f"Hardware Priority: task_{status['owner_id'][:6]}")
+            if st.button("Unlock Hardware"): requests.post(f"{API_URL}/system/unlock"); st.rerun()
 
-    with col_left:
-        st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-        st.markdown('<span class="card-tag">Reference Domain</span>', unsafe_allow_html=True)
+    # 3. Main Workspace: Multi-Domain Canvas
+    col_l, col_r = st.columns(2, gap="large")
+
+    with col_l:
+        st.markdown('<div class="glass-panel"><h5>SOURCE DOMAIN</h5>', unsafe_allow_html=True)
         if uploaded_file:
             st.image(uploaded_file, use_column_width=True)
+            st.caption(f"Expert Essense: {st.session_state.analysis_essence}")
         else:
-            st.markdown('<div style="height:300px; border:1px dashed #333; display:flex; align-items:center; justify-content:center; color:#444 !important;">Awaiting source image...</div>', unsafe_allow_html=True)
+            st.info("Upload character reference to begin.")
         st.markdown('</div>', unsafe_allow_html=True)
 
-    with col_right:
-        st.markdown('<div class="studio-card">', unsafe_allow_html=True)
-        st.markdown('<span class="card-tag">Synthesized Realism</span>', unsafe_allow_html=True)
-        if st.session_state.research_data["image"]:
-            st.image(st.session_state.research_data["image"], use_column_width=True)
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.download_button("💾 DOWNLOAD RESULT", st.session_state.research_data["image"], "z_realism_output.png")
+    with col_r:
+        st.markdown('<div class="glass-panel"><h5>SYNTHETIC OUTPUT</h5>', unsafe_allow_html=True)
+        if "final_img_data" in st.session_state:
+            st.image(st.session_state.final_img_data, use_column_width=True)
+            st.download_button("💾 SAVE RESEARCH (PNG)", st.session_state.final_img_data, "z_realism_v55.png")
         else:
-            st.markdown('<div style="height:300px; border:1px dashed #333; display:flex; align-items:center; justify-content:center; color:#444 !important;">Synthesis not yet executed.</div>', unsafe_allow_html=True)
+            st.caption("Engine awaiting lore-aware tuning.")
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # EXECUTION PIPELINE
-    if initiate or st.session_state.active_task_id:
+    # 4. Neural Execution Pipeline
+    if initiate and uploaded_file:
+        files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+        data = {
+            "character_name": char_name, "feature_prompt": prompt, "resolution_anchor": res_val,
+            "steps": steps, "cfg_scale": cfg, "cn_scale": cn_weight
+        }
         
-        # Dispatch New Task
-        if initiate and not st.session_state.active_task_id:
-            try:
-                files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
-                data = {"character_name": char_name, "feature_prompt": feat_prompt, "resolution_anchor": res_val}
-                resp = requests.post(f"{API_URL}/transform", files=files, data=data)
-                if resp.status_code == 200:
-                    st.session_state.active_task_id = resp.json()["task_id"]
-                    st.rerun()
-                else: st.error("System contention detected.")
-            except Exception as e: st.error(f"Engine Connection Failed: {e}")
+        try:
+            resp = requests.post(f"{API_URL}/transform", files=files, data=data)
+            if resp.status_code == 200:
+                task_id = resp.json()["task_id"]
+                with st.status("🧬 NEURAL DIFFUSION ACTIVE...", expanded=True) as status_box:
+                    p_bar = st.progress(0)
+                    while True:
+                        info = requests.get(f"{API_URL}/status/{task_id}").json()
+                        if info["status"] == "PROGRESS":
+                            pct = info["progress"]["percent"]
+                            p_bar.progress(pct)
+                            status_box.update(label=f"🔄 Latent De-noising: {pct}%")
+                        elif info["status"] == "SUCCESS":
+                            p_bar.progress(100)
+                            status_box.update(label="✨ Synthesis Finished!", state="complete")
+                            pkg = requests.get(f"{API_URL}/result/{task_id}").json()
+                            st.session_state.final_img_data = base64.b64decode(pkg["result_image_b64"])
+                            st.session_state.metrics = pkg["metrics"]
+                            st.rerun()
+                            break
+                        elif info["status"] == "FAILURE":
+                            st.error("Engine failure."); break
+                        time.sleep(2)
+        except Exception as e: st.error(f"Pipeline error: {e}")
 
-        # Polling Progress
-        if st.session_state.active_task_id:
-            with st.status("🧬 NEURAL DIFFUSION ACTIVE...", expanded=True) as status:
-                p_bar = st.progress(0)
-                while True:
-                    info = requests.get(f"{API_URL}/status/{st.session_state.active_task_id}").json()
-                    if info["status"] == "PROGRESS" and info["progress"]:
-                        pct = info["progress"]["percent"]
-                        p_bar.progress(pct)
-                        status.update(label=f"🔄 Inverting Latent Noise: {pct}%", state="running")
-                    elif info["status"] == "SUCCESS":
-                        p_bar.progress(100); status.update(label="✨ Synthesis Complete!", state="complete")
-                        res_pkg = requests.get(f"{API_URL}/result/{st.session_state.active_task_id}").json()
-                        st.session_state.research_data["image"] = base64.b64decode(res_pkg["result_image_b64"])
-                        st.session_state.research_data["metrics"] = res_pkg["metrics"]
-                        st.session_state.active_task_id = None
-                        st.rerun()
-                    elif info["status"] == "FAILURE":
-                        st.error("Engine failure."); st.session_state.active_task_id = None; break
-                    time.sleep(2)
-
-    # ANALYTICS SECTION
-    if st.session_state.research_data["metrics"]:
-        st.markdown('<br><hr style="border:1px solid #1a1a1a;"><br>', unsafe_allow_html=True)
-        st.markdown('### 🔬 SCIENTIFIC ASSESSMENT REPORT', unsafe_allow_html=True)
-        
-        met = st.session_state.research_data["metrics"]
-        st.markdown(f"""
-            <div class="metric-grid">
-                <div class="metric-item">
-                    <div class="metric-val">{int(met["structural_similarity"]*100)}%</div>
-                    <div class="metric-lbl">Structural SSIM</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-val">{int(met["identity_preservation"]*100)}%</div>
-                    <div class="metric-lbl">Identity Correlation</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-val">{met["inference_time"]}s</div>
-                    <div class="metric-lbl">Inference Latency</div>
-                </div>
-            </div>
-            <br>
-            <div style="background:#000; padding:20px; border-radius:8px; font-family:'JetBrains Mono'; color:#00f2ff !important; font-size:0.8rem; border-left:4px solid #00f2ff;">
-                [SYSTEM]: Analysis finalized for entity {char_name.upper() if char_name else 'UNKNOWN'}.<br>
-                [VERDICT]: Synthesis verified. Structural and Identity metrics are within acceptable PhD research margins.
-            </div>
-        """, unsafe_allow_html=True)
+    # 5. Scientific Assessment Report
+    if "metrics" in st.session_state:
+        st.divider()
+        m = st.session_state.metrics
+        st.markdown("### 🔬 SCIENTIFIC ASSESSMENT REPORT")
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Structural SSIM", f"{int(m['structural_similarity']*100)}%")
+        c2.metric("Identity Preservation", f"{int(m['identity_preservation']*100)}%")
+        c3.metric("Research Latency", f"{m['inference_time']}s")
 
 if __name__ == "__main__":
     main()

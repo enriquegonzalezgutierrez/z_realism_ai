@@ -1,15 +1,22 @@
 # path: z_realism_ai/docker-compose.yml
-# description: Orchestration with GPU acceleration.
-#              FIXED: Switched to the robust 'runtime: nvidia' method for GPU access,
-#              which is more compatible with local development environments.
+# description: Base orchestration configuration for the Z-Realism AI ecosystem.
+#              Designed for hardware-agnostic execution by removing mandatory 
+#              driver reservations. GPU acceleration is injected via overrides.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 services:
+  # --- Message Broker ---
   z-realism-broker:
     image: redis:7-alpine
     container_name: z_realism_redis
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # --- FastAPI Backend ---
   z-realism-api:
     build: .
     container_name: z_realism_container
@@ -19,14 +26,20 @@ services:
       - ./src:/app/src
       - hf_cache:/app/model_cache
     environment:
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - ENVIRONMENT=development
       - HF_HOME=/app/model_cache
       - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
       - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
     depends_on:
-      - z-realism-broker
+      z-realism-broker:
+        condition: service_healthy
 
+  # --- AI Inference Worker (Celery) ---
   z-realism-worker:
     build: .
+    # Optimization: concurrency=1 to prevent VRAM/RAM contention in DL tasks
     command: celery -A src.infrastructure.worker worker --loglevel=info --concurrency=1
     volumes:
       - ./src:/app/src
@@ -35,20 +48,12 @@ services:
       - HF_HOME=/app/model_cache
       - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
       - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
-    
-    # --- ROBUST GPU CONFIGURATION (runtime: nvidia) ---
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-    # --------------------------------------------------
-    
+      - OFFLINE_MODE=false
     depends_on:
-      - z-realism-broker
+      z-realism-broker:
+        condition: service_healthy
 
+  # --- Streamlit Research Dashboard ---
   z-realism-dashboard:
     build: .
     container_name: z_realism_dashboard
@@ -63,4 +68,6 @@ services:
       - z-realism-api
 
 volumes:
+  # Persistent storage for Hugging Face models (approx 10GB+ for SDXL/ControlNet)
   hf_cache:
+    driver: local
