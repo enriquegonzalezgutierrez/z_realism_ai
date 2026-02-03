@@ -1,8 +1,8 @@
 # path: z_realism_ai/src/infrastructure/sd_generator.py
-# description: Neural Synthesis Engine v5.0 - Final Research Edition.
+# description: Neural Synthesis Engine v5.1 - Research Traceability Edition.
 #              FEATURING: Hardcoded Quality-Enforcement negative prompting and 
 #              DPM++ 2M Karras-style scheduling for high-speed CPU inference.
-#              OPTIMIZED: Target 20-step synthesis for low-latency research.
+#              UPDATED: Now returns full prompts for fine-tuning analysis.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import torch
@@ -69,7 +69,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             else:
                 self._pipe.enable_attention_slicing("max")
             
-            print(f"INFRA_AI: v5.0 Final Engine ready on {self._device.upper()}")
+            print(f"INFRA_AI: v5.1 Research Engine ready on {self._device.upper()}")
             
         except Exception as e:
             print(f"INFRA_AI_CRITICAL: Initialization failed. {str(e)}")
@@ -83,9 +83,10 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         resolution_anchor: int, 
         hyper_params: Dict[str, Any], 
         progress_callback: Optional[Callable[[int, int], None]] = None
-    ) -> Image.Image:
+    ) -> Tuple[Image.Image, str, str]:
         """
-        Synthesizes a humanized version of the character using v5.0 quality gates.
+        Synthesizes a humanized version of the character using v5.1 quality gates.
+        Returns the generated image, the full positive prompt, and the negative prompt.
         """
         
         # --- DYNAMIC PARAMETERS ---
@@ -106,7 +107,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         img_canny = np.stack([img_canny]*3, axis=-1)
         control_image = Image.fromarray(img_canny)
 
-        # 3. FINAL v5.0 PROMPT ENGINEERING
+        # 3. FINAL v5.1 PROMPT ENGINEERING
         # Identity and Heuristics combined with quality-booster keywords
         full_prompt = (
             f"raw photo, {prompt_guidance}, {feature_prompt}, "
@@ -144,7 +145,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
                 callback_on_step_end=internal_callback
             ).images[0]
 
-        return output
+        return output, full_prompt, negative_prompt
 
     def _calculate_proportional_dimensions(self, width: int, height: int, resolution_anchor: int) -> Tuple[int, int]:
         aspect = width / height

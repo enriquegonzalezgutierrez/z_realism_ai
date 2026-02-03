@@ -1,8 +1,8 @@
 # path: z_realism_ai/src/application/use_cases.py
-# description: Orchestration Logic for realistic character transformation.
+# description: Orchestration Logic v5.1 for realistic character transformation.
 #              This layer is technology-agnostic and relies on Ports.
-#              Updated to support dynamic hyper-parameter passthrough for 
-#              real-time research tuning.
+#              UPDATED: Now enriches the final report with the exact prompts used
+#              for synthesis, enabling full research traceability.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import time
@@ -38,6 +38,7 @@ class TransformCharacterUseCase:
         1. Prepares the identity prompt.
         2. Executes the neural generation (Live Action Synthesis).
         3. Measures latency and scientific metrics.
+        4. Enriches the report with full traceability data (prompts).
         """
 
         # Identity Logic: Focus on human translation.
@@ -47,8 +48,8 @@ class TransformCharacterUseCase:
         start_time = time.time()
 
         # Phase 1: Neural Generation
-        # We pass hyper_params (steps, cfg_scale, etc.) directly to the generator
-        generated_image = self._generator.generate_live_action(
+        # The generator now returns the image and the exact prompts used.
+        generated_image, full_prompt, negative_prompt = self._generator.generate_live_action(
             source_image=image_file,
             prompt_guidance=identity_prompt,
             feature_prompt=feature_prompt,
@@ -63,9 +64,10 @@ class TransformCharacterUseCase:
         # Computes SSIM and Identity preservation using Computer Vision
         report: AssessmentReport = self._evaluator.assess_quality(image_file, generated_image)
         
-        # Phase 3: Metadata Enrichment
+        # Phase 3: Metadata Enrichment & Traceability
         report.inference_time = round(elapsed_time, 2)
-        # Type-checking class name for system transparency (Mock vs Real AI)
         report.is_mock = "Mock" in self._generator.__class__.__name__
+        report.full_prompt = full_prompt
+        report.negative_prompt = negative_prompt
 
         return generated_image, report

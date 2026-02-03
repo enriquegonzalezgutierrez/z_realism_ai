@@ -1,21 +1,25 @@
 # path: z_realism_ai/src/domain/ports.py
-# description: Domain Boundary Interfaces v5.4.
+# description: Domain Boundary Interfaces v5.5.
+#              UPDATED: Added full synthesis prompts to the AssessmentReport 
+#              for enhanced research traceability and fine-tuning.
 #              UPDATED: Added 'character_name' to the analyzer port 
 #              to enable Multi-Modal Expert heuristics.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 from abc import ABC, abstractmethod
-from typing import Callable, Any, Optional, Dict
-from dataclasses import dataclass
+from typing import Callable, Any, Optional, Dict, Tuple
+from dataclasses import dataclass, field
 from PIL import Image
 
 @dataclass
 class AssessmentReport:
-    """Scientific metrics container."""
+    """Scientific metrics container, now with full prompt traceability."""
     structural_similarity: float
     identity_preservation: float
     inference_time: float
     is_mock: bool = False
+    full_prompt: str = ""
+    negative_prompt: str = ""
 
 @dataclass
 class AnalysisResult:
@@ -27,9 +31,12 @@ class AnalysisResult:
     suggested_prompt: str
 
 class ImageGeneratorPort(ABC):
-    """Abstract port for the Neural Diffusion Engine."""
+    """
+    Abstract port for the Neural Diffusion Engine.
+    UPDATED: Now returns the exact prompts used during synthesis for traceability.
+    """
     @abstractmethod
-    async def generate_live_action(
+    def generate_live_action(
         self, 
         source_image: Image.Image, 
         prompt_guidance: str,
@@ -37,7 +44,7 @@ class ImageGeneratorPort(ABC):
         resolution_anchor: int,
         hyper_params: Dict[str, Any],
         progress_callback: Optional[Callable[[int, int], None]] = None
-    ) -> Image.Image:
+    ) -> Tuple[Image.Image, str, str]: # Returns (Image, full_prompt, negative_prompt)
         pass
 
 class ImageAnalyzerPort(ABC):

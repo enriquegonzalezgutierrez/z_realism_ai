@@ -1,7 +1,8 @@
 # path: z_realism_ai/src/infrastructure/worker.py
-# description: Celery Worker v4.8 with Adaptive Progress Tracking.
+# description: Celery Worker v4.9 with Traceability Reporting.
 #              Optimized for Deep Learning workloads in parallel processes.
-#              Supports dynamic step-counts for the new DPM Multistep Scheduler.
+#              UPDATED: Now includes full positive and negative prompts in the
+#              final task result for detailed research analysis.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import os
@@ -51,6 +52,8 @@ def get_use_case():
         device = "cuda" if torch.cuda.is_available() else "cpu"
         evaluator = ComputerVisionEvaluator()
         try:
+            # Note: The generator now returns prompts, but the UseCase handles it.
+            # No changes needed here for dependency injection.
             generator = StableDiffusionGenerator(device=device)
             _use_case_instance = TransformCharacterUseCase(generator, evaluator)
         except Exception as e:
@@ -73,7 +76,7 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
     Matches the progress reporting to the dynamic DPM step configuration.
     """
     # Recover dynamic step count for accurate percentage reporting
-    dynamic_total_steps = int(hyper_params.get("steps", 30))
+    dynamic_total_steps = int(hyper_params.get("steps", 20))
 
     def on_adaptive_progress(current, total=dynamic_total_steps):
         """Calculates and pushes progress updates to the Redis backend."""
@@ -101,14 +104,16 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
         result_pil.save(buffered, format="PNG")
         final_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
-        # 4. Success Package
+        # 4. Success Package with Full Traceability
         return {
             "result_image_b64": final_b64,
             "metrics": {
                 "structural_similarity": report.structural_similarity,
                 "identity_preservation": report.identity_preservation,
                 "inference_time": report.inference_time,
-                "is_mock": report.is_mock
+                "is_mock": report.is_mock,
+                "full_prompt": report.full_prompt,          # NEW
+                "negative_prompt": report.negative_prompt   # NEW
             }
         }
 
