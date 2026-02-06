@@ -1,7 +1,5 @@
 # path: z_realism_ai/requirements.txt
-# description: Project dependencies.
-#              UPDATED: Added opencv-python-headless for Canny edge detection
-#              required by the updated SDXL Adapter logic.
+# description: Project dependencies updated for IP-Adapter support.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 fastapi==0.109.0
@@ -18,12 +16,13 @@ transformers==4.46.1
 accelerate==1.1.0
 scipy==1.12.0
 huggingface-hub==0.26.2
+safetensors==0.4.5
 
-# Structural Control Tools
+# Identity & Structural Tools
 insightface==0.7.3
-onnxruntime==1.17.3
-# CRITICAL: Headless OpenCV is needed for Docker environments (avoids X11 errors)
-opencv-python-headless==4.9.0.80 
+onnxruntime-gpu==1.17.1
+opencv-python-headless==4.9.0.80
+numpy==1.26.4
 
 # Async Queue
 celery==5.3.6

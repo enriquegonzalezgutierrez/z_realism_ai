@@ -1,0 +1,267 @@
+/* 
+  path: z_realism_ai/src/presentation-custom/style.css
+  description: Ultra-Premium "Capsule Corp" Design System v9.2.
+               Complete feature set including custom forms, responsive grids,
+               aura animations, and the Flight Recorder terminal.
+  author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+*/
+
+/* 1. DESIGN TOKENS (Variables) */
+:root {
+    /* DBS Color Palette */
+    --accent-goku: #ff7b00;
+    --accent-vegeta: #0077ff;
+    --accent-ui: #00f2ff; /* Ultra Instinct Cyan */
+    --accent-destruction: #ff0055;
+    
+    /* UI Structure */
+    --bg-deep-space: #030305;
+    --bg-panel: rgba(15, 15, 20, 0.8);
+    --border-glow: rgba(255, 255, 255, 0.05);
+    
+    /* Text Hierarchy */
+    --text-primary: #e0e0e0;
+    --text-secondary: #888888;
+    
+    /* Gradients */
+    --grad-primary: linear-gradient(135deg, var(--accent-goku) 0%, var(--accent-destruction) 100%);
+    --grad-surface: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+
+    /* Fonts */
+    --font-heading: 'Orbitron', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* 2. BASE RESET & SCROLLBAR */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { 
+    background: var(--accent-goku); 
+    border-radius: 10px; 
+    box-shadow: 0 0 10px var(--accent-goku);
+}
+
+body {
+    background-color: var(--bg-deep-space);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: radial-gradient(circle at 20% 20%, #110022 0%, #030305 50%);
+}
+
+/* 3. RESPONSIVE LAYOUT */
+.main-wrapper { display: flex; flex-direction: column; height: 100vh; }
+
+.top-nav {
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--border-glow);
+    z-index: 100;
+}
+
+.top-nav h1 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px rgba(255, 123, 0, 0.3));
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    flex: 1;
+    overflow: hidden;
+}
+
+@media (max-width: 1200px) {
+    .content-grid { grid-template-columns: 320px 1fr; }
+}
+
+@media (max-width: 1024px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+    .main-wrapper { height: auto; }
+}
+
+/* 4. SIDEBAR PANEL */
+.control-panel {
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border-glow);
+    padding: 25px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-header {
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    color: var(--accent-ui);
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-header::after {
+    content: ""; flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--accent-ui), transparent);
+}
+
+/* 5. CUSTOM FORM ELEMENTS */
+.input-stack { margin-bottom: 15px; }
+
+label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #888;
+    margin-bottom: 8px;
+    display: block;
+    text-transform: uppercase;
+}
+
+.input-field {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #333;
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--accent-ui);
+    font-family: var(--font-mono);
+    width: 100%;
+    transition: 0.3s;
+}
+
+.input-field:focus { border-color: var(--accent-ui); outline: none; }
+
+/* Custom Range Slider */
+input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #222; border-radius: 2px; }
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%;
+    background: var(--accent-goku); cursor: pointer; margin-top: -6px;
+    box-shadow: 0 0 10px var(--accent-goku);
+}
+
+/* Custom File Upload */
+.file-upload-label {
+    display: block; padding: 12px; background: #111; border: 1px dashed #444;
+    border-radius: 8px; text-align: center; cursor: pointer; font-size: 0.75rem;
+    color: #666; transition: 0.3s;
+}
+
+.file-upload-label:hover { border-color: var(--accent-goku); color: var(--accent-goku); }
+
+/* 6. AURA BUTTONS */
+.btn-primary {
+    background: var(--grad-primary); color: white; padding: 16px;
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
+    font-family: var(--font-heading); font-weight: 900;
+    text-transform: uppercase; letter-spacing: 2px;
+    cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(255, 0, 85, 0.2); margin-top: 10px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(255, 123, 0, 0.5);
+    border-color: white;
+}
+
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-secondary {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--accent-ui);
+    color: var(--accent-ui); padding: 10px; font-family: var(--font-heading);
+    font-size: 0.7rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.3s;
+}
+
+.btn-secondary:hover { background: var(--accent-ui); color: black; box-shadow: 0 0 20px var(--accent-ui); }
+
+/* 7. VISUAL WORKSPACE */
+.workspace { padding: 30px; overflow-y: auto; }
+
+.canvas-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background: var(--bg-panel); border: 1px solid var(--border-glow);
+    border-radius: 20px; padding: 25px; position: relative; overflow: hidden;
+}
+
+.card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: var(--grad-surface);
+}
+
+.img-frame {
+    width: 100%; aspect-ratio: 1/1; background: #000;
+    border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; border: 1px solid #222; position: relative;
+}
+
+.img-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+/* 8. ENERGY CHARGE (Progress) */
+.energy-meter { height: 6px; background: #111; border-radius: 3px; margin-top: 20px; overflow: hidden; }
+.energy-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(to right, var(--accent-ui), #ffffff);
+    box-shadow: 0 0 15px var(--accent-ui);
+    transition: width 0.4s ease;
+}
+
+/* 9. ANALYTICS & DEBUGGING */
+.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; }
+.metric-box {
+    background: rgba(0,0,0,0.4); padding: 20px; border-radius: 12px;
+    border-bottom: 2px solid var(--accent-ui); text-align: center;
+}
+.metric-box label { font-size: 0.55rem; letter-spacing: 2px; color: var(--accent-destruction); }
+.metric-box .value { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 900; color: #fff; margin-top: 5px; }
+
+.debug-container {
+    margin-top: 30px; background: #080808; border: 1px solid #333;
+    border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.debug-header {
+    background: #111; padding: 10px 20px; border-bottom: 1px solid #333;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.debug-header span {
+    font-size: 0.65rem; font-weight: 900; color: #666;
+    letter-spacing: 2px; font-family: var(--font-heading);
+}
+.copy-btn {
+    background: transparent; border: 1px solid #444; color: #888;
+    padding: 5px 10px; font-size: 0.6rem; font-family: var(--font-heading);
+    border-radius: 4px; cursor: pointer; transition: 0.2s;
+}
+.copy-btn:hover { border-color: var(--accent-ui); color: var(--accent-ui); background: rgba(0, 242, 255, 0.1); }
+#system-log {
+    width: 100%; height: 120px; background: #050505; color: #00ff00;
+    font-family: var(--font-mono); font-size: 0.7rem; border: none;
+    padding: 15px; resize: none; outline: none; line-height: 1.4;
+}
+#system-log::-webkit-scrollbar { width: 8px; }
+#system-log::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+.hidden { display: none; }

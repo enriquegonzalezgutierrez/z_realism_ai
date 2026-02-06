@@ -1,23 +1,23 @@
 # path: z_realism_ai/Makefile
-# description: Task automation tool for the Hardware-Aware Z-Realism AI environment.
-#              Automatically detects GPU availability to select the correct
-#              Docker Compose orchestration profile.
+# description: Ultimate Orchestrator v8.9 - Full Stack Management.
+#              Manages: Custom UI (80), Expert Dashboard (8501), API (8000), 
+#              Worker (Inference), and Broker (Redis).
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 # -----------------------------------------------------------------------------
 # Configuration & Service Names
 # -----------------------------------------------------------------------------
+UI_SERVICE        = z-realism-ui
+DASHBOARD_SERVICE = z-realism-dashboard
 APP_SERVICE       = z-realism-api
 WORKER_SERVICE    = z-realism-worker
 BROKER_SERVICE    = z-realism-broker
-DASHBOARD_SERVICE = z-realism-dashboard
 MODEL_CACHE_VOL   = hf_cache
 
 # -----------------------------------------------------------------------------
 # Hardware Detection Logic
 # -----------------------------------------------------------------------------
-# Checks if nvidia-smi exists and returns successfully.
-# This determines if we inject the GPU resource reservations.
+# Checks for nvidia-smi to determine if we inject GPU support.
 HAS_GPU := $(shell nvidia-smi > /dev/null 2>&1 && echo "yes" || echo "no")
 
 ifeq ($(HAS_GPU),yes)
@@ -29,7 +29,7 @@ else
 endif
 
 # -----------------------------------------------------------------------------
-# UI Styling
+# UI Styling (Colors)
 # -----------------------------------------------------------------------------
 CLR_RESET   = \033[0m
 CLR_CYAN    = \033[36m
@@ -39,103 +39,79 @@ CLR_RED     = \033[31m
 CLR_BOLD    = \033[1m
 
 # -----------------------------------------------------------------------------
-# Default Target: Help Documentation
+# Help / Documentation
 # -----------------------------------------------------------------------------
 .PHONY: help
 help: ## Display this help message
-	@printf "$(CLR_BOLD)Z-Realism AI - Multi-Hardware Management Console$(CLR_RESET)\n"
-	@printf "Detected Environment: $(CLR_GREEN)$(HW_STATUS)$(CLR_RESET)\n\n"
+	@printf "$(CLR_BOLD)Z-Realism AI - Full Stack Management v8.9$(CLR_RESET)\n"
+	@printf "Detected Environment: $(CLR_GREEN)$(HW_STATUS)$(CLR_RESET)\n"
+	@printf "Custom UI (80):      $(CLR_CYAN)http://localhost$(CLR_RESET)\n"
+	@printf "Expert Dashboard:    $(CLR_CYAN)http://localhost:8501$(CLR_RESET)\n"
+	@printf "Backend API (8000):  $(CLR_CYAN)http://localhost:8000$(CLR_RESET)\n\n"
 	@printf "Usage: make $(CLR_CYAN)[target]$(CLR_RESET)\n\n"
 	
 	@printf "$(CLR_CYAN)$(CLR_BOLD)CORE LIFECYCLE:$(CLR_RESET)\n"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -E "build|up|down|restart" | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(CLR_CYAN)%-25s$(CLR_RESET) %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## CORE .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## CORE "}; {printf "  $(CLR_CYAN)%-25s$(CLR_RESET) %s\n", $$1, $$2}'
 	
 	@printf "\n$(CLR_YELLOW)$(CLR_BOLD)DEVELOPMENT & MONITORING:$(CLR_RESET)\n"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -E "logs|shell|redis" | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(CLR_YELLOW)%-25s$(CLR_RESET) %s\n", $$1, $$2}'
-	
-	@printf "\n$(CLR_GREEN)$(CLR_BOLD)QUALITY ASSURANCE:$(CLR_RESET)\n"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -E "format|lint|test" | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(CLR_GREEN)%-25s$(CLR_RESET) %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## DEV .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## DEV "}; {printf "  $(CLR_YELLOW)%-25s$(CLR_RESET) %s\n", $$1, $$2}'
 	
 	@printf "\n$(CLR_RED)$(CLR_BOLD)DANGER ZONE:$(CLR_RESET)\n"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -E "clean|prune" | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(CLR_RED)%-25s$(CLR_RESET) %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## DANGER .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## DANGER "}; {printf "  $(CLR_RED)%-25s$(CLR_RESET) %s\n", $$1, $$2}'
 
 # -----------------------------------------------------------------------------
 # Core Lifecycle
 # -----------------------------------------------------------------------------
 .PHONY: build
-build: ## Build images using the detected hardware profile
+build: ## CORE Build images using the detected hardware profile
 	@echo $(HW_STATUS)
 	$(DOCKER_COMPOSE_CMD) build
 
 .PHONY: up
-up: ## Start the ecosystem (API, Worker, Redis, Dashboard)
+up: ## CORE Start the entire ecosystem (UI, Dashboard, API, Worker, Redis)
 	@echo $(HW_STATUS)
 	$(DOCKER_COMPOSE_CMD) up -d
+	@printf "\n$(CLR_GREEN)System Online at http://localhost and http://localhost:8501$(CLR_RESET)\n"
 
 .PHONY: down
-down: ## Stop and remove all active containers
+down: ## CORE Stop and remove all active containers
 	$(DOCKER_COMPOSE_CMD) down
 
 .PHONY: restart
-restart: ## Restart all core application services
-	$(DOCKER_COMPOSE_CMD) restart $(APP_SERVICE) $(WORKER_SERVICE) $(DASHBOARD_SERVICE)
+restart: ## CORE Restart all core services to apply changes
+	$(DOCKER_COMPOSE_CMD) restart $(UI_SERVICE) $(DASHBOARD_SERVICE) $(APP_SERVICE) $(WORKER_SERVICE)
 
 # -----------------------------------------------------------------------------
 # Development & Monitoring
 # -----------------------------------------------------------------------------
-.PHONY: logs
-logs: ## Stream live logs from the API service
+.PHONY: logs-api
+logs-api: ## DEV Stream live logs from the FastAPI service
 	$(DOCKER_COMPOSE_CMD) logs -f $(APP_SERVICE)
 
 .PHONY: logs-worker
-logs-worker: ## Stream live logs from the AI Inference Worker
+logs-worker: ## DEV Stream live logs from the AI Inference Worker
 	$(DOCKER_COMPOSE_CMD) logs -f $(WORKER_SERVICE)
 
-.PHONY: shell-api
-shell-api: ## Access the terminal inside the API container
-	$(DOCKER_COMPOSE_CMD) exec $(APP_SERVICE) bash
-
 .PHONY: shell-worker
-shell-worker: ## Access the terminal inside the Worker container
+shell-worker: ## DEV Access the terminal inside the Worker container
 	$(DOCKER_COMPOSE_CMD) exec $(WORKER_SERVICE) bash
 
-.PHONY: redis-cli
-redis-cli: ## Open Redis CLI to inspect task queues
-	$(DOCKER_COMPOSE_CMD) exec $(BROKER_SERVICE) redis-cli
-
-# -----------------------------------------------------------------------------
-# Quality Assurance
-# -----------------------------------------------------------------------------
-.PHONY: format
-format: ## Format Python code (Black & Isort)
-	$(DOCKER_COMPOSE_CMD) exec $(APP_SERVICE) black src/
-	$(DOCKER_COMPOSE_CMD) exec $(APP_SERVICE) isort src/
-
-.PHONY: lint
-lint: ## Run style and syntax checks (Flake8)
-	$(DOCKER_COMPOSE_CMD) exec $(APP_SERVICE) flake8 src/
-
-.PHONY: test
-test: ## Execute unit and integration tests (Pytest)
-	$(DOCKER_COMPOSE_CMD) exec $(APP_SERVICE) pytest
+.PHONY: stats
+stats: ## DEV Show resource usage (CPU/GPU/RAM)
+	docker stats
 
 # -----------------------------------------------------------------------------
 # Danger Zone (Maintenance)
 # -----------------------------------------------------------------------------
-.PHONY: clean
-clean: ## Remove containers and network artifacts
-	$(DOCKER_COMPOSE_CMD) down --remove-orphans
-	@printf "$(CLR_RED)--- Environment Cleaned ---$(CLR_RESET)\n"
-
 .PHONY: clean-model
-clean-model: ## Force re-download of AI models by purging hf_cache volume
-	@printf "$(CLR_RED)$(CLR_BOLD)WARNING: Removing 10GB+ Model Cache!$(CLR_RESET)\n"
+clean-model: ## DANGER Purge model cache volume (forces re-download)
+	@printf "$(CLR_RED)$(CLR_BOLD)WARNING: Removing Persistent AI Models!$(CLR_RESET)\n"
 	$(DOCKER_COMPOSE_CMD) down
-	docker volume rm $(MODEL_CACHE_VOL) || true
-	@printf "$(CLR_RED)--- Cache Purged. Run 'make up' to rebuild ---$(CLR_RESET)\n"
+	docker volume rm z_realism_ai_hf_cache || true
+	@printf "$(CLR_RED)Cache Purged. Run 'make up' to restart.$(CLR_RESET)\n"
 
 .PHONY: prune
-prune: ## Complete system wipe: containers, volumes, and images
+prune: ## DANGER Complete system wipe: containers, volumes, and images
 	@printf "$(CLR_RED)$(CLR_BOLD)DANGER: Full System Reset Initiated!$(CLR_RESET)\n"
 	$(DOCKER_COMPOSE_CMD) down -v --rmi all
 	@printf "$(CLR_RED)--- Deep Clean Complete ---$(CLR_RESET)\n"

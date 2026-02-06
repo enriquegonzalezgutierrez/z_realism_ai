@@ -1,7 +1,7 @@
 # path: z_realism_ai/src/infrastructure/evaluator.py
 # description: Scientific Evaluation Engine v5.0.
-#              UPGRADED: Implements professional Structural Similarity (SSIM) 
-#              heuristics and HSV Histogram Correlation for precise Identity tracking.
+#              Implements Structural Similarity (SSIM) and HSV Histogram 
+#              Correlation for precise identity tracking.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import cv2
@@ -11,8 +11,8 @@ from src.domain.ports import ScientificEvaluatorPort, AssessmentReport
 
 class ComputerVisionEvaluator(ScientificEvaluatorPort):
     """
-    Expert implementation of scientific assessment using Computer Vision.
-    Matches the quality of the neural synthesis with high-precision metrics.
+    Expert implementation of scientific quality assessment using OpenCV.
+    Quantifies structural and chromatic fidelity between source and output.
     """
 
     def _preprocess_for_cv(self, pil_image: Image.Image, target_size=(512, 512)) -> np.ndarray:
@@ -29,29 +29,29 @@ class ComputerVisionEvaluator(ScientificEvaluatorPort):
         Calculates SSIM and Identity Correlation using multi-stage CV heuristics.
         """
         
-        # 1. Normalize domains
+        # 1. Domain Standardization
         img_src = self._preprocess_for_cv(original_image)
         img_gen = self._preprocess_for_cv(generated_image)
 
-        # 2. Structural Integrity Assessment (Gaussian SSIM Heuristic)
-        # We compare the structural gradients while ignoring high-frequency noise.
+        # 2. Structural Integrity Assessment (Gaussian SSIM Proxy)
+        # We compare structural gradients while ignoring high-frequency noise.
         gray_src = cv2.cvtColor(img_src, cv2.COLOR_BGR2GRAY)
         gray_gen = cv2.cvtColor(img_gen, cv2.COLOR_BGR2GRAY)
         
-        # Apply slight blur to focus on major structural forms (muscles, clothes, pose)
+        # Focus on major structural forms (muscles, clothes, pose)
         blur_src = cv2.GaussianBlur(gray_src, (5, 5), 0)
         blur_gen = cv2.GaussianBlur(gray_gen, (5, 5), 0)
         
-        # Use MatchTemplate as a robust structural cross-correlation metric
+        # Cross-correlation metric (1.0 = perfect structural match)
         structural_score = cv2.matchTemplate(blur_src, blur_gen, cv2.TM_CCOEFF_NORMED)[0][0]
         structural_score = max(0.0, float(structural_score))
 
         # 3. Identity Preservation (HSV Histogram Correlation)
-        # We use the HSV space because it separates 'Color' (Identity) from 'Lighting'.
+        # We use HSV space because it separates 'Color' (Identity) from 'Lighting'.
         hsv_src = cv2.cvtColor(img_src, cv2.COLOR_BGR2HSV)
         hsv_gen = cv2.cvtColor(img_gen, cv2.COLOR_BGR2HSV)
         
-        # Calculate Hue and Saturation histograms (ignoring Value/Brightness)
+        # Calculate Hue and Saturation histograms
         hist_src = cv2.calcHist([hsv_src], [0, 1], None, [50, 60], [0, 180, 0, 256])
         hist_gen = cv2.calcHist([hsv_gen], [0, 1], None, [50, 60], [0, 180, 0, 256])
         
@@ -66,6 +66,6 @@ class ComputerVisionEvaluator(ScientificEvaluatorPort):
         return AssessmentReport(
             structural_similarity=round(structural_score, 4),
             identity_preservation=round(identity_score, 4),
-            inference_time=0.0, # Filled by Use Case
+            inference_time=0.0, # Filled by Use Case after execution
             is_mock=False
         )

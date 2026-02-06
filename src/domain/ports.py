@@ -1,19 +1,17 @@
 # path: z_realism_ai/src/domain/ports.py
-# description: Domain Boundary Interfaces v5.5.
-#              UPDATED: Added full synthesis prompts to the AssessmentReport 
-#              for enhanced research traceability and fine-tuning.
-#              UPDATED: Added 'character_name' to the analyzer port 
-#              to enable Multi-Modal Expert heuristics.
+# description: Domain Boundary Interfaces.
+#              Defines strict contracts for Hexagonal Architecture.
+#              UPDATED: Added traceability fields (prompts) to AssessmentReport.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 from abc import ABC, abstractmethod
 from typing import Callable, Any, Optional, Dict, Tuple
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from PIL import Image
 
 @dataclass
 class AssessmentReport:
-    """Scientific metrics container, now with full prompt traceability."""
+    """Container for scientific metrics and traceability data."""
     structural_similarity: float
     identity_preservation: float
     inference_time: float
@@ -23,7 +21,7 @@ class AssessmentReport:
 
 @dataclass
 class AnalysisResult:
-    """Optimized hyper-parameters based on name and visual DNA."""
+    """Container for heuristic analysis results."""
     recommended_steps: int
     recommended_cfg: float
     recommended_cn: float
@@ -32,8 +30,8 @@ class AnalysisResult:
 
 class ImageGeneratorPort(ABC):
     """
-    Abstract port for the Neural Diffusion Engine.
-    UPDATED: Now returns the exact prompts used during synthesis for traceability.
+    Abstract contract for the Neural Diffusion Engine.
+    Ensures any generator implementation follows this input/output structure.
     """
     @abstractmethod
     def generate_live_action(
@@ -44,24 +42,25 @@ class ImageGeneratorPort(ABC):
         resolution_anchor: int,
         hyper_params: Dict[str, Any],
         progress_callback: Optional[Callable[[int, int], None]] = None
-    ) -> Tuple[Image.Image, str, str]: # Returns (Image, full_prompt, negative_prompt)
+    ) -> Tuple[Image.Image, str, str]: 
+        # Must return: (Generated Image, Positive Prompt Used, Negative Prompt Used)
         pass
 
 class ImageAnalyzerPort(ABC):
     """
-    Expert Heuristic Engine.
-    Combines Entity Name (Semantic) + Visual DNA (CV) to determine 
-    the species-specific synthesis strategy.
+    Abstract contract for the Expert Heuristic Engine.
     """
     @abstractmethod
     def analyze_source(self, image: Image.Image, character_name: str) -> AnalysisResult:
         """
-        Calculates optimal parameters by identifying character species.
+        Determines optimal synthesis parameters based on visual and semantic data.
         """
         pass
 
 class ScientificEvaluatorPort(ABC):
-    """Port for High-Precision metric calculation."""
+    """
+    Abstract contract for Quality Metrics.
+    """
     @abstractmethod
     def assess_quality(self, original: Image.Image, generated: Image.Image) -> AssessmentReport:
         pass

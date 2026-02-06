@@ -1,9 +1,7 @@
 # path: z_realism_ai/src/infrastructure/analyzer.py
-# description: Universal Dragon Ball Heuristic Analyzer v5.5.
-#              FEATURING: Specific Form Detection (Black/Golden) and 
-#              expanded character knowledge base (Tien, Krillin, Jiren).
-#              FIXED: Majin detection now requires high pink saturation 
-#              to avoid false positives with skin tones or warm lighting.
+# description: Universal Heuristic Analyzer v9.5 - Recalibrated Master Edition.
+#              FEATURING: Precise parameters for Realistic Vision V5.1.
+#              STRATEGY: Balanced steps (25-30) for high-fidelity skin textures.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import cv2
@@ -13,108 +11,87 @@ from src.domain.ports import ImageAnalyzerPort, AnalysisResult
 
 class HeuristicImageAnalyzer(ImageAnalyzerPort):
     """
-    Final PhD-Grade Analyzer. 
-    Handles species, specific transformations, and environment noise filtering.
+    Expert Visual Intelligence v9.5.
+    Determines character-specific strategies for the full DBS roster.
+    Recalibrated for the non-lightning Realistic Vision pipeline.
     """
 
     def analyze_source(self, image: Image.Image, character_name: str) -> AnalysisResult:
+        # Visual DNA Extraction via OpenCV
         img_np = np.array(image.convert('RGB'))
-        img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
-        img_hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
-        gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR), cv2.COLOR_BGR2GRAY)
         
         name = character_name.lower()
         edges = cv2.Canny(gray, 100, 200)
         edge_density = np.sum(edges) / (gray.size * 255)
 
-        # --- ADVANCED COLOR DNA (v5.5) ---
-        # Majin Pink (More specific range to avoid skin false positives)
-        mask_pink = cv2.inRange(img_hsv, np.array([145, 80, 80]), np.array([165, 255, 255]))
-        # Frost Demon Purple/Obsidian
-        mask_purple = cv2.inRange(img_hsv, np.array([120, 50, 50]), np.array([140, 255, 255]))
-        # Namekian Green
-        mask_green = cv2.inRange(img_hsv, np.array([35, 40, 40]), np.array([90, 255, 255]))
-        
-        pink_ratio = np.sum(mask_pink > 0) / mask_pink.size
-        purple_ratio = np.sum(mask_purple > 0) / mask_purple.size
-        green_ratio = np.sum(mask_green > 0) / mask_green.size
+        # --- RECALIBRATED HEURISTIC ENGINE v9.5 ---
+        # Target Architecture: Realistic Vision V5.1 (Standard Diffusion)
+        # Optimal CFG: 7.0 - 8.0
+        # Optimal Steps: 25 - 35
 
-        # --- EXPERT REASONING ENGINE ---
-
-        # 1. HUMANOIDS & MONKS (Ten Shin Han, Krillin, Roshi, Chi-Chi, Videl, etc.)
-        if any(k in name for k in ["ten", "tien", "han", "krillin", "roshi", "chi", "videl", "satan", "yamcha", "chiaotzu", "jiren", "bulma", "17", "18"]):
-            essence = "species_humanoid_monk"
-            proposed_cn = 0.42 + (edge_density * 0.3)
-            suggested_prompt = (
-                "raw photo, human facial features, realistic skin texture, "
-                "martial arts uniform, fabric fibers, cinematic soft lighting"
-            )
-
-        # 2. SAIYANS (Goku, Vegeta, Gohan, Trunks, Broly)
-        elif any(k in name for k in ["goku", "vegeta", "gohan", "trunks", "broly", "kakarot"]):
+        # 1. SAIYAN WARRIORS (Goku, Vegeta, Broly, Gohan)
+        if any(k in name for k in ["goku", "vegeta", "gohan", "broly", "trunks", "kakarot"]):
             essence = "species_saiyan_warrior"
-            proposed_cn = 0.45 + (edge_density * 0.4)
+            # Depth weight calibrated to allow IP-Adapter facial reconstruction
+            proposed_cn = 0.62 + (edge_density * 0.1)
             suggested_prompt = (
-                "raw photo, muscular human build, intense eyes, skin pores, "
-                "messy real hair texture, combat gi, cinematic lighting"
+                "cinematic film still, a powerful muscular asian martial artist, "
+                "hyper-detailed skin pores, sweat, realistic messy black hair, "
+                "weathered heavy linen gi, intense warrior eyes, epic lighting"
             )
 
-        # 3. FROST DEMONS & FORMS (Frieza, Cooler)
-        elif any(k in name for k in ["frieza", "freezer", "cooler"]):
-            if "black" in name:
-                essence = "form_black_frieza"
-                proposed_cn = 0.68
-                suggested_prompt = (
-                    "raw photo, black obsidian biological armor, metallic silver plates, "
-                    "purple bio-gems, dark reptilian skin, cinematic rim lighting"
-                )
-            elif "gold" in name:
-                essence = "form_golden_frieza"
-                proposed_cn = 0.65
-                suggested_prompt = "raw photo, polished gold organic armor, purple gems, glowing skin"
-            else:
-                essence = "species_frost_demon_base"
-                proposed_cn = 0.62
-                suggested_prompt = "raw photo, white reptilian skin, purple bio-gems, polished biological armor"
-
-        # 4. MAJINS (Buu) - Strong verification required
-        elif "buu" in name or (pink_ratio > 0.15):
-            essence = "species_majin_entity"
-            proposed_cn = 0.50
+        # 2. DEITIES (Beerus, Champa, Sidra)
+        elif any(k in name for k in ["beerus", "bills", "champa", "destruction"]):
+            essence = "species_deity_feline"
+            proposed_cn = 0.78 # High depth weight for non-human head geometry
             suggested_prompt = (
-                "raw photo, pink rubbery skin, organic smooth surface, "
-                "muscular anatomy, realistic steam vents, accurate attire"
+                "raw photo, realistic purple sphynx cat skin texture, "
+                "muscular humanoid deity, gold egyptian artifacts, silk robes, "
+                "glowing yellow eyes, divine atmosphere, cinematic rim lighting"
             )
 
-        # 5. BIO-ANDROIDS (Cell)
-        elif "cell" in name or (green_ratio > 0.05 and edge_density > 0.07):
-            essence = "species_bio_android"
+        # 3. ANGELS & CELESTIALS (Whis, Vados, Grand Priest)
+        elif any(k in name for k in ["whis", "vados", "priest", "angel"]):
+            essence = "species_celestial"
+            proposed_cn = 0.58
+            suggested_prompt = (
+                "cinematic portrait, ethereal pale celeste skin, youthful refined face, "
+                "glowing halo, elegant silk robes, white vertical natural hair, "
+                "soft volumetric studio lighting, high-end photography"
+            )
+
+        # 4. ANCIENT & ELITE VILLAINS (Moro, Jiren, Hit, Goku Black)
+        elif any(k in name for k in ["moro", "jiren", "hit", "black", "zamasu"]):
+            essence = "species_elite_adversary"
             proposed_cn = 0.72
             suggested_prompt = (
-                "raw photo, biological exoskeleton, chitinous plates, "
-                "insectoid skin, organic spots, cinematic studio lighting"
+                "cinematic still, hyper-detailed musculature, real alien skin texture, "
+                "weathered combat suit fibers, dramatic lighting, cinematic film grain, "
+                "terrifying presence, masterpiece photography"
             )
 
-        # 6. NAMEKIANS (Piccolo)
-        elif "piccolo" in name or "picolo" in name:
-            essence = "species_namekian"
+        # 5. HUMAN-TYPES (Android 18/17, Bulma, Videl, Roshi)
+        elif any(k in name for k in ["18", "17", "bulma", "videl", "roshi", "yamcha"]):
+            essence = "species_human_android"
             proposed_cn = 0.52
-            suggested_prompt = "raw photo, smooth green alien skin, damp amphibian texture, pointed ears"
+            suggested_prompt = (
+                "raw photography, realistic human face, sharp focus on eyes, "
+                "highly detailed skin texture, individual hair strands, "
+                "authentic clothing fabric, masterpiece, 8k uhd"
+            )
 
-        # 7. UNIVERSAL FALLBACK
+        # 6. UNIVERSAL FALLBACK
         else:
-            essence = "fallback_heuristic"
-            proposed_cn = 0.50
-            suggested_prompt = "raw photo, detailed face, cinematic lighting, high resolution"
+            essence = "cinematic_fallback"
+            proposed_cn = 0.60
+            suggested_prompt = "cinematic film still, highly detailed human version, realistic textures, 8k"
 
-        # Global Clamps
-        proposed_cn = min(max(proposed_cn, 0.40), 0.85)
-        proposed_cfg = min(max(8.5 - (gray.std() / 20.0), 6.0), 8.5)
-
+        # Final Parameter Logic for v9.5 Stability
         return AnalysisResult(
-            recommended_steps=20,
-            recommended_cfg=round(proposed_cfg, 2),
+            recommended_steps=30,     # Standard steps for v5.1 Realism
+            recommended_cfg=7.5,      # High contrast guidance
             recommended_cn=round(proposed_cn, 2),
-            detected_essence=f"{essence} (Expert Logic v5.5)",
+            detected_essence=f"{essence} (Lore-Aware v9.5)",
             suggested_prompt=suggested_prompt
         )
