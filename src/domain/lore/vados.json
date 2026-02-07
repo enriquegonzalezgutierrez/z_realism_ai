@@ -1,0 +1,7 @@
+{
+    "id": "vados",
+    "aliases": ["vados"],
+    "essence": "species_celestial_angel",
+    "prompt_base": "elegant woman with pale light-blue skin, long white ponytail, divine green and black robes, gold jewelry, calm expression, realistic skin pores, wide jawline",
+    "weights": { "depth": 0.60, "openpose": 0.50 }
+}

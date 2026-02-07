@@ -1,10 +1,13 @@
 {
     "id": "bulma",
-    "aliases": ["bulma", "briefs", "scientist", "bulma san"],
-    "essence": "species_human_scientist",
-    "prompt_base": "cinematic portrait, beautiful blue hair scientist, modern capsule corp outfit, realistic smooth skin, intelligent eyes, studio lighting, fashion photography, sharp focus, fujifilm, 8k, masterpiece",
+    "aliases": ["bulma", "bulma_briefs"],
+    "essence": "human_scientist",
+    "prompt_base": "cinematic portrait of a young intelligent woman, realistic proportions, confident expression, turquoise-blue hair, yellow shorts, red tube top, high-tech lab background",
+    "feature_prompt": "detailed skin pores, natural wide jawline, sharp eyes, defined cheekbones, smooth straight hair",
+    "negative_prompt": "anime, cartoon, illustration, CGI, cosplay, plastic skin, over-smooth face, curly or wavy hair, frizzy hair, small chin, exaggerated eyes, bad anatomy, flat lighting, low quality",
     "weights": {
-        "depth": 0.45,
-        "openpose": 0.85
-    }
+        "depth": 0.80,
+        "openpose": 0.40
+    },
+    "denoising_strength": 0.50
 }

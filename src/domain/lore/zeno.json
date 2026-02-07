@@ -1,0 +1,7 @@
+{
+    "id": "zeno",
+    "aliases": ["zeno", "zen-oh", "omni-king"],
+    "essence": "species_cosmic_entity",
+    "prompt_base": "ethereal cosmic creature, football-shaped head, purple and blue skin segments, large void-like eyes, royal colorful robes, tiny stature, divine aura",
+    "weights": { "depth": 0.90, "openpose": 0.40 }
+}

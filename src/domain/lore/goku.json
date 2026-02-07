@@ -1,10 +1,13 @@
 {
     "id": "goku",
-    "aliases": ["goku", "kakarot", "son goku", "bardock", "goten"],
-    "essence": "species_saiyan_warrior",
-    "prompt_base": "cinematic portrait, realistic asian goku, skin pores, sweat, messy black hair, weathered gi, intense warrior eyes, epic lighting",
+    "aliases": ["goku", "kakarot"],
+    "essence": "human_warrior",
+    "prompt_base": "cinematic portrait of a muscular human male warrior, spiky black hair, determined expression, orange martial arts gi with blue undershirt, standing in a dynamic battle stance, dramatic lighting",
+    "feature_prompt": "defined muscles, realistic skin texture, detailed eyes, subtle scars, wristbands, flying hair strands, energy aura",
+    "negative_prompt": "anime, cartoon, chibi, exaggerated eyes, plastic skin, flat lighting, CGI, low quality, deformed anatomy",
     "weights": {
-        "depth": 0.60,
-        "openpose": 0.85
-    }
+        "depth": 0.80,
+        "openpose": 0.50
+    },
+    "denoising_strength": 0.55
 }

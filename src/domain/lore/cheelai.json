@@ -1,0 +1,7 @@
+{
+    "id": "cheelai",
+    "aliases": ["cheelai", "chelye"],
+    "essence": "species_alien_outlaw",
+    "prompt_base": "beautiful alien woman with light green skin, short white hair, large purple eyes, futuristic galactic patrol suit, realistic skin pores, wide jawline",
+    "weights": { "depth": 0.60, "openpose": 0.55 }
+}

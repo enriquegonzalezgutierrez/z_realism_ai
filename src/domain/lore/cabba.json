@@ -1,0 +1,7 @@
+{
+    "id": "cabba",
+    "aliases": ["cabba", "kyabe"],
+    "essence": "species_saiyan_u6",
+    "prompt_base": "lean athletic young asian man, short spiked black hair, wide jawline, universe 6 saiyan armor, silver and blue chestplate, realistic skin texture, earnest expression",
+    "weights": { "depth": 0.60, "openpose": 0.55 }
+}

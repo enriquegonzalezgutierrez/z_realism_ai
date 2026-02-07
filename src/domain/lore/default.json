@@ -1,0 +1,10 @@
+{
+    "essence": "default_humanoid",
+    "prompt_base": "cinematic live-action portrait, realistic human or humanoid proportions, natural anatomy, detailed face, sharp focus, dramatic lighting",
+    "denoising_strength": 0.55,
+    "negative_prompt": "anime, cartoon, illustration, CGI, plastic skin, over-smooth face, bad anatomy, deformed, flat lighting, low quality",
+    "weights": {
+        "depth": 0.75,
+        "openpose": 0.45
+    }
+}

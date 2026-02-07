@@ -1,22 +1,32 @@
 # path: z_realism_ai/src/infrastructure/mock_generator.py
-# description: Technical Mock Implementation v5.1.
-#              UPDATED: Replaced simple inversion with a "Safe Simulation Mode".
-#              It now applies grayscale and a technical watermark to indicate 
-#              that the Neural Engine is not active.
-#              UPDATED: Complies with the new Port signature returning empty prompts.
+# description: Resilient Fallback Engine v18.0 - Simulation Adapter.
+#
+# ABSTRACT:
+# This module implements the ImageGeneratorPort as a deterministic fallback 
+# mechanism. It is architected to ensure the "Graceful Degradation" of the 
+# system, allowing researchers to test the application lifecycle and UI 
+# telemetry without the presence of a CUDA-enabled neural environment.
+#
+# ARCHITECTURAL ROLE:
+# 1. System Resilience: Decouples the Application Layer from strict hardware 
+#    dependencies during testing or restricted deployments.
+# 2. Visual Transparency: Employs procedural grayscale filters and technical 
+#    watermarking to communicate the "Engine Offline" status to the end user.
+# 3. Protocol Alignment: Adheres strictly to the multi-parameter signature 
+#    of the domain ports, ensuring seamless swap-ability (Liskov Substitution).
+#
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
-from PIL import Image, ImageOps, ImageDraw, ImageFont
+from PIL import Image, ImageOps, ImageDraw
 from src.domain.ports import ImageGeneratorPort
-import asyncio
 from typing import Callable, Optional, Dict, Any, Tuple
 
 class MockImageGenerator(ImageGeneratorPort):
     """
-    MockImageGenerator (Safe Mode)
+    Simulated Neural Engine (Safe Mode Fallback).
     
-    A fallback adapter that visually communicates its status to the researcher.
-    Used when hardware requirements (VRAM/RAM) are not met.
+    Provides a procedurally generated visual output that adheres to the 
+    domain's interface contracts while bypassing GPU-intensive inference.
     """
     
     def generate_live_action(
@@ -26,37 +36,65 @@ class MockImageGenerator(ImageGeneratorPort):
         feature_prompt: str,
         resolution_anchor: int,
         hyper_params: Dict[str, Any],
-        progress_callback: Optional[Callable[[int, int], None]] = None
+        progress_callback: Optional[Callable[[int, int, str], None]] = None
     ) -> Tuple[Image.Image, str, str]:
         """
-        Simulates AI processing by applying a grayscale filter and a 
-        'MOCK MODE' watermark for system transparency.
-        Returns the image and empty prompts to match the port signature.
+        Executes a procedural simulation of the generative pipeline.
+        
+        Args:
+            source_image: The 2D subject image.
+            prompt_guidance: Semantic subject name.
+            feature_prompt: Target material descriptors.
+            resolution_anchor: Target manifold dimension.
+            hyper_params: Numerical hyperparameters.
+            progress_callback: Optional telemetry link for UI synchronization.
+            
+        Returns:
+            Tuple: (Procedurally Modified Image, Positive Prompt Mock, Negative Prompt Mock).
         """
-        # Simulate neural latency (0.5s)
-        # In a real async context, we would use `await asyncio.sleep(0.5)`
-        # but Celery runs this synchronously, so we remove await.
         
-        print(f"MOCK_SYSTEM: AI Engine is OFFLINE. Generating safe simulation.")
+        print(f"MOCK_SYSTEM: AI Engine is currently OFFLINE. Executing Procedural Simulation Protocol.")
         
-        # 1. Base Transformation (Grayscale for visual distinction)
+        # 1. Telemetry Simulation (Simulating cold-start latency)
+        # We invoke the callback to verify the frontend's polling logic.
+        if progress_callback:
+            progress_callback(100, 100, None)
+        
+        # 2. Procedural Transformation (Identity Preservation)
+        # We convert the image to RGB to ensure canvas compatibility.
         canvas = source_image.convert("RGB")
+        
+        # We apply a Grayscale filter as a visual indicator of "Simulation Mode".
         processed = ImageOps.grayscale(canvas).convert("RGB")
         
-        # 2. Apply Technical Watermark
+        # 3. Technical Watermarking (UI Transparency)
+        # This prevents researchers from mistaking the mock for a neural output.
         draw = ImageDraw.Draw(processed)
         width, height = processed.size
         
-        # Draw a semi-transparent warning bar at the bottom
-        bar_height = height // 8
-        draw.rectangle([0, height - bar_height, width, height], fill=(255, 0, 0))
+        # Define the warning bar dimensions (8% of the total height)
+        bar_height = max(20, height // 12)
         
-        # Add warning text (Using basic drawing if custom fonts are missing in Docker)
-        warning_text = "SIMULATION MODE: NO AI ENGINE DETECTED"
+        # Draw a high-contrast warning banner at the inferior edge
+        draw.rectangle(
+            [0, height - bar_height, width, height], 
+            fill=(239, 68, 68) # Semantic 'Danger' Red (ef4444)
+        )
         
-        # Center the text approximately
-        text_pos = (width // 10, height - (bar_height // 1.5))
-        draw.text(text_pos, warning_text, fill=(255, 255, 255))
+        # Inscribe the Warning Text
+        # Note: We use basic drawing for maximum compatibility within Docker images.
+        warning_message = "SIMULATION MODE: NO GPU ENGINE DETECTED"
+        text_pos = (15, height - (bar_height // 1.5))
         
-        # Return image and empty prompts as per the port contract
-        return processed, "N/A (Mock Mode)", "N/A (Mock Mode)"
+        # Draw text shadow for legibility
+        draw.text((text_pos[0]+1, text_pos[1]+1), warning_message, fill=(0, 0, 0))
+        # Draw text
+        draw.text(text_pos, warning_message, fill=(255, 255, 255))
+        
+        # 4. Signature Fulfillment
+        # We return the modified image and placeholder strings to satisfy the port requirements.
+        return (
+            processed, 
+            "N/A (Simulation Protocol Active)", 
+            "N/A (Simulation Protocol Active)"
+        )

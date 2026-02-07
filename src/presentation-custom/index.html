@@ -1,182 +1,165 @@
 <!-- 
   path: z_realism_ai/src/presentation-custom/index.html
-  description: Premium "Cyber-Capsule" Research Console v10.0.
-               High-fidelity HTML5 structure featuring the Stealth Control 
-               parameter and advanced telemetry visualizations.
-  author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+  description: HCI Layer v19.9 - Dual Viewport Architecture
 -->
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-Realism AI | Master Control v10.0</title>
-    <!-- Stylesheet Link -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Z-REALISM | Research Laboratory v19.9</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Premium Fonts Inclusion -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
-    <div class="main-wrapper">
-        <!-- 1. NAVIGATION: System Identity & Hardware Telemetry -->
-        <header class="top-nav">
-            <div class="logo-container">
-                <h1>🐉 Z-REALISM <span style="color: var(--glow-orange)">MASTER_V10</span></h1>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="app-container">
+
+        <header class="glass-header">
+            <div class="logo">
+                <span class="logo-icon">🐉</span>
+                <div class="logo-text">
+                    <h1>Z-REALISM</h1>
+                    <span class="version-badge">v19.9 DUAL_VIEW</span>
+                </div>
             </div>
-            <div class="status-indicator">
-                <span id="gpu-warning" style="color: var(--glow-cyan); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px;">
-                    HARDWARE_LINK: NOMINAL
-                </span>
-            </div>
+            <div class="status-pill" id="system-status"><span class="status-dot"></span> NEURAL ENGINE: READY</div>
         </header>
 
-        <div class="content-grid">
-            <!-- 2. SIDEBAR: Laboratory Configuration -->
-            <aside class="control-panel">
-                
-                <!-- GROUP: BIOLOGICAL IDENTITY -->
-                <section>
-                    <div class="section-header">BIOLOGICAL IDENTITY</div>
-                    <div class="input-stack" title="Specify the character name to load specialized lore-aware presets from the JSON library.">
-                        <label>ENTITY NAME</label>
-                        <input type="text" id="char-name" class="input-field" value="Goku">
+        <main class="main-grid">
+
+            <aside class="control-panel glass-panel">
+                <div class="panel-section">
+                    <h2>🧬 IDENTITY SOURCE</h2>
+                    <input type="text" id="char-name" class="modern-input" value="Bulma">
+                    <div class="upload-zone" id="drop-zone">
+                        <input type="file" id="file-upload" hidden accept="image/*">
+                        <label for="file-upload" class="upload-label" id="file-label">
+                            <span class="icon">📁</span><span class="text">LOAD SUBJECT DATA</span>
+                        </label>
                     </div>
-                    <div class="input-stack" title="Upload the 2D source artwork. Clean lineart or anime frames provide the best results.">
-                        <label>SOURCE ARTWORK</label>
-                        <div class="file-upload-wrapper">
-                            <label for="file-upload" class="file-upload-label" id="file-label">
-                                📁 UPLOAD DIMENSIONAL INPUT
-                            </label>
-                            <input type="file" id="file-upload" style="display: none;" accept="image/*">
+                    <button id="btn-analyze" class="btn-secondary">🔍 ANALYZE DNA STRATEGY</button>
+                    <div id="essence-tag" class="essence-display">STANDBY</div>
+                </div>
+
+                <div class="panel-section optimization-panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                        <h2 style="margin-bottom:0; color: var(--accent);">🤖 AUTO-PILOT (LOOP)</h2>
+                        <input type="checkbox" id="chk-autotune" checked>
+                    </div>
+                    <div id="opt-status" class="hidden"
+                        style="font-family: 'JetBrains Mono'; font-size: 0.65rem; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                        <div>EVOLUTION: <span id="opt-count" style="color:white;">0</span> / 5</div>
+                        <div style="margin-top:5px;">BEST SCORE: <span id="opt-score"
+                                style="color:var(--success);">0%</span></div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>🎨 SEMANTIC GUIDANCE</h2>
+                    <textarea id="input-prompt"
+                        class="modern-textarea">cinematic film still, high detail skin texture, hyper-realistic, 8k</textarea>
+                </div>
+
+                <div class="accordion-wrapper">
+                    <button class="accordion-trigger" id="acc-trigger">⚙️ ADVANCED CONFIGURATION <span
+                            class="arrow">▼</span></button>
+                    <div class="accordion-content" id="acc-content">
+
+                        <div class="slider-group">
+                            <label for="input-strength">Denoising Strength (<span id="val-strength">0.70</span>)</label>
+                            <input type="range" id="input-strength" min="0.1" max="1.0" step="0.01" value="0.70">
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="input-cn-depth">CN Depth Weight (<span id="val-cn-depth">0.75</span>)</label>
+                            <input type="range" id="input-cn-depth" min="0.0" max="2.0" step="0.05" value="0.75">
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="input-cn-pose">CN Pose Weight (<span id="val-cn-pose">0.40</span>)</label>
+                            <input type="range" id="input-cn-pose" min="0.0" max="2.0" step="0.05" value="0.40">
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="input-res">Resolution Anchor (<span id="val-res">512</span>px)</label>
+                            <input type="range" id="input-res" min="512" max="1024" step="64" value="512">
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="input-steps">Inference Steps (<span id="val-steps">30</span>)</label>
+                            <input type="range" id="input-steps" min="10" max="60" step="1" value="30">
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="input-cfg">CFG Scale (<span id="val-cfg">7.5</span>)</label>
+                            <input type="range" id="input-cfg" min="1" max="20" step="0.5" value="7.5">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="input-seed">Manual Seed</label>
+                            <input type="number" id="input-seed" class="modern-input" value="42">
                         </div>
                     </div>
-                    <button id="btn-analyze" class="btn-secondary" style="width: 100%;" title="Run Heuristic Analysis to automatically configure the engine based on character species.">
-                        🔍 ANALYZE VISUAL DNA
-                    </button>
-                </section>
+                </div>
 
-                <!-- GROUP: NEURAL CORE TUNING -->
-                <section>
-                    <div class="section-header">NEURAL CORE</div>
-                    <div class="input-stack" title="Target resolution. 512px is optimized for speed. Above 768px activates the Smoke Zone.">
-                        <label>RESOLUTION: <span id="val-res" style="color: #fff; font-weight: 900;">512</span>px</label>
-                        <input type="range" id="input-res" min="256" max="1280" step="64" value="512">
-                        <div id="resolution-warning" style="font-size: 0.55rem; color: #555; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">
-                            STABLE_ZONE
-                        </div>
-                    </div>
-                    <div class="input-stack" title="Denoising iterations. 30 steps provide high-fidelity skin textures with balanced latency.">
-                        <label>STEPS: <span id="val-steps" style="color: #fff;">30</span></label>
-                        <input type="range" id="input-steps" min="10" max="60" step="1" value="30">
-                    </div>
-                    <div class="input-stack" title="Guidance Scale. Higher values (7.5+) force the AI to adhere strictly to the prompt guidance.">
-                        <label>GUIDANCE (CFG): <span id="val-cfg" style="color: #fff;">7.5</span></label>
-                        <input type="range" id="input-cfg" min="1" max="15" step="0.5" value="7.5">
-                    </div>
-                    <div class="input-stack" title="ControlNet Strength. Determines the precision of hair spikes and mechanical edges.">
-                        <label>CANNY WEIGHT: <span id="val-cn" style="color: #fff;">0.70</span></label>
-                        <input type="range" id="input-cn" min="0" max="1" step="0.05" value="0.70">
-                    </div>
-                    <!-- NEW STEALTH SLIDER -->
-                    <div class="input-stack" title="The point (0.0 to 1.0) where the AI stops following the drawing lines to focus on skin realism.">
-                        <label>STEALTH STOP: <span id="val-stealth" style="color: #fff;">0.60</span></label>
-                        <input type="range" id="input-stealth" min="0.1" max="1.0" step="0.05" value="0.60">
-                    </div>
-                </section>
-
-                <!-- GROUP: EXPERT ENGINEERING -->
-                <section>
-                    <div class="section-header">EXPERT ENGINEERING</div>
-                    <div class="input-stack" title="Input a specific number for reproducible results, or -1 for total randomness.">
-                        <label>SEED</label>
-                        <input type="number" id="input-seed" class="input-field" value="42">
-                    </div>
-                    <div class="input-stack" title="IP-Adapter intensity. Controls the transfer of character colors and facial identity.">
-                        <label>IDENTITY SCALE (IP): <span id="val-ip" style="color: #fff;">0.65</span></label>
-                        <input type="range" id="input-ip" min="0" max="1" step="0.05" value="0.65">
-                    </div>
-                    <div class="input-stack" title="Concepts to exclude. High values prevent the AI from producing cartoonish or low-quality artifacts.">
-                        <label>NEGATIVE FILTER</label>
-                        <textarea id="input-negative" class="input-field" style="height: 50px; font-size: 0.65rem;">anime, cartoon, low quality, bad anatomy, plastic, blurry</textarea>
-                    </div>
-                </section>
-
-                <!-- GROUP: TEXTURAL GUIDANCE -->
-                <section>
-                    <div class="section-header">TEXTURAL GUIDANCE</div>
-                    <textarea id="input-prompt" class="input-field" style="height: 80px; resize: none;" title="Describe the specific materials, cinematic lighting, and camera settings.">cinematic film still, high detail skin</textarea>
-                </section>
-
-                <button id="btn-generate" class="btn-primary">
-                    🚀 INITIATE TRANSFORMATION
-                </button>
+                <button id="btn-generate" class="btn-primary"><span class="btn-text">INITIATE NEURAL
+                        FUSION</span></button>
             </aside>
 
-            <!-- 3. MAIN WORKSPACE: Visual Synthesis Canvas -->
-            <main class="workspace">
-                <div class="canvas-layout">
-                    <!-- Source artwork container -->
-                    <div class="card">
-                        <header>SOURCE DOMAIN (ARTWORK)</header>
-                        <div id="source-preview" class="img-frame">
-                            <p style="color: #444; font-size: 0.7rem;">Awaiting dimensional input...</p>
-                        </div>
-                        <div id="essence-tag" class="status-box" style="margin-top: 20px; font-weight: 800; color: var(--glow-orange);">
-                            STRATEGY: STANDBY
+            <section class="visual-workspace">
+
+                <div class="dual-viewport-container">
+                    <div class="visual-card glass-panel viewport-source">
+                        <div class="card-header">SOURCE MANIFOLD (INPUT)</div>
+                        <div class="img-container" id="source-preview">
+                            <div class="placeholder-text">LOAD IMAGE DATA</div>
                         </div>
                     </div>
 
-                    <!-- Neural output container -->
-                    <div class="card">
-                        <header>SYNTHETIC DOMAIN (LIVE ACTION)</header>
-                        <div id="result-display" class="img-frame">
-                            <p style="color: #444; font-size: 0.7rem;">Engine awaiting data.</p>
+                    <div class="visual-card glass-panel viewport-result">
+                        <div class="card-header">ACTIVE CANDIDATE MONITOR</div>
+                        <div class="img-container" id="result-display">
+                            <div class="placeholder-text">WAITING FOR NEURAL SEQUENCE...</div>
                         </div>
-                        
-                        <!-- Progress Aura -->
-                        <div id="progress-container" class="hidden">
-                            <div class="energy-meter">
-                                <div id="progress-bar" class="energy-fill"></div>
+
+                        <div id="progress-container" class="progress-overlay hidden">
+                            <div class="spinner"></div>
+                            <div id="progress-text" class="status-message">ANALYZING MANIFOLD...</div>
+                            <div class="progress-track">
+                                <div id="progress-bar" class="progress-fill"></div>
                             </div>
-                            <p id="progress-text" style="font-size: 0.6rem; color: var(--glow-cyan); margin-top: 10px; font-family: 'JetBrains Mono'; letter-spacing: 1px;">
-                                CHARGING AURA: 0%
-                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 4. ANALYTICS REPORT: Scientific Metrics -->
-                <div id="metrics-panel" class="metrics-row hidden">
-                    <div class="metric-box">
-                        <label>STRUCTURAL FIDELITY</label>
-                        <div id="metric-ssim" class="value">0%</div>
-                    </div>
-                    <div class="metric-box">
-                        <label>IDENTITY RETENTION</label>
-                        <div id="metric-id" class="value">0%</div>
-                    </div>
-                    <div class="metric-box">
-                        <label>INFERENCE TIME</label>
-                        <div id="metric-time" class="value">0.0s</div>
-                    </div>
+                <div class="gallery-wrapper glass-panel">
+                    <div class="card-header">POPULATION HISTORY (CANDIDATE SELECTION)</div>
+                    <div id="candidate-gallery" class="gallery-strip"></div>
                 </div>
 
-                <!-- 5. FLIGHT DATA RECORDER: Telemetry Log -->
-                <section id="debug-section" class="debug-container hidden">
-                    <div class="debug-header">
-                        <span style="font-family: 'Orbitron'; font-size: 0.6rem;">📋 FLIGHT DATA RECORDER</span>
-                        <button id="btn-copy-log" class="copy-btn">COPY TELEMETRY</button>
-                    </div>
-                    <textarea id="system-log" readonly spellcheck="false"></textarea>
-                </section>
-
-            </main>
-        </div>
+                <div id="metrics-panel" class="metrics-strip glass-panel hidden">
+                    <div class="metric-item"><span class="label">SSIM FIDELITY</span><span class="value"
+                            id="metric-ssim">0%</span></div>
+                    <div class="metric-item"><span class="label">IDENTITY DNA</span><span class="value"
+                            id="metric-id">0%</span></div>
+                    <div class="metric-item"><span class="label">INFERENCE</span><span class="value"
+                            id="metric-time">0s</span></div>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <!-- Interface Logic Link -->
     <script src="app.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,7 @@
+{
+    "id": "mai",
+    "aliases": ["mai", "agent mai"],
+    "essence": "species_human_agent",
+    "prompt_base": "beautiful asian woman, long straight black hair, green trench coat, stern yet youthful expression, realistic skin pores, wide jawline",
+    "weights": { "depth": 0.60, "openpose": 0.55 }
+}

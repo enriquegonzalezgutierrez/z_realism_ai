@@ -1,7 +1,20 @@
 # path: z_realism_ai/src/application/use_cases.py
-# description: Orchestration Logic v5.1.
-#              This layer coordinates the ports to execute the transformation pipeline.
-#              It is technology-agnostic (doesn't know about PyTorch or CUDA).
+# description: Application Orchestration Layer v18.0 - Transformation Pipeline.
+#
+# ABSTRACT:
+# This module implements the primary business logic for the Z-Realism engine. 
+# It acts as a Pure Application Service that coordinates the interaction 
+# between the Generative Engine and the Scientific Evaluator.
+#
+# ARCHITECTURAL ROLE:
+# 1. Orchestration: Manages the sequential lifecycle of a transformation task 
+#    (Synthesis -> Assessment -> Metadata Enrichment).
+# 2. Decoupling: Utilizes Inversion of Control (IoC) to interact with domain 
+#    ports, allowing the underlying technology (e.g., Stable Diffusion vs. Mock) 
+#    to be swapped without modifying the use case logic.
+# 3. Telemetry Aggregation: Captures execution metrics (inference latency) and 
+#    aggregates scientific data into a unified traceability report.
+#
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import time
@@ -11,14 +24,19 @@ from src.domain.ports import ImageGeneratorPort, ScientificEvaluatorPort, Assess
 
 class TransformCharacterUseCase:
     """
-    Orchestrates the transformation of a character into an Anime/2.5D version.
-    Coordinates the generation process and the subsequent scientific evaluation.
+    Orchestrator for the Neural-Scientific Transformation Pipeline.
+    
+    Coordinates the synthesis of 2D subjects into Live-Action manifolds 
+    and subsequently quantifies the fidelity of the resulting output.
     """
 
     def __init__(self, generator: ImageGeneratorPort, evaluator: ScientificEvaluatorPort):
         """
-        Dependency Injection via Ports (DIP - SOLID).
-        The Use Case depends on abstractions, not concrete implementations.
+        Dependency Injection via Domain Ports (SOLID Principles).
+        
+        Args:
+            generator: The abstract neural synthesis engine adapter.
+            evaluator: The abstract scientific assessment adapter.
         """
         self._generator = generator
         self._evaluator = evaluator
@@ -29,46 +47,63 @@ class TransformCharacterUseCase:
         character_name: str, 
         feature_prompt: str, 
         resolution_anchor: int,
-        hyper_params: Dict[str, Any], # Dynamic tuning parameters (CFG, Steps, etc.)
-        callback: Optional[Callable[[int, int], None]] = None
+        hyper_params: Dict[str, Any],
+        callback: Optional[Callable[[int, int, str], None]] = None
     ) -> Tuple[Image.Image, AssessmentReport]:
         """
-        Executes the full transformation pipeline.
+        Executes the three-phase transformation lifecycle.
         
-        1. Prepares the identity context.
-        2. Executes the neural generation (MeinaMix Engine).
-        3. Measures latency and scientific metrics.
-        4. Enriches the report with full traceability data (prompts used).
+        PHASE 1: NEURAL SYNTHESIS
+        Invokes the generator to perform latent diffusion based on the 
+        source image and semantic guidance.
+        
+        PHASE 2: SCIENTIFIC QUANTIFICATION
+        Invokes the evaluator to measure structural and chromatic fidelity 
+        using Computer Vision (CV) metrics.
+        
+        PHASE 3: TRACEABILITY ENRICHMENT
+        Calculates execution latency and maps technical prompts to the 
+        final report for research transparency.
+        
+        Returns:
+            Tuple: (Final Generated Image, Detailed Assessment Report).
         """
 
-        # Identity Logic: 
-        # We pass the character name as guidance to the generator.
-        # The generator (MeinaMix) will use this to construct the final prompt.
-        identity_prompt = character_name
-
+        # Initialize latency tracking
         start_time = time.time()
 
-        # Phase 1: Neural Generation
-        # The generator returns the image and the exact prompts used for traceability.
+        # ---------------------------------------------------------------------
+        # PHASE 1: GENRATIVE INFERENCE
+        # ---------------------------------------------------------------------
+        # The generator produces the pixel manifold and returns the exact 
+        # prompts utilized (for flight data recording).
         generated_image, full_prompt, negative_prompt = self._generator.generate_live_action(
             source_image=image_file,
-            prompt_guidance=identity_prompt,
+            prompt_guidance=character_name,
             feature_prompt=feature_prompt,
             resolution_anchor=resolution_anchor,
             hyper_params=hyper_params,
             progress_callback=callback
         )
 
-        elapsed_time = time.time() - start_time
-
-        # Phase 2: Scientific Assessment
-        # Computes SSIM (Structure) and Color DNA preservation.
+        # ---------------------------------------------------------------------
+        # PHASE 2: MULTIVARIATE SCIENTIFIC ASSESSMENT
+        # ---------------------------------------------------------------------
+        # Quantification of SSIM and Identity preservation between Source and Output.
         report: AssessmentReport = self._evaluator.assess_quality(image_file, generated_image)
         
-        # Phase 3: Metadata Enrichment
+        # ---------------------------------------------------------------------
+        # PHASE 3: METADATA CONSOLIDATION
+        # ---------------------------------------------------------------------
+        elapsed_time = time.time() - start_time
+        
+        # Enrich the report with operational telemetry
         report.inference_time = round(elapsed_time, 2)
-        # We assume it's a mock if the class name contains 'Mock' (simple check)
+        
+        # Determine if the execution was generative or a procedural simulation (Mock)
         report.is_mock = "Mock" in self._generator.__class__.__name__
+        
+        # Populate traceability fields
         report.full_prompt = full_prompt
         report.negative_prompt = negative_prompt
 

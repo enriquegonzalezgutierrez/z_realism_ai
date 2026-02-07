@@ -1,244 +1,707 @@
 /* 
   path: z_realism_ai/src/presentation-custom/style.css
-  description: Premium Cyber-Obsidian Design System v10.0.
-               FEATURING: Neon-Glow sliders, Aura-Pulse buttons, 
-               and high-end Capsule Corp laboratory aesthetics.
+  description: Presentation Layer v19.9 - Dual Viewport Implementation.
+  
+  ABSTRACT:
+  This revision introduces the necessary CSS rules for the Dual Viewport 
+  Architecture. The top section of the visual workspace is split into two 
+  columns to display the Source Manifold and the Active Candidate concurrently, 
+  facilitating A/B comparison.
+  
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap');
-
+/* ----------------------------------------------------------------------------- 
+   1. DESIGN TOKENS (ROOT VARIABLES)
+----------------------------------------------------------------------------- */
 :root {
-    --bg-black: #020204;
-    --bg-sidebar: #08080a;
-    --bg-card: rgba(20, 20, 25, 0.7);
-    
-    --glow-orange: #ff7b00;
-    --glow-cyan: #00f2ff;
-    --glow-magenta: #ff0055;
-    
-    --text-main: #e0e0e0;
-    --text-dim: #666666;
-    
-    --border-thin: 1px solid rgba(255, 255, 255, 0.08);
-    --grad-aura: linear-gradient(135deg, #ff7b00 0%, #ff0055 100%);
+    --bg-dark: #050505;
+    --bg-panel: rgba(20, 20, 25, 0.6);
+    --primary: #3b82f6;
+    --accent: #8b5cf6;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --blur-intensity: 20px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
-/* 1. GLOBAL UI RESET */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--bg-black); }
-::-webkit-scrollbar-thumb { background: var(--glow-orange); border-radius: 5px; }
+/* ----------------------------------------------------------------------------- 
+   2. GLOBAL RESET & TYPOGRAPHY
+----------------------------------------------------------------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
-    background-color: var(--bg-black);
+    background-color: var(--bg-dark);
     color: var(--text-main);
-    font-family: 'Inter', sans-serif;
-    height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
     overflow: hidden;
-    background-image: radial-gradient(circle at 10% 10%, #150a2e 0%, #020204 50%);
+    -webkit-font-smoothing: antialiased;
 }
 
-/* 2. LAYOUT ENGINE */
-.main-wrapper { display: flex; flex-direction: column; height: 100vh; }
+/* ----------------------------------------------------------------------------- 
+   3. ENVIRONMENTAL AMBIENCE
+----------------------------------------------------------------------------- */
+.grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -1;
+    pointer-events: none;
+}
 
-.top-nav {
-    height: 60px;
-    padding: 0 30px;
+.bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: -2;
+    opacity: 0.4;
+    animation: pulse 8s infinite alternate;
+}
+
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--primary);
+    top: -100px;
+    left: -100px;
+}
+
+.orb-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--accent);
+    bottom: -50px;
+    right: -50px;
+}
+
+/* ----------------------------------------------------------------------------- 
+   4. LAYOUT ARCHITECTURE
+----------------------------------------------------------------------------- */
+.app-container {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100vh;
+}
+
+.glass-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0,0,0,0.9);
-    backdrop-filter: blur(20px);
-    border-bottom: var(--border-thin);
-    z-index: 1000;
+    padding: 15px 25px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(var(--blur-intensity));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    z-index: 100;
+    flex-shrink: 0;
 }
 
-.top-nav h1 {
-    font-family: 'Orbitron', sans-serif;
+.logo {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.logo-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 10px var(--accent));
+}
+
+.logo-text h1 {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 1.2rem;
-    font-weight: 900;
-    letter-spacing: 3px;
-    background: var(--grad-aura);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-.content-grid {
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    flex: 1;
+.version-badge {
+    font-size: 0.6rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-left: 8px;
+}
+
+.status-pill {
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: var(--success);
+    font-weight: 600;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--success);
+}
+
+.main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-grow: 1;
     overflow: hidden;
 }
 
-/* 3. SIDEBAR: THE CONTROL CENTER */
-.control-panel {
-    background: var(--bg-sidebar);
-    border-right: var(--border-thin);
-    padding: 25px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
+@media (min-width: 1024px) {
+    .main-grid {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        align-items: start;
+    }
+
+    .control-panel,
+    .visual-workspace {
+        height: 100%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+    .visual-workspace {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
-.section-header {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem;
-    color: var(--glow-cyan);
-    letter-spacing: 4px;
+/* ----------------------------------------------------------------------------- 
+   5. COMPONENT LIBRARY
+----------------------------------------------------------------------------- */
+.glass-panel {
+    background: var(--bg-panel);
+    backdrop-filter: blur(var(--blur-intensity));
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 25px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.panel-section {
+    margin-bottom: 25px;
+}
+
+h2 {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
     margin-bottom: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
-.section-header::after {
-    content: ""; flex: 1; height: 1px;
-    background: linear-gradient(to right, var(--glow-cyan), transparent);
+.input-group {
+    margin-bottom: 15px;
 }
 
-/* 4. PREMIUM FORM ELEMENTS */
-.input-stack { margin-bottom: 18px; }
-
-label {
-    font-size: 0.6rem;
-    font-weight: 800;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-    display: block;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.input-field {
-    background: #000;
-    border: 1px solid #1a1a1a;
-    padding: 12px;
-    border-radius: 8px;
-    color: var(--glow-cyan);
-    font-family: 'JetBrains Mono', monospace;
+.input-group label,
+.slider-group>label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 0.8rem;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.slider-group>label span {
+    font-family: 'JetBrains Mono';
+    color: var(--text-main);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.modern-input,
+.modern-textarea {
     width: 100%;
-    transition: 0.3s;
-}
-
-.input-field:focus { border-color: var(--glow-orange); outline: none; }
-
-/* Custom Range Slider (The "Energy Bar" Look) */
-input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
-input[type=range]::-webkit-slider-runnable-track {
-    width: 100%; height: 6px; background: #111; border-radius: 3px;
-    border: 1px solid #222;
-}
-input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; height: 18px; width: 8px;
-    background: var(--glow-orange); cursor: pointer; margin-top: -7px;
-    box-shadow: 0 0 15px var(--glow-orange); border-radius: 2px;
-}
-
-/* Custom File Upload */
-.file-upload-label {
-    display: block; padding: 15px; background: #050505; border: 1px dashed #333;
-    border-radius: 10px; text-align: center; cursor: pointer; font-size: 0.7rem;
-    color: var(--text-dim); transition: 0.3s;
-}
-.file-upload-label:hover { border-color: var(--glow-orange); color: var(--glow-orange); background: #0a0500; }
-
-/* 5. AURA BUTTONS */
-.btn-primary {
-    background: var(--grad-aura);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
-    padding: 18px;
-    border: none;
-    border-radius: 12px;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 5px 20px rgba(255, 123, 0, 0.2);
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease;
 }
+
+.modern-input:focus,
+.modern-textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.modern-textarea {
+    min-height: 80px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.upload-zone {
+    margin-bottom: 20px;
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 30px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s var(--ease-out-cubic);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.upload-label:hover {
+    border-color: var(--primary);
+    background: rgba(59, 130, 246, 0.05);
+    transform: translateY(-2px);
+}
+
+.upload-label .icon {
+    font-size: 2rem;
+}
+
+.upload-label .text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Sliders */
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    margin-top: -6px;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    transition: transform 0.1s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Accordion */
+.accordion-wrapper {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 15px;
+    margin-bottom: 20px;
+}
+
+.accordion-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 10px 0;
+    transition: color 0.2s;
+}
+
+.accordion-trigger:hover {
+    color: var(--text-main);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s var(--ease-out-cubic), opacity 0.4s;
+    opacity: 0;
+}
+
+.accordion-content.open {
+    max-height: 1000px;
+    opacity: 1;
+    padding-top: 10px;
+}
+
+.arrow {
+    transition: transform 0.3s;
+    font-size: 0.7rem;
+}
+
+.arrow.rotate {
+    transform: rotate(180deg);
+}
+
+/* Buttons */
+.btn-primary {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
 .btn-primary:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 10px 40px rgba(255, 123, 0, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.6);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    filter: grayscale(1);
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .btn-secondary {
-    background: transparent; border: 1px solid var(--glow-cyan);
-    color: var(--glow-cyan); padding: 10px; font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.3s;
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    transition: 0.3s;
 }
-.btn-secondary:hover { background: rgba(0, 242, 255, 0.1); box-shadow: 0 0 15px var(--glow-cyan); }
 
-/* 6. VISUAL WORKSPACE */
-.workspace { padding: 40px; overflow-y: auto; background: var(--bg-black); }
-
-.canvas-layout {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 40px;
+.btn-secondary:hover {
+    border-color: var(--text-muted);
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
 }
 
-.card {
-    background: var(--bg-card);
-    border: var(--border-thin);
-    border-radius: 24px;
-    padding: 30px;
-    backdrop-filter: blur(30px);
+/* ----------------------------------------------------------------------------- 
+   6. VISUALIZATION WORKSPACE (Dual Viewport)
+----------------------------------------------------------------------------- */
+.visual-workspace {
+    gap: 20px;
+}
+
+.dual-viewport-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-grow: 1;
+    min-height: 400px;
+}
+
+@media (min-width: 768px) {
+    .dual-viewport-container {
+        flex-direction: row;
+    }
+}
+
+.visual-card {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.img-container {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
     position: relative;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
-.card header {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: var(--text-dim);
-    margin-bottom: 20px;
-    letter-spacing: 2px;
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: filter 0.3s;
 }
 
-.img-frame {
-    width: 100%; aspect-ratio: 1/1; background: #000;
-    border-radius: 16px; display: flex; align-items: center;
-    justify-content: center; border: 1px solid #111; overflow: hidden;
+.placeholder-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono';
+    opacity: 0.5;
 }
 
-.img-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
+#source-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    background: rgba(0, 0, 0, 0.15);
+}
 
-/* 7. TELEMETRY & METRICS */
-.metrics-row {
+/* ----------------------------------------------------------------------------- 
+   7. PROGRESS, METRICS & GALLERY
+----------------------------------------------------------------------------- */
+.progress-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 50;
+    border-radius: var(--radius-lg);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.progress-track {
+    width: 60%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--success);
+    width: 0%;
+    transition: width 0.3s linear;
+    box-shadow: 0 0 10px var(--success);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--success);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.status-message {
+    font-family: 'JetBrains Mono';
+    font-size: 0.75rem;
+    color: var(--success);
+    letter-spacing: 1px;
+}
+
+.metrics-strip {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin-top: 40px;
+    gap: 15px;
+    text-align: center;
 }
 
-.metric-box {
-    background: rgba(0,0,0,0.5);
-    padding: 25px;
-    border-radius: 16px;
-    border-left: 4px solid var(--glow-cyan);
+.metric-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px 10px;
+    border-radius: var(--radius-sm);
 }
 
-.metric-box label { color: var(--glow-magenta); margin-bottom: 5px; }
-.metric-box .value { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; }
-
-.debug-container {
-    margin-top: 40px; background: #050505; border: var(--border-thin);
-    border-radius: 16px; overflow: hidden;
+.metric-item .label {
+    display: block;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-#system-log {
-    width: 100%; height: 150px; background: #000;
-    color: #0f0; font-family: 'JetBrains Mono'; font-size: 0.75rem;
-    padding: 20px; border: none; resize: none; outline: none;
+.metric-item .value {
+    font-family: 'JetBrains Mono';
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
 }
 
-/* 8. ANIMATIONS */
-@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-@keyframes auraPulse { from { opacity: 0.6; } to { opacity: 1; } }
+.gallery-wrapper {
+    flex-shrink: 0;
+}
 
-.hidden { display: none; }
+.gallery-strip {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 10px 5px;
+}
+
+.gallery-item {
+    flex: 0 0 120px;
+    height: 120px;
+    cursor: pointer;
+    position: relative;
+    padding: 0 !important;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    transition: all 0.3s;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+    border-color: var(--primary);
+}
+
+.gallery-item.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent);
+    transform: scale(1.05);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.gallery-score {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    color: white;
+    font-family: 'JetBrains Mono';
+    font-size: 0.65rem;
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+/* ----------------------------------------------------------------------------- 
+   8. SCROLLBAR STYLING
+----------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* ----------------------------------------------------------------------------- 
+   9. ANIMATIONS
+----------------------------------------------------------------------------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(0.95);
+        opacity: 0.4;
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "drgero",
+    "aliases": ["gero", "dr. gero", "android 20", "a20"],
+    "essence": "species_android_cyborg",
+    "prompt_base": "elderly man, long white hair, large grey mustache, black hat with red ribbon logo, realistic aged skin wrinkles, mechanical hand details, wide jawline, sinister eyes",
+    "weights": { "depth": 0.70, "openpose": 0.50 }
+}

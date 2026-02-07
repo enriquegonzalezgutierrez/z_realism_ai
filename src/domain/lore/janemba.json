@@ -1,0 +1,7 @@
+{
+    "id": "janemba",
+    "aliases": ["janemba", "super janemba"],
+    "essence": "species_hell_demon",
+    "prompt_base": "powerful red demon, purple organic armor segments, yellow horns, realistic muscular anatomy, long purple sword, glowing yellow eyes, wide jawline",
+    "weights": { "depth": 0.75, "openpose": 0.50 }
+}

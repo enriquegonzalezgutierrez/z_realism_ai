@@ -1,0 +1,7 @@
+{
+    "id": "tien",
+    "aliases": ["tien", "tenshinhan"],
+    "essence": "species_human_triclops",
+    "prompt_base": "tall muscular bald man, three functional eyes, green martial arts vest, realistic skin texture, wide jawline, thick neck, scarred shoulder",
+    "weights": { "depth": 0.70, "openpose": 0.50 }
+}

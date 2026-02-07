@@ -1,0 +1,7 @@
+{
+    "id": "caulifla",
+    "aliases": ["caulifla"],
+    "essence": "species_saiyan_u6",
+    "prompt_base": "rebellious young asian woman, messy spiked black hair, wide jawline, purple tube top, baggy magenta pants, realistic skin texture, confident smirk",
+    "weights": { "depth": 0.60, "openpose": 0.55 }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "roshi",
+    "aliases": ["master roshi", "kame-sennin", "jackie chun"],
+    "essence": "species_human_elder_master",
+    "prompt_base": "elderly muscular man, very tan skin, bald head, thick long white beard, iconic red sunglasses, hawaiian shirt, realistic skin wrinkles and age spots",
+    "weights": { "depth": 0.70, "openpose": 0.50 }
+}

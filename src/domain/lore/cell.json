@@ -1,0 +1,7 @@
+{
+    "id": "cell",
+    "aliases": ["cell", "perfect cell"],
+    "essence": "species_bio_android",
+    "prompt_base": "humanoid insectoid hybrid, green spotted chitinous armor, crown-like head horns, golden eyes, black insect wings, biological exoskeleton",
+    "weights": { "depth": 0.75, "openpose": 0.50 }
+}

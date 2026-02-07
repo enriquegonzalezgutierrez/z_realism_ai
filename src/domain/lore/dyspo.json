@@ -1,0 +1,7 @@
+{
+    "id": "dyspo",
+    "aliases": ["dyspo"],
+    "essence": "species_alien_feline",
+    "prompt_base": "anthropomorphic purple rabbit creature, slender muscular build, large pointed ears, prominent front teeth, yellow eyes, pride trooper suit, realistic skin texture",
+    "weights": { "depth": 0.75, "openpose": 0.50 }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "android15",
+    "aliases": ["15", "android 15"],
+    "essence": "species_android_mechanical",
+    "prompt_base": "short alien-looking android, dark purple skin, large green sunglasses, oversized hat, tuxedo outfit, realistic smooth texture, wide face",
+    "weights": { "depth": 0.70, "openpose": 0.55 }
+}

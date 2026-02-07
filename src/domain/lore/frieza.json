@@ -1,10 +1,7 @@
 {
     "id": "frieza",
-    "aliases": ["frieza", "freezer", "golden frieza", "emperor"],
+    "aliases": ["frieza", "freezer", "golden frieza"],
     "essence": "species_frost_demon",
-    "prompt_base": "raw photo, realistic alien creature, white polished bio-armor, reptilian skin, purple head gems, menacing eyes, cinematic rim light, fujifilm, 8k, masterpiece",
-    "weights": {
-        "depth": 0.78,
-        "openpose": 0.80
-    }
+    "prompt_base": "sleek alien creature, polished white bio-armor, purple crystalline head gems, menacing red eyes, reptilian skin texture, slender and terrifying",
+    "weights": { "depth": 0.80, "openpose": 0.45 }
 }

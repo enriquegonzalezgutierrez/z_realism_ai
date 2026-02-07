@@ -1,0 +1,7 @@
+{
+    "id": "pilaf",
+    "aliases": ["pilaf", "emperor pilaf"],
+    "essence": "species_alien_imp",
+    "prompt_base": "tiny blue alien creature, large pointed ears, blue and red jester hat, blue imperial tunic with frills, wide face, realistic smooth skin, tiny stature",
+    "weights": { "depth": 0.90, "openpose": 0.40 }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "gogeta",
+    "aliases": ["gogeta", "gogeta blue"],
+    "essence": "species_saiyan_fusion",
+    "prompt_base": "masculine asian warrior, black spiked hair, metamoran fusion vest with black and yellow padding, wide jawline, realistic skin pores, intense battle-ready eyes",
+    "weights": { "depth": 0.65, "openpose": 0.50 }
+}

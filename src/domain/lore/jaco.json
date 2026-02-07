@@ -1,0 +1,7 @@
+{
+    "id": "jaco",
+    "aliases": ["jaco", "galactic patrolman"],
+    "essence": "species_alien_patrolman",
+    "prompt_base": "slender alien with smooth silver and purple skin, large yellow bug-like eyes, galactic patrol armor, radio antenna on head, wide jawline, futuristic aesthetic",
+    "weights": { "depth": 0.70, "openpose": 0.55 }
+}

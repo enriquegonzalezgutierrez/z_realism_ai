@@ -1,0 +1,7 @@
+{
+    "id": "gokublack",
+    "aliases": ["goku black", "zamasu goku", "black"],
+    "essence": "species_saiyan_corrupted",
+    "prompt_base": "masculine asian man, sharp arrogant smirk, single green earring, messy black hair, dark grey tunic, black long sleeves, realistic skin texture, wide jawline",
+    "weights": { "depth": 0.65, "openpose": 0.50 }
+}

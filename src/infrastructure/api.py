@@ -1,7 +1,17 @@
 # path: z_realism_ai/src/infrastructure/api.py
-# description: FastAPI Gateway v10.0 - Stealth Protocol Edition.
-#              Orchestrates complex parameter marshalling from the Custom UI 
-#              to the asynchronous CUDA workers.
+# description: Expert Gateway v19.0 - High-Fidelity Asynchronous Orchestrator.
+#
+# ABSTRACT:
+# This module implements the Primary Driving Adapter for the Z-Realism ecosystem. 
+# It manages the ingestion of multi-part form data and marshals complex 
+# hyperparameters into serialized task payloads for the distributed Celery queue.
+#
+# ARCHITECTURAL EVOLUTION (v19.0):
+# The transformation interface has been expanded to support a decoupled 
+# conditioning schema. By explicitly passing 'cn_depth', 'cn_pose', and 
+# 'strength', the API ensures that the Neural Engine remains stateless 
+# and 100% compliant with the Domain Lore's tactical requirements.
+#
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import io
@@ -18,23 +28,21 @@ from PIL import Image
 from src.infrastructure.worker import transform_character_task, celery_app
 from src.infrastructure.analyzer import HeuristicImageAnalyzer
 
-app = FastAPI(title="Z-Realism Expert Gateway", version="10.0")
+app = FastAPI(title="Z-Realism Expert Gateway", version="19.0")
 
 # --- 1. CROSS-ORIGIN RESOURCE SHARING (CORS) ---
-# Allows the Custom UI (Port 80) to securely communicate with the API (Port 8000).
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Permissive for development laboratory environments
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # --- 2. HARDWARE RESOURCE COORDINATION ---
-# Redis client for task tracking and hardware mutex locks.
 redis_client = redis.from_url(os.getenv("CELERY_BROKER_URL", "redis://z-realism-broker:6379/0"))
-SYSTEM_LOCK_KEY = "z_realism_v10_mutex"
-LOCK_TIMEOUT = 900 # 15-minute safety timeout for high-res renders
+SYSTEM_LOCK_KEY = "z_realism_v19_mutex"
+LOCK_TIMEOUT = 900 
 
 # Neural Strategy Intelligence
 image_analyzer = HeuristicImageAnalyzer()
@@ -47,6 +55,7 @@ async def analyze_visual_dna(
 ):
     """
     Invokes the Heuristic Brain to determine the optimal synthesis strategy.
+    Now returns granular weights and stochastic ratios from Lore.
     """
     try:
         content = await file.read()
@@ -59,8 +68,11 @@ async def analyze_visual_dna(
             "recommendations": {
                 "steps": analysis.recommended_steps, 
                 "cfg_scale": analysis.recommended_cfg,
-                "cn_scale": analysis.recommended_cn,
-                "texture_prompt": analysis.suggested_prompt 
+                "cn_scale_depth": analysis.recommended_cn_depth, # Decoupled
+                "cn_scale_pose": analysis.recommended_cn_pose,   # Decoupled
+                "strength": analysis.recommended_strength,       # Img2Img specific
+                "texture_prompt": analysis.suggested_prompt,
+                "negative_prompt": analysis.suggested_negative
             }
         }
     except Exception as e:
@@ -75,15 +87,15 @@ async def transform_image(
     resolution_anchor: int = Form(512),
     steps: int = Form(30),
     cfg_scale: float = Form(7.5),
-    cn_scale: float = Form(0.70),
-    stealth_stop: float = Form(0.60), # NEW: Temporal control parameter
+    cn_depth: float = Form(0.75),       # NEW: Decoupled weight
+    cn_pose: float = Form(0.40),        # NEW: Decoupled weight
+    strength: float = Form(0.70),       # NEW: Precision stochastic control
     seed: int = Form(42),
-    ip_scale: float = Form(0.65),
     negative_prompt: str = Form("anime, cartoon")
 ):
     """
-    Dispatches the heavy dimensional fusion task to the asynchronous CUDA queue.
-    Ensures single-task execution to protect 6GB VRAM hardware.
+    Dispatches the high-fidelity synthesis job to the CUDA worker.
+    Implements hardware single-tenancy via Redis Mutex.
     """
     if redis_client.exists(SYSTEM_LOCK_KEY):
         raise HTTPException(status_code=429, detail="HARDWARE_LOCK: CUDA Engine Busy.")
@@ -92,14 +104,14 @@ async def transform_image(
         content = await file.read()
         image_b64 = base64.b64encode(content).decode('utf-8')
 
-        # Package the full 10-parameter hyper-param dictionary
+        # Package the full tactical hyper-param manifold
         hyper_params = {
             "steps": steps,
             "cfg_scale": cfg_scale,
-            "cn_scale": cn_scale,
-            "stealth_stop": stealth_stop, # Injected into the task payload
+            "cn_depth": cn_depth,
+            "cn_pose": cn_pose,
+            "strength": strength,
             "seed": seed,
-            "ip_scale": ip_scale,
             "negative_prompt": negative_prompt
         }
 
@@ -119,9 +131,7 @@ async def transform_image(
 # --- 5. TELEMETRY & SYSTEM CONTROL ---
 @app.get("/status/{task_id}")
 async def get_task_status(task_id: str):
-    """Real-time monitoring of de-noising progress."""
     task_result = AsyncResult(task_id, app=celery_app)
-    # Release lock automatically if the task is finished
     if task_result.ready():
         current_lock = redis_client.get(SYSTEM_LOCK_KEY)
         if current_lock and current_lock.decode('utf-8') == task_id:
@@ -134,19 +144,11 @@ async def get_task_status(task_id: str):
 
 @app.get("/result/{task_id}")
 async def get_task_result(task_id: str):
-    """Retrieves finalized base64 image and scientific metrics."""
     task_result = AsyncResult(task_id, app=celery_app)
     if not task_result.ready(): raise HTTPException(status_code=202)
     return JSONResponse(content=task_result.result)
 
 @app.post("/system/unlock")
 async def manual_unlock():
-    """Safety manual override to release hardware resources."""
     redis_client.delete(SYSTEM_LOCK_KEY)
-    return {"message": "System Unlocked. Ready for next session."}
-
-@app.get("/system/status")
-async def get_system_status():
-    """Returns true if the GPU is currently processing a task."""
-    lock_owner = redis_client.get(SYSTEM_LOCK_KEY)
-    return {"locked": bool(lock_owner)}
+    return {"message": "Hardware Mutex Released."}

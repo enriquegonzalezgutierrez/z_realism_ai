@@ -1,0 +1,7 @@
+{
+    "id": "moro",
+    "aliases": ["moro", "planet-eater moro"],
+    "essence": "species_ancient_wizard",
+    "prompt_base": "anthropomorphic elder goat creature, massive curved horns, long white beard, blue wrinkled skin, ancient mystical robes, menacing red eyes, realistic fur texture",
+    "weights": { "depth": 0.85, "openpose": 0.40 }
+}

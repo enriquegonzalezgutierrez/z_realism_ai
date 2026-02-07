@@ -1,0 +1,7 @@
+{
+    "id": "cooler",
+    "aliases": ["cooler", "coora", "final form cooler"],
+    "essence": "species_frost_demon_elite",
+    "prompt_base": "sleek alien creature, purple and white organic bio-armor, white biological face mask, red demonic eyes, long tail, menacing presence, biological exoskeleton",
+    "weights": { "depth": 0.80, "openpose": 0.45 }
+}

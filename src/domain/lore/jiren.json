@@ -2,9 +2,6 @@
     "id": "jiren",
     "aliases": ["jiren", "the gray", "pride trooper"],
     "essence": "species_alien_warrior",
-    "prompt_base": "cinematic battle, hyper-muscular gray alien, black eyes, red black combat suit, muscle definition, realistic skin, dramatic lighting, epic scale, 8k, masterpiece",
-    "weights": {
-        "depth": 0.72,
-        "openpose": 0.85
-    }
+    "prompt_base": "massive muscular gray alien, giant black eyes, smooth gray skin, wide bald head, thick muscular neck, red and black combat suit, hyper-realistic muscle definition",
+    "weights": { "depth": 0.75, "openpose": 0.50 }
 }

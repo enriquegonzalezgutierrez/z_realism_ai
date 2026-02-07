@@ -1,0 +1,7 @@
+{
+    "id": "videl",
+    "aliases": ["videl", "videl satan"],
+    "essence": "species_human_martial_artist",
+    "prompt_base": "athletic young woman, fit toned physique, short black hair, wide jawline, white oversized t-shirt, purple cycling shorts, realistic sweat and skin texture",
+    "weights": { "depth": 0.60, "openpose": 0.55 }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "bojack",
+    "aliases": ["bojack"],
+    "essence": "species_hera_seijin",
+    "prompt_base": "massive muscular pirate man, teal green skin, wild long orange hair and beard, gold jewelry, blue vest, realistic skin texture, wide jawline, thick neck",
+    "weights": { "depth": 0.75, "openpose": 0.50 }
+}

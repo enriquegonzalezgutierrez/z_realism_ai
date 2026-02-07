@@ -1,0 +1,7 @@
+{
+    "id": "champa",
+    "aliases": ["champa", "lord champa"],
+    "essence": "species_deity_feline",
+    "prompt_base": "obese anthropomorphic sphynx cat, purple skin folds, heavy-set feline body, glowing yellow eyes, ancient egyptian jewelry, divine maroon silk, wide face",
+    "weights": { "depth": 0.85, "openpose": 0.45 }
+}

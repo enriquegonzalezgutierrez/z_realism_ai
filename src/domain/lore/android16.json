@@ -1,0 +1,7 @@
+{
+    "id": "android16",
+    "aliases": ["16", "android 16"],
+    "essence": "species_android_full",
+    "prompt_base": "hyper-muscular giant man, ginger mohawk hair, gentle blue eyes, heavy green robotic armor, mechanical chestplate, realistic skin pores, wide square face, thick neck",
+    "weights": { "depth": 0.80, "openpose": 0.45 }
+}

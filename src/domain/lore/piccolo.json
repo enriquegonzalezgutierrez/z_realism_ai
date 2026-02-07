@@ -1,10 +1,7 @@
 {
     "id": "piccolo",
-    "aliases": ["piccolo", "picolo", "nail", "kami", "slug", "namekian"],
+    "aliases": ["piccolo", "ma junior", "namekian"],
     "essence": "species_namekian",
-    "prompt_base": "raw photo, realistic green alien man, damp amphibian skin texture, organic pointed ears, fleshy antennas, muscular anatomy, realistic purple martial arts gi, cinematic lighting, masterpiece",
-    "weights": {
-        "depth": 0.70,
-        "openpose": 0.85
-    }
+    "prompt_base": "muscular green alien man, amphibian skin texture, pointed ears, organic antennas, wide jaw, heavy purple martial arts gi, thick neck, focused alien eyes",
+    "weights": { "depth": 0.75, "openpose": 0.45 }
 }

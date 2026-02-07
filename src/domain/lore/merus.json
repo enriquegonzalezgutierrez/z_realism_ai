@@ -1,0 +1,7 @@
+{
+    "id": "merus",
+    "aliases": ["merus", "agent 1"],
+    "essence": "species_angel_trainee",
+    "prompt_base": "elegant man with pale light-blue skin, short silver hair, galactic patrol armor, serene expression, wide jawline, realistic skin pores, divine aura",
+    "weights": { "depth": 0.60, "openpose": 0.50 }
+}

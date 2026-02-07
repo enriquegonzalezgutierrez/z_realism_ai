@@ -1,0 +1,7 @@
+{
+    "id": "mrsatan",
+    "aliases": ["mr. satan", "hercule", "mark"],
+    "essence": "species_human_showman",
+    "prompt_base": "muscular man with large black afro, thick horseshoe mustache, hairy chest, brown martial arts gi, white cape, boisterous expression, realistic skin texture",
+    "weights": { "depth": 0.65, "openpose": 0.55 }
+}

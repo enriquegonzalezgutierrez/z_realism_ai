@@ -1,0 +1,7 @@
+{
+    "id": "kefla",
+    "aliases": ["kefla", "kafla"],
+    "essence": "species_saiyan_fusion_u6",
+    "prompt_base": "muscular young woman, chaotic spiked black hair, green potara earrings, red crop top and leggings, realistic muscle definition, arrogant smirk, wide jawline",
+    "weights": { "depth": 0.65, "openpose": 0.50 }
+}

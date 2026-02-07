@@ -1,0 +1,7 @@
+{
+    "id": "android21",
+    "aliases": ["21", "android 21", "vomi"],
+    "essence": "species_android_scientist",
+    "prompt_base": "beautiful woman, long voluminous curly brown hair, black framed glasses, laboratory white coat, blue and red dress, realistic skin texture, wide jawline, intelligent gaze",
+    "weights": { "depth": 0.60, "openpose": 0.55 }
+}

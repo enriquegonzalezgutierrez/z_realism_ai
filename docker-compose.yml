@@ -65,7 +65,7 @@ services:
   z-realism-worker:
     build: .
     container_name: z_realism_worker
-    command: celery -A src.infrastructure.worker worker --loglevel=info --concurrency=1
+    command: celery -A src.infrastructure.worker worker --loglevel=info --pool=solo
     volumes:
       - ./src:/app/src
       - hf_cache:/app/model_cache

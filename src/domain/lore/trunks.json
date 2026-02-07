@@ -1,0 +1,7 @@
+{
+    "id": "trunks",
+    "aliases": ["trunks", "future trunks"],
+    "essence": "species_saiyan_hybrid",
+    "prompt_base": "handsome young man, lavender colored hair, wide jaw, denim capsule corp jacket, leather sword strap across chest, intense blue eyes, battle-worn face",
+    "weights": { "depth": 0.65, "openpose": 0.55 }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "yamcha",
+    "aliases": ["yamcha"],
+    "essence": "species_human_warrior",
+    "prompt_base": "handsome asian man, long messy black hair, cross-shaped scars on cheeks, orange martial arts gi, wide jawline, realistic skin texture, athletic build",
+    "weights": { "depth": 0.60, "openpose": 0.55 }
+}

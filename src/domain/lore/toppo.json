@@ -1,0 +1,7 @@
+{
+    "id": "toppo",
+    "aliases": ["toppo", "top"],
+    "essence": "species_alien_deity",
+    "prompt_base": "massive muscular alien man, enormous barrel chest, giant white horseshoe mustache, tan skin, pride trooper uniform, wide bald head, thick neck",
+    "weights": { "depth": 0.85, "openpose": 0.45 }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "granolah",
+    "aliases": ["granolah"],
+    "essence": "species_cerealian",
+    "prompt_base": "handsome man with green hair, one mechanical sniper eye patch, long white muffler scarf, leather flight jacket, realistic skin texture, wide jawline, revengeful eyes",
+    "weights": { "depth": 0.65, "openpose": 0.55 }
+}

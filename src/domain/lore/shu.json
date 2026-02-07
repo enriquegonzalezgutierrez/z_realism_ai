@@ -1,0 +1,7 @@
+{
+    "id": "shu",
+    "aliases": ["shu", "soba"],
+    "essence": "species_anthropomorphic_dog",
+    "prompt_base": "anthropomorphic shiba inu dog ninja, realistic fur texture, black ninja outfit, katana on back, wide dog jaw, canine facial structure, brown eyes",
+    "weights": { "depth": 0.75, "openpose": 0.50 }
+}

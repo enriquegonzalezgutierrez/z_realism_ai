@@ -1,0 +1,7 @@
+{
+    "id": "zamasu",
+    "aliases": ["zamasu", "fused zamasu"],
+    "essence": "species_shinjin_deity",
+    "prompt_base": "slender green alien man, mohawk white hair, pointed ears, divine shinjin robes, wide jawline, realistic skin pores, arrogant expression, gold earrings",
+    "weights": { "depth": 0.70, "openpose": 0.50 }
+}

@@ -1,10 +1,13 @@
 {
     "id": "beerus",
-    "aliases": ["beerus", "bills", "champa", "god of destruction"],
-    "essence": "species_deity_feline",
-    "prompt_base": "raw photo, realistic purple sphynx skin, muscular feline god, gold jewelry, silk fabrics, yellow glowing eyes, divine aura, sharp focus, 8k, masterpiece",
+    "aliases": ["beerus", "god_of_destruction"],
+    "essence": "anthropomorphic_deity",
+    "prompt_base": "cinematic portrait of a purple anthropomorphic cat deity, muscular yet lean, confident and menacing expression, Egyptian-inspired attire, floating in cosmic background",
+    "feature_prompt": "wrinkled skin texture, detailed eyes, sharp ears, gold jewelry, subtle scar details, divine aura",
+    "negative_prompt": "anime, cartoon, illustration, CGI, chibi, plastic texture, exaggerated eyes, deformed anatomy, flat lighting, low quality",
     "weights": {
-        "depth": 0.75,
-        "openpose": 0.80
-    }
+        "depth": 0.85,
+        "openpose": 0.30
+    },
+    "denoising_strength": 0.50
 }

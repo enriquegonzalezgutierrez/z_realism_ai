@@ -1,0 +1,7 @@
+{
+    "id": "hit",
+    "aliases": ["hit", "hitman", "legendary assassin"],
+    "essence": "species_alien_assassin",
+    "prompt_base": "purple alien man, leather-like skin texture, stoic face, wide jawline, purple chitinous head structure, long dark grey trench coat, futuristic warrior aesthetic",
+    "weights": { "depth": 0.75, "openpose": 0.50 }
+}

@@ -1,5 +1,8 @@
 # path: z_realism_ai/requirements.txt
-# description: Project dependencies updated for IP-Adapter support.
+# description: Project dependencies v18.0 - The "Skin & Speed" Update.
+#              UPDATED: Added 'xformers' for massive VRAM optimization.
+#              UPDATED: Added 'mediapipe' for facial geometry.
+#              This configuration turns a consumer GPU into a workstation.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 fastapi==0.109.0
@@ -18,11 +21,19 @@ scipy==1.12.0
 huggingface-hub==0.26.2
 safetensors==0.4.5
 
+# CRITICAL OPTIMIZATION: Memory Efficient Attention
+# Allows 1024x1024 generation on 6GB/8GB cards.
+xformers==0.0.26.post1
+
 # Identity & Structural Tools
 insightface==0.7.3
 onnxruntime-gpu==1.17.1
 opencv-python-headless==4.9.0.80
 numpy==1.26.4
+
+# Geometry & Preprocessors
+controlnet_aux==0.0.9
+mediapipe==0.10.9
 
 # Async Queue
 celery==5.3.6
@@ -30,5 +41,3 @@ redis==5.0.1
 
 # Frontend
 streamlit==1.30.0
-
-controlnet_aux==0.0.9

@@ -1,0 +1,7 @@
+{
+    "id": "android14",
+    "aliases": ["14", "android 14"],
+    "essence": "species_android_giant",
+    "prompt_base": "massive muscular giant man, light purple skin, black mohawk and long braid, stoic expression, wide jawline, brown vest, thick neck, realistic skin texture",
+    "weights": { "depth": 0.80, "openpose": 0.45 }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "android17",
+    "aliases": ["17", "android 17", "lapis"],
+    "essence": "species_human_android",
+    "prompt_base": "masculine asian man, long straight black hair, cool intelligent eyes, ranger outfit with green armband, jeans, wide jawline, realistic skin texture, athletic build",
+    "weights": { "depth": 0.60, "openpose": 0.55 }
+}

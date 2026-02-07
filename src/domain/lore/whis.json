@@ -2,9 +2,6 @@
     "id": "whis",
     "aliases": ["whis", "uis", "angel"],
     "essence": "species_celestial_angel",
-    "prompt_base": "cinematic portrait, ethereal pale celeste skin, white vertical hair, maroon silk robes, gold details, glowing halo, divine expression, volumetric light, 8k, masterpiece",
-    "weights": {
-        "depth": 0.55,
-        "openpose": 0.85
-    }
+    "prompt_base": "ethereal man with pale light-blue skin, tall vertical white hair texture, serene intelligent eyes, gold neck ring, divine maroon silk robes, wide jawline, tall elegant stature",
+    "weights": { "depth": 0.60, "openpose": 0.50 }
 }

@@ -1,0 +1,7 @@
+{
+    "id": "vegito",
+    "aliases": ["vegito", "vegetto", "vegito blue"],
+    "essence": "species_saiyan_fusion",
+    "prompt_base": "masculine muscular asian man, spiked black hair with two front fringes, white potara earrings, blue martial arts gi with orange undershirt, wide jawline, confident expression",
+    "weights": { "depth": 0.65, "openpose": 0.50 }
+}

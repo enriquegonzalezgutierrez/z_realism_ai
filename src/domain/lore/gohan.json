@@ -1,0 +1,7 @@
+{
+    "id": "gohan",
+    "aliases": ["gohan", "ultimate gohan", "beast gohan"],
+    "essence": "species_saiyan_hybrid",
+    "prompt_base": "muscular asian man, spiked black hair with one long fringe, silver rimmed glasses, purple martial arts gi, realistic muscle definition, focused expression",
+    "weights": { "depth": 0.65, "openpose": 0.50 }
+}

@@ -1,0 +1,7 @@
+{
+    "id": "krillin",
+    "aliases": ["krillin", "kuririn"],
+    "essence": "species_human_monk",
+    "prompt_base": "short muscular monk, bald head, six incense burn scars on forehead, realistic small nose, orange martial arts gi, wide jawline, determined expression",
+    "weights": { "depth": 0.65, "openpose": 0.50 }
+}

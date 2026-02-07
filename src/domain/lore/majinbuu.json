@@ -1,0 +1,7 @@
+{
+    "id": "majinbuu",
+    "aliases": ["buu", "fat buu", "kid buu"],
+    "essence": "species_majin",
+    "prompt_base": "creature with pink rubbery bubblegum skin, organic steam vents on arms, black eyes with pink pupils, gold belt, white puffy pants, supernatural smile",
+    "weights": { "depth": 0.70, "openpose": 0.50 }
+}

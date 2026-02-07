@@ -1,0 +1,7 @@
+{
+    "id": "kale",
+    "aliases": ["kale", "berserk kale"],
+    "essence": "species_saiyan_u6",
+    "prompt_base": "muscular woman, tanned skin, black hair in a high ponytail, gold hoop earrings, red crop top and skirt, realistic muscle definition, wide jawline",
+    "weights": { "depth": 0.65, "openpose": 0.50 }
+}
