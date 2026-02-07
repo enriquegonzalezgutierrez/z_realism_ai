@@ -1,7 +1,7 @@
 # path: z_realism_ai/src/infrastructure/sd_generator.py
-# description: Neural Engine v12.2 - THE FINAL PATCH.
-#              FIXED: IndentationError and the 'NoneType' callback bug.
-#              This is the stable, production-ready Dual ControlNet engine.
+# description: Neural Engine v12.3 - THE FINAL STAND.
+#              FIXED: Re-integrated Scheduler patch to prevent ImportError.
+#              This version combines all previous fixes into a stable master.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import torch
@@ -28,9 +28,8 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         self._device = "cuda" if torch.cuda.is_available() and device == "cuda" else "cpu"
         self._torch_dtype = torch.float16 if self._device == "cuda" else torch.float32
 
-        # CORRECTED 'try' statement
         try:
-            print(f"INFRA_AI: Deploying Dual ControlNet Engine v12.2...")
+            print(f"INFRA_AI: Deploying Dual ControlNet Engine v12.3 (Final Stand)...")
             
             # 1. Load ControlNet Models
             depth_net = ControlNetModel.from_pretrained(depth_control_id, torch_dtype=self._torch_dtype, local_files_only=self._offline)
@@ -39,7 +38,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             # 2. Load OpenPose Preprocessor
             self.openpose_detector = OpenposeDetector.from_pretrained('lllyasviel/ControlNet')
 
-            # 3. Load Pipeline with a list of ControlNets
+            # 3. Load Pipeline
             self._pipe = StableDiffusionControlNetPipeline.from_pretrained(
                 base_model_id, 
                 controlnet=[depth_net, openpose_net], 
@@ -51,13 +50,18 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             # 4. Load IP-Adapter
             self._pipe.load_ip_adapter("h94/IP-Adapter", subfolder="models", weight_name="ip-adapter_sd15.bin")
             
+            # 5. --- CRITICAL FIX RESTORED ---
+            # Re-adding the full scheduler config to prevent the 'deis' error
             self._pipe.scheduler = DPMSolverMultistepScheduler.from_config(
-                self._pipe.scheduler.config, use_karras_sigmas=True, algorithm_type="dpmsolver++"
+                self._pipe.scheduler.config, 
+                use_karras_sigmas=True,
+                algorithm_type="dpmsolver++",
+                final_sigmas_type="sigma_min" # This was missing
             )
             
             self._pipe.enable_model_cpu_offload() 
                 
-            print(f"INFRA_AI: Face Rescue Engine (v12.2) Stable and Online.")
+            print(f"INFRA_AI: Face Rescue Engine (v12.3) Stable and Online.")
             
         except Exception as e:
             print(f"INFRA_AI_CRITICAL: {e}")
@@ -83,11 +87,11 @@ class StableDiffusionGenerator(ImageGeneratorPort):
 
         full_prompt = f"cinematic film still, raw photo, {feature_prompt}, highly detailed skin, 8k"
 
-        # --- ROBUST CALLBACK FUNCTION ---
+        # --- ROBUST CALLBACK ---
         def internal_callback(pipe, i, t, callback_kwargs):
             if progress_callback:
                 progress_callback(i + 1, steps)
-            return callback_kwargs # This line is mandatory
+            return callback_kwargs
 
         with torch.no_grad():
             gen = torch.Generator(device=self._device)
@@ -106,7 +110,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
                 callback_on_step_end=internal_callback
             ).images[0]
 
-        return output, "v12.2 Face Rescue", "Dual ControlNet"
+        return output, "v12.3 Final Stand", "Dual ControlNet"
 
     def _calculate_proportional_dimensions(self, width, height, resolution_anchor):
         aspect = width / height
