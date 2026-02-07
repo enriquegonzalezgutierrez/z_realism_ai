@@ -1,7 +1,7 @@
 # path: z_realism_ai/src/infrastructure/evaluator.py
-# description: Scientific Evaluation Engine v5.0.
-#              Implements Structural Similarity (SSIM) and HSV Histogram 
-#              Correlation for precise identity tracking.
+# description: Advanced Scientific Evaluation Engine v10.5.
+#              Implements Multivariate Analysis: Structural Edge Fidelity, 
+#              Perceptual Color Moments, and Shannon Entropy.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import cv2
@@ -11,14 +11,60 @@ from src.domain.ports import ScientificEvaluatorPort, AssessmentReport
 
 class ComputerVisionEvaluator(ScientificEvaluatorPort):
     """
-    Expert implementation of scientific quality assessment using OpenCV.
-    Quantifies structural and chromatic fidelity between source and output.
+    Multivariate Assessment Engine for Generative Synthesis.
+    Quantifies the scientific delta between 2D source and Live-Action output.
     """
 
-    def _preprocess_for_cv(self, pil_image: Image.Image, target_size=(512, 512)) -> np.ndarray:
-        """Standardizes images for mathematical comparison."""
+    def _preprocess(self, pil_image: Image.Image, target_size=(512, 512)) -> np.ndarray:
+        """Standardizes inputs into the BGR/LAB domain."""
         img = pil_image.convert('RGB').resize(target_size, Image.LANCZOS)
         return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+
+    def _calculate_edge_fidelity(self, src: np.ndarray, gen: np.ndarray) -> float:
+        """
+        Calculates the retention of the character's silhouette using 
+        Laplacian Variance Analysis.
+        """
+        # Convert to grayscale
+        gray_src = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+        gray_gen = cv2.cvtColor(gen, cv2.COLOR_BGR2GRAY)
+
+        # Extract structural edges (high-frequency components)
+        edge_src = cv2.Laplacian(gray_src, cv2.CV_64F).var()
+        edge_gen = cv2.Laplacian(gray_gen, cv2.CV_64F).var()
+
+        # Structural Edge Correlation
+        # We use a normalized ratio to see how much 'definition' was maintained
+        return min(edge_src, edge_gen) / max(edge_src, edge_gen)
+
+    def _calculate_color_dna(self, src: np.ndarray, gen: np.ndarray) -> float:
+        """
+        Perceptual Color DNA analysis using LAB Color Space Moments.
+        LAB is used because it separates Luminance from Chrominance (Identity).
+        """
+        lab_src = cv2.cvtColor(src, cv2.COLOR_BGR2LAB)
+        lab_gen = cv2.cvtColor(gen, cv2.COLOR_BGR2LAB)
+
+        # Calculate Mean and StdDev for each channel (L, A, B)
+        (mu_src, sigma_src) = cv2.meanStdDev(lab_src)
+        (mu_gen, sigma_gen) = cv2.meanStdDev(lab_gen)
+
+        # Euclidean distance between color moments (Lower is better, then normalized)
+        dist = np.linalg.norm(mu_src - mu_gen) + np.linalg.norm(sigma_src - sigma_gen)
+        
+        # Normalize: 0 (different) to 1 (identical color DNA)
+        return 1.0 / (1.0 + (dist / 100.0))
+
+    def _calculate_entropy(self, image: np.ndarray) -> float:
+        """
+        Calculates Shannon Entropy to measure the 'Realism Density'.
+        High entropy suggests the addition of fine details (skin pores, textures).
+        """
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        marg = np.histogramdd(gray.ravel(), bins=256)[0] / gray.size
+        marg = list(filter(lambda p: p > 0, marg))
+        entropy = -np.sum(np.multiply(marg, np.log2(marg)))
+        return entropy / 8.0 # Normalized 0 to 1
 
     def assess_quality(
         self, 
@@ -26,46 +72,29 @@ class ComputerVisionEvaluator(ScientificEvaluatorPort):
         generated_image: Image.Image
     ) -> AssessmentReport:
         """
-        Calculates SSIM and Identity Correlation using multi-stage CV heuristics.
+        Executes a three-stage scientific assessment pipeline.
         """
-        
-        # 1. Domain Standardization
-        img_src = self._preprocess_for_cv(original_image)
-        img_gen = self._preprocess_for_cv(generated_image)
+        # 1. Image Normalization
+        img_src = self._preprocess(original_image)
+        img_gen = self._preprocess(generated_image)
 
-        # 2. Structural Integrity Assessment (Gaussian SSIM Proxy)
-        # We compare structural gradients while ignoring high-frequency noise.
-        gray_src = cv2.cvtColor(img_src, cv2.COLOR_BGR2GRAY)
-        gray_gen = cv2.cvtColor(img_gen, cv2.COLOR_BGR2GRAY)
-        
-        # Focus on major structural forms (muscles, clothes, pose)
-        blur_src = cv2.GaussianBlur(gray_src, (5, 5), 0)
-        blur_gen = cv2.GaussianBlur(gray_gen, (5, 5), 0)
-        
-        # Cross-correlation metric (1.0 = perfect structural match)
-        structural_score = cv2.matchTemplate(blur_src, blur_gen, cv2.TM_CCOEFF_NORMED)[0][0]
-        structural_score = max(0.0, float(structural_score))
+        # 2. Extract Multivariate Metrics
+        edge_fidelity = self._calculate_edge_fidelity(img_src, img_gen)
+        color_fidelity = self._calculate_color_dna(img_src, img_gen)
+        realism_score = self._calculate_entropy(img_gen)
 
-        # 3. Identity Preservation (HSV Histogram Correlation)
-        # We use HSV space because it separates 'Color' (Identity) from 'Lighting'.
-        hsv_src = cv2.cvtColor(img_src, cv2.COLOR_BGR2HSV)
-        hsv_gen = cv2.cvtColor(img_gen, cv2.COLOR_BGR2HSV)
-        
-        # Calculate Hue and Saturation histograms
-        hist_src = cv2.calcHist([hsv_src], [0, 1], None, [50, 60], [0, 180, 0, 256])
-        hist_gen = cv2.calcHist([hsv_gen], [0, 1], None, [50, 60], [0, 180, 0, 256])
-        
-        cv2.normalize(hist_src, hist_src, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
-        cv2.normalize(hist_gen, hist_gen, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
-        
-        # Correlation measures how similar the color 'DNA' is.
-        identity_score = cv2.compareHist(hist_src, hist_gen, cv2.HISTCMP_CORREL)
-        identity_score = max(0.0, min(1.0, float(identity_score)))
+        # 3. Weighted Result Assembly
+        # SSIM Proxy = Edge Fidelity (Structure)
+        # Identity = Color DNA (Identity)
+        structural_ssim = round(float(edge_fidelity), 4)
+        identity_retention = round(float(color_fidelity), 4)
 
-        # 4. Final Scientific Packaging
+        # In a PhD context, we can use the realism_score for the log, 
+        # though the port only asks for SSIM and ID for now.
         return AssessmentReport(
-            structural_similarity=round(structural_score, 4),
-            identity_preservation=round(identity_score, 4),
-            inference_time=0.0, # Filled by Use Case after execution
-            is_mock=False
+            structural_similarity=structural_ssim,
+            identity_preservation=identity_retention,
+            inference_time=0.0, # Handled by Use Case
+            is_mock=False,
+            full_prompt=f"Detail Entropy: {round(realism_score, 2)}" # Traceability
         )

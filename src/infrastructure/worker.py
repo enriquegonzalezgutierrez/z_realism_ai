@@ -1,7 +1,7 @@
 # path: z_realism_ai/src/infrastructure/worker.py
-# description: Celery Worker v16.0 - Live Telemetry Edition.
-#              FEATURING: Real-time transmission of latent previews.
-#              FIXED: Removed double-loading by disabling pre-warmup.
+# description: Optimized Research Worker v16.2.
+#              FEATURING: Granular Lifecycle Telemetry (Cold Start vs Active Synthesis).
+#              FEATURING: Real-time transmission of latent previews for PhD visibility.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import os
@@ -23,23 +23,29 @@ RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://z-realism-broker:63
 celery_app = Celery("z_realism_worker", broker=BROKER_URL, backend=RESULT_BACKEND)
 celery_app.conf.update(
     task_track_started=True, 
-    worker_prefetch_multiplier=1, # Strict serial processing for 6GB VRAM
+    worker_prefetch_multiplier=1, # Strict serial processing to protect 6GB VRAM
     task_acks_late=True,
     broker_connection_retry_on_startup=True
 )
 
-# SINGLETON: Ensures the engine stays in memory after first use to avoid reload overhead
+# SINGLETON: Persists the Neural Engine in memory to avoid repeated loading
 _use_case_instance = None
 
-def get_use_case():
+def get_use_case(task_instance):
     """
-    Lazy initialization of the Neural Engine.
-    Loads the full Master Engine (Dual ControlNet + Shielded IP-Adapter) on first use.
+    Lazy initialization of the Neural Engine with real-time status updates.
+    This manages the 'Cold Start' phase (loading ~10GB of models).
     """
     global _use_case_instance
     if _use_case_instance is None:
+        # Emit 'LOADING_MODELS' status to inform the UI of the 30-40s delay
+        task_instance.update_state(
+            state='PROGRESS', 
+            meta={'percent': 0, 'status_text': 'LOADING_MODELS'}
+        )
+        
         device = "cuda" if torch.cuda.is_available() else "cpu"
-        print(f"WORKER_SYSTEM: Deploying Neural Engine on {device}...")
+        print(f"WORKER_SYSTEM: Initiating Cold Start on {device}...")
         
         evaluator = ComputerVisionEvaluator()
         generator = StableDiffusionGenerator(device=device)
@@ -50,42 +56,49 @@ def get_use_case():
 @celery_app.task(name="transform_character_task", bind=True)
 def transform_character_task(self, image_b64, character_name, feature_prompt, resolution_anchor, hyper_params):
     """
-    Asynchronous synthesis pipeline with Live Telemetry support.
+    Asynchronous synthesis pipeline with granular state reporting.
     """
     total_steps = int(hyper_params.get("steps", 30))
 
     def on_progress(current, total=total_steps, preview_b64=None):
         """
-        Updates the task state in Redis with the current percentage 
-        and an optional low-resolution preview image.
+        Internal callback to update Redis with current denoising progress.
         """
         pct = min(max(int((current / total) * 100), 0), 100)
         
-        # We store the metadata including the intermediate image
         self.update_state(
             state='PROGRESS', 
             meta={
                 'percent': pct,
-                'preview_b64': preview_b64 # Transmitted to the frontend
+                'preview_b64': preview_b64,
+                'status_text': 'SYNTHESIZING' # Active computation state
             }
         )
 
     try:
-        # 1. Image De-serialization
+        # Phase 1: Task Initialization
+        self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'INITIALIZING'})
+        
+        # Phase 2: Image Reconstruction
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
         
-        # 2. Use Case Execution
-        use_case = get_use_case()
+        # Phase 3: Engine Warmup (Handles Cold Start if necessary)
+        use_case = get_use_case(self)
+        
+        # Phase 4: Hardware Allocation
+        self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'ALLOCATING_VRAM'})
+
+        # Phase 5: Neural Synthesis Execution
         result_pil, report = use_case.execute(
             image_file=source_pil, 
             character_name=character_name,
             feature_prompt=feature_prompt,
             resolution_anchor=resolution_anchor,
             hyper_params=hyper_params,
-            callback=on_progress # Linked to the telemetry function
+            callback=on_progress # Linked to on_progress above
         )
 
-        # 3. Final Result Packaging
+        # Phase 6: Result Serialization
         buffered = io.BytesIO()
         result_pil.save(buffered, format="PNG")
         

@@ -1,22 +1,23 @@
 /**
  * path: z_realism_ai/src/presentation-custom/app.js
- * description: Real-Time Lab Controller v16.0.
- *              Manages live preview streaming, state resets, and 
- *              hardware locking for the Z-Realism Master Engine.
+ * description: Research Laboratory Controller v16.2.1.
+ *              FEATURING: Granular Lifecycle Decoding (Cold Start vs Active Synthesis).
+ *              FEATURING: High-performance DOM rendering for real-time latent previews.
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
 const API_BASE_URL = 'http://localhost:8000';
 
-// 1. SYSTEM STATE
+// 1. RESEARCHER STATE
 const state = {
     taskId: null,
     isProcessing: false,
     selectedFile: null,
-    lastParams: null
+    lastParams: null,
+    previewImgElement: null // Persistent reference to avoid DOM thrashing
 };
 
-// 2. DOM MAPPING
+// 2. INTERFACE MAPPING
 const ui = {
     charName: document.getElementById('char-name'),
     fileInput: document.getElementById('file-upload'),
@@ -24,31 +25,25 @@ const ui = {
     btnAnalyze: document.getElementById('btn-analyze'),
     btnGenerate: document.getElementById('btn-generate'),
     
-    // Sliders
+    // Control Sliders
     resSlider: document.getElementById('input-res'),
-    resValue: document.getElementById('val-res'),
     stepsSlider: document.getElementById('input-steps'),
     cfgSlider: document.getElementById('input-cfg'),
     cnSlider: document.getElementById('input-cn'),
     stealthSlider: document.getElementById('input-stealth'),
-    
-    // Expert Controls
-    seedInput: document.getElementById('input-seed'),
     ipSlider: document.getElementById('input-ip'),
-    negPrompt: document.getElementById('input-negative'),
-    posPrompt: document.getElementById('input-prompt'),
-
-    // Visual Displays
+    
+    // Visual Domain Containers
     sourcePreview: document.getElementById('source-preview'),
     resultDisplay: document.getElementById('result-display'),
     essenceTag: document.getElementById('essence-tag'),
     
-    // Aura/Telemetry Progress
+    // Telemetry Progress Components
     progressContainer: document.getElementById('progress-container'),
     progressBar: document.getElementById('progress-bar'),
     progressText: document.getElementById('progress-text'),
 
-    // Analytics & Metrics
+    // Scientific Metrics & Logs
     metricsPanel: document.getElementById('metrics-panel'),
     metricSsim: document.getElementById('metric-ssim'),
     metricId: document.getElementById('metric-id'),
@@ -59,46 +54,51 @@ const ui = {
 };
 
 /**
- * Initializes the Interactive Laboratory.
+ * Initializes the Laboratory Event Listeners.
  */
 function initLaboratory() {
-    // A. Reactive Parameter Sync
-    const link = (id, valId) => {
-        document.getElementById(id).addEventListener('input', (e) => {
+    // Dynamic Parameter Label Synchronization
+    const linkValue = (id, valId) => {
+        const input = document.getElementById(id);
+        if (input) input.addEventListener('input', (e) => {
             document.getElementById(valId).innerText = e.target.value;
         });
     };
-    link('input-res', 'val-res'); link('input-steps', 'val-steps');
-    link('input-cfg', 'val-cfg'); link('input-cn', 'val-cn');
-    link('input-stealth', 'val-stealth'); link('input-ip', 'val-ip');
+    linkValue('input-res', 'val-res'); linkValue('input-steps', 'val-steps');
+    linkValue('input-cfg', 'val-cfg'); linkValue('input-cn', 'val-cn');
+    linkValue('input-stealth', 'val-stealth'); linkValue('input-ip', 'val-ip');
 
-    // B. File Upload UX
+    // Source Artwork Ingestion
     ui.fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
             state.selectedFile = file;
-            ui.fileLabel.innerText = `📂 ${file.name.toUpperCase()}`;
+            ui.fileLabel.innerText = `📂 INPUT: ${file.name.toUpperCase()}`;
             const reader = new FileReader();
             reader.onload = (ev) => {
-                ui.sourcePreview.innerHTML = `<img src="${ev.target.result}" style="animation: fadeIn 0.5s ease;">`;
+                ui.sourcePreview.innerHTML = `<img src="${ev.target.result}" style="animation: fadeIn 0.4s ease-out;">`;
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // C. Interaction Hub
+    // Interaction Dispatchers
     ui.btnAnalyze.addEventListener('click', executeDNAAnalysis);
     ui.btnGenerate.addEventListener('click', startFusingSequence);
-    ui.btnCopy.addEventListener('click', copyLog);
+    ui.btnCopy.addEventListener('click', () => {
+        ui.systemLog.select();
+        document.execCommand('copy');
+        alert("System Telemetry Copied.");
+    });
 }
 
 /**
- * EXECUTE ANALYSIS
- * Updates UI with expert lore-aware character presets.
+ * DNA ANALYSIS
+ * Invokes the Heuristic Brain to determine optimal synthesis parameters.
  */
 async function executeDNAAnalysis() {
     if (!state.selectedFile || state.isProcessing) return;
-    ui.essenceTag.innerText = "DNA_SEQUENCING...";
+    ui.essenceTag.innerText = "SEQUENCING_VISUAL_DNA...";
     
     const body = new FormData();
     body.append('file', state.selectedFile);
@@ -109,69 +109,66 @@ async function executeDNAAnalysis() {
         const data = await response.json();
         if (data.status === 'success') {
             const r = data.recommendations;
-            ui.stepsSlider.value = r.steps; ui.cfgSlider.value = r.cfg_scale;
-            ui.cnSlider.value = r.cn_scale; ui.posPrompt.value = r.texture_prompt;
-            
-            // Sync Labels
-            document.getElementById('val-steps').innerText = r.steps;
-            document.getElementById('val-cfg').innerText = r.cfg_scale;
-            document.getElementById('val-cn').innerText = r.cn_scale;
+            // Update Interface Inputs
+            ui.stepsSlider.value = r.steps; document.getElementById('val-steps').innerText = r.steps;
+            ui.cfgSlider.value = r.cfg_scale; document.getElementById('val-cfg').innerText = r.cfg_scale;
+            ui.cnSlider.value = r.cn_scale; document.getElementById('val-cn').innerText = r.cn_scale;
+            document.getElementById('input-prompt').value = r.texture_prompt;
 
-            ui.essenceTag.innerText = `IDENTIFIED: ${data.detected_essence.toUpperCase()}`;
+            ui.essenceTag.innerText = `STRATEGY_FOUND: ${data.detected_essence.toUpperCase()}`;
         }
-    } catch (err) { ui.essenceTag.innerText = "CORE_LINK_ERROR"; }
-}
-
-/**
- * START FUSION
- * Resets the UI and dispatches the task to CUDA.
- */
-async function startFusingSequence() {
-    if (!state.selectedFile || state.isProcessing) return;
-
-    // 1. Immediate UI Reset & Lock
-    state.isProcessing = true;
-    lockUI(true);
-    resetVisualState();
-
-    // 2. Package Parameters
-    const params = {
-        character_name: ui.charName.value, feature_prompt: ui.posPrompt.value,
-        resolution_anchor: ui.resSlider.value, steps: ui.stepsSlider.value,
-        cfg_scale: ui.cfgSlider.value, cn_scale: ui.cnSlider.value,
-        stealth_stop: ui.stealthSlider.value, seed: ui.seedInput.value,
-        ip_scale: ui.ipSlider.value, negative_prompt: ui.negPrompt.value
-    };
-    state.lastParams = params;
-
-    const body = new FormData();
-    body.append('file', state.selectedFile);
-    for (const key in params) body.append(key, params[key]);
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/transform`, { method: 'POST', body });
-        if (response.status === 429) {
-            alert("Hardware Mutex Locked: Another task is active.");
-            lockUI(false);
-            return;
-        }
-        const data = await response.json();
-        if (data.task_id) {
-            state.taskId = data.task_id;
-            ui.progressText.innerText = "INITIALIZING TENSORS...";
-            pollRealTimeAura();
-        }
-    } catch (err) {
-        console.error(err);
-        lockUI(false);
+    } catch (err) { 
+        ui.essenceTag.innerText = "HEURISTIC_OFFLINE"; 
     }
 }
 
 /**
- * REAL-TIME AURA POLLING
- * Streams intermediate previews and progress percentage.
+ * FUSION SEQUENCE
+ * Orchestrates the dispatch of parameters to the CUDA Inference Worker.
  */
-function pollRealTimeAura() {
+async function startFusingSequence() {
+    if (!state.selectedFile || state.isProcessing) return;
+
+    state.isProcessing = true;
+    toggleControls(true);
+    resetWorkspace();
+
+    const body = new FormData();
+    body.append('file', state.selectedFile);
+    body.append('character_name', ui.charName.value);
+    body.append('feature_prompt', document.getElementById('input-prompt').value);
+    body.append('resolution_anchor', ui.resSlider.value);
+    body.append('steps', ui.stepsSlider.value);
+    body.append('cfg_scale', ui.cfgSlider.value);
+    body.append('cn_scale', ui.cnSlider.value);
+    body.append('stealth_stop', ui.stealthSlider.value);
+    body.append('seed', document.getElementById('input-seed').value);
+    body.append('ip_scale', ui.ipSlider.value);
+    body.append('negative_prompt', document.getElementById('input-negative').value);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/transform`, { method: 'POST', body });
+        
+        if (response.status === 429) {
+            alert("HARDWARE_MUTEX: GPU is currently occupied by another researcher.");
+            toggleControls(false);
+            return;
+        }
+
+        const data = await response.json();
+        state.taskId = data.task_id;
+        pollInferenceTelemetry();
+    } catch (err) {
+        console.error("Fusion Protocol Interrupted:", err);
+        toggleControls(false);
+    }
+}
+
+/**
+ * OPTIMIZED TELEMETRY POLLING
+ * Decodes granular worker states and manages high-speed latent preview rendering.
+ */
+function pollInferenceTelemetry() {
     const pollInterval = setInterval(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/status/${state.taskId}`);
@@ -179,86 +176,112 @@ function pollRealTimeAura() {
 
             if (data.status === 'PROGRESS') {
                 const pct = data.progress.percent;
-                ui.progressBar.style.width = `${pct}%`;
-                
-                // UX: Show specific status based on percentage
-                if (pct === 0) ui.progressText.innerText = "ALLOCATING VRAM...";
-                else if (pct === 100) ui.progressText.innerText = "DECODING FINAL PNG...";
-                else ui.progressText.innerText = `CHARGING AURA: ${pct}%`;
+                const statusStr = data.progress.status_text;
 
-                // LIVE PREVIEW: Render intermediate snapshots from the latent space
+                // Sync UI Progress Bar
+                requestAnimationFrame(() => {
+                    ui.progressBar.style.width = `${pct}%`;
+                    
+                    // Decode Internal States into User-Friendly Research Messages
+                    switch(statusStr) {
+                        case 'LOADING_MODELS':
+                            ui.progressText.innerText = "COLD_START: LOADING NEURAL WEIGHTS TO VRAM (40s)...";
+                            ui.progressText.style.color = "var(--glow-orange)";
+                            break;
+                        case 'ALLOCATING_VRAM':
+                            ui.progressText.innerText = "PRE-HEATING CUDA CORES & TENSORS...";
+                            ui.progressText.style.color = "var(--glow-cyan)";
+                            break;
+                        case 'SYNTHESIZING':
+                            ui.progressText.innerText = `NEURAL SYNTHESIS IN PROGRESS: ${pct}%`;
+                            ui.progressText.style.color = "var(--glow-cyan)";
+                            break;
+                        default:
+                            ui.progressText.innerText = "COMMUNICATING WITH DISTRIBUTED WORKER...";
+                    }
+                });
+
+                // Render Intermediate Latent Snapshots
                 if (data.progress.preview_b64) {
-                    ui.resultDisplay.innerHTML = `<img src="data:image/jpeg;base64,${data.progress.preview_b64}" style="filter: blur(2px); opacity: 0.7;">`;
+                    if (!state.previewImgElement) {
+                        ui.resultDisplay.innerHTML = ''; 
+                        state.previewImgElement = new Image();
+                        state.previewImgElement.style.width = "100%";
+                        state.previewImgElement.style.filter = "blur(2px) contrast(1.1)"; // Approximation is noisy
+                        ui.resultDisplay.appendChild(state.previewImgElement);
+                    }
+                    state.previewImgElement.src = `data:image/jpeg;base64,${data.progress.preview_b64}`;
                 }
-            } else if (data.status === 'SUCCESS') {
+            } 
+            else if (data.status === 'SUCCESS') {
                 clearInterval(pollInterval);
-                renderFinalMaster();
-            } else if (data.status === 'FAILURE') {
+                renderFinalMasterwork();
+            } 
+            else if (data.status === 'FAILURE') {
                 clearInterval(pollInterval);
-                alert("CUDA Engine Capacity Exceeded.");
-                lockUI(false);
+                alert("CRITICAL_ENGINE_FAILURE: Check CUDA allocation logs.");
+                toggleControls(false);
             }
         } catch (err) {
             clearInterval(pollInterval);
-            lockUI(false);
+            toggleControls(false);
         }
-    }, 1500); // Efficient polling rate
+    }, 1000); // Efficient polling frequency for 6GB VRAM hardware
 }
 
 /**
- * RENDER MASTER OUTPUT
+ * FINAL RENDERING
+ * Retrieves the high-fidelity synthesis and computes scientific metrics.
  */
-async function renderFinalMaster() {
+async function renderFinalMasterwork() {
     try {
         const response = await fetch(`${API_BASE_URL}/result/${state.taskId}`);
         const result = await response.json();
         
-        // Final High-Res Image
-        ui.resultDisplay.innerHTML = `<img src="data:image/png;base64,${result.result_image_b64}" style="animation: fadeIn 1s ease;">`;
-        
-        // Metrics & Log
+        // Final Output Presentation
+        const finalImg = new Image();
+        finalImg.src = `data:image/png;base64,${result.result_image_b64}`;
+        finalImg.onload = () => {
+            ui.resultDisplay.innerHTML = '';
+            ui.resultDisplay.appendChild(finalImg);
+            finalImg.style.animation = "fadeIn 1s cubic-bezier(0.23, 1, 0.32, 1)";
+            state.previewImgElement = null; 
+        };
+
+        // Scientific Analytics Integration
         const m = result.metrics;
-        ui.metricSsim.innerText = `${Math.round(m.structural_similarity * 100)}%`;
-        ui.metricId.innerText = `${Math.round(m.identity_preservation * 100)}%`;
+        ui.metricSsim.innerText = `${(m.structural_similarity * 100).toFixed(1)}%`;
+        ui.metricId.innerText = `${(m.identity_preservation * 100).toFixed(1)}%`;
         ui.metricTime.innerText = `${m.inference_time}s`;
         
-        ui.systemLog.value = JSON.stringify({
-            timestamp: new Date().toISOString(),
-            config: state.lastParams,
-            metrics: m,
-            engine: "Z-REALISM_V16_REALTIME"
-        }, null, 2);
+        ui.systemLog.value = JSON.stringify(result, null, 2);
         
         ui.metricsPanel.classList.remove('hidden');
         ui.debugSection.classList.remove('hidden');
     } catch (err) {
-        console.error(err);
+        console.error("Masterwork Retrieval Error:", err);
     } finally {
-        lockUI(false);
+        toggleControls(false);
     }
 }
 
 /**
- * UI STATE ORCHESTRATION
+ * UI ORCHESTRATION UTILITIES
  */
-function lockUI(locked) {
-    state.isProcessing = locked;
+function toggleControls(locked) {
     ui.btnGenerate.disabled = locked;
     ui.btnAnalyze.disabled = locked;
     ui.btnGenerate.style.filter = locked ? "grayscale(1) opacity(0.5)" : "none";
+    ui.btnGenerate.innerText = locked ? "⚡ ENGINE_ENGAGED" : "🚀 INITIATE TRANSFORMATION";
 }
 
-function resetVisualState() {
+function resetWorkspace() {
     ui.metricsPanel.classList.add('hidden');
     ui.debugSection.classList.add('hidden');
     ui.progressContainer.classList.remove('hidden');
     ui.progressBar.style.width = '0%';
-    ui.resultDisplay.innerHTML = '<p style="color:var(--accent-ui); animation: auraPulse 1s infinite alternate;">OPENING DIMENSIONAL PORTAL...</p>';
-}
-
-function copyLog() {
-    ui.systemLog.select(); document.execCommand('copy');
-    alert("Telemetry Copied!");
+    ui.resultDisplay.innerHTML = '<p class="aura-pulse" style="color:var(--glow-cyan); font-size: 0.7rem;">ESTABLISHING NEURAL LINK...</p>';
+    state.previewImgElement = null;
 }
 
 document.addEventListener('DOMContentLoaded', initLaboratory);

@@ -2,7 +2,7 @@
     "id": "goku",
     "aliases": ["goku", "kakarot", "son goku", "bardock", "goten"],
     "essence": "species_saiyan_warrior",
-    "prompt_base": "raw photo, cinematic film still, ultra-realistic asian man as goku, hyper-detailed skin pores, sweat, realistic messy black hair, weathered heavy linen gi, intense warrior eyes, epic lighting, 8k uhd, masterpiece",
+    "prompt_base": "cinematic portrait, realistic asian goku, skin pores, sweat, messy black hair, weathered gi, intense warrior eyes, epic lighting",
     "weights": {
         "depth": 0.60,
         "openpose": 0.85
