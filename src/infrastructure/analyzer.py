@@ -48,7 +48,7 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
         return AnalysisResult(
             recommended_steps=30,
             recommended_cfg=7.5,
-            recommended_cn=round(min(final_cn, 0.85), 2), # This is for the DEPTH slider
-            detected_essence=f"{essence} (Stable v10.6)",
-            suggested_prompt=prompt
+            recommended_cn=weights[0],
+            detected_essence=f"{essence} (Clean Prompt v10.7)",
+            suggested_prompt=suggested_prompt
         )
