@@ -1,0 +1,10 @@
+{
+    "id": "bulma",
+    "aliases": ["bulma", "briefs", "scientist", "bulma san"],
+    "essence": "species_human_scientist",
+    "prompt_base": "cinematic portrait, beautiful blue hair scientist, modern capsule corp outfit, realistic smooth skin, intelligent eyes, studio lighting, fashion photography, sharp focus, fujifilm, 8k, masterpiece",
+    "weights": {
+        "depth": 0.45,
+        "openpose": 0.85
+    }
+}

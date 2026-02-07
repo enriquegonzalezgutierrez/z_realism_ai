@@ -1,27 +1,22 @@
 /**
  * path: z_realism_ai/src/presentation-custom/app.js
- * description: Ultimate Neural Orchestrator v9.2 - Full Feature Set.
- *              This script manages the entire user interaction lifecycle:
- *              - Automated Heuristic Analysis
- *              - Expert Parameter Injection
- *              - Asynchronous Task Polling with Visual Feedback
- *              - Hardware Stress Monitoring
- *              - Flight Data Recording for Telemetry
+ * description: Advanced Neural Controller v10.0.
+ *              Manages character identity transfer, temporal stealth control, 
+ *              and real-time hardware telemetry for the DBS Master Engine.
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
-// --- GLOBAL CONFIGURATION ---
 const API_BASE_URL = 'http://localhost:8000';
 
-// --- CENTRAL UI STATE MANAGEMENT ---
+// 1. COMPONENT STATE MANAGEMENT
 const state = {
     taskId: null,
     isProcessing: false,
     selectedFile: null,
-    lastRequestData: null // For the Flight Recorder
+    lastRequestParams: null
 };
 
-// --- DOM ELEMENT MAPPING (SINGLE SOURCE OF TRUTH) ---
+// 2. DOM ELEMENT MAPPING (Mission Control)
 const ui = {
     // Identity & Triggers
     charName: document.getElementById('char-name'),
@@ -30,7 +25,7 @@ const ui = {
     btnAnalyze: document.getElementById('btn-analyze'),
     btnGenerate: document.getElementById('btn-generate'),
     
-    // Neural Tuning Sliders
+    // Neural Core Sliders
     resSlider: document.getElementById('input-res'),
     resValue: document.getElementById('val-res'),
     resWarning: document.getElementById('resolution-warning'),
@@ -38,6 +33,7 @@ const ui = {
     stepsSlider: document.getElementById('input-steps'),
     cfgSlider: document.getElementById('input-cfg'),
     cnSlider: document.getElementById('input-cn'),
+    stealthSlider: document.getElementById('input-stealth'),
     
     // Expert Engineering Inputs
     seedInput: document.getElementById('input-seed'),
@@ -45,17 +41,17 @@ const ui = {
     negPrompt: document.getElementById('input-negative'),
     posPrompt: document.getElementById('input-prompt'),
 
-    // Visual Displays
+    // Visual Feedback Containers
     sourcePreview: document.getElementById('source-preview'),
     resultDisplay: document.getElementById('result-display'),
     essenceTag: document.getElementById('essence-tag'),
     
-    // Progress Telemetry
+    // Aura Progress Telemetry
     progressContainer: document.getElementById('progress-container'),
     progressBar: document.getElementById('progress-bar'),
     progressText: document.getElementById('progress-text'),
 
-    // Analytical Metrics & Debugging
+    // Analytics & Recording
     metricsPanel: document.getElementById('metrics-panel'),
     metricSsim: document.getElementById('metric-ssim'),
     metricId: document.getElementById('metric-id'),
@@ -66,148 +62,147 @@ const ui = {
 };
 
 /**
- * Main function to bootstrap all UI event listeners.
+ * Attaches all event listeners and initializes the UI state.
  */
-function initializeEngineUI() {
+function bootstrapController() {
     
-    // 1. HARDWARE STRESS MONITOR (Resolution Slider)
+    // A. RESOLUTION & HARDWARE MONITORING
     ui.resSlider.addEventListener('input', (e) => {
         const val = parseInt(e.target.value);
         ui.resValue.innerText = val;
         
         if (val <= 512) {
-            ui.resWarning.innerText = "STABLE ZONE (Optimized for 6GB)";
-            ui.resWarning.style.color = "var(--accent-ui)";
-            ui.gpuStatus.innerText = "SYSTEM STATUS: READY";
-            ui.gpuStatus.style.color = "var(--accent-ui)";
+            ui.resWarning.innerText = "STABLE_ZONE";
+            ui.resWarning.style.color = "var(--glow-cyan)";
+            ui.gpuStatus.innerText = "HARDWARE_LINK: NOMINAL";
+            ui.gpuStatus.style.color = "var(--glow-cyan)";
             ui.gpuStatus.style.animation = "none";
         } else if (val <= 768) {
-            ui.resWarning.innerText = "HIGH FIDELITY (Moderate VRAM Load)";
-            ui.resWarning.style.color = "var(--accent-goku)";
-            ui.gpuStatus.innerText = "SYSTEM STATUS: HEAVY LOAD";
-            ui.gpuStatus.style.color = "var(--accent-goku)";
+            ui.resWarning.innerText = "HIGH_FIDELITY_LOAD";
+            ui.resWarning.style.color = "var(--glow-orange)";
+            ui.gpuStatus.innerText = "HARDWARE_LINK: WARNING";
+            ui.gpuStatus.style.color = "var(--glow-orange)";
             ui.gpuStatus.style.animation = "none";
         } else {
-            ui.resWarning.innerText = "🚨 SMOKE ZONE (Extreme VRAM Stress)";
-            ui.resWarning.style.color = "#ff0000";
-            ui.gpuStatus.innerText = "SYSTEM STATUS: OVERCLOCKING";
-            ui.gpuStatus.style.color = "#ff0000";
-            // Animation for dramatic effect (defined in CSS)
-            ui.gpuStatus.style.animation = "pulse 0.5s infinite alternate";
+            ui.resWarning.innerText = "🚨 SMOKE_ZONE_DETECTION";
+            ui.resWarning.style.color = "var(--glow-magenta)";
+            ui.gpuStatus.innerText = "HARDWARE_LINK: CRITICAL_STRESS";
+            ui.gpuStatus.style.color = "var(--glow-magenta)";
+            ui.gpuStatus.style.animation = "auraPulse 0.5s infinite alternate";
         }
     });
 
-    // 2. Link other sliders to their display labels
-    const linkSlider = (id, valId) => {
+    // B. SLIDER SYNCHRONIZATION
+    const sync = (id, valId) => {
         document.getElementById(id).addEventListener('input', (e) => {
             document.getElementById(valId).innerText = e.target.value;
         });
     };
-    linkSlider('input-steps', 'val-steps');
-    linkSlider('input-cfg', 'val-cfg');
-    linkSlider('input-cn', 'val-cn');
-    linkSlider('input-ip', 'val-ip');
+    sync('input-steps', 'val-steps');
+    sync('input-cfg', 'val-cfg');
+    sync('input-cn', 'val-cn');
+    sync('input-stealth', 'val-stealth');
+    sync('input-ip', 'val-ip');
 
-    // 3. Custom File Upload Logic
+    // C. FILE UPLOAD UX
     ui.fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
             state.selectedFile = file;
             ui.fileLabel.innerText = `📂 ${file.name.toUpperCase()}`;
-            ui.fileLabel.style.borderColor = "var(--accent-goku)";
             const reader = new FileReader();
             reader.onload = (ev) => {
-                ui.sourcePreview.innerHTML = `<img src="${ev.target.result}" style="animation: fadeIn 0.5s ease;">`;
+                ui.sourcePreview.innerHTML = `<img src="${ev.target.result}" style="animation: fadeIn 0.8s ease;">`;
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // 4. Attach Core Action Listeners
-    ui.btnAnalyze.addEventListener('click', runLoreAnalysis);
-    ui.btnGenerate.addEventListener('click', initiateFusionSequence);
-    ui.btnCopy.addEventListener('click', copyLogToClipboard);
+    // D. ACTION TRIGGERS
+    ui.btnAnalyze.addEventListener('click', runDNAAnalysis);
+    ui.btnGenerate.addEventListener('click', startFusionSequence);
+    ui.btnCopy.addEventListener('click', copyTelemetryToClipboard);
 }
 
 /**
- * Calls the /analyze endpoint and injects recommended parameters into the UI.
+ * DNA ANALYSIS SEQUENCE
+ * Communicates with the Heuristic Brain to auto-configure the engine.
  */
-async function runLoreAnalysis() {
-    if (!state.selectedFile) return alert("Please upload a source image first.");
-    ui.essenceTag.innerText = "ANALYZING VISUAL DNA...";
-    ui.essenceTag.style.color = "var(--accent-ui)";
+async function runDNAAnalysis() {
+    if (!state.selectedFile) return alert("System Error: No dimensional input detected.");
+    ui.essenceTag.innerText = "DNA_ANALYSIS_IN_PROGRESS...";
     
-    const formData = new FormData();
-    formData.append('file', state.selectedFile);
-    formData.append('character_name', ui.charName.value);
+    const body = new FormData();
+    body.append('file', state.selectedFile);
+    body.append('character_name', ui.charName.value);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/analyze`, { method: 'POST', body: formData });
+        const response = await fetch(`${API_BASE_URL}/analyze`, { method: 'POST', body });
         const data = await response.json();
         if (data.status === 'success') {
             const recs = data.recommendations;
-            // Inject parameters into sliders and text areas
+            // MASTER PARAMETER INJECTION
             ui.stepsSlider.value = recs.steps;
             ui.cfgSlider.value = recs.cfg_scale;
             ui.cnSlider.value = recs.cn_scale;
             ui.posPrompt.value = recs.texture_prompt;
             
-            // Manually update the visual labels
+            // Sync Labels
             document.getElementById('val-steps').innerText = recs.steps;
             document.getElementById('val-cfg').innerText = recs.cfg_scale;
             document.getElementById('val-cn').innerText = recs.cn_scale;
-            
-            ui.essenceTag.innerText = `DETECTED: ${data.detected_essence}`;
-            ui.essenceTag.style.color = "var(--accent-goku)";
+
+            ui.essenceTag.innerText = `IDENTIFIED: ${data.detected_essence.toUpperCase()}`;
         }
-    } catch (err) { ui.essenceTag.innerText = "API LINK ERROR"; }
+    } catch (err) { ui.essenceTag.innerText = "CORE_LINK: OFFLINE"; }
 }
 
 /**
- * Packages all parameters and sends the transformation request to the API.
+ * FUSION SEQUENCE
+ * Packages all 10 hyper-parameters and starts the CUDA inference.
  */
-async function initiateFusionSequence() {
+async function startFusionSequence() {
     if (!state.selectedFile || state.isProcessing) return;
     state.isProcessing = true;
-    updateUIState(true);
+    updateUIForFusion(true);
 
     const formData = new FormData();
-    const requestData = {
+    const requestParams = {
         character_name: ui.charName.value,
         feature_prompt: ui.posPrompt.value,
         resolution_anchor: ui.resSlider.value,
         steps: ui.stepsSlider.value,
         cfg_scale: ui.cfgSlider.value,
         cn_scale: ui.cnSlider.value,
+        stealth_stop: ui.stealthSlider.value, // NEW: Stealth Control
         seed: ui.seedInput.value,
         ip_scale: ui.ipSlider.value,
         negative_prompt: ui.negPrompt.value
     };
-    state.lastRequestData = requestData;
+    state.lastRequestParams = requestParams;
 
     formData.append('file', state.selectedFile);
-    for (const key in requestData) {
-        formData.append(key, requestData[key]);
-    }
+    for (const key in requestParams) formData.append(key, requestParams[key]);
 
     try {
         const response = await fetch(`${API_BASE_URL}/transform`, { method: 'POST', body: formData });
         const data = await response.json();
         if (data.task_id) {
             state.taskId = data.task_id;
-            pollTelemetry();
+            pollAuraStatus();
         }
     } catch (err) {
-        console.error(err);
-        updateUIState(false);
+        console.error("Fusion Error:", err);
+        updateUIForFusion(false);
     }
 }
 
 /**
- * Periodically checks the task status and updates the progress bar.
+ * AURA POLLING
+ * Monitors the real-time charging of the de-noising steps.
  */
-function pollTelemetry() {
-    const poll = setInterval(async () => {
+function pollAuraStatus() {
+    const pollInterval = setInterval(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/status/${state.taskId}`);
             const data = await response.json();
@@ -216,78 +211,77 @@ function pollTelemetry() {
                 ui.progressBar.style.width = `${pct}%`;
                 ui.progressText.innerText = `CHARGING AURA: ${pct}%`;
             } else if (data.status === 'SUCCESS') {
-                clearInterval(poll);
-                renderOutput();
+                clearInterval(pollInterval);
+                finalizeDimensionalRender();
             } else if (data.status === 'FAILURE') {
-                clearInterval(poll);
-                alert("Transformation Failed. Check worker logs for details.");
-                updateUIState(false);
+                clearInterval(pollInterval);
+                alert("CUDA Engine Capacity Reached. Reduce resolution.");
+                updateUIForFusion(false);
             }
         } catch (err) {
-            clearInterval(poll);
-            updateUIState(false);
+            clearInterval(pollInterval);
+            updateUIForFusion(false);
         }
     }, 1200);
 }
 
 /**
- * Fetches the final result, renders the image and metrics, and populates the Flight Recorder.
+ * FINAL RENDERING
+ * Displays the high-fidelity output and the telemetry log.
  */
-async function renderOutput() {
+async function finalizeDimensionalRender() {
     try {
         const response = await fetch(`${API_BASE_URL}/result/${state.taskId}`);
-        const pkg = await response.json();
+        const result = await response.json();
         
-        ui.resultDisplay.innerHTML = `<img src="data:image/png;base64,${pkg.result_image_b64}" style="animation: auraPulse 2s infinite alternate;">`;
+        ui.resultDisplay.innerHTML = `<img src="data:image/png;base64,${result.result_image_b64}" style="animation: fadeIn 1s ease;">`;
         
-        const m = pkg.metrics;
+        const m = result.metrics;
         ui.metricSsim.innerText = `${Math.round(m.structural_similarity * 100)}%`;
         ui.metricId.innerText = `${Math.round(m.identity_preservation * 100)}%`;
         ui.metricTime.innerText = `${m.inference_time}s`;
         
-        // Populate Flight Data Recorder
-        const logData = {
+        // POPULATE FLIGHT RECORDER
+        const telemetryData = {
             timestamp: new Date().toISOString(),
-            configuration: state.lastRequestData,
-            performance: m
+            config_profile: state.lastRequestParams,
+            hardware_metrics: m,
+            engine_build: "Z-REALISM_V10_STEALTH"
         };
-        ui.systemLog.value = JSON.stringify(logData, null, 2);
-        ui.debugSection.classList.remove('hidden');
+        ui.systemLog.value = JSON.stringify(telemetryData, null, 2);
+        
         ui.metricsPanel.classList.remove('hidden');
+        ui.debugSection.classList.remove('hidden');
 
-    } catch (err) { console.error(err); } 
-    finally { updateUIState(false); }
+    } catch (err) { console.error("Telemetry Error:", err); } 
+    finally { updateUIForFusion(false); }
 }
 
 /**
- * Central function to manage the UI's visual state during processing.
+ * VISUAL STATE MANAGER
  */
-function updateUIState(isWorking) {
-    ui.btnGenerate.disabled = isWorking;
-    ui.btnGenerate.innerText = isWorking ? "🧬 FUSING DIMENSIONS..." : "🚀 INITIATE TRANSFORMATION";
-    
-    if (isWorking) {
+function updateUIForFusion(isActive) {
+    ui.btnGenerate.disabled = isActive;
+    if (isActive) {
         ui.progressContainer.classList.remove('hidden');
         ui.metricsPanel.classList.add('hidden');
         ui.debugSection.classList.add('hidden');
-        ui.resultDisplay.innerHTML = '<p style="color: var(--accent-ui); animation: auraPulse 1s infinite alternate;">ACCESSING LATENT SPACE...</p>';
+        ui.resultDisplay.innerHTML = '<p style="color: var(--glow-cyan); font-family: Orbitron; font-size: 0.6rem; animation: auraPulse 1s infinite alternate;">ACCESSING_LATENT_TENSORS...</p>';
         ui.progressBar.style.width = '0%';
     } else {
         ui.progressContainer.classList.add('hidden');
         state.isProcessing = false;
-        ui.gpuStatus.style.animation = "none";
     }
 }
 
 /**
- * Copies the Flight Recorder content to the user's clipboard.
+ * TELEMETRY EXPORT
  */
-function copyLogToClipboard() {
-    if (!ui.systemLog.value) return;
+function copyTelemetryToClipboard() {
     ui.systemLog.select();
     document.execCommand('copy');
-    alert("Telemetry Log Copied to Clipboard!");
+    alert("Dimensional Telemetry Copied to Clipboard!");
 }
 
-// Start the Console when the DOM is fully loaded.
-document.addEventListener('DOMContentLoaded', initializeEngineUI);
+// EXECUTE BOOTSTRAP
+document.addEventListener('DOMContentLoaded', bootstrapController);

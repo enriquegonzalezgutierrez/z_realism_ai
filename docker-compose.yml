@@ -48,6 +48,7 @@ services:
       - "8000:8000"
     volumes:
       - ./src:/app/src
+      - ./src/domain/lore:/app/src/domain/lore
       - hf_cache:/app/model_cache
     environment:
       - APP_HOST=0.0.0.0

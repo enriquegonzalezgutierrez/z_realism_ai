@@ -1,0 +1,10 @@
+{
+    "id": "android18",
+    "aliases": ["18", "android 18", "lazuli"],
+    "essence": "species_human_android",
+    "prompt_base": "cinematic portrait, beautiful blonde woman, realistic blue eyes, denim jacket, striped sleeves, cool expression, skin pores, studio lighting, 8k, masterpiece",
+    "weights": {
+        "depth": 0.45,
+        "openpose": 0.90
+    }
+}

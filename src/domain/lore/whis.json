@@ -1,0 +1,10 @@
+{
+    "id": "whis",
+    "aliases": ["whis", "uis", "angel"],
+    "essence": "species_celestial_angel",
+    "prompt_base": "cinematic portrait, ethereal pale celeste skin, white vertical hair, maroon silk robes, gold details, glowing halo, divine expression, volumetric light, 8k, masterpiece",
+    "weights": {
+        "depth": 0.55,
+        "openpose": 0.85
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "id": "goku",
+    "aliases": ["goku", "kakarot", "son goku", "bardock", "goten"],
+    "essence": "species_saiyan_warrior",
+    "prompt_base": "cinematic film still, ultra-realistic asian martial artist as goku, messy spiky black hair, sharp tips, muscular, skin pores, sweat, weathered orange gi, heavy linen, dramatic rim lighting, 8k, masterpiece",
+    "weights": {
+        "depth": 0.60,
+        "openpose": 0.85
+    }
+}

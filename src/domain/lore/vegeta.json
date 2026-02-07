@@ -1,0 +1,10 @@
+{
+    "id": "vegeta",
+    "aliases": ["vegeta", "prince vegeta", "royal saiyan"],
+    "essence": "species_saiyan_royal",
+    "prompt_base": "cinematic still, muscular man as vegeta, widow's peak black hair, intense eyes, blue spandex suit, white battle armor, metal texture, cinematic lighting, 8k, masterpiece",
+    "weights": {
+        "depth": 0.65,
+        "openpose": 0.85
+    }
+}

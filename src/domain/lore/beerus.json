@@ -1,0 +1,10 @@
+{
+    "id": "beerus",
+    "aliases": ["beerus", "bills", "champa", "god of destruction"],
+    "essence": "species_deity_feline",
+    "prompt_base": "raw photo, realistic purple sphynx skin, muscular feline god, gold jewelry, silk fabrics, yellow glowing eyes, divine aura, sharp focus, 8k, masterpiece",
+    "weights": {
+        "depth": 0.75,
+        "openpose": 0.80
+    }
+}

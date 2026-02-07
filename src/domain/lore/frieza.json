@@ -1,0 +1,10 @@
+{
+    "id": "frieza",
+    "aliases": ["frieza", "freezer", "golden frieza", "emperor"],
+    "essence": "species_frost_demon",
+    "prompt_base": "raw photo, realistic alien creature, white polished bio-armor, reptilian skin, purple head gems, menacing eyes, cinematic rim light, fujifilm, 8k, masterpiece",
+    "weights": {
+        "depth": 0.78,
+        "openpose": 0.80
+    }
+}

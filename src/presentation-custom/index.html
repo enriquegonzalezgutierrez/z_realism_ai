@@ -1,8 +1,8 @@
 <!-- 
   path: z_realism_ai/src/presentation-custom/index.html
-  description: Z-Realism Master Console v9.2 - PRODUCTION READY.
-               Complete feature set including Tooltips, Hardware Warnings, 
-               and the Flight Data Recorder.
+  description: Premium "Cyber-Capsule" Research Console v10.0.
+               High-fidelity HTML5 structure featuring the Stealth Control 
+               parameter and advanced telemetry visualizations.
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
 
@@ -11,149 +11,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-Realism AI | Master Research Console</title>
+    <title>Z-Realism AI | Master Control v10.0</title>
     <!-- Stylesheet Link -->
     <link rel="stylesheet" href="style.css">
-    <!-- Premium Orbitron & Inter Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <!-- Premium Fonts Inclusion -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
 </head>
-<body class="obsidian-theme">
+<body>
 
     <div class="main-wrapper">
-        <!-- 1. NAVIGATION HEADER -->
+        <!-- 1. NAVIGATION: System Identity & Hardware Telemetry -->
         <header class="top-nav">
             <div class="logo-container">
-                <h1>🐉 Z-REALISM <span class="accent-text">MASTER</span></h1>
+                <h1>🐉 Z-REALISM <span style="color: var(--glow-orange)">MASTER_V10</span></h1>
             </div>
             <div class="status-indicator">
-                <span id="gpu-warning" style="color: var(--accent-ui); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 1px;">
-                    SYSTEM STATUS: READY
+                <span id="gpu-warning" style="color: var(--glow-cyan); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px;">
+                    HARDWARE_LINK: NOMINAL
                 </span>
             </div>
         </header>
 
         <div class="content-grid">
-            <!-- 2. SIDEBAR CONTROL PANEL -->
+            <!-- 2. SIDEBAR: Laboratory Configuration -->
             <aside class="control-panel">
                 
-                <!-- SECTION: BIOLOGICAL IDENTITY -->
+                <!-- GROUP: BIOLOGICAL IDENTITY -->
                 <section>
                     <div class="section-header">BIOLOGICAL IDENTITY</div>
-                    
-                    <div class="input-stack" title="Enter the character's name to load specific lore-aware rules (e.g., 'Goku', 'Beerus', 'Piccolo')">
+                    <div class="input-stack" title="Specify the character name to load specialized lore-aware presets from the JSON library.">
                         <label>ENTITY NAME</label>
-                        <input type="text" id="char-name" class="input-field" value="Goku Ultra Instinct">
+                        <input type="text" id="char-name" class="input-field" value="Goku">
                     </div>
-                    
-                    <div class="input-stack" title="Upload a clear 2D drawing, anime screenshot, or manga panel">
-                        <label>SOURCE ARTWORK (2D)</label>
+                    <div class="input-stack" title="Upload the 2D source artwork. Clean lineart or anime frames provide the best results.">
+                        <label>SOURCE ARTWORK</label>
                         <div class="file-upload-wrapper">
                             <label for="file-upload" class="file-upload-label" id="file-label">
-                                📁 CLICK TO UPLOAD REFERENCE
+                                📁 UPLOAD DIMENSIONAL INPUT
                             </label>
                             <input type="file" id="file-upload" style="display: none;" accept="image/*">
                         </div>
                     </div>
-                    
-                    <button id="btn-analyze" class="btn-secondary" style="width: 100%;" title="Automatically detects species (Saiyan, Namekian, God) and sets optimal parameters">
+                    <button id="btn-analyze" class="btn-secondary" style="width: 100%;" title="Run Heuristic Analysis to automatically configure the engine based on character species.">
                         🔍 ANALYZE VISUAL DNA
                     </button>
                 </section>
 
-                <!-- SECTION: NEURAL TUNING -->
+                <!-- GROUP: NEURAL CORE TUNING -->
                 <section>
-                    <div class="section-header">NEURAL TUNING</div>
-                    
-                    <div class="input-stack" title="Output resolution. 512px is fastest. Above 768px requires significant VRAM and time">
+                    <div class="section-header">NEURAL CORE</div>
+                    <div class="input-stack" title="Target resolution. 512px is optimized for speed. Above 768px activates the Smoke Zone.">
                         <label>RESOLUTION: <span id="val-res" style="color: #fff; font-weight: 900;">512</span>px</label>
                         <input type="range" id="input-res" min="256" max="1280" step="64" value="512">
-                        <div id="resolution-warning" style="font-size: 0.55rem; color: #555; margin-top: 5px; font-weight: 800;">
-                            STABLE ZONE (512-768px)
+                        <div id="resolution-warning" style="font-size: 0.55rem; color: #555; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">
+                            STABLE_ZONE
                         </div>
                     </div>
-                    
-                    <div class="input-stack" title="Number of denoising steps. Higher values (30-50) increase detail but slow down generation">
+                    <div class="input-stack" title="Denoising iterations. 30 steps provide high-fidelity skin textures with balanced latency.">
                         <label>STEPS: <span id="val-steps" style="color: #fff;">30</span></label>
                         <input type="range" id="input-steps" min="10" max="60" step="1" value="30">
                     </div>
-                    
-                    <div class="input-stack" title="Classifier-Free Guidance Scale. Higher values force the AI to follow the prompt more strictly">
+                    <div class="input-stack" title="Guidance Scale. Higher values (7.5+) force the AI to adhere strictly to the prompt guidance.">
                         <label>GUIDANCE (CFG): <span id="val-cfg" style="color: #fff;">7.5</span></label>
                         <input type="range" id="input-cfg" min="1" max="15" step="0.5" value="7.5">
                     </div>
-                    
-                    <div class="input-stack" title="ControlNet Strength. Determines how strictly the AI adheres to the original pose and depth map">
-                        <label>DEPTH WEIGHT (CN): <span id="val-cn" style="color: #fff;">0.70</span></label>
+                    <div class="input-stack" title="ControlNet Strength. Determines the precision of hair spikes and mechanical edges.">
+                        <label>CANNY WEIGHT: <span id="val-cn" style="color: #fff;">0.70</span></label>
                         <input type="range" id="input-cn" min="0" max="1" step="0.05" value="0.70">
+                    </div>
+                    <!-- NEW STEALTH SLIDER -->
+                    <div class="input-stack" title="The point (0.0 to 1.0) where the AI stops following the drawing lines to focus on skin realism.">
+                        <label>STEALTH STOP: <span id="val-stealth" style="color: #fff;">0.60</span></label>
+                        <input type="range" id="input-stealth" min="0.1" max="1.0" step="0.05" value="0.60">
                     </div>
                 </section>
 
-                <!-- SECTION: EXPERT ENGINEERING -->
+                <!-- GROUP: EXPERT ENGINEERING -->
                 <section>
                     <div class="section-header">EXPERT ENGINEERING</div>
-                    
-                    <div class="input-stack" title="Random Seed. Set to -1 for random generation, or keep fixed for reproducible results">
-                        <label>SEED (-1 = RANDOM)</label>
+                    <div class="input-stack" title="Input a specific number for reproducible results, or -1 for total randomness.">
+                        <label>SEED</label>
                         <input type="number" id="input-seed" class="input-field" value="42">
                     </div>
-                    
-                    <div class="input-stack" title="IP-Adapter Scale. Controls how strongly the character's original identity is applied">
+                    <div class="input-stack" title="IP-Adapter intensity. Controls the transfer of character colors and facial identity.">
                         <label>IDENTITY SCALE (IP): <span id="val-ip" style="color: #fff;">0.65</span></label>
                         <input type="range" id="input-ip" min="0" max="1" step="0.05" value="0.65">
                     </div>
-                    
-                    <div class="input-stack" title="Concepts the AI should avoid generating (Negative Prompt)">
+                    <div class="input-stack" title="Concepts to exclude. High values prevent the AI from producing cartoonish or low-quality artifacts.">
                         <label>NEGATIVE FILTER</label>
-                        <textarea id="input-negative" class="input-field" style="height: 50px; font-size: 0.65rem;">anime, cartoon, bad anatomy, blurry, plastic, low quality</textarea>
+                        <textarea id="input-negative" class="input-field" style="height: 50px; font-size: 0.65rem;">anime, cartoon, low quality, bad anatomy, plastic, blurry</textarea>
                     </div>
                 </section>
 
-                <!-- SECTION: TEXTURAL GUIDANCE -->
+                <!-- GROUP: TEXTURAL GUIDANCE -->
                 <section>
                     <div class="section-header">TEXTURAL GUIDANCE</div>
-                    <textarea id="input-prompt" class="input-field" style="height: 80px; resize: none;" title="Describe materials, lighting, and camera lens (e.g., 'cinematic lighting, 85mm lens, sweat')">cinematic film still, high detail skin</textarea>
+                    <textarea id="input-prompt" class="input-field" style="height: 80px; resize: none;" title="Describe the specific materials, cinematic lighting, and camera settings.">cinematic film still, high detail skin</textarea>
                 </section>
 
-                <!-- PRIMARY ACTION -->
-                <button id="btn-generate" class="btn-primary" title="Launch the Neural Inference Engine on the GPU">
+                <button id="btn-generate" class="btn-primary">
                     🚀 INITIATE TRANSFORMATION
                 </button>
             </aside>
 
-            <!-- 3. DIMENSIONAL WORKSPACE -->
+            <!-- 3. MAIN WORKSPACE: Visual Synthesis Canvas -->
             <main class="workspace">
                 <div class="canvas-layout">
-                    <!-- Source Card -->
+                    <!-- Source artwork container -->
                     <div class="card">
-                        <header>SOURCE DOMAIN</header>
+                        <header>SOURCE DOMAIN (ARTWORK)</header>
                         <div id="source-preview" class="img-frame">
-                            <p style="color: #444; font-size: 0.7rem;">Awaiting input...</p>
+                            <p style="color: #444; font-size: 0.7rem;">Awaiting dimensional input...</p>
                         </div>
-                        <div id="essence-tag" class="status-box" style="margin-top: 15px;">
+                        <div id="essence-tag" class="status-box" style="margin-top: 20px; font-weight: 800; color: var(--glow-orange);">
                             STRATEGY: STANDBY
                         </div>
                     </div>
 
-                    <!-- Result Card -->
+                    <!-- Neural output container -->
                     <div class="card">
-                        <header>SYNTHETIC DOMAIN</header>
+                        <header>SYNTHETIC DOMAIN (LIVE ACTION)</header>
                         <div id="result-display" class="img-frame">
-                            <p style="color: #444; font-size: 0.7rem;">Engine standby.</p>
+                            <p style="color: #444; font-size: 0.7rem;">Engine awaiting data.</p>
                         </div>
                         
-                        <!-- Progress Engine -->
+                        <!-- Progress Aura -->
                         <div id="progress-container" class="hidden">
                             <div class="energy-meter">
                                 <div id="progress-bar" class="energy-fill"></div>
                             </div>
-                            <p id="progress-text" style="font-size: 0.6rem; color: var(--accent-ui); margin-top: 10px; font-family: 'JetBrains Mono';">
+                            <p id="progress-text" style="font-size: 0.6rem; color: var(--glow-cyan); margin-top: 10px; font-family: 'JetBrains Mono'; letter-spacing: 1px;">
                                 CHARGING AURA: 0%
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 4. ANALYTICS REPORT -->
+                <!-- 4. ANALYTICS REPORT: Scientific Metrics -->
                 <div id="metrics-panel" class="metrics-row hidden">
                     <div class="metric-box">
                         <label>STRUCTURAL FIDELITY</label>
@@ -169,20 +163,20 @@
                     </div>
                 </div>
 
-                <!-- 5. FLIGHT DATA RECORDER (DEBUG TERMINAL) -->
+                <!-- 5. FLIGHT DATA RECORDER: Telemetry Log -->
                 <section id="debug-section" class="debug-container hidden">
                     <div class="debug-header">
-                        <span>📋 FLIGHT DATA RECORDER</span>
-                        <button id="btn-copy-log" class="copy-btn" title="Copy JSON telemetry to clipboard">COPY LOG</button>
+                        <span style="font-family: 'Orbitron'; font-size: 0.6rem;">📋 FLIGHT DATA RECORDER</span>
+                        <button id="btn-copy-log" class="copy-btn">COPY TELEMETRY</button>
                     </div>
-                    <textarea id="system-log" readonly spellcheck="false" title="JSON Log for engineering analysis"></textarea>
+                    <textarea id="system-log" readonly spellcheck="false"></textarea>
                 </section>
 
             </main>
         </div>
     </div>
 
-    <!-- Core Logic Link -->
+    <!-- Interface Logic Link -->
     <script src="app.js"></script>
 </body>
 </html>
