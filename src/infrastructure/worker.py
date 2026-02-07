@@ -1,7 +1,7 @@
 # path: z_realism_ai/src/infrastructure/worker.py
-# description: Celery Worker v9.5 - VRAM Protection Edition.
+# description: Celery Worker v16.0 - Live Telemetry Edition.
+#              FEATURING: Real-time transmission of latent previews.
 #              FIXED: Removed double-loading by disabling pre-warmup.
-#              OPTIMIZED: Model loads only once inside the active child process.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import os
@@ -16,25 +16,30 @@ from src.application.use_cases import TransformCharacterUseCase
 from src.infrastructure.sd_generator import StableDiffusionGenerator
 from src.infrastructure.evaluator import ComputerVisionEvaluator
 
+# --- CELERY INFRASTRUCTURE SETUP ---
 BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://z-realism-broker:6379/0")
 RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://z-realism-broker:6379/0")
 
 celery_app = Celery("z_realism_worker", broker=BROKER_URL, backend=RESULT_BACKEND)
 celery_app.conf.update(
     task_track_started=True, 
-    worker_prefetch_multiplier=1,
+    worker_prefetch_multiplier=1, # Strict serial processing for 6GB VRAM
     task_acks_late=True,
     broker_connection_retry_on_startup=True
 )
 
-# SINGLETON: Ensures the engine stays in memory after first use
+# SINGLETON: Ensures the engine stays in memory after first use to avoid reload overhead
 _use_case_instance = None
 
 def get_use_case():
+    """
+    Lazy initialization of the Neural Engine.
+    Loads the full Master Engine (Dual ControlNet + Shielded IP-Adapter) on first use.
+    """
     global _use_case_instance
     if _use_case_instance is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
-        print(f"WORKER_SYSTEM: Loading Neural Engine on {device} (First use load)...")
+        print(f"WORKER_SYSTEM: Deploying Neural Engine on {device}...")
         
         evaluator = ComputerVisionEvaluator()
         generator = StableDiffusionGenerator(device=device)
@@ -44,28 +49,43 @@ def get_use_case():
 
 @celery_app.task(name="transform_character_task", bind=True)
 def transform_character_task(self, image_b64, character_name, feature_prompt, resolution_anchor, hyper_params):
-    # Retrieve target steps for the progress bar
-    total_steps = int(hyper_params.get("steps", 25))
+    """
+    Asynchronous synthesis pipeline with Live Telemetry support.
+    """
+    total_steps = int(hyper_params.get("steps", 30))
 
-    def on_progress(current, total=total_steps):
+    def on_progress(current, total=total_steps, preview_b64=None):
+        """
+        Updates the task state in Redis with the current percentage 
+        and an optional low-resolution preview image.
+        """
         pct = min(max(int((current / total) * 100), 0), 100)
-        self.update_state(state='PROGRESS', meta={'percent': pct})
+        
+        # We store the metadata including the intermediate image
+        self.update_state(
+            state='PROGRESS', 
+            meta={
+                'percent': pct,
+                'preview_b64': preview_b64 # Transmitted to the frontend
+            }
+        )
 
     try:
+        # 1. Image De-serialization
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
         
-        # Load or retrieve the engine
+        # 2. Use Case Execution
         use_case = get_use_case()
-        
         result_pil, report = use_case.execute(
             image_file=source_pil, 
             character_name=character_name,
             feature_prompt=feature_prompt,
             resolution_anchor=resolution_anchor,
             hyper_params=hyper_params,
-            callback=on_progress
+            callback=on_progress # Linked to the telemetry function
         )
 
+        # 3. Final Result Packaging
         buffered = io.BytesIO()
         result_pil.save(buffered, format="PNG")
         
