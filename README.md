@@ -1,4 +1,4 @@
-# 🐉 Z-Realism AI: Dragon Ball Live-Action Engine (v16.5 Stable)
+# 🐉 Z-Realism AI: Dragon Ball Live-Action Engine (v19.7 Synced)
 
 [![Docker](https://img.shields.io/badge/Docker-Enabled-blue?logo=docker)](https://www.docker.com/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
@@ -7,7 +7,7 @@
 [![Architecture](https://img.shields.io/badge/Architecture-Hexagonal%20%2F%20DDD-orange)](#system-architecture-hexagonal--ddd)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-**Z-Realism AI** is a professional-grade, domain-driven generative AI ecosystem engineered for the photorealistic synthesis of 2D characters into high-fidelity "Live Action" human counterparts. This research platform utilizes a meticulously optimized **Stable Diffusion (SD) 1.5** pipeline augmented with dual structural and identity conditioning, designed specifically for consumer-grade GPU environments (e.g., NVIDIA GTX 1060).
+**Z-Realism AI** is a professional-grade, domain-driven generative AI ecosystem engineered for the photorealistic synthesis of 2D characters into high-fidelity "Live Action" human counterparts. This research platform utilizes a meticulously optimized **Stable Diffusion (SD) 1.5** pipeline augmented with dual structural conditioning and a restored **Original Fidelity Protocol** to ensure strict color preservation.
 
 **Author:** Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -15,12 +15,13 @@
 
 ## 🔬 Scientific & Technical Thesis
 
-The core thesis of Z-Realism is the solution to the **Structural Drift Problem**—the tendency of style transfer models to distort source geometry. By coupling **ControlNet (Depth + OpenPose)** for structural fidelity with **IP-Adapter** for identity and color preservation, we achieve cinematic realism while maintaining proportional integrity.
+The core thesis of Z-Realism is the solution to the **Structural and Chromatic Drift Problems**—ensuring the geometric and color integrity of the source image is maintained during style transfer. We achieve cinematic realism through focused control of the stochastic de-noising process.
 
 ### Key Architectural Features:
-*   **Hierarchical Conditioning:** Utilizes a dual-stage neural architecture where ControlNet anchors pose and geometry, while the IP-Adapter preserves facial features and color DNA.
-*   **Multivariate Evaluation:** Implements a scientific assessment engine using **Laplacian Edge Fidelity** and **LAB Color Moment Analysis** to quantitatively track the preservation of structural and chromatic identity.
-*   **Adaptive Heuristics:** The system incorporates a **Visual Complexity Scoring (VCS) Analyzer** which dynamically adjusts generation hyper-parameters (ControlNet scale, steps) based on the structural density of the input image.
+*   **Restored Fidelity Protocol:** The engine uses a hybrid prompt structure and white-background image pre-processing (v19.7) to lock onto the source image's color palette, mitigating saturation loss common in high-strength Img2Img pipelines.
+*   **Hierarchical Conditioning:** Utilizes a dual-stage neural architecture with **ControlNet (Depth + OpenPose)** to precisely anchor pose and geometry, allowing high structural control with medium denoising strength.
+*   **Multivariate Evaluation:** Implements a scientific assessment engine using **Laplacian Edge Fidelity** and **LAB Color Moment Analysis** (plus the new **Textural Realism** score) to quantitatively track the preservation of identity.
+*   **Adaptive Heuristics:** The system incorporates the **Heuristic Image Analyzer** which dynamically recommends hyper-parameters (ControlNet scale, denoising ratios) based on the structural density of the input image.
 *   **Low-VRAM Optimization:** Features a **Linear Latent Approximation** bypass for real-time previews, mitigating the VAE decoding bottleneck which often stalls inference on 6GB GPUs.
 *   **Granular Telemetry:** The Celery worker reports detailed **Lifecycle States** (`LOADING_MODELS`, `ALLOCATING_VRAM`, `SYNTHESIZING`) for full transparency during the "Cold Start" phase.
 
@@ -64,15 +65,15 @@ graph TD
 sequenceDiagram
     participant UI as Cyber-Capsule UI
     participant API as FastAPI Gateway
-    participant Redis as Broker / Cache
+    participant Redis as Broker / Mutex
     participant Worker as Celery Worker (CUDA)
     
     UI->>API: 1. /transform (Upload & Params)
     API->>API: 2. Acquire Hardware Mutex (Redis Lock)
     API->>Redis: 3. Dispatch transform_character_task
-    Note over Worker: 4. Cold Start Check (30s delay if necessary)
+    Note over Worker: 4. Cold Start Check (Model Loading)
     Redis->>Worker: 5. Task Received (ID: T1)
-    Worker->>Worker: 6. Inference Loop (U-Net, ControlNet, IP-Adapter)
+    Worker->>Worker: 6. Inference Loop (U-Net, ControlNet)
     loop Every 5 Steps
         Worker->>Redis: 7. Status Update (PROGRESS, % Completion, Latent Preview)
         UI->>API: 8. Poll /status/T1
@@ -88,7 +89,7 @@ sequenceDiagram
 
 ## 🛠 Tech Stack
 
-- **AI Core:** Stable Diffusion 1.5 (Realistic Vision V5.1), IP-Adapter, PyTorch, Hugging Face Diffusers, ControlNet.
+- **AI Core:** Stable Diffusion 1.5 (Realistic Vision V5.1), PyTorch, Hugging Face Diffusers, Dual ControlNet (Depth, OpenPose).
 - **Backend/Gateway:** FastAPI (Python).
 - **Task Management:** Celery & Redis (Broker/Backend).
 - **Frontend:** Custom Nginx (HTML/CSS/JS Cyber-Capsule UI).
@@ -107,7 +108,7 @@ sequenceDiagram
 ### Installation & Launch
 
 1.  **Clone the repository and enter the directory.**
-2.  **Build the ecosystem:** This step downloads the multi-gigabyte models (SD, ControlNets, IP-Adapter) and builds the CUDA-ready Python environment.
+2.  **Build the ecosystem:** This step downloads the multi-gigabyte models (SD, ControlNets) and builds the CUDA-ready Python environment.
     ```bash
     make build
     ```
@@ -146,6 +147,6 @@ sequenceDiagram
 **Code License:** MIT License (Copyright 2024 Enrique González Gutiérrez)
 
 **AI Model License Notice:**
-The core models (Stable Diffusion 1.5, T2I-Adapter) are subject to the **CreativeML Open RAIL-M License**. Users must ensure compliance with these terms, which govern responsible usage.
+The core models (Stable Diffusion 1.5, ControlNet) are subject to the **CreativeML Open RAIL-M License**. Users must ensure compliance with these terms, which govern responsible usage.
 
 ---
