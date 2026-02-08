@@ -2,6 +2,12 @@
     "id": "android14",
     "aliases": ["14", "android 14"],
     "essence": "species_android_giant",
-    "prompt_base": "massive muscular giant man, light purple skin, black mohawk and long braid, stoic expression, wide jawline, brown vest, thick neck, realistic skin texture",
-    "weights": { "depth": 0.80, "openpose": 0.45 }
+    "prompt_base": "cinematic portrait of a colossal, massive humanoid warrior, light lavender/pale purple skin, sharp black mohawk and long braid, stoic expression, wide jawline, thick muscular neck, wearing brown vest",
+    "feature_prompt": "RAW photo, 8k dslr, extreme muscle definition, detailed biological skin texture, volumetric rim lighting, subtle sheen on the skin, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, helmet, flat lighting, low quality, deformed anatomy, blurry hair, unrealistic proportions",
+    "weights": { 
+        "depth": 0.80,
+        "openpose": 0.85
+    },
+    "denoising_strength": 0.78
 }

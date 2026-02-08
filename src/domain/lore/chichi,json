@@ -1,7 +1,0 @@
-{
-    "id": "chichi",
-    "aliases": ["chi-chi", "chi chi", "ox-queen"],
-    "essence": "species_human_matriarch",
-    "prompt_base": "beautiful asian woman, traditional chinese blue dress, long black hair in a bun, wide jawline, realistic skin pores, maternal yet fierce expression, pink scarf",
-    "weights": { "depth": 0.60, "openpose": 0.55 }
-}

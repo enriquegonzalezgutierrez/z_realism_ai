@@ -2,6 +2,12 @@
     "id": "moro",
     "aliases": ["moro", "planet-eater moro"],
     "essence": "species_ancient_wizard",
-    "prompt_base": "anthropomorphic elder goat creature, massive curved horns, long white beard, blue wrinkled skin, ancient mystical robes, menacing red eyes, realistic fur texture",
-    "weights": { "depth": 0.85, "openpose": 0.40 }
+    "prompt_base": "hyperdetailed cinematic portrait of an imposing elder wizard, massive curved demonic horns, long flowing white beard and hair, wrinkled pale blue skin, menacing red eyes, wearing ancient, tattered mystical robes",
+    "feature_prompt": "RAW photo, 8k dslr, extreme detail on skin texture and wrinkles, realistic white beard and hair strands, subtle volumetric lighting defining muscle mass, sharp focus on horns and eyes",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, blue fur, blurry beard, toy, flat lighting, low quality, deformed horns, simple robes",
+    "weights": { 
+        "depth": 0.85,
+        "openpose": 0.80
+    },
+    "denoising_strength": 0.79
 }

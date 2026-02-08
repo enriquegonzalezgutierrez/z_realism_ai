@@ -2,6 +2,12 @@
     "id": "vados",
     "aliases": ["vados"],
     "essence": "species_celestial_angel",
-    "prompt_base": "elegant woman with pale light-blue skin, long white ponytail, divine green and black robes, gold jewelry, calm expression, realistic skin pores, wide jawline",
-    "weights": { "depth": 0.60, "openpose": 0.50 }
+    "prompt_base": "photograph of an elegant, tall celestial woman, pale light-blue skin tone, long flowing white hair tied in a high ponytail, wearing intricate green and black divine silk robes, serene intelligent eyes, subtle gold jewelry",
+    "feature_prompt": "RAW photo, 8k dslr, soft cinematic rim lighting, hyperdetailed texture on the silk robes, delicate subsurface scattering on the pale skin, sharp focus on facial features and hair structure",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, helmet hair, blurry fabric, stiff robes, humanoid proportions, flat lighting, low quality",
+    "weights": { 
+        "depth": 0.65,
+        "openpose": 0.75
+    },
+    "denoising_strength": 0.76
 }

@@ -2,6 +2,12 @@
     "id": "champa",
     "aliases": ["champa", "lord champa"],
     "essence": "species_deity_feline",
-    "prompt_base": "obese anthropomorphic sphynx cat, purple skin folds, heavy-set feline body, glowing yellow eyes, ancient egyptian jewelry, divine maroon silk, wide face",
-    "weights": { "depth": 0.85, "openpose": 0.45 }
+    "prompt_base": "hyperdetailed cinematic portrait of an obese, portly anthropomorphic feline deity, deep purple skin folds, large glowing yellow cat eyes, wearing heavy ancient egyptian jewelry, divine maroon silk robes, wide facial structure",
+    "feature_prompt": "RAW photo, 8k dslr, extreme detail on skin texture (sphynx cat like), realistic folds and wrinkles, detailed texture on maroon silk fabric, volumetric rim lighting, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic skin, smooth skin, human face, cat ears, flat lighting, low quality, deformed body, blurry silk",
+    "weights": { 
+        "depth": 0.85,
+        "openpose": 0.80
+    },
+    "denoising_strength": 0.78
 }

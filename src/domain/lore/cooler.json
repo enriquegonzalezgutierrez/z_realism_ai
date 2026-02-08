@@ -1,7 +1,13 @@
 {
     "id": "cooler",
-    "aliases": ["cooler", "coora", "final form cooler"],
+    "aliases": ["cooler", "coora", "final_form_cooler"],
     "essence": "species_frost_demon_elite",
-    "prompt_base": "sleek alien creature, purple and white organic bio-armor, white biological face mask, red demonic eyes, long tail, menacing presence, biological exoskeleton",
-    "weights": { "depth": 0.80, "openpose": 0.45 }
+    "prompt_base": "cinematic portrait of a massive, sleek, alien humanoid warrior, final form, wearing segmented purple and white organic bio-armor, white biological face mask, intense red demonic eyes, menacing presence",
+    "feature_prompt": "RAW photo, 8k dslr, high contrast lighting, detailed biological plating texture, wet sheen/oily surface texture on armor, volumetric rim light, sharp focus, visible muscle striations underneath armor",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth armor, metal, chrome, solid block color, flat lighting, deformed anatomy, blurry details, yellow light",
+    "weights": { 
+        "depth": 0.80,
+        "openpose": 0.80
+    },
+    "denoising_strength": 0.80
 }

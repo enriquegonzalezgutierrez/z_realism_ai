@@ -2,6 +2,12 @@
     "id": "mrsatan",
     "aliases": ["mr. satan", "hercule", "mark"],
     "essence": "species_human_showman",
-    "prompt_base": "muscular man with large black afro, thick horseshoe mustache, hairy chest, brown martial arts gi, white cape, boisterous expression, realistic skin texture",
-    "weights": { "depth": 0.65, "openpose": 0.55 }
+    "prompt_base": "photograph of a muscular middle-aged man, very tanned skin, large voluminous black afro hairstyle, thick black horseshoe mustache, wearing a white cape over a brown martial arts gi, boisterous expression",
+    "feature_prompt": "RAW photo, 8k dslr, cinematic studio lighting, extreme detailed skin wrinkles and pores, visible chest hair texture, detailed hair strands in afro, highly textured fabric",
+    "negative_prompt": "anime, cartoon, CGI, plastic texture, smooth skin, bald, helmet hair, doll, toy, flat lighting, exaggerated smile, low quality, bad hands",
+    "weights": { 
+        "depth": 0.70,
+        "openpose": 0.70
+    },
+    "denoising_strength": 0.75
 }

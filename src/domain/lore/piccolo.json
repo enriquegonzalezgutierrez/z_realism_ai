@@ -2,12 +2,12 @@
     "id": "piccolo",
     "aliases": ["piccolo", "piccolo jr"],
     "essence": "species_alien_Namekian",
-    "prompt_base": "hyperdetailed photograph of an imposing tall alien man, dark green matte skin texture, black cape and white turban, intense focused eyes, muscular physique",
-    "feature_prompt": "RAW photo, 8k, cinematic volumetric lighting, detailed skin surface imperfections, wet/sweaty look on the skin, metallic reflections on armor/pads, professional studio light",
-    "negative_prompt": "anime, cartoon, illustration, CGI, toy, plastic, smooth green skin, cell shaded, overly saturated green, yellow lighting, bad anatomy, unrealistic textures",
+    "prompt_base": "hyperdetailed portrait of an imposing tall alien man, VIBRANT emerald green skin texture, black cape and white turban, intense focused eyes, muscular physique",
+    "feature_prompt": "RAW photo, 8k, cinematic volumetric rim lighting, detailed skin surface imperfections, subtle wet sheen on the skin, professional studio light, HIGH COLOR FIDELITY",
+    "negative_prompt": "anime, cartoon, illustration, CGI, toy, plastic, smooth green skin, cell shaded, dark silhouette, black skin, shadows obscuring color, bad anatomy, unrealistic textures",
     "weights": { 
-        "depth": 0.75,
-        "openpose": 0.85
+        "depth": 0.75,          
+        "openpose": 0.85        
     },
-    "denoising_strength": 0.75
+    "denoising_strength": 0.78
 }

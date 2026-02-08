@@ -1,0 +1,13 @@
+{
+    "id": "chichi",
+    "aliases": ["chi-chi", "milk"],
+    "essence": "species_human_matriarch",
+    "prompt_base": "photograph of a beautiful mature asian woman, traditional chinese blue qipao dress, long straight black hair in an elaborate bun, wide jawline, soft realistic skin texture, maternal yet fierce expression, pink silk scarf",
+    "feature_prompt": "RAW photo, 8k uhd, dslr, soft natural lighting, high quality, film grain, subtle subsurface scattering on skin, detailed straight hair strands, fabric texture on dress",
+    "negative_prompt": "anime, cartoon, illustration, drawing, CGI, doll, plastic, smooth black hair, harsh shadows, exaggerated features, low quality, overly saturated blue",
+    "weights": { 
+        "depth": 0.60,
+        "openpose": 0.70
+    },
+    "denoising_strength": 0.70
+}

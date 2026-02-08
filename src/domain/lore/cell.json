@@ -2,6 +2,12 @@
     "id": "cell",
     "aliases": ["cell", "perfect cell"],
     "essence": "species_bio_android",
-    "prompt_base": "humanoid insectoid hybrid, green spotted chitinous armor, crown-like head horns, golden eyes, black insect wings, biological exoskeleton",
-    "weights": { "depth": 0.75, "openpose": 0.50 }
+    "prompt_base": "hyperdetailed cinematic portrait of a colossal bio-android warrior, flawless green chitinous exoskeleton with dark black spots, imposing regal head horns, giant black insectoid eyes, large folded black biomechanical wings, imposing stance",
+    "feature_prompt": "RAW photo, 8k dslr, extreme texture detail on chitin, wet biological sheen, volumetric rim lighting defining the segments, sharp focus, menacing presence",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, human proportions, fleshy texture, fleshy face, doll, toy, yellow skin, flat lighting, blurry wings",
+    "weights": { 
+        "depth": 0.85,
+        "openpose": 0.80
+    },
+    "denoising_strength": 0.82
 }

@@ -2,6 +2,12 @@
     "id": "hit",
     "aliases": ["hit", "hitman", "legendary assassin"],
     "essence": "species_alien_assassin",
-    "prompt_base": "purple alien man, leather-like skin texture, stoic face, wide jawline, purple chitinous head structure, long dark grey trench coat, futuristic warrior aesthetic",
-    "weights": { "depth": 0.75, "openpose": 0.50 }
+    "prompt_base": "cinematic portrait of a stoic, imposing assassin, deep purple skin tone, sharp angular facial features, short dark hair, wearing a textured dark grey/black futuristic trench coat, serious expression",
+    "feature_prompt": "RAW photo, 8k dslr, volumetric rim lighting, extreme detail on leather/fabric texture of the coat, subtle biological texture on the purple skin, sharp focus on the face and collar",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, flat color, blurry coat, black blob, low quality, shiny armor",
+    "weights": { 
+        "depth": 0.80,
+        "openpose": 0.80
+    },
+    "denoising_strength": 0.78
 }

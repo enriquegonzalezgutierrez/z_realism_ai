@@ -2,6 +2,12 @@
     "id": "drgero",
     "aliases": ["gero", "dr. gero", "android 20", "a20"],
     "essence": "species_android_cyborg",
-    "prompt_base": "elderly man, long white hair, large grey mustache, black hat with red ribbon logo, realistic aged skin wrinkles, mechanical hand details, wide jawline, sinister eyes",
-    "weights": { "depth": 0.70, "openpose": 0.50 }
+    "prompt_base": "hyperdetailed cinematic portrait of an elderly, sinister-looking scientist, long white hair, thick grey horseshoe mustache, black hat with a distinct red ribbon logo, wide jawline, sinister eyes, wearing simple lab coat",
+    "feature_prompt": "RAW photo, 8k dslr, extreme detailed aged skin texture, deep wrinkles, visible pores, subtle veins, realistic rendering of the mechanical hand/glove, sharp focus on hat logo and glasses",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, perfect skin, doll, flat lighting, low quality, blurry mustache, youthful skin",
+    "weights": { 
+        "depth": 0.75,
+        "openpose": 0.65
+    },
+    "denoising_strength": 0.75
 }

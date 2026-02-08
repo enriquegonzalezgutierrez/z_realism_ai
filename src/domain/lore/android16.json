@@ -2,6 +2,12 @@
     "id": "android16",
     "aliases": ["16", "android 16"],
     "essence": "species_android_full",
-    "prompt_base": "hyper-muscular giant man, ginger mohawk hair, gentle blue eyes, heavy green robotic armor, mechanical chestplate, realistic skin pores, wide square face, thick neck",
-    "weights": { "depth": 0.80, "openpose": 0.45 }
+    "prompt_base": "cinematic portrait of a colossal, hyper-muscular android warrior, vibrant ginger orange mohawk hair, gentle blue eyes, wearing heavy articulated green robotic armor plating, exposed mechanical chestplate, wide square face, thick neck",
+    "feature_prompt": "RAW photo, 8k dslr, extreme high fidelity textures, subtle surface imperfections on armor plating, detailed skin pores on face, volumetric rim lighting, sharp focus on mechanical joints",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth armor, blurry hair, doll, toy, simple shading, deformed hands, flat lighting, unrealistic proportions",
+    "weights": { 
+        "depth": 0.85,
+        "openpose": 0.80
+    },
+    "denoising_strength": 0.78
 }

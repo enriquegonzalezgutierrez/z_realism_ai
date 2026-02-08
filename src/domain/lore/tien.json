@@ -2,6 +2,12 @@
     "id": "tien",
     "aliases": ["tien", "tenshinhan"],
     "essence": "species_human_triclops",
-    "prompt_base": "tall muscular bald man, three functional eyes, green martial arts vest, realistic skin texture, wide jawline, thick neck, scarred shoulder",
-    "weights": { "depth": 0.70, "openpose": 0.50 }
+    "prompt_base": "hyperdetailed portrait of a tall, muscular man, completely bald head, three functional eyes clearly visible on forehead, realistic human skin texture, green martial arts gi vest, wide jawline, determined expression",
+    "feature_prompt": "RAW photo, 8k dslr, cinematic dramatic lighting, detailed skin wrinkles and pores, sharp focus on the third eye structure, detailed fabric texture on vest",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, two eyes only, missing eye, blurry eyes, smooth skin, low quality, deformed face, simple shading",
+    "weights": { 
+        "depth": 0.75,
+        "openpose": 0.75
+    },
+    "denoising_strength": 0.76
 }

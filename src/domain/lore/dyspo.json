@@ -2,6 +2,12 @@
     "id": "dyspo",
     "aliases": ["dyspo"],
     "essence": "species_alien_feline",
-    "prompt_base": "anthropomorphic purple rabbit creature, slender muscular build, large pointed ears, prominent front teeth, yellow eyes, pride trooper suit, realistic skin texture",
-    "weights": { "depth": 0.75, "openpose": 0.50 }
+    "prompt_base": "cinematic portrait of a slender, very fast-looking anthropomorphic rabbit warrior, vibrant purple skin tone, large pointed rabbit ears, prominent front teeth detail, wearing a structured Pride Trooper suit",
+    "feature_prompt": "RAW photo, 8k dslr, high fidelity biological texture on the purple skin, volumetric lighting highlighting the slender physique, sharp focus on the face and ears, detailed suit texture",
+    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, bulky, human face, large ears, flat lighting, low quality, blurry details",
+    "weights": { 
+        "depth": 0.75,
+        "openpose": 0.80
+    },
+    "denoising_strength": 0.77
 }
