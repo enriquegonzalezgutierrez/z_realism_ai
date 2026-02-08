@@ -185,11 +185,6 @@ async function startFusingSequence() {
     toggleControls(true);
     resetWorkspace();
     
-    if (state.optimization.active) {
-        state.optimization.attempts++;
-        ui.optCount.innerText = state.optimization.attempts;
-    }
-    
     // Prepare the full request body using the latest state/UI values
     const body = new FormData();
     body.append('file', state.selectedFile);
@@ -270,47 +265,44 @@ async function renderFinalMasterwork() {
     try {
         const response = await fetch(`${API_BASE_URL}/result/${state.taskId}`);
         if (response.status === 202) {
-             // Task still pending in broker, try again (shouldn't happen after SUCCESS)
-             setTimeout(renderFinalMasterwork, 500); 
-             return;
+            setTimeout(renderFinalMasterwork, 500);
+            return;
         }
 
         const result = await response.json();
         const m = result.metrics;
         const b64 = result.result_image_b64;
-        
-        // Combine data for history
+
         const candidate = {
             id: state.taskId,
             b64: b64,
             metrics: m,
-            params: { ...state.recommendedParams, seed: state.recommendedParams.seed } // Record params used
+            params: { ...state.recommendedParams, seed: state.recommendedParams.seed }
         };
 
-        // 1. ADD TO POPULATION GALLERY
         addCandidateToGallery(candidate);
-
-        // 2. RENDER MAIN PREVIEW (and make it sharp)
         displayCandidate(candidate);
-        ui.progressContainer.classList.add('hidden');
-        
-        // 3. 🤖 EVOLUTIONARY SUPERVISOR
+        ui.progressContainer.style.display = 'none';
+
         if (state.optimization.active) {
             const currentScore = (m.structural_similarity + m.identity_preservation) / 2;
-            
-            // Log for debugging the loop
+            state.optimization.attempts++;
+            ui.optCount.innerText = state.optimization.attempts;
+
             console.log(`[ATTEMPT ${state.optimization.attempts}] Score: ${currentScore.toFixed(3)} | Params: Depth=${candidate.params.cn_depth.toFixed(2)}, Str=${candidate.params.strength.toFixed(2)}, Seed=${candidate.params.seed}`);
 
             if (currentScore > state.optimization.bestScore) {
                 state.optimization.bestScore = currentScore;
                 ui.optScore.innerText = `${Math.round(currentScore * 100)}%`;
             }
+
             if (currentScore >= state.optimization.targetThreshold) {
                 ui.essenceTag.innerText = "🎯 TARGET REACHED! OPTIMIZATION HALTED.";
                 state.optimization.active = false;
                 toggleControls(false);
                 return;
             }
+
             if (state.optimization.attempts >= state.optimization.maxAttempts) {
                 ui.essenceTag.innerText = "⚠️ POPULATION LIMIT REACHED. OPTIMIZATION HALTED.";
                 state.optimization.active = false;
@@ -318,41 +310,60 @@ async function renderFinalMasterwork() {
                 return;
             }
 
-            // --- MUTATION PROTOCOL (Adaptive Sampling) ---
-            // Randomly adjust parameters based on performance deviations
-            
-            // If structural fidelity is low, increase depth constraint
-            if (m.structural_similarity < 0.85) {
-                state.recommendedParams.cn_depth = Math.min(1.2, state.recommendedParams.cn_depth + 0.05);
-            }
-            
-            // If identity preservation is low, slightly reduce denoising strength
-            if (m.identity_preservation < 0.90) {
-                state.recommendedParams.strength = Math.max(0.40, state.recommendedParams.strength - 0.03);
-            } else {
-                 // Or slightly increase strength if identity is good, seeking more realism
-                 state.recommendedParams.strength = Math.min(1.0, state.recommendedParams.strength + 0.01);
+            // --- Realism-focused Adaptive Sampling ---
+            if (m.structural_similarity < 0.88) {
+                state.recommendedParams.cn_depth = Math.min(1.2, state.recommendedParams.cn_depth + 0.03);
             }
 
-            // Introduce stochastic noise by randomizing the seed for the next iteration
+            if (m.identity_preservation < 0.90) {
+                state.recommendedParams.strength = Math.max(0.50, state.recommendedParams.strength - 0.02);
+            } else {
+                state.recommendedParams.strength = Math.min(0.95, state.recommendedParams.strength + 0.01);
+            }
+
+            // Slightly tweak pose for natural anatomy
+            state.recommendedParams.cn_pose = Math.max(0.25, Math.min(0.75, state.recommendedParams.cn_pose + (Math.random() - 0.5) * 0.03));
+
+            // Add a tiny bias to negative_prompt to reduce anime look
+            state.recommendedParams.negative_prompt = "anime, cartoon, illustration, CGI, plastic skin, over-smooth face";
+
+            // Randomize seed slightly to explore subtle variations
             state.recommendedParams.seed = Math.floor(Math.random() * 1000000);
-            
-            // Apply a small random perturbation to pose constraint to explore subtle anatomical variations
-            state.recommendedParams.cn_pose = Math.max(0.2, Math.min(0.8, state.recommendedParams.cn_pose + (Math.random() - 0.5) * 0.05));
-            
-            setTimeout(() => { 
-                state.isProcessing = false; 
-                startFusingSequence(); 
-            }, 1000); // 1s buffer before next GPU task
+
+            setTimeout(() => {
+                state.isProcessing = false;
+                startFusingSequence();
+            }, 800);
+
         } else {
-            // Not in autopilot mode
             toggleControls(false);
         }
-    } catch (err) { 
-        console.error("Result Fetch/Render Failure:", err); 
-        state.optimization.active = false; // Stop loop on failure
-        toggleControls(false); 
+
+    } catch (err) {
+        console.error("Result Fetch/Render Failure:", err);
+        state.optimization.active = false;
+        toggleControls(false);
     }
+}
+
+function displayCandidate(candidate) {
+    ui.resultDisplay.innerHTML = `
+        <img src="data:image/png;base64,${candidate.b64}" style="animation: fadeIn 0.4s ease-out; width:100%; height:100%; object-fit:contain;">
+        <button id="download-btn" style="position:absolute; top:10px; right:10px; z-index:10;">Download</button>
+    `;
+
+    document.getElementById('download-btn').onclick = () => {
+        const a = document.createElement('a');
+        a.href = `data:image/png;base64,${candidate.b64}`;
+        a.download = `candidate_${candidate.id}.png`;
+        a.click();
+    };
+
+    const m = candidate.metrics;
+    ui.metricSsim.innerText = `${(m.structural_similarity * 100).toFixed(0)}%`;
+    ui.metricId.innerText = `${(m.identity_preservation * 100).toFixed(0)}%`;
+    ui.metricTime.innerText = `${m.inference_time}s`;
+    ui.metricsPanel.classList.remove('hidden');
 }
 
 /**
@@ -387,27 +398,6 @@ function addCandidateToGallery(candidate) {
     ui.gallery.prepend(wrapper); // Latest first
 }
 
-/**
- * UI UTILITY: Renders a specific candidate (from history or active result)
- */
-function displayCandidate(candidate) {
-    // Stop any live preview blur effect
-    ui.resultDisplay.innerHTML = `<img src="data:image/png;base64,${candidate.b64}" style="animation: fadeIn 0.4s ease-out;">`;
-    
-    // Update Metrics Panel
-    const m = candidate.metrics;
-    ui.metricSsim.innerText = `${(m.structural_similarity * 100).toFixed(0)}%`;
-    ui.metricId.innerText = `${(m.identity_preservation * 100).toFixed(0)}%`;
-    ui.metricTime.innerText = `${m.inference_time}s`;
-    ui.metricsPanel.classList.remove('hidden');
-    
-    // If not in processing state, update the sidebar controls to show selected candidate's params
-    if (!state.isProcessing) {
-         // Optionally, update sliders to selected candidate's params if needed for inspection
-         // For now, we only display metrics.
-    }
-}
-
 function toggleControls(locked) {
     state.isProcessing = locked; 
     ui.btnGenerate.disabled = locked;
@@ -423,11 +413,11 @@ function toggleControls(locked) {
 }
 
 function resetWorkspace() {
-    ui.progressContainer.classList.remove('hidden');
+    ui.progressContainer.style.display = 'block';
     ui.progressBar.style.width = '0%';
     state.previewImgElement = null;
-    
-    // Clear the active candidate highlight
+
+    // Clear active gallery highlight
     document.querySelectorAll('.gallery-item').forEach(item => item.classList.remove('active'));
 }
 

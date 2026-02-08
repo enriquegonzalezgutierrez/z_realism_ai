@@ -1,7 +1,13 @@
 {
     "id": "vegeta",
-    "aliases": ["vegeta", "prince vegeta"],
-    "essence": "species_saiyan_royal",
-    "prompt_base": "muscular man, prominent widow's peak, intense brooding eyes, wide jaw, blue tactical spandex, white battle armor with gold trim, weathered metal texture",
-    "weights": { "depth": 0.70, "openpose": 0.50 }
+    "aliases": ["vegeta", "prince of all saiyans"],
+    "essence": "species_human_alien_Saiyan",
+    "prompt_base": "Award-winning portrait of a battle-hardened man in his late 30s, intense cold blue eyes, short, rigid spiky dark blue hair, wearing high-tech composite battle armor, fierce expression", 
+    "feature_prompt": "RAW photo, 16k resolution, cinematic volumetric lighting, sharp focus, skin pores, individual metallic reflections on armor, hyperdetailed, professional studio lighting",
+    "negative_prompt": "anime, cartoon, illustration, drawing, CGI, 3d render, plastic texture, smooth skin, toy, action figure, doll, bright yellow hair, flat lighting, low quality, bad anatomy, unnatural eyes",
+    "weights": { 
+        "depth": 0.75,
+        "openpose": 0.80
+    },
+    "denoising_strength": 0.78
 }

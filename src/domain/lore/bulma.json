@@ -1,13 +1,13 @@
 {
     "id": "bulma",
-    "aliases": ["bulma", "bulma_briefs"],
-    "essence": "human_scientist",
-    "prompt_base": "cinematic portrait of a young intelligent woman, realistic proportions, confident expression, turquoise-blue hair, yellow shorts, red tube top, high-tech lab background",
-    "feature_prompt": "detailed skin pores, natural wide jawline, sharp eyes, defined cheekbones, smooth straight hair",
-    "negative_prompt": "anime, cartoon, illustration, CGI, cosplay, plastic skin, over-smooth face, curly or wavy hair, frizzy hair, small chin, exaggerated eyes, bad anatomy, flat lighting, low quality",
-    "weights": {
-        "depth": 0.80,
-        "openpose": 0.40
+    "aliases": ["bulma", "bulma briefs"],
+    "essence": "species_human",
+    "prompt_base": "photograph of a beautiful young woman, captivating blue eyes, long smooth cyan blue hair, modern casual attire, subtle smile",
+    "feature_prompt": "RAW photo, 8k uhd, dslr, soft cinematic lighting, high quality, film grain, Fujifilm XT3, detailed skin texture",
+    "negative_prompt": "anime, cartoon, illustration, drawing, 3d render, plastic, deformed, blur, bad anatomy, bad eyes, crossed eyes, disfigured, poorly drawn face, mutation, mutated, extra limb, ugly, poorly drawn hands, missing limb, floating limbs, disconnected limbs, malformed hands, blur, out of focus, unnatural hair texture",   
+    "weights": { 
+        "depth": 0.50,
+        "openpose": 0.80
     },
-    "denoising_strength": 0.50
+    "denoising_strength": 0.72
 }

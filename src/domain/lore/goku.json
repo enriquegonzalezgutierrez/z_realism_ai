@@ -1,13 +1,13 @@
 {
-    "id": "goku",
-    "aliases": ["goku", "kakarot"],
-    "essence": "human_warrior",
-    "prompt_base": "cinematic portrait of a muscular human male warrior, spiky black hair, determined expression, orange martial arts gi with blue undershirt, standing in a dynamic battle stance, dramatic lighting",
-    "feature_prompt": "defined muscles, realistic skin texture, detailed eyes, subtle scars, wristbands, flying hair strands, energy aura",
-    "negative_prompt": "anime, cartoon, chibi, exaggerated eyes, plastic skin, flat lighting, CGI, low quality, deformed anatomy",
-    "weights": {
-        "depth": 0.80,
-        "openpose": 0.50
+    "id": "goku_ssj",
+    "aliases": ["goku", "kakarotto", "super saiyan"],
+    "essence": "species_human_alien_Saiyan",
+    "prompt_base": "photograph of an extremely muscular man, intense focus, spiky golden yellow hair, wearing a torn orange and blue martial arts gi, fighting stance",
+    "feature_prompt": "RAW photo, cinematic rim lighting, hyperdetailed human skin texture, individual hair strands visible, dramatic shadows, high quality, award-winning photography",
+    "negative_prompt": "anime, cartoon, illustration, plastic texture, smooth plastic hair, bright yellow hair, flat color, orange glow, blurry background, childish, overly saturated, low contrast",
+    "weights": { 
+        "depth": 0.50,
+        "openpose": 0.90
     },
-    "denoising_strength": 0.55
+    "denoising_strength": 0.78
 }
