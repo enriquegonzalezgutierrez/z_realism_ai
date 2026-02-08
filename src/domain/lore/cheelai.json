@@ -2,12 +2,12 @@
     "id": "cheelai",
     "aliases": ["cheelai", "chelye"],
     "essence": "species_alien_outlaw",
-    "prompt_base": "photograph of a beautiful young alien woman, light mint green skin tone, short spiky white hair, large luminous purple eyes, wearing a tight futuristic galactic patrol suit, determined expression",
-    "feature_prompt": "RAW photo, 8k dslr, cinematic studio lighting, hyperdetailed skin texture, subtle subsurface scattering on skin, high gloss texture on the suit, sharp focus on eyes and armor seams",
-    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, bright green skin, flat lighting, low quality, helmet effect, deformed eyes, unnatural eyes",
+    "prompt_base": "cinematic photograph of a beautiful young alien woman, pale mint green skin tone, short spiky white hair, large amethyst purple eyes, futuristic galactic patrol suit",
+    "feature_prompt": "alien woman, mint green skin, white spiky hair, purple eyes, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, hyperdetailed skin texture, subsurface scattering, high gloss texture on suit",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, neon green skin, dark green, flat lighting, low quality, helmet effect, deformed eyes",
     "weights": { 
-        "depth": 0.65,
-        "openpose": 0.75
+        "depth": 0.60, 
+        "openpose": 0.75 
     },
-    "denoising_strength": 0.75
+    "denoising_strength": 0.63
 }

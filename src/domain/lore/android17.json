@@ -2,12 +2,12 @@
     "id": "android17",
     "aliases": ["17", "android 17", "lapis"],
     "essence": "species_human_android",    
-    "prompt_base": "athletic young man, lean build, long straight black hair, cool intelligent eyes, wearing a dark ranger outfit with green armband, casual jeans, neutral expression",    
-    "feature_prompt": "RAW photo, 8k uhd, dslr, dramatic cinematic lighting, high quality, film grain, hyperdetailed skin texture, individual hair strands visible, textured denim fabric",    
-    "negative_prompt": "anime, cartoon, illustration, drawing, 3d render, plastic texture, helmet, black shiny hair, exaggerated eyes, deformed anatomy, flat lighting, low quality, smooth fabric",    
+    "prompt_base": "cinematic portrait of a lean athletic young man, long straight jet-black hair, cool intelligent eyes, dark ranger outfit with green armband, casual jeans",    
+    "feature_prompt": "athletic young man, jet-black hair, ranger outfit, green armband, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, hyperdetailed skin texture, individual hair strands visible, detailed denim fabric texture",    
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, flat color, exaggerated eyes, low quality, smooth fabric, blurry face",    
     "weights": { 
         "depth": 0.60,
         "openpose": 0.75
     },
-    "denoising_strength": 0.72
+    "denoising_strength": 0.65
 }

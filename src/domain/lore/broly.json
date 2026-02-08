@@ -1,13 +1,13 @@
 {
     "id": "broly",
     "aliases": ["broly", "legendary_super_saiyan"],
-    "essence": "human_warrior",
-    "prompt_base": "cinematic portrait of a muscular human male warrior, long wild black-green hair, fierce expression, torn battle outfit, standing in a power-charged stance, dramatic lighting, energy aura",
-    "feature_prompt": "defined muscles, realistic skin texture, veins, battle scars, glowing green energy, dynamic hair movement, intense eyes, detailed fists",
-    "negative_prompt": "anime, cartoon, chibi, exaggerated eyes, plastic skin, flat lighting, CGI, low quality, deformed anatomy",
+    "essence": "saiyan_beast_warrior",
+    "prompt_base": "cinematic portrait of a colossal hyper-muscular warrior, Pacific Islander facial features, long wild mane-like hair in dark forest green, torn primitive fur pelt",
+    "feature_prompt": "colossal muscular warrior, dark forest green hair, fur pelt, green energy, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, extreme muscle definition, visible veins, sweat, battle-worn skin",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic skin, toy, doll, regular build, small muscles, neon green, flat lighting, low quality",
     "weights": {
-        "depth": 0.85,
-        "openpose": 0.55
+        "depth": 0.60,
+        "openpose": 0.75
     },
-    "denoising_strength": 0.55
+    "denoising_strength": 0.65
 }

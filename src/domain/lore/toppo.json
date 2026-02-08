@@ -2,12 +2,12 @@
     "id": "toppo",
     "aliases": ["toppo", "top"],
     "essence": "species_alien_deity",
-    "prompt_base": "hyperdetailed cinematic portrait of a massive, barrel-chested alien warrior, very tan skin tone, giant white horseshoe mustache, completely bald head, wearing a structured Pride Trooper uniform, stoic expression",
-    "feature_prompt": "RAW photo, 8k dslr, extreme muscle definition, detailed skin pores and wrinkles (like an older man), hyperrealistic texture on the white mustache, high contrast volumetric lighting, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, blurry mustache, toy, flat lighting, low quality, deformed anatomy, youthful face",
+    "prompt_base": "cinematic portrait of a massive, barrel-chested gray alien warrior, very tan skin tone, giant white horseshoe mustache, wearing a red and black Pride Trooper uniform",
+    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, extreme muscle definition, detailed skin pores and wrinkles, hyperrealistic texture on the white mustache, detailed suit fabric",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, blurry mustache, flat lighting, low quality, human skin color",
     "weights": { 
-        "depth": 0.80,
-        "openpose": 0.80
+        "depth": 0.70,
+        "openpose": 0.75
     },
-    "denoising_strength": 0.76
+    "denoising_strength": 0.65
 }

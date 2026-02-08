@@ -1,20 +1,15 @@
 # path: z_realism_ai/src/infrastructure/worker.py
-# description: Distributed Inference Worker v18.0 - Neural Orchestration Layer.
+# description: Distributed Inference Worker v18.1 - Neural Orchestration Layer.
 #
 # ABSTRACT:
 # This module implements the asynchronous processing consumer using the Celery 
 # distributed task queue framework. It acts as the "Heavy Compute" bridge 
 # between the RESTful API and the Generative AI Domain. 
 #
-# KEY ARCHITECTURAL FEATURES:
-# 1. Singleton Neural Engine: Implements a lazy-loading singleton pattern to 
-#    ensure the Multi-Gigabyte Stable Diffusion weights are loaded into VRAM 
-#    only once, persisting across multiple tasks.
-# 2. Telemetry Synchronization: Mitigates race conditions between Redis I/O 
-#    latency and Frontend polling by enforcing a 500ms "State Propagation Delay" 
-#    at 100% completion.
-# 3. Memory Lifecycle Management: Coordinates with the PyTorch/CUDA backend 
-#    to ensure optimal tensor allocation during high-resolution synthesis.
+# CHANGES v18.1:
+# 1. UPDATED: Serialization logic to include the new 'textural_realism' metric 
+#    in the final task result payload.
+# 2. MAINTAINED: Telemetry synchronization protocols and lazy-loading singletons.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -160,6 +155,7 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
             "metrics": {
                 "structural_similarity": report.structural_similarity,
                 "identity_preservation": report.identity_preservation,
+                "textural_realism": report.textural_realism,  # NEW: Added for v18.1
                 "inference_time": report.inference_time,
                 "is_mock": report.is_mock,
                 "full_prompt": report.full_prompt,

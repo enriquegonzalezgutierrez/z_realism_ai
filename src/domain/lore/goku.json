@@ -1,13 +1,13 @@
 {
     "id": "goku_ssj",
     "aliases": ["goku", "kakarotto", "super saiyan"],
-    "essence": "species_human_alien_Saiyan",
-    "prompt_base": "photograph of an extremely muscular man, intense focus, spiky golden yellow hair, wearing a torn orange and blue martial arts gi, fighting stance",
-    "feature_prompt": "RAW photo, cinematic rim lighting, hyperdetailed human skin texture, individual hair strands visible, dramatic shadows, high quality, award-winning photography",
-    "negative_prompt": "anime, cartoon, illustration, plastic texture, smooth plastic hair, bright yellow hair, flat color, orange glow, blurry background, childish, overly saturated, low contrast",
+    "essence": "species_saiyan_ultimate",
+    "prompt_base": "cinematic portrait of an extremely muscular Japanese man, fierce expression, spiky golden-yellow energy hair, wearing a torn orange and blue martial arts gi",
+    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, hyperdetailed human skin texture, individual golden hair strands visible, dynamic shadows, realistic fabric weave on gi",
+    "negative_prompt": "anime, cartoon, illustration, plastic texture, smooth plastic hair, bright yellow hair, flat color, CGI, blurry background, low quality, childish, oversaturated",
     "weights": { 
-        "depth": 0.50,
-        "openpose": 0.90
+        "depth": 0.60,
+        "openpose": 0.75
     },
-    "denoising_strength": 0.78
+    "denoising_strength": 0.65
 }

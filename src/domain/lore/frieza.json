@@ -2,12 +2,12 @@
     "id": "frieza",
     "aliases": ["frieza", "freezer", "golden frieza"],
     "essence": "species_frost_demon",
-    "prompt_base": "cinematic portrait of a sleek, slender alien overlord, smooth white bio-armor plating, crystalline purple head and shoulder gems, intense menacing red eyes, menacing presence, slender tail visible",
-    "feature_prompt": "RAW photo, 8k dslr, hyperrealistic polished surface texture on armor, high-gloss reflections, volumetric rim lighting emphasizing the smooth form, sharp focus on the crystalline details",
-    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, dull surface, matte skin, fleshy texture, human proportions, bulky, flat lighting, low quality, blurry details",
+    "prompt_base": "cinematic portrait of a sleek, slender alien overlord, white polished organic bio-armor, crystalline purple gems, intense red eyes, visible slender tail",
+    "feature_prompt": "hyperrealistic polished surface texture on organic armor, high-gloss reflections, volumetric rim lighting, sharp focus on the crystalline details, smooth organic texture on purple parts",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, dull surface, matte skin, fleshy texture, human proportions, bulky, flat lighting, low quality",
     "weights": { 
-        "depth": 0.80,
+        "depth": 0.70,
         "openpose": 0.75
     },
-    "denoising_strength": 0.80
+    "denoising_strength": 0.65
 }

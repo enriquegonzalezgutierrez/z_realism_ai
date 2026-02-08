@@ -2,12 +2,12 @@
     "id": "yamcha",
     "aliases": ["yamcha"],
     "essence": "species_human_warrior",
-    "prompt_base": "photograph of a handsome asian man, long messy black hair, distinctive cross-shaped scars clearly visible on both cheeks, wearing an orange martial arts gi, determined expression, athletic build",
-    "feature_prompt": "RAW photo, 8k dslr, cinematic studio lighting, hyperdetailed skin texture, sharp focus on the scars, detailed fabric texture, subtle subsurface scattering on skin",
-    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, blurry face, missing scars, flat lighting, low quality, helmet hair, unnatural proportions",
+    "prompt_base": "photograph of a handsome asian man, long messy black hair, distinctive cross-shaped scars on both cheeks, wearing an orange martial arts gi",
+    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, sharp focus on the scars, detailed fabric texture on gi, subtle subsurface scattering on skin",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, blurry face, missing scars, flat lighting, low quality, helmet hair",
     "weights": { 
-        "depth": 0.65,
+        "depth": 0.60,
         "openpose": 0.75
     },
-    "denoising_strength": 0.74
+    "denoising_strength": 0.65
 }

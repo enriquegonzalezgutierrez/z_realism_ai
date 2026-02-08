@@ -1,41 +1,56 @@
 /**
  * path: z_realism_ai/src/presentation-custom/app.js
- * description: Research Controller v19.5 - Advanced Manifold Control and Gallery Management.
+ * description: Research Controller v19.7 - Final Interaction & Display Sync.
  *
  * ABSTRACT:
- * This revision expands the client-side controller to manage the full tactical 
- * hyper-parameter manifold (including Denoising Strength and decoupled ControlNet weights).
- * It introduces a robust mechanism for managing the Candidate Gallery, allowing 
- * users to inspect historical results while the optimization loop continues 
- * in the background.
+ * This script controls the logic for the Z-REALISM laboratory. It manages 
+ * subject analysis, neural fusion triggering, and the optimization loop.
+ *
+ * KEY FIXES (v19.7):
+ * 1. Interaction Logic: Uses direct .style.display = 'none' to hide the progress 
+ *    overlay, ensuring it doesn't block mouse events on the download button.
+ * 2. Layout Sync: Uses .style.display = 'flex' to show the overlay, maintaining 
+ *    the centered alignment defined in the CSS.
+ * 3. Event Propagation: Download button now uses e.stopPropagation() to prevent 
+ *    triggering gallery selection events when saving a result.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
 const API_BASE_URL = 'http://localhost:8000';
 
+// =============================================================================
+// 1. GLOBAL STATE
+// =============================================================================
 const state = {
     taskId: null,
     isProcessing: false,
     selectedFile: null,
     previewImgElement: null,
     
-    // Default values for the full tactical manifold
+    // Core parameters for the synthesis manifold
     recommendedParams: {
-        cn_depth: 0.75, cn_pose: 0.40, strength: 0.70,
-        negative_prompt: "anime, cartoon, low quality", seed: 42
+        cn_depth: 0.75, 
+        cn_pose: 0.40, 
+        strength: 0.70,
+        negative_prompt: "anime, cartoon, low quality", 
+        seed: 42
     },
 
+    // Auto-pilot / Optimization loop state
     optimization: {
         active: false,
         attempts: 0,
         maxAttempts: 5,
         targetThreshold: 0.92,
         bestScore: 0,
-        history: [] // Holds all generated candidates
+        history: [] // Stores candidate objects for the gallery
     }
 };
 
+// =============================================================================
+// 2. UI ELEMENTS MAPPING
+// =============================================================================
 const ui = {
     charName: document.getElementById('char-name'),
     fileInput: document.getElementById('file-upload'),
@@ -43,7 +58,6 @@ const ui = {
     btnAnalyze: document.getElementById('btn-analyze'),
     btnGenerate: document.getElementById('btn-generate'),
     
-    // New Sliders and inputs (Full Manifold)
     resSlider: document.getElementById('input-res'),
     stepsSlider: document.getElementById('input-steps'),
     cfgSlider: document.getElementById('input-cfg'),
@@ -61,28 +75,37 @@ const ui = {
     sourcePreview: document.getElementById('source-preview'),
     resultDisplay: document.getElementById('result-display'),
     gallery: document.getElementById('candidate-gallery'),
+    
     progressContainer: document.getElementById('progress-container'),
     progressBar: document.getElementById('progress-bar'),
     progressText: document.getElementById('progress-text'),
+    
     metricsPanel: document.getElementById('metrics-panel'),
     metricSsim: document.getElementById('metric-ssim'),
     metricId: document.getElementById('metric-id'),
     metricTime: document.getElementById('metric-time'),
+    
     accTrigger: document.getElementById('acc-trigger'),
     accContent: document.getElementById('acc-content')
 };
 
+// =============================================================================
+// 3. INITIALIZATION
+// =============================================================================
 function initLaboratory() {
-    // 1. Accordion Setup
+    // Accordion Logic
     ui.accTrigger.addEventListener('click', () => {
         ui.accContent.classList.toggle('open');
         ui.accTrigger.querySelector('.arrow').classList.toggle('rotate');
     });
 
-    // 2. Slider Value Linking
+    // Slider Label Sync
     const link = (id, valId) => {
         const el = document.getElementById(id);
-        if (el) el.addEventListener('input', (e) => document.getElementById(valId).innerText = parseFloat(e.target.value).toFixed(2));
+        if (el) el.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            document.getElementById(valId).innerText = val % 1 === 0 ? val : val.toFixed(2);
+        });
     };
     link('input-res', 'val-res'); 
     link('input-steps', 'val-steps'); 
@@ -91,7 +114,7 @@ function initLaboratory() {
     link('input-cn-depth', 'val-cn-depth');
     link('input-cn-pose', 'val-cn-pose');
 
-    // 3. File Handling
+    // File Upload Preview
     ui.fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -103,43 +126,45 @@ function initLaboratory() {
         }
     });
 
-    // 4. Button Actions
     ui.btnAnalyze.addEventListener('click', executeDNAAnalysis);
     ui.btnGenerate.addEventListener('click', initializeFusion);
 
-    // Set initial values from the UI (in case the user modifies defaults before analysis)
     updateRecommendedParamsFromUI();
 }
 
+/**
+ * Reads values from UI sliders and updates the internal manifold state.
+ */
 function updateRecommendedParamsFromUI() {
     state.recommendedParams = {
         cn_depth: parseFloat(ui.cnDepthSlider.value),
         cn_pose: parseFloat(ui.cnPoseSlider.value),
         strength: parseFloat(ui.strengthSlider.value),
-        negative_prompt: state.recommendedParams.negative_prompt, // Kept from state for defaults
+        negative_prompt: state.recommendedParams.negative_prompt,
         seed: parseInt(ui.seedInput.value)
     };
 }
 
+// =============================================================================
+// 4. CORE WORKFLOWS
+// =============================================================================
+
 function initializeFusion() {
-    // Reset optimization state
     state.optimization.attempts = 0;
     state.optimization.bestScore = 0;
     state.optimization.active = ui.chkAutoPilot.checked;
     state.optimization.history = [];
-    ui.gallery.innerHTML = ''; // Clear previous session
+    ui.gallery.innerHTML = ''; 
     
-    // Display/hide optimization status panel
+    // UI Feedback for Auto-Pilot
     if(state.optimization.active) {
-        ui.optStatus.classList.remove('hidden');
+        ui.optStatus.style.display = 'block';
         ui.optScore.innerText = "0%";
     } else {
-        ui.optStatus.classList.add('hidden');
+        ui.optStatus.style.display = 'none';
     }
     
-    // Ensure the current UI settings are loaded into the tactical manifold
     updateRecommendedParamsFromUI();
-    
     startFusingSequence();
 }
 
@@ -156,17 +181,16 @@ async function executeDNAAnalysis() {
         
         if (data.status === 'success') {
             const r = data.recommendations;
-            
-            // 1. Update State's Recommended Manifold
+            // Update State
             state.recommendedParams = {
                 cn_depth: r.cn_scale_depth, 
                 cn_pose: r.cn_scale_pose,
                 strength: r.strength, 
                 negative_prompt: r.negative_prompt,
-                seed: parseInt(ui.seedInput.value) // Use existing UI seed
+                seed: parseInt(ui.seedInput.value)
             };
             
-            // 2. Update UI Sliders/Inputs to reflect recommendations
+            // Sync UI Sliders
             ui.strengthSlider.value = r.strength;
             document.getElementById('val-strength').innerText = r.strength.toFixed(2);
             ui.cnDepthSlider.value = r.cn_scale_depth;
@@ -177,7 +201,7 @@ async function executeDNAAnalysis() {
             ui.promptInput.value = r.texture_prompt;
             ui.essenceTag.innerText = `STRATEGY: ${data.detected_essence}`;
         }
-    } catch (err) { ui.essenceTag.innerText = "OFFLINE: Analysis Failure."; console.error(err); }
+    } catch (err) { ui.essenceTag.innerText = "OFFLINE: Analysis Failure."; }
 }
 
 async function startFusingSequence() {
@@ -185,7 +209,6 @@ async function startFusingSequence() {
     toggleControls(true);
     resetWorkspace();
     
-    // Prepare the full request body using the latest state/UI values
     const body = new FormData();
     body.append('file', state.selectedFile);
     body.append('character_name', ui.charName.value);
@@ -193,47 +216,38 @@ async function startFusingSequence() {
     body.append('resolution_anchor', ui.resSlider.value);
     body.append('steps', ui.stepsSlider.value);
     body.append('cfg_scale', ui.cfgSlider.value);
-    
-    // Critical Hyperparameters from the tactical manifold (state.recommendedParams)
-    // These are often modified by the optimization loop, overriding the UI sliders.
     body.append('cn_depth', state.recommendedParams.cn_depth);
     body.append('cn_pose', state.recommendedParams.cn_pose);
     body.append('strength', state.recommendedParams.strength);
     body.append('negative_prompt', state.recommendedParams.negative_prompt);
     body.append('seed', state.recommendedParams.seed);
 
-
     try {
         const response = await fetch(`${API_BASE_URL}/transform`, { method: 'POST', body });
         if (response.status === 429) { alert("HARDWARE_LOCK: CUDA Engine Busy."); toggleControls(false); return; }
-        
         const data = await response.json();
         state.taskId = data.task_id;
         pollInferenceTelemetry();
-    } catch (err) { toggleControls(false); console.error("Fusion Dispatch Failed:", err); }
+    } catch (err) { toggleControls(false); }
 }
 
 function pollInferenceTelemetry() {
     const pollInterval = setInterval(async () => {
         if (!state.taskId) return clearInterval(pollInterval);
-        
         try {
             const response = await fetch(`${API_BASE_URL}/status/${state.taskId}`);
             const data = await response.json();
             
             if (data.status === 'PROGRESS') {
                 const pct = data.progress.percent;
-                requestAnimationFrame(() => {
-                    ui.progressBar.style.width = `${pct}%`;
-                    ui.progressText.innerText = `${data.progress.status_text.replace(/_/g, ' ')}: ${pct}%`;
-                });
+                ui.progressBar.style.width = `${pct}%`;
+                ui.progressText.innerText = `${data.progress.status_text.replace(/_/g, ' ')}: ${pct}%`;
                 
-                // Show intermediate preview
+                // Real-time latent preview
                 if (data.progress.preview_b64) {
                     if (!state.previewImgElement) {
                         ui.resultDisplay.innerHTML = ''; 
                         state.previewImgElement = new Image();
-                        state.previewImgElement.id = 'active-preview';
                         state.previewImgElement.style.cssText = "width:100%; height:100%; object-fit:contain; filter:blur(4px);";
                         ui.resultDisplay.appendChild(state.previewImgElement);
                     }
@@ -242,120 +256,90 @@ function pollInferenceTelemetry() {
             } 
             else if (data.status === 'SUCCESS') {
                 clearInterval(pollInterval);
-                requestAnimationFrame(() => { ui.progressBar.style.width = '100%'; ui.progressText.innerText = "SYNC COMPLETE."; });
-                // Delay rendering slightly to allow final metrics to propagate
+                ui.progressBar.style.width = '100%'; 
+                ui.progressText.innerText = "SYNC COMPLETE.";
                 setTimeout(() => { renderFinalMasterwork(); }, 600);
             } 
             else if (data.status === 'FAILURE') {
                 clearInterval(pollInterval);
                 state.optimization.active = false;
-                ui.essenceTag.innerText = "CRITICAL FAILURE";
                 toggleControls(false);
             }
-        } catch (err) { 
-            clearInterval(pollInterval); 
-            // Only stop processing if the error is severe (e.g., connection lost)
-            // If optimization is active, a failure might stop the loop.
-            if (!state.optimization.active) toggleControls(false); 
-        }
+        } catch (err) { clearInterval(pollInterval); toggleControls(false); }
     }, 1000); 
 }
 
 async function renderFinalMasterwork() {
     try {
         const response = await fetch(`${API_BASE_URL}/result/${state.taskId}`);
-        if (response.status === 202) {
-            setTimeout(renderFinalMasterwork, 500);
-            return;
-        }
+        if (response.status === 202) { setTimeout(renderFinalMasterwork, 500); return; }
 
         const result = await response.json();
-        const m = result.metrics;
-        const b64 = result.result_image_b64;
-
         const candidate = {
             id: state.taskId,
-            b64: b64,
-            metrics: m,
-            params: { ...state.recommendedParams, seed: state.recommendedParams.seed }
+            b64: result.result_image_b64,
+            metrics: result.metrics,
+            params: { ...state.recommendedParams }
         };
 
         addCandidateToGallery(candidate);
         displayCandidate(candidate);
+        
+        // CRITICAL FIX: Direct display style to hide overlay and unlock interaction
         ui.progressContainer.style.display = 'none';
 
         if (state.optimization.active) {
-            const currentScore = (m.structural_similarity + m.identity_preservation) / 2;
-            state.optimization.attempts++;
-            ui.optCount.innerText = state.optimization.attempts;
-
-            console.log(`[ATTEMPT ${state.optimization.attempts}] Score: ${currentScore.toFixed(3)} | Params: Depth=${candidate.params.cn_depth.toFixed(2)}, Str=${candidate.params.strength.toFixed(2)}, Seed=${candidate.params.seed}`);
-
-            if (currentScore > state.optimization.bestScore) {
-                state.optimization.bestScore = currentScore;
-                ui.optScore.innerText = `${Math.round(currentScore * 100)}%`;
-            }
-
-            if (currentScore >= state.optimization.targetThreshold) {
-                ui.essenceTag.innerText = "🎯 TARGET REACHED! OPTIMIZATION HALTED.";
-                state.optimization.active = false;
-                toggleControls(false);
-                return;
-            }
-
-            if (state.optimization.attempts >= state.optimization.maxAttempts) {
-                ui.essenceTag.innerText = "⚠️ POPULATION LIMIT REACHED. OPTIMIZATION HALTED.";
-                state.optimization.active = false;
-                toggleControls(false);
-                return;
-            }
-
-            // --- Realism-focused Adaptive Sampling ---
-            if (m.structural_similarity < 0.88) {
-                state.recommendedParams.cn_depth = Math.min(1.2, state.recommendedParams.cn_depth + 0.03);
-            }
-
-            if (m.identity_preservation < 0.90) {
-                state.recommendedParams.strength = Math.max(0.50, state.recommendedParams.strength - 0.02);
-            } else {
-                state.recommendedParams.strength = Math.min(0.95, state.recommendedParams.strength + 0.01);
-            }
-
-            // Slightly tweak pose for natural anatomy
-            state.recommendedParams.cn_pose = Math.max(0.25, Math.min(0.75, state.recommendedParams.cn_pose + (Math.random() - 0.5) * 0.03));
-
-            // Add a tiny bias to negative_prompt to reduce anime look
-            state.recommendedParams.negative_prompt = "anime, cartoon, illustration, CGI, plastic skin, over-smooth face";
-
-            // Randomize seed slightly to explore subtle variations
-            state.recommendedParams.seed = Math.floor(Math.random() * 1000000);
-
-            setTimeout(() => {
-                state.isProcessing = false;
-                startFusingSequence();
-            }, 800);
-
+            handleOptimizationLoop(candidate);
         } else {
             toggleControls(false);
         }
+    } catch (err) { state.optimization.active = false; toggleControls(false); }
+}
 
-    } catch (err) {
-        console.error("Result Fetch/Render Failure:", err);
+function handleOptimizationLoop(candidate) {
+    const m = candidate.metrics;
+    const currentScore = (m.structural_similarity + m.identity_preservation) / 2;
+    state.optimization.attempts++;
+    ui.optCount.innerText = state.optimization.attempts;
+
+    if (currentScore > state.optimization.bestScore) {
+        state.optimization.bestScore = currentScore;
+        ui.optScore.innerText = `${Math.round(currentScore * 100)}%`;
+    }
+
+    if (currentScore >= state.optimization.targetThreshold || state.optimization.attempts >= state.optimization.maxAttempts) {
+        ui.essenceTag.innerText = "OPTIMIZATION COMPLETE.";
         state.optimization.active = false;
         toggleControls(false);
+        return;
     }
+
+    // Adaptive Sampling Logic
+    if (m.structural_similarity < 0.88) state.recommendedParams.cn_depth = Math.min(1.2, state.recommendedParams.cn_depth + 0.03);
+    if (m.identity_preservation < 0.90) state.recommendedParams.strength = Math.max(0.50, state.recommendedParams.strength - 0.02);
+    else state.recommendedParams.strength = Math.min(0.95, state.recommendedParams.strength + 0.01);
+
+    state.recommendedParams.seed = Math.floor(Math.random() * 1000000);
+
+    setTimeout(() => { state.isProcessing = false; startFusingSequence(); }, 800);
 }
+
+// =============================================================================
+// 5. VIEWPORT & GALLERY MANAGEMENT
+// =============================================================================
 
 function displayCandidate(candidate) {
     ui.resultDisplay.innerHTML = `
-        <img src="data:image/png;base64,${candidate.b64}" style="animation: fadeIn 0.4s ease-out; width:100%; height:100%; object-fit:contain;">
-        <button id="download-btn" style="position:absolute; top:10px; right:10px; z-index:10;">Download</button>
+        <img src="data:image/png;base64,${candidate.b64}" style="width:100%; height:100%; object-fit:contain;">
+        <button id="download-btn" class="btn-secondary" style="position:absolute; bottom:10px; right:10px; z-index:20; margin:0; width:auto; padding:8px 15px;">💾 SAVE DATA</button>
     `;
 
-    document.getElementById('download-btn').onclick = () => {
+    document.getElementById('download-btn').onclick = (e) => {
+        // Prevent click from bubbling to the image container
+        e.stopPropagation();
         const a = document.createElement('a');
         a.href = `data:image/png;base64,${candidate.b64}`;
-        a.download = `candidate_${candidate.id}.png`;
+        a.download = `result_${candidate.id}.png`;
         a.click();
     };
 
@@ -366,16 +350,10 @@ function displayCandidate(candidate) {
     ui.metricsPanel.classList.remove('hidden');
 }
 
-/**
- * UI UTILITY: Adds a result to the history strip
- */
 function addCandidateToGallery(candidate) {
     const score = Math.round(((candidate.metrics.structural_similarity + candidate.metrics.identity_preservation) / 2) * 100);
     const wrapper = document.createElement('div');
-    wrapper.className = 'gallery-item glass-panel';
-    wrapper.setAttribute('data-candidate-id', candidate.id);
-    
-    // Store the candidate data in the global history array
+    wrapper.className = 'gallery-item';
     state.optimization.history.push(candidate); 
 
     wrapper.innerHTML = `
@@ -383,41 +361,32 @@ function addCandidateToGallery(candidate) {
         <div class="gallery-score">${score}%</div>
     `;
     
-    // Allow clicking on candidates to review results without interrupting the loop
     wrapper.onclick = () => {
-        // Find the candidate from history
-        const targetCandidate = state.optimization.history.find(c => c.id === candidate.id);
-        if (targetCandidate) {
-            displayCandidate(targetCandidate);
-            // Highlight active gallery item
+        const target = state.optimization.history.find(c => c.id === candidate.id);
+        if (target) {
+            displayCandidate(target);
             document.querySelectorAll('.gallery-item').forEach(item => item.classList.remove('active'));
             wrapper.classList.add('active');
         }
     };
-    
-    ui.gallery.prepend(wrapper); // Latest first
+    ui.gallery.prepend(wrapper);
 }
 
 function toggleControls(locked) {
     state.isProcessing = locked; 
     ui.btnGenerate.disabled = locked;
     ui.btnAnalyze.disabled = locked;
-    ui.btnGenerate.innerText = locked ? "⚡ SEQUENCING..." : "INITIATE NEURAL FUSION";
+    ui.btnGenerate.querySelector('.btn-text').innerText = locked ? "⚡ SEQUENCING..." : "INITIATE NEURAL FUSION";
     ui.chkAutoPilot.disabled = locked;
-    
-    // If unlocked, ensure the UI reflects the parameters currently loaded in the state for the next run.
-    if (!locked) {
-        // Sync the UI seeds back to the state's calculated seed if autopilot was running
-        ui.seedInput.value = state.recommendedParams.seed; 
-    }
+    if (!locked) ui.seedInput.value = state.recommendedParams.seed; 
 }
 
 function resetWorkspace() {
-    ui.progressContainer.style.display = 'block';
+    // CRITICAL FIX: Show overlay using flex to match CSS layout
+    ui.progressContainer.style.display = 'flex';
     ui.progressBar.style.width = '0%';
+    ui.progressText.innerText = "INITIALIZING...";
     state.previewImgElement = null;
-
-    // Clear active gallery highlight
     document.querySelectorAll('.gallery-item').forEach(item => item.classList.remove('active'));
 }
 

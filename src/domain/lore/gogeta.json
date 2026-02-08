@@ -2,12 +2,12 @@
     "id": "gogeta",
     "aliases": ["gogeta", "gogeta blue"],
     "essence": "species_saiyan_fusion",
-    "prompt_base": "cinematic portrait of an extremely powerful fusion warrior, masculine asian warrior, spiky black hair, intense determined eyes, wearing the iconic Metamoran fusion vest with black and yellow segmented padding, wide jawline",
-    "feature_prompt": "RAW photo, 8k dslr, hyperdetailed skin texture, subtle subsurface scattering, volumetric rim lighting, sharp focus on padding texture, realistic fabric weave",
-    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, helmet hair, flat lighting, low quality, deformed anatomy, overly bulky muscles",
+    "prompt_base": "cinematic portrait of an extremely powerful fusion warrior, intense determined eyes, spiky black hair, iconic Metamoran fusion vest (black and yellow segmented padding), white pants, blue sash",
+    "feature_prompt": "hyperdetailed skin texture, realistic fabric weave, sharp focus on padding texture, subsurface scattering, individual hair strands, intense energy aura, hyper-muscular physique",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, helmet hair, low quality, deformed anatomy, blurry clothes",
     "weights": { 
-        "depth": 0.75,
-        "openpose": 0.85
+        "depth": 0.65,
+        "openpose": 0.75
     },
-    "denoising_strength": 0.76
+    "denoising_strength": 0.65
 }

@@ -2,12 +2,12 @@
     "id": "android21",
     "aliases": ["21", "android 21", "vomi"],
     "essence": "species_human_scientist",
-    "prompt_base": "beautiful young woman, long voluminous curly brown hair, black framed glasses, white laboratory coat, blue and red dress underneath, intelligent gaze, realistic skin texture",
-    "feature_prompt": "RAW photo, 8k uhd, dslr, sharp focus, cinematic rim lighting, high quality, detailed hair texture, subsurface scattering on skin, subtle wrinkles, crisp lines on glasses frame",
-    "negative_prompt": "anime, cartoon, illustration, drawing, 3d render, plastic, doll, smooth curly hair, helmet, exaggerated eyes, flat lighting, low quality, blurry background, unnatural skin, heavy makeup",    
+    "prompt_base": "cinematic portrait of a brilliant young woman, voluminous auburn mahogany hair, black-framed glasses, white lab coat, blue and red checkered dress",
+    "feature_prompt": "brilliant young woman, auburn hair, lab coat, checkered dress, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, subsurface scattering on skin, subtle skin texture, crisp lines on glasses",
+    "negative_prompt": "anime, cartoon, illustration, drawing, 3d render, plastic, doll, smooth hair, exaggerated eyes, flat lighting, low quality, blurry face, deformed glasses",    
     "weights": { 
         "depth": 0.60,
-        "openpose": 0.70
+        "openpose": 0.75
     },
-    "denoising_strength": 0.74
+    "denoising_strength": 0.65
 }

@@ -2,12 +2,12 @@
     "id": "cell",
     "aliases": ["cell", "perfect cell"],
     "essence": "species_bio_android",
-    "prompt_base": "hyperdetailed cinematic portrait of a colossal bio-android warrior, flawless green chitinous exoskeleton with dark black spots, imposing regal head horns, giant black insectoid eyes, large folded black biomechanical wings, imposing stance",
-    "feature_prompt": "RAW photo, 8k dslr, extreme texture detail on chitin, wet biological sheen, volumetric rim lighting defining the segments, sharp focus, menacing presence",
-    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, human proportions, fleshy texture, fleshy face, doll, toy, yellow skin, flat lighting, blurry wings",
+    "prompt_base": "cinematic portrait of a colossal bio-android warrior, green chitinous exoskeleton with black spots, regal head horns, giant black insectoid eyes, black biomechanical wings",
+    "feature_prompt": "bio-android, green beetle-like exoskeleton, black spots, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, extreme texture detail on chitin, wet biological sheen, volumetric rim lighting",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, human face, fleshy skin, toy, doll, flat lighting, blurry wings, yellow skin",
     "weights": { 
-        "depth": 0.85,
-        "openpose": 0.80
+        "depth": 0.60, 
+        "openpose": 0.75 
     },
-    "denoising_strength": 0.82
+    "denoising_strength": 0.65
 }

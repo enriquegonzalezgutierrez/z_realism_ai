@@ -1,0 +1,13 @@
+{
+    "id": "chun_li",
+    "aliases": ["chun-li", "chunli"],
+    "essence": "human_interpol_officer",
+    "prompt_base": "cinematic portrait of a powerful Chinese woman, signature ox-horn hair buns with white silk ribbons, wearing a blue silk qipao with gold embroidery",
+    "feature_prompt": "Chinese woman, blue silk qipao, gold embroidery, ox-horn hair buns, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, hyper-realistic skin, intricate silk texture, photorealistic eyes, athletic build",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic skin, doll, low quality, deformed, cosplay material, messy hair",
+    "weights": { 
+        "depth": 0.60, 
+        "openpose": 0.75 
+    },
+    "denoising_strength": 0.64
+}

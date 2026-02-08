@@ -1,0 +1,13 @@
+{
+    "id": "balrog",
+    "aliases": ["balrog", "boxer", "m. bison jp"],
+    "essence": "human_boxer",
+    "prompt_base": "cinematic portrait of a powerful African-American boxer, aggressive expression, blue boxing robe, blue leather boxing gloves",
+    "feature_prompt": "African-American boxer, blue boxing gear, sweat dripping on skin, leather texture on gloves, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, hyper-realistic facial features, arena tunnel lighting",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, toy, thin build, friendly expression, deformed gloves",
+    "weights": { 
+        "depth": 0.60, 
+        "openpose": 0.75 
+    },
+    "denoising_strength": 0.65
+}

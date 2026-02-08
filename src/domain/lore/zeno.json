@@ -2,12 +2,12 @@
     "id": "zeno",
     "aliases": ["zeno", "zen-oh", "omni-king"],
     "essence": "species_cosmic_entity",
-    "prompt_base": "photorealistic render of a floating cosmic deity, spherical head shape, skin segmented in deep violet and cyan glowing patterns, large black void-like eyes, wearing ornate royal flowing silk robes, divine presence",
-    "feature_prompt": "cinematic volumetric rim lighting, high detail texture on silk robes, extreme high resolution, glowing energy effect, deep space background, 16k detail",
+    "prompt_base": "photorealistic render of a floating cosmic deity, spherical head shape, skin segmented in deep violet and cyan glowing patterns, large black void-like eyes, wearing ornate royal flowing silk robes",
+    "feature_prompt": "cinematic volumetric lighting, high detail texture on silk robes, glowing energy effect, deep space background, 16k detail",
     "negative_prompt": "anime, cartoon, drawing, human proportions, fleshy skin, nose, mouth, ears, childish, simple, plastic, flat color, poorly drawn shape, low contrast",
     "weights": { 
-        "depth": 0.85,
+        "depth": 0.75,
         "openpose": 0.30
     },
-    "denoising_strength": 0.85
+    "denoising_strength": 0.60
 }

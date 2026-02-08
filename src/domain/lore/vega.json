@@ -1,0 +1,10 @@
+{
+    "id": "vega",
+    "aliases": ["vega", "claw", "balrog jp"],
+    "essence": "human_assassin",
+    "prompt_base": "photorealistic portrait of a narcissistic Spanish matador, silver mask, long blonde hair, sharp metal claw on one hand, purple snake tattoo",
+    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, polished metal texture on claw and mask, realistic silk hair, sharp focus on tattoo ink detail",
+    "negative_prompt": "anime, cartoon, drawing, plastic, blunt claw, messy hair, blurry tattoo",
+    "weights": { "depth": 0.60, "openpose": 0.75 },
+    "denoising_strength": 0.65
+}

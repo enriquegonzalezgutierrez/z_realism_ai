@@ -2,12 +2,12 @@
     "id": "beerus",
     "aliases": ["beerus", "god_of_destruction"],
     "essence": "species_alien_deity",
-    "prompt_base": "hyperdetailed portrait of an imposing, slender alien male, feline ears, calm confident expression, wearing ornate purple and gold Egyptian-inspired robes, human-like anatomy",
-    "feature_prompt": "RAW photo, 8k dslr, deep volumetric lighting, realistic subtle purple skin texture, fine wrinkles around eyes, wet/oily look on the skin, high contrast, subsurface scattering",
-    "negative_prompt": "anime, cartoon, CGI, toy, plastic texture, smooth skin, pink color, bright purple, flat lighting, exaggerated ears, deformed anatomy, low quality",
+    "prompt_base": "cinematic portrait of a slender, imposing feline deity, smooth purple skin, piercing yellow eyes, large pointed ears, wearing ornate Egyptian jewelry and robes",
+    "feature_prompt": "impossibly smooth purple skin texture, subtle biological sheen, volumetric rim lighting, macro detail on skin surface, sharp focus on crystalline yellow eyes",
+    "negative_prompt": "anime, cartoon, illustration, drawing, plastic skin, toy, rough texture, diseased, wounded, gore, human ears, low quality",
     "weights": { 
-        "depth": 0.70,
-        "openpose": 0.80
+        "depth": 0.60,
+        "openpose": 0.75
     },
-    "denoising_strength": 0.78
+    "denoising_strength": 0.65
 }

@@ -2,6 +2,12 @@
     "id": "shu",
     "aliases": ["shu", "soba"],
     "essence": "species_anthropomorphic_dog",
-    "prompt_base": "anthropomorphic shiba inu dog ninja, realistic fur texture, black ninja outfit, katana on back, wide dog jaw, canine facial structure, brown eyes",
-    "weights": { "depth": 0.75, "openpose": 0.50 }
+    "prompt_base": "photorealistic portrait of a small anthropomorphic Shiba Inu dog ninja, realistic brown fur texture, fierce expression, wearing a black ninja outfit, katana on back",
+    "feature_prompt": "RAW photo, 8k dslr, high detailed fur texture, sharp focus on dog jaw and canine facial structure, metallic texture on katana and hilt, woven fabric on ninja outfit",
+    "negative_prompt": "anime, cartoon, drawing, human hands, human face, smooth skin, plastic costume, low quality",
+    "weights": { 
+        "depth": 0.65, 
+        "openpose": 0.75 
+    },
+    "denoising_strength": 0.65
 }

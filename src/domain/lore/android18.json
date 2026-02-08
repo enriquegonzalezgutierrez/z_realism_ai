@@ -2,12 +2,12 @@
     "id": "android18",
     "aliases": ["18", "android 18", "lazuli"],
     "essence": "species_human_cyborg",
-    "prompt_base": "photograph of a beautiful scandinavian woman, cold blue eyes, short blonde bob hair, denim jacket with striped sleeves, neutral expression",
-    "feature_prompt": "RAW photo, 8k uhd, dslr, soft lighting, high quality, film grain, Fujifilm XT3",
-    "negative_prompt": "anime, cartoon, illustration, drawing, 3d render, plastic, deformed, blur, bad anatomy, bad eyes, crossed eyes, disfigured, poorly drawn face, mutation, mutated, extra limb, ugly, poorly drawn hands, missing limb, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, mutant",
+    "prompt_base": "cinematic photograph of a beautiful young scandinavian woman, piercing cold blue eyes, short blonde bob hair, blue denim jacket, striped sleeves",
+    "feature_prompt": "scandinavian woman, blonde bob, denim jacket, striped sleeves, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, hyper-realistic skin texture, visible fabric weave, detailed denim and knit textures, Fujifilm XT3 style",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, doll, exaggerated eyes, flat lighting, low quality, smooth skin, blurry hair",
     "weights": { 
-        "depth": 0.55, 
-        "openpose": 0.80 
+        "depth": 0.60, 
+        "openpose": 0.75 
     },
-    "denoising_strength": 0.70
+    "denoising_strength": 0.65
 }

@@ -2,12 +2,12 @@
     "id": "majinbuu",
     "aliases": ["buu", "fat buu", "kid buu"],
     "essence": "species_majin",
-    "prompt_base": "hyperdetailed portrait of a massive, rotund creature, vibrant bubblegum pink rubbery skin texture, short black antennae-like protrusions, large black eyes with glowing pink pupils, wearing a white puffy ceremonial garment and gold belt, supernatural smile",
-    "feature_prompt": "RAW photo, 8k dslr, volumetric rim lighting, macro detail on the matte rubber texture, subtle steam vents visible on skin surfaces, sharp focus on eyes and gold buckle",
-    "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, human proportions, fleshy texture, wrinkles, cartoon eyes, overly shiny, low quality",
+    "prompt_base": "hyperdetailed portrait of a massive, rotund creature, vibrant bubblegum pink rubbery skin texture, short black antennae, large black eyes, white puffy ceremonial garment and gold belt",
+    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, macro detail on the matte rubber texture, sharp focus on eyes and gold buckle, detailed fabric on garment",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, human proportions, fleshy texture, wrinkles, low quality, overly shiny, flat lighting",
     "weights": { 
-        "depth": 0.85,
+        "depth": 0.75,
         "openpose": 0.75
     },
-    "denoising_strength": 0.82
+    "denoising_strength": 0.65
 }

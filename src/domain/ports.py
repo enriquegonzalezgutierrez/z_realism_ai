@@ -1,17 +1,17 @@
 # path: z_realism_ai/src/domain/ports.py
-# description: Domain Boundary Interfaces v19.0 - Dynamic Hyperparameter Schema.
+# description: Domain Boundary Interfaces v19.1 - Extended Evaluation Metrics.
 #
 # ABSTRACT:
 # This module represents the formal specification of the system's operational 
 # boundaries. It defines the schemas required for cross-domain communication 
 # in a Hexagonal Architecture. 
 #
-# ARCHITECTURAL EVOLUTION (v19.0):
-# To mitigate "Semantic Over-Drift" and "Anatomic Distortion," the AnalysisResult 
-# has been expanded to decouple structural conditioning (Depth vs. Pose) and 
-# to explicitly control the stochastic intensity (Denoising Strength). This 
-# ensures that the lore-specific JSON manifolds have total authority over 
-# the synthesis engine.
+# ARCHITECTURAL EVOLUTION (v19.1):
+# 1. Expanded AssessmentReport to include 'textural_realism' (relative entropy),
+#    allowing the system to quantify the information density gain between 
+#    stylized and photorealistic manifolds.
+# 2. Maintained decoupled structural conditioning (Depth vs. Pose) for 
+#    total synthesis engine authority.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -27,6 +27,7 @@ class AssessmentReport:
     """
     structural_similarity: float
     identity_preservation: float
+    textural_realism: float  # NEW: Quantifies information density/texture gain
     inference_time: float
     is_mock: bool = False
     full_prompt: str = ""

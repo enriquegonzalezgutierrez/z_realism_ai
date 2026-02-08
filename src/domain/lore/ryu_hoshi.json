@@ -1,0 +1,10 @@
+{
+    "id": "ryu_hoshi",
+    "aliases": ["ryu", "sf2 ryu"],
+    "essence": "human_martial_artist",
+    "prompt_base": "cinematic portrait of a stoic Japanese martial artist, messy black hair, red headband, intense gaze, wearing a weathered white cotton karate gi",
+    "feature_prompt": "RAW photo, 8k dslr, visible fabric weave, sweat on skin, facial stubble, realistic skin pores, cinematic dojo lighting",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, clean clothes, smooth skin, glowing eyes, magic effects",
+    "weights": { "depth": 0.60, "openpose": 0.75 },
+    "denoising_strength": 0.65
+}

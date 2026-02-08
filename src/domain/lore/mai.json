@@ -1,7 +1,13 @@
 {
-    "id": "mai",
+    "id": "mai_future",
     "aliases": ["mai", "future mai"],
     "essence": "species_human_resistance",
-    "prompt_base": "beautiful woman, long straight black hair, denim military coat, red scarf, realistic tired eyes, skin pores, wide jawline, holding a tactical rifle",
-    "weights": { "depth": 0.60, "openpose": 0.55 }
+    "prompt_base": "cinematic portrait of a beautiful woman, long straight black hair, denim military trench coat, bright red scarf, intense determined expression, holding a tactical rifle",
+    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, hyperdetailed skin pores, detailed texture on the coat fabric, realistic scarf weave, sharp focus on rifle metal",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, blurry coat, flat lighting, low quality, exaggerated youthful look",
+    "weights": { 
+        "depth": 0.60,
+        "openpose": 0.75
+    },
+    "denoising_strength": 0.65
 }

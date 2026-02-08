@@ -1,0 +1,13 @@
+{
+    "id": "ken_masters",
+    "aliases": ["ken", "ken masters"],
+    "essence": "human_martial_artist",
+    "prompt_base": "photorealistic portrait of a handsome American martial artist, long blonde hair, confident smile, red cotton karate gi",
+    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, realistic hair strands, sun-kissed skin texture, detailed cotton fabric weave",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, doll, flat lighting, messy face, neon red",
+    "weights": { 
+        "depth": 0.60, 
+        "openpose": 0.75
+    },
+    "denoising_strength": 0.65
+}

@@ -1,13 +1,13 @@
 {
     "id": "bulma",
     "aliases": ["bulma", "bulma briefs"],
-    "essence": "species_human",
-    "prompt_base": "photograph of a beautiful young woman, captivating blue eyes, long smooth cyan blue hair, modern casual attire, subtle smile",
-    "feature_prompt": "RAW photo, 8k uhd, dslr, soft cinematic lighting, high quality, film grain, Fujifilm XT3, detailed skin texture",
-    "negative_prompt": "anime, cartoon, illustration, drawing, 3d render, plastic, deformed, blur, bad anatomy, bad eyes, crossed eyes, disfigured, poorly drawn face, mutation, mutated, extra limb, ugly, poorly drawn hands, missing limb, floating limbs, disconnected limbs, malformed hands, blur, out of focus, unnatural hair texture",   
+    "essence": "human_scientist",
+    "prompt_base": "photograph of Bulma, captivating blue eyes, long smooth turquoise teal hair, modern casual attire",
+    "feature_prompt": "photograph of Bulma, captivating blue eyes, long smooth turquoise teal hair, modern casual attire, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, neon blue, wig",   
     "weights": { 
-        "depth": 0.50,
-        "openpose": 0.80
+        "depth": 0.60,
+        "openpose": 0.75 
     },
-    "denoising_strength": 0.72
+    "denoising_strength": 0.62
 }
