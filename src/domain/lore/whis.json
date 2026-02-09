@@ -3,7 +3,7 @@
     "aliases": ["whis", "uis", "angel"],
     "essence": "species_celestial_angel",
     "prompt_base": "hyperdetailed portrait of an elegant celestial being, tall stature, pale light-blue skin tone, impossibly tall vertical white hair structure, serene intelligent eyes, wearing a regal maroon silk garment, gold neck ring",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, hyperrealistic texture on the silk fabric, delicate subsurface scattering on the pale skin, detailed structure of the white hair",
+    "feature_prompt": "hyperrealistic texture on the silk fabric, delicate subsurface scattering on the pale skin, detailed structure of the white hair",
     "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, helmet hair, humanoid proportions, flat lighting, low quality",
     "weights": { 
         "depth": 0.60,

@@ -3,7 +3,7 @@
     "aliases": ["buu", "fat buu", "kid buu"],
     "essence": "species_majin",
     "prompt_base": "hyperdetailed portrait of a massive, rotund creature, vibrant bubblegum pink rubbery skin texture, short black antennae, large black eyes, white puffy ceremonial garment and gold belt",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, macro detail on the matte rubber texture, sharp focus on eyes and gold buckle, detailed fabric on garment",
+    "feature_prompt": "macro detail on the matte rubber texture, sharp focus on eyes and gold buckle, detailed fabric on garment",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, human proportions, fleshy texture, wrinkles, low quality, overly shiny, flat lighting",
     "weights": { 
         "depth": 0.75,

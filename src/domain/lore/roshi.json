@@ -1,9 +1,9 @@
 {
     "id": "roshi",
     "aliases": ["master roshi", "kame-sennin", "jackie chun"],
-    "essence": "species_human_elder_master",
-    "prompt_base": "hyperdetailed portrait of an elderly, extremely muscular man, deep tan skin tone, bald head, long flowing white beard, iconic red sunglasses, vibrant Hawaiian shirt",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, extreme detailed skin wrinkles and age spots, visible pores, realistic hair strands on beard, sharp reflections on red sunglasses",
+    "essence": "human_elder_master",
+    "prompt_base": "elderly extremely muscular man, deep tan skin tone, bald head, long flowing white beard, iconic red plastic sunglasses, vibrant Hawaiian shirt",
+    "feature_prompt": "extreme detailed skin wrinkles and age spots, visible pores, realistic hair strands on beard, sharp reflections on red sunglasses, detailed texture on Hawaiian shirt fabric",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic skin, smooth skin, perfect skin, doll, thick white hair, low quality, cartoon sunglasses",
     "weights": { 
         "depth": 0.60,

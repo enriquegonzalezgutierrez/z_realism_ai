@@ -3,7 +3,7 @@
     "aliases": ["broly", "legendary_super_saiyan"],
     "essence": "saiyan_beast_warrior",
     "prompt_base": "cinematic portrait of a colossal hyper-muscular warrior, Pacific Islander facial features, long wild mane-like hair in dark forest green, torn primitive fur pelt",
-    "feature_prompt": "colossal muscular warrior, dark forest green hair, fur pelt, green energy, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, extreme muscle definition, visible veins, sweat, battle-worn skin",
+    "feature_prompt": "colossal muscular warrior, dark forest green hair, fur pelt, green energy, extreme muscle definition, visible veins, sweat, battle-worn skin",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic skin, toy, doll, regular build, small muscles, neon green, flat lighting, low quality",
     "weights": {
         "depth": 0.60,

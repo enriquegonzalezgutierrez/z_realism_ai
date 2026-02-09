@@ -2,8 +2,8 @@
     "id": "android13",
     "aliases": ["13", "android 13"],
     "essence": "species_human_android",    
-    "prompt_base": "photograph of Android 13, muscular man, white trucker hat with red RR logo, long flowing white hair, bright orange vest, forest green pants, intense blue eyes",    
-    "feature_prompt": "photorealistic skin texture, detailed white hair strands, rugged fabric texture on vest, canvas texture on hat",    
+    "prompt_base": "muscular man, white trucker hat with red RR logo, long flowing white hair, bright orange vest, forest green pants, intense blue eyes",    
+    "feature_prompt": "rugged fabric texture on vest, canvas texture on hat, detailed white hair strands",    
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth hair, deformed anatomy, flat lighting, low quality",    
     "weights": { 
         "depth": 0.60, 

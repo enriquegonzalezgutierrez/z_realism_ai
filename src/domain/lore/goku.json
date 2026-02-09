@@ -2,9 +2,9 @@
     "id": "goku_ssj",
     "aliases": ["goku", "kakarotto", "super saiyan"],
     "essence": "species_saiyan_ultimate",
-    "prompt_base": "cinematic portrait of an extremely muscular Japanese man, fierce expression, spiky golden-yellow energy hair, wearing a torn orange and blue martial arts gi",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, hyperdetailed human skin texture, individual golden hair strands visible, dynamic shadows, realistic fabric weave on gi",
-    "negative_prompt": "anime, cartoon, illustration, plastic texture, smooth plastic hair, bright yellow hair, flat color, CGI, blurry background, low quality, childish, oversaturated",
+    "prompt_base": "cinematic portrait of an extremely muscular Japanese man, fierce expression, spiky golden-yellow hair, wearing **a torn orange cotton martial arts gi, with a blue undershirt, a blue sash belt, blue wristbands, and blue boots with yellow trim**",
+    "feature_prompt": "hyperdetailed human skin texture, individual golden hair strands visible, dynamic shadows, realistic fabric weave on gi, detailed cotton texture on undershirt, robust fabric on wristbands, weathered leather texture on boots",
+    "negative_prompt": "anime, cartoon, illustration, plastic texture, smooth plastic hair, bright yellow hair, flat color, CGI, blurry background, low quality, childish, oversaturated, no uniform, torn pants",
     "weights": { 
         "depth": 0.60,
         "openpose": 0.75

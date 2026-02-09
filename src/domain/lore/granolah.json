@@ -3,7 +3,7 @@
     "aliases": ["granolah"],
     "essence": "species_cerealian",
     "prompt_base": "cinematic portrait of a handsome man, long emerald green hair, mechanical sniper eyepiece, long white muffler scarf, brown leather flight jacket, wide jawline, focused revengeful eyes",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, detailed leather texture on jacket, metallic texture on the sniper eyepiece, individual green hair strands visible, subtle stubble",
+    "feature_prompt": "detailed leather texture on jacket, metallic texture on the sniper eyepiece, individual green hair strands visible, subtle stubble",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, helmet hair, flat lighting, low quality, blurry eyepiece, bright neon green hair",
     "weights": { 
         "depth": 0.60, 

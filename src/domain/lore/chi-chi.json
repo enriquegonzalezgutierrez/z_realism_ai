@@ -3,7 +3,7 @@
     "aliases": ["chi-chi", "milk"],
     "essence": "species_human_matriarch",
     "prompt_base": "cinematic photograph of a beautiful East-Asian woman, long straight black hair in an elegant bun, wearing a traditional blue qipao and a soft pink silk scarf",
-    "feature_prompt": "East-Asian woman, blue qipao, pink scarf, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, high quality, film grain, subtle subsurface scattering on skin, detailed hair strands",
+    "feature_prompt": "subtle subsurface scattering on skin, detailed hair strands, fabric texture on qipao and silk scarf",
     "negative_prompt": "anime, cartoon, illustration, drawing, plastic texture, smooth hair, exaggerated eyes, flat lighting, low quality, messy bun, neon colors",
     "weights": { 
         "depth": 0.60,

@@ -3,7 +3,7 @@
     "aliases": ["janemba", "super janemba"],
     "essence": "species_hell_demon",
     "prompt_base": "cinematic portrait of a colossal red demon, purple organic armor segments, yellow horns, demonic muscle anatomy, long purple sword, glowing yellow eyes",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, extreme demonic skin texture, biological segments, glowing energy, sharp focus on horns and sword material",
+    "feature_prompt": "extreme demonic skin texture, biological segments, glowing energy, sharp focus on horns and sword material",
     "negative_prompt": "anime, cartoon, drawing, plastic texture, human skin, smooth skin, friendly face, low quality, simple sword",
     "weights": { 
         "depth": 0.70, 

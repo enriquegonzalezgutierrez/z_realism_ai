@@ -2,8 +2,8 @@
     "id": "android14",
     "aliases": ["14", "android 14"],
     "essence": "species_android_giant",
-    "prompt_base": "photograph of Android 14, massive muscular warrior, pale lavender skin tone, sharp black mohawk and long braid, wide jawline, brown leather vest",
-    "feature_prompt": "massive muscle definition, biological skin texture, subtle sheen on the lavender skin, individual hair strands visible in the braid, rugged leather texture on vest",
+    "prompt_base": "massive muscular warrior, pale lavender skin tone, sharp black mohawk and long braid, wide jawline, brown leather vest",
+    "feature_prompt": "biological skin texture with subtle sheen, individual hair strands visible in the braid, rugged leather texture on vest",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, human skin color, flat lighting, low quality, deformed anatomy",
     "weights": { 
         "depth": 0.60,

@@ -3,7 +3,7 @@
     "aliases": ["21", "android 21", "vomi"],
     "essence": "species_human_scientist",
     "prompt_base": "cinematic portrait of a brilliant young woman, voluminous auburn mahogany hair, black-framed glasses, white lab coat, blue and red checkered dress",
-    "feature_prompt": "brilliant young woman, auburn hair, lab coat, checkered dress, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, subsurface scattering on skin, subtle skin texture, crisp lines on glasses",
+    "feature_prompt": "subsurface scattering on skin, subtle skin texture, crisp lines on glasses, detailed fabric on lab coat, realistic hair strands",
     "negative_prompt": "anime, cartoon, illustration, drawing, 3d render, plastic, doll, smooth hair, exaggerated eyes, flat lighting, low quality, blurry face, deformed glasses",    
     "weights": { 
         "depth": 0.60,

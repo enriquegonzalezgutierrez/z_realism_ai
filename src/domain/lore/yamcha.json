@@ -3,7 +3,7 @@
     "aliases": ["yamcha"],
     "essence": "species_human_warrior",
     "prompt_base": "photograph of a handsome asian man, long messy black hair, distinctive cross-shaped scars on both cheeks, wearing an orange martial arts gi",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, sharp focus on the scars, detailed fabric texture on gi, subtle subsurface scattering on skin",
+    "feature_prompt": "sharp focus on the scars, detailed fabric texture on gi, subtle subsurface scattering on skin",
     "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, blurry face, missing scars, flat lighting, low quality, helmet hair",
     "weights": { 
         "depth": 0.60,

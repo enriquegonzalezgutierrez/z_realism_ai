@@ -3,7 +3,7 @@
     "aliases": ["trunks", "future trunks"],
     "essence": "species_saiyan_hybrid",
     "prompt_base": "cinematic portrait of a handsome young man, intense determined blue eyes, medium-length, layered, spiky lavender colored hair, wearing a worn denim capsule corp jacket, leather sword strap",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, hyperdetailed skin texture, highly detailed texture on denim and leather materials, subtle weathering on face",
+    "feature_prompt": "hyperdetailed skin texture, highly detailed texture on denim and leather materials, subtle weathering on face",
     "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, helmet hair, low quality, blurry denim",
     "weights": { 
         "depth": 0.60,

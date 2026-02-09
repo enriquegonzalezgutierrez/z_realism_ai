@@ -3,7 +3,7 @@
     "aliases": ["bojack"],
     "essence": "species_hera_seijin",
     "prompt_base": "cinematic portrait of a massive muscular alien pirate, teal green skin tone, wild long flowing orange hair and beard, heavy gold jewelry, blue vest",
-    "feature_prompt": "RAW photo, 8k dslr, extreme muscle definition, detailed skin texture, volumetric rim lighting, realistic texture on beard and hair strands, detailed gold jewelry material",
+    "feature_prompt": "extreme muscle definition, detailed skin texture, realistic texture on beard and hair strands, detailed gold jewelry material",
     "negative_prompt": "anime, cartoon, drawing, CGI, plastic texture, smooth skin, helmet hair, flat lighting, low quality, deformed anatomy, solid block color",
     "weights": { 
         "depth": 0.80,

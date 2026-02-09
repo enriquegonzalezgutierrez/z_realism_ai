@@ -20,7 +20,7 @@ services:
     image: nginx:alpine
     container_name: z_realism_custom_ui
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./src/presentation-custom:/usr/share/nginx/html
     depends_on:

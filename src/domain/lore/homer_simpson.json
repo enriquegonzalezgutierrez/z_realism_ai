@@ -1,0 +1,13 @@
+{
+    "id": "m_bison",
+    "aliases": ["bison", "dictator", "vega jp"],
+    "essence": "human_dictator",
+    "prompt_base": "cinematic portrait of an imposing military leader, sharp red officer uniform with silver plates, large officer cap, glowing white eyes, intense expression",
+    "feature_prompt": "high quality wool texture on uniform, realistic metallic plates, weathered face, intimidating presence",
+    "negative_prompt": "anime, cartoon, illustration, plastic, friendly, bright colors, toy, smooth uniform",
+    "weights": { 
+        "depth": 0.65, 
+        "openpose": 0.75 
+    },
+    "denoising_strength": 0.65
+}

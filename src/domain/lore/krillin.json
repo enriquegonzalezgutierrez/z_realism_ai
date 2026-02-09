@@ -3,7 +3,7 @@
     "aliases": ["krillin", "kuririn"],
     "essence": "species_human_monk",
     "prompt_base": "photograph of a short, highly muscular martial arts monk, completely bald head, six distinct incense burn scars on forehead, determined expression, orange martial arts gi",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, subtle light reflection on the burn scars, defined muscles, realistic fabric texture on gi",
+    "feature_prompt": "subtle light reflection on the burn scars, defined muscles, realistic fabric texture on gi",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, large nose, six dots missing, perfect skin, smooth head, helmet hair, flat lighting",
     "weights": { 
         "depth": 0.65,

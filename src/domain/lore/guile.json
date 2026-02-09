@@ -3,7 +3,7 @@
     "aliases": ["guile", "major guile"],
     "essence": "human_military",
     "prompt_base": "cinematic portrait of an American air force major, iconic blonde flat-top haircut, military green tank top, US flag tattoo on shoulder",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, sharp focus on hair texture, weathered skin, clear US flag tattoo, detailed fabric weave on tank top",
+    "feature_prompt": "sharp focus on hair texture, weathered skin, clear US flag tattoo, detailed fabric weave on tank top",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth hair, helmet, flat lighting, low quality, deformed tattoo",
     "weights": { 
         "depth": 0.60, 

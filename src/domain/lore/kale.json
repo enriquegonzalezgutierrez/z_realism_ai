@@ -3,7 +3,7 @@
     "aliases": ["kale", "berserk kale"],
     "essence": "species_saiyan_u6",
     "prompt_base": "photorealistic portrait of a lean and muscular young woman, short black spiky hair, wearing a red crop top and matching skirt, extreme muscle definition, determined eyes",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, extreme muscle definition, visible veins on arms and abdomen, detailed fabric weave, sharp focus",
+    "feature_prompt": "extreme muscle definition, visible veins on arms and abdomen, detailed fabric weave, sharp focus",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, doll, flat lighting, low quality, overly bulky muscles",
     "weights": { 
         "depth": 0.65,

@@ -3,7 +3,7 @@
     "aliases": ["champa", "lord champa"],
     "essence": "species_deity_feline",
     "prompt_base": "cinematic portrait of a portly, barrel-chested feline deity, massive build, dusty purple skin, prominent facial wrinkles, large glowing yellow cat eyes, wearing luxurious maroon silk robes",
-    "feature_prompt": "imposing feline deity, purple skin with natural skin texture, detailed silk fabric folds, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, prominent facial features, volumetric lighting",
+    "feature_prompt": "imposing feline deity, purple skin with natural skin texture, detailed silk fabric folds, prominent facial features, volumetric lighting",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic skin, smooth skin, human face, cat ears, flat lighting, low quality, deformed body, medical condition, exposed organs, excessive flesh",
     "weights": { 
         "depth": 0.60, 

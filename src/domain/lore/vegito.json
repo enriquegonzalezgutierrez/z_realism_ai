@@ -3,7 +3,7 @@
     "aliases": ["vegito", "vegetto", "vegito blue"],
     "essence": "species_saiyan_fusion",
     "prompt_base": "cinematic portrait of a muscular asian man, spiked black hair with two front fringes, white potara earrings, blue martial arts gi with orange undershirt, confident expression",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, realistic fabric texture, sharp focus on potara earrings, hyper-muscular physique",
+    "feature_prompt": "realistic fabric texture, sharp focus on potara earrings, hyper-muscular physique",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth hair, flat lighting, low quality",
     "weights": { 
         "depth": 0.60, 

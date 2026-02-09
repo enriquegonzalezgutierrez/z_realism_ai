@@ -3,7 +3,7 @@
     "aliases": ["vados"],
     "essence": "species_celestial_angel",
     "prompt_base": "photograph of an elegant, tall celestial woman, pale light-blue skin tone, long flowing white hair, wearing intricate green and black divine silk robes, serene intelligent eyes",
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, soft cinematic rim lighting, hyperdetailed texture on the silk robes, delicate subsurface scattering on the pale skin",
+    "feature_prompt": "soft cinematic rim lighting, hyperdetailed texture on the silk robes, delicate subsurface scattering on the pale skin",
     "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, helmet hair, blurry fabric, humanoid proportions, flat lighting, low quality",
     "weights": { 
         "depth": 0.60,

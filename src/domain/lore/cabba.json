@@ -2,9 +2,9 @@
     "id": "cabba",
     "aliases": ["cabba", "kyabe"],
     "essence": "species_saiyan_u6",
-    "prompt_base": "cinematic portrait of a youthful East-Asian man, short spiky black hair, silver metallic armor over dark purple leather fabric",
-    "feature_prompt": "youthful man, silver armor, purple leather, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh, hyper-realistic skin texture, subtle sweat, realistic metallic specular highlights, textured leather",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, flat lighting, low quality, blurry face, helmet-like hair, muscular bodybuilder",
+    "prompt_base": "cinematic portrait of a youthful East-Asian man, short spiky black hair, earnest and determined expression, wearing **silver metallic shoulder armor, a matching chestplate, and dark purple leather-like fabric for the torso and leggings**",
+    "feature_prompt": "hyper-realistic skin texture, subtle sweat, realistic metallic specular highlights on armor, textured leather undergarment, sharp focus on armor details",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, flat lighting, low quality, blurry face, helmet-like hair, muscular bodybuilder, no armor, plain clothes",
     "weights": { 
         "depth": 0.60, 
         "openpose": 0.75 

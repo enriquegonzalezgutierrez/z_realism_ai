@@ -3,7 +3,7 @@
     "aliases": ["videl", "videl satan"],
     "essence": "species_human_martial_artist",    
     "prompt_base": "photograph of an athletic young woman, short black hair, wide jawline, oversized white t-shirt, purple cycling shorts, serious expression",    
-    "feature_prompt": "RAW photo, 8k dslr, high detailed skin, cinematic lighting, dslr, soft bokeh, high quality cotton texture on t-shirt, realistic spandex texture on shorts, detailed musculature",    
+    "feature_prompt": "high quality cotton texture on t-shirt, realistic spandex texture on shorts, detailed musculature",    
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, doll, airbrushed skin, exaggerated musculature, unnatural anatomy, flat lighting, low quality",    
     "weights": { 
         "depth": 0.60,          
