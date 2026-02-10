@@ -15,51 +15,68 @@
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
+/* 
+ * path: src/presentation-custom/css/landing.css
+ * description: Homepage / Landing Styles v20.12 (Definitive Layout Fix).
+ *
+ * ABSTRACT:
+ * Finalizes the Hero section's visual alignment by ensuring it correctly 
+ * positions itself in the document flow, fully trusting the global body offset 
+ * defined in main.css. This eliminates header overlap and ensures accurate 
+ * background image positioning.
+ *
+ * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+ */
+
 /* --- 1. HERO SECTION (IMPACT AREA) --- */
 .hero-section {
-    /*
-       THE FIX (v20.8):
-       - min-height: Ensures it always fills the visible screen below the nav.
-       - padding-top: Pushes the *content* down, making it start after the nav.
-       - justify-content: center: This will then center the *content* within the *remaining* space.
-       - background-size: cover & background-position: center: Ensures the image always fills the element,
-         but with the padding-top, the visible area of the image will shift down.
+    /* 
+       THE DEFINITIVE FIX (v20.12):
+       - min-height: Ensures it fills the *remaining* viewport height 
+         AFTER the body's padding-top. This is the correct calculation.
+       - margin-top: 0; padding-top: 0; (REMOVED)
+         The hero-section no longer compensates for the navigation directly.
+       - The element now naturally starts *below* the body's padding-top.
     */
-    min-height: calc(100vh - var(--nav-height)); /* Ensures it fills the screen below the nav */
+    min-height: calc(100vh - var(--body-padding-top-offset)); /* Fills remaining viewport */
     
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
+    justify-content: center; /* Centers content vertically within the hero-section's height */
     align-items: center;
     text-align: center;
     position: relative;
-    
-    /* PUSH DOWN THE CONTENT inside the hero-section */
-    /* This padding will effectively center the content visually below the nav. */
-    padding: calc(var(--content-gap) * 2) 20px calc(var(--content-gap) * 2) 20px; /* Top, Right, Bottom, Left */
+    /* Internal padding for the hero-content, not for positioning against the nav */
+    padding: var(--content-gap) 20px; 
     
     /* Background properties remain */
     background: linear-gradient(to bottom, rgba(5, 5, 5, 0.4), rgba(5, 5, 5, 1)), 
                 url('../assets/hero_bg.png');
     background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
     
-    /* Aligns the whole section to start right after the nav */
-    margin-top: var(--nav-height); 
+    /* 
+       Adjust background-position to fine-tune the visible area of your image.
+       'center top' ensures the top of the image is visible.
+       'center 20%' would shift the image 20% down from its element's top edge.
+       If your character's face is very high in the image, 'top' is safest.
+    */
+    background-position: center top; 
+    
+    background-attachment: fixed;
+    margin-top: 0; /* CRITICAL: Remove any conflicting margin-top */
 }
 
 /* 
   Mobile specific adjustments for the hero-section:
-  - Reduce overall padding to prevent content squeeze.
-  - Disable fixed background for performance.
 */
-@media (max-width: 768px) {
+@media (max-width: 850px) { /* Use nav's breakpoint from main.css */
     .hero-section {
         background-attachment: scroll; /* Performance fix for mobile parallax */
-        margin-top: var(--nav-height); /* Keep pushing it down based on mobile nav height */
-        padding-top: calc(var(--content-gap) + 20px); /* Slightly less padding on mobile */
-        padding-bottom: calc(var(--content-gap) + 20px);
+        /* min-height will now correctly account for the larger mobile nav offset */
+        min-height: calc(100vh - var(--body-padding-top-offset)); 
+        padding-top: var(--content-gap); /* Keep content padding consistent */
+        padding-bottom: var(--content-gap);
+        background-position: center top; /* On mobile, usually safest to just align top */
     }
 }
 
@@ -113,6 +130,17 @@
     margin-top: -120px; /* Overlaps with hero section */
     position: relative;
     z-index: 10;
+}
+
+/* 
+   THE FIX (v20.13):
+   On smaller screens, remove or drastically reduce the negative margin-top.
+   This prevents the modules from overlapping the hero content.
+*/
+@media (max-width: 768px) {
+    .modules-container {
+        margin-top: var(--content-gap);
+    }
 }
 
 .modules-grid {

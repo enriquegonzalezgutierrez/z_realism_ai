@@ -1,16 +1,16 @@
 /* 
  * path: src/presentation-custom/css/lab.css
- * description: Laboratory UI Components v20.5 - Header Offset Revision.
+ * description: Laboratory UI Components v20.12 - Definitive Layout Fix.
  *
  * ABSTRACT:
- * Manages the functional workspaces for neural research. This revision 
- * fixes the height calculation to perfectly align with the fixed 
- * navigation system and the new global container offsets.
+ * Manages the high-fidelity functional workspaces for neural research. This revision 
+ * ensures the lab layout correctly positions itself in the document flow, fully 
+ * trusting the global body offset defined in main.css.
  *
  * KEY IMPROVEMENTS:
- * 1. Precision Height: calculated based on dynamic header tokens.
- * 2. Independent Scroll: The control panel scrolls while the viewport stays fixed.
- * 3. Layout Stability: Prevents content shifting behind the navigation bar.
+ * 1. Precision Height: Calculates height based on the body's actual content offset.
+ * 2. Simplified Padding: Relies on global padding for top offset, adds internal spacing.
+ * 3. Responsive Robustness: Consistent behavior across all screen sizes.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -22,27 +22,22 @@
     gap: 30px;
     
     /* 
-       THE FIX: 
-       We take responsibility for our own positioning.
-       Push down the layout by the height of the nav + a content gap.
+       THE DEFINITIVE FIX (v20.12):
+       - height: Fills the remaining viewport space *after* the body's padding-top.
+       - padding: This is now *internal* padding for the lab content, 
+                  not for compensating the fixed navigation.
     */
-    padding: calc(var(--nav-height) + var(--content-gap)) 40px 40px 40px;
-    
-    /* 
-       Height is now 100vh because the padding pushes the content area down.
-       This creates a true full-screen app feel.
-    */
-    height: 100vh;
+    height: calc(100vh - var(--body-padding-top-offset)); 
+    padding: var(--content-gap) 40px 40px 40px; /* Internal padding: top/right/bottom/left */
 }
 
 /* Tablet & Mobile Breakpoint (Fluid Vertical Stack) */
 @media (max-width: 1200px) {
     .lab-layout {
         grid-template-columns: 1fr;
-        height: auto; /* Let the content flow naturally */
-        padding-top: calc(var(--nav-height) + 20px); /* Adjust for mobile header height */
-        padding-left: 20px;
-        padding-right: 20px;
+        height: auto; /* Let content dictate height in stacked layout */
+        /* Internal padding for mobile, using global content gap */
+        padding: var(--content-gap) 20px 40px 20px; 
         gap: 40px;
     }
 }
@@ -58,11 +53,6 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-    
-    /* 
-       Allows the parameters to be scrolled independently 
-       from the result viewports on desktop.
-    */
     overflow-y: auto; 
     scrollbar-width: thin;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);

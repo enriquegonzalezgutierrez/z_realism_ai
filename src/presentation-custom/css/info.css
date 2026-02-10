@@ -1,16 +1,16 @@
 /* 
  * path: src/presentation-custom/css/info.css
- * description: Documentation & Information Layout System v20.5 - Header Offset Revision.
+ * description: Documentation & Information Layout System v20.12 - Definitive Layout Fix.
  *
  * ABSTRACT:
- * Provides a highly readable and structured layout for long-form content.
+ * Provides a highly readable and structured layout for long-form content. 
  * This revision ensures the content is correctly positioned below the
- * fixed navigation bar, using the global container's padding.
+ * fixed navigation bar by leveraging the global body's padding-top.
  *
  * KEY IMPROVEMENTS:
- * 1. DRY Compliance: Removed redundant padding rules.
- * 2. Visual Rhythm: Harmonized spacing with the global design system.
- * 3. Layout Stability: Ensures all documentation is fully visible on load.
+ * 1. Precision Positioning: Content starts correctly below the navigation.
+ * 2. DRY Compliance: Eliminates redundant padding rules.
+ * 3. Responsive Robustness: Consistent layout behavior across all screen sizes.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -18,13 +18,16 @@
 /* --- 1. CORE DOCUMENTATION CONTAINER --- */
 .info-container {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1000px; 
     margin: 0 auto;
     
-    /* THE FIX: Removed padding-top. It's now handled by the global .container class. */
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 100px;
+    /* 
+       THE DEFINITIVE FIX (v20.12):
+       - The body's padding-top (from main.css) pushes this entire element down.
+       - This padding is now for *internal* content spacing within the container,
+         including a buffer at the top.
+    */
+    padding: var(--content-gap) 20px 100px 20px; /* Top, Right, Bottom, Left internal padding */
     
     animation: infoFadeIn 0.8s ease-out;
 }

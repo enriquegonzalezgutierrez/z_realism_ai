@@ -1,11 +1,11 @@
 /* 
  * path: src/presentation-custom/css/main.css
- * description: Core Design System & Global Layout Orchestration v20.5.
+ * description: Core Design System & Global Layout Orchestration v20.12 (Final Header Fix).
  *
  * ABSTRACT:
- * Manages the foundational styles, the responsive form engine, and the 
- * fixed navigation system. This version fixes the "Header Overlap" bug by 
- * implementing a standardized layout offset.
+ * Finalizes the global layout strategy for fixed navigation, ensuring consistent 
+ * and precise content offsetting across all screen sizes. This revision
+ * addresses the dynamic height of the navigation bar on mobile.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -28,9 +28,16 @@
     --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
     --font-code: 'JetBrains Mono', monospace;
     
-    /* --- HEADER OFFSET TOKENS --- */
-    --nav-height: 80px;
-    --content-gap: 40px; /* Space between header and first element */
+    /* --- HEADER OFFSET TOKENS (FINAL REVISION) --- */
+    --nav-height-desktop: 80px;  /* Actual fixed height of the nav on desktop */
+    --nav-height-mobile: 140px; /* Actual fixed height of the nav on mobile (to fit wrapped links) */
+    
+    /* 
+       THE FIX: This variable determines the actual padding-top for the body.
+       It includes the nav's height and a standard content buffer.
+    */
+    --body-padding-top-offset: calc(var(--nav-height-desktop) + 40px); /* Default for desktop */
+    --content-gap: 40px; /* Standard internal gap for content sections (used in .container) */
 }
 
 /* --- 2. GLOBAL RESET & BASE --- */
@@ -40,6 +47,16 @@
     padding: 0; 
 }
 
+html {
+    scroll-behavior: smooth; /* Make all anchor links scroll smoothly */
+    /* 
+       THE FIX (v20.13):
+       This property tells the browser to leave space at the top when scrolling to an anchor link.
+       It uses the same offset calculated for the body's padding-top.
+    */
+    scroll-padding-top: var(--body-padding-top-offset); 
+}
+
 body {
     background-color: var(--bg-dark);
     color: var(--text-main);
@@ -47,6 +64,14 @@ body {
     line-height: 1.5;
     overflow-x: hidden;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    
+    /* 
+       THE DEFINITIVE FIX (v20.12):
+       Body's top padding is controlled solely by --body-padding-top-offset.
+       This pushes *all* body content down, clearing the fixed navigation.
+    */
+    padding-top: var(--body-padding-top-offset); 
 }
 
 .grid-overlay {
@@ -63,7 +88,11 @@ body {
     justify-content: space-between; 
     align-items: center;
     padding: 0 40px; 
-    height: var(--nav-height);
+    /* 
+       THE FIX: Nav height is now fixed to its desktop token.
+       This makes its height predictable.
+    */
+    height: var(--nav-height-desktop); 
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
@@ -136,15 +165,12 @@ body {
 }
 .footer-copy { font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-code); }
 
-/* --- 6. SHARED LAYOUT CONTAINERS (THE BUG FIX) --- */
+/* --- 6. SHARED LAYOUT CONTAINERS (SIMPLER) --- */
 .container { 
     max-width: 1600px; 
     margin: 0 auto; 
-    /* 
-       PUSH DOWN CONTENT: 
-       The padding-top must be equal to or greater than the header height.
-    */
-    padding-top: calc(var(--nav-height) + var(--content-gap)); 
+    /* Padding-top is handled by the body; this is for internal content spacing. */
+    padding-top: var(--content-gap); 
 }
 
 /* --- 7. BUTTONS --- */
@@ -161,11 +187,16 @@ body {
 /* --- 8. RESPONSIVE REVISION --- */
 @media (max-width: 850px) {
     :root {
-        --nav-height: 140px; /* Header grows in mobile because links wrap */
+        /* 
+           CRITICAL FIX: Dynamically update --body-padding-top-offset
+           This ensures body's padding-top adapts to the taller, fixed mobile nav.
+        */
+        --body-padding-top-offset: calc(var(--nav-height-mobile) + 20px); /* Add 20px for content gap on mobile */
     }
     .main-nav {
         flex-direction: column;
-        height: auto;
+        /* THE FIX: Height of nav is now fixed to its mobile token, not 'auto' */
+        height: var(--nav-height-mobile); 
         padding: 15px 20px;
         gap: 15px;
     }
@@ -174,10 +205,99 @@ body {
         flex-wrap: wrap;
         justify-content: center;
     }
-    /* Increase top padding on mobile to accommodate taller header */
-    .container {
-        padding-top: calc(var(--nav-height) + 20px);
-    }
+    /* Body's padding-top is already handled by --body-padding-top-offset */
 }
 
 .hidden { display: none !important; }
+
+/* --- 9. NEURAL CACHE (COOKIE) MODAL v20.9 --- */
+.cookie-modal {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 550px;
+    margin: auto;
+    
+    /* State Management */
+    opacity: 0;
+    transform: translateY(100px);
+    visibility: hidden;
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    
+    /* Glassmorphism Design */
+    background: rgba(15, 15, 20, 0.9);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(139, 92, 246, 0.2); /* Subtle Accent Border */
+    border-radius: var(--radius-lg);
+    padding: 25px;
+    z-index: 9999;
+    
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+.cookie-modal.active {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.cookie-content {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.cookie-icon {
+    font-size: 1.6rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.cookie-text h4 {
+    font-family: var(--font-code);
+    color: white;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cookie-text p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.cookie-text a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.cookie-text a:hover {
+    text-decoration: underline;
+}
+
+.cookie-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+/* Responsive adjustment for the modal buttons */
+@media (max-width: 480px) {
+    .cookie-actions {
+        flex-direction: column;
+    }
+    .cookie-actions .btn {
+        width: 100%;
+    }
+}
