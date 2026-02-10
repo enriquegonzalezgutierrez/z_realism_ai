@@ -1,11 +1,13 @@
 # path: z_realism_ai/requirements.txt
-# description: Project dependencies v20.0 - Full Multi-Modal Temporal Support.
-#              FIXED: Added 'peft' for AnimateDiff module compatibility.
-#              FIXED: Corrected 'av' package name for video stream processing.
-#              OPTIMIZED: Balanced for GTX 1060 (6GB) + System RAM (32GB).
+# description: Stabilized Project Dependencies v21.8 - Final Candidate.
+#              This configuration resolves the "Dependency Hell" conflict 
+#              between Mediapipe, OpenCV, and PyTorch tensors, ensuring a
+#              reproducible research environment.
+#
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
-# --- Web Server & Framework ---
+# --- Application Layer (Web Server & API) ---
+# FastAPI provides the high-performance ASGI interface for the Driving Adapter.
 fastapi==0.109.0
 uvicorn==0.27.0
 pydantic==2.6.0
@@ -13,7 +15,8 @@ python-multipart==0.0.9
 requests==2.31.0
 pillow==10.2.0
 
-# --- AI Core & Latent Diffusion ---
+# --- Domain Layer (AI Core & Latent Diffusion) ---
+# PyTorch and Diffusers form the neural synthesis engine.
 torch==2.3.0
 diffusers==0.31.0
 transformers==4.46.1
@@ -23,29 +26,32 @@ scipy==1.12.0
 huggingface-hub==0.26.2
 safetensors==0.4.5
 
-# --- Hardware Optimization ---
-# Critical for calculating cross-frame attention without VRAM overflow.
+# --- Hardware Acceleration Layer ---
+# xFormers provides memory-efficient attention mechanisms for NVIDIA GPUs.
 xformers==0.0.26.post1
 
-# --- Identity & Computer Vision Tools ---
-insightface==0.7.3
+# --- Infrastructure Layer (Vision & Identity Manifold) ---
+# CRITICAL STABILITY PINNING:
+# - numpy 1.26.4: The last stable version before the 2.x breaking changes.
+# - protobuf 3.20.3: The "golden" version compatible with Mediapipe and ONNX 1.16.1.
+# - onnx 1.16.1: Strategic downgrade to maintain Protobuf 3.x compatibility.
+# - mediapipe 0.10.9: Stable version for heuristic analysis.
+numpy==1.26.4
+protobuf==3.20.3
+onnx==1.16.1
 onnxruntime-gpu==1.17.1
 opencv-python-headless==4.9.0.80
-numpy==1.26.4
-
-# --- Geometry & Preprocessors ---
-controlnet_aux==0.0.9
+insightface==0.7.3
 mediapipe==0.10.9
 
-# --- Async Task Orchestration ---
+# --- Infrastructure Layer (Geometry & Task Management) ---
+# ControlNet and Celery for structural conditioning and asynchronous orchestration.
+controlnet_aux==0.0.9
 celery==5.3.6
 redis==5.0.1
 
-# --- Laboratory Frontend ---
-streamlit==1.30.0
-
-# --- Temporal Extension (Video Support) ---
-# Used for MP4 container management and frame-to-video synthesis.
+# --- Infrastructure Layer (Temporal Extension) ---
+# Tools for MP4 container management and frame-to-video synthesis.
 imageio==2.34.0
 imageio-ffmpeg==0.4.9
 av==12.0.0

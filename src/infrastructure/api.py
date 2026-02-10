@@ -1,16 +1,16 @@
 # path: z_realism_ai/src/infrastructure/api.py
-# description: Expert Gateway v20.0 - Temporal Orchestration & Multi-Modal Gateway.
+# description: Driving Adapter (FastAPI) v21.0 - Thesis Candidate.
+#              Exposes the Application Layer via a RESTful interface.
 #
-# ABSTRACT:
-# This module implements the Primary Driving Adapter for the Z-Realism ecosystem. 
-# It manages the ingestion of multi-part form data and marshals complex 
-# hyperparameters into serialized task payloads for the distributed Celery queue.
+# ARCHITECTURAL ROLE (Hexagonal/DDD):
+# This module acts as the Primary Adapter. It receives HTTP requests,
+# validates input data (DTOs), and dispatches commands to the
+# Application Layer (via the Celery Worker).
 #
-# ARCHITECTURAL EVOLUTION (v20.0):
-# 1. Introduced '/animate' endpoint to support Image-to-Video synthesis.
-# 2. Implemented hardware orchestration for video tasks using the same 
-#    Redis-based Mutex to prevent VRAM overflow on 6GB cards.
-# 3. Maintained decoupled conditioning schema for both static and temporal tasks.
+# KEY FEATURES:
+# 1. Resource Mutex: Redis-based lock to enforce single-tenancy on the GPU.
+# 2. Asynchronous Dispatch: Offloads heavy computation to the Worker node.
+# 3. Multi-Modal Endpoints: Supports both Static and Temporal synthesis.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -24,13 +24,14 @@ from fastapi.responses import JSONResponse
 from celery.result import AsyncResult
 from PIL import Image
 
-# Core Implementation Imports
+# Infrastructure & Domain Imports
 from src.infrastructure.worker import transform_character_task, animate_character_task, celery_app
 from src.infrastructure.analyzer import HeuristicImageAnalyzer
 
-app = FastAPI(title="Z-Realism Expert Gateway", version="20.0")
+app = FastAPI(title="Z-Realism Expert Gateway", version="21.0")
 
 # --- 1. CROSS-ORIGIN RESOURCE SHARING (CORS) ---
+# Configured to allow requests from any origin during research phases.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -39,12 +40,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- 2. HARDWARE RESOURCE COORDINATION ---
+# --- 2. HARDWARE RESOURCE COORDINATION (MUTEX) ---
+# Critical for GTX 1060 (6GB VRAM). Prevents concurrent GPU access.
 redis_client = redis.from_url(os.getenv("CELERY_BROKER_URL", "redis://z-realism-broker:6379/0"))
-SYSTEM_LOCK_KEY = "z_realism_v19_mutex"
-LOCK_TIMEOUT = 900 
+SYSTEM_LOCK_KEY = "z_realism_v21_mutex"
+LOCK_TIMEOUT = 900  # 15 minutes max lock duration
 
-# Neural Strategy Intelligence
+# Neural Strategy Intelligence (Heuristic Analyzer)
 image_analyzer = HeuristicImageAnalyzer()
 
 # --- 3. ANALYTICAL ENDPOINT ---
@@ -60,6 +62,8 @@ async def analyze_visual_dna(
     try:
         content = await file.read()
         pil_image = Image.open(io.BytesIO(content))
+        
+        # Analyze source manifold (Lore extraction)
         analysis = image_analyzer.analyze_source(pil_image, character_name)
         
         return {
@@ -97,6 +101,7 @@ async def transform_image(
     Dispatches the high-fidelity synthesis job to the CUDA worker.
     Implements hardware single-tenancy via Redis Mutex.
     """
+    # Hardware Lock Check
     if redis_client.exists(SYSTEM_LOCK_KEY):
         raise HTTPException(status_code=429, detail="HARDWARE_LOCK: CUDA Engine Busy.")
 
@@ -104,6 +109,7 @@ async def transform_image(
         content = await file.read()
         image_b64 = base64.b64encode(content).decode('utf-8')
 
+        # Construct Hyperparameter DTO
         hyper_params = {
             "steps": steps,
             "cfg_scale": cfg_scale,
@@ -114,10 +120,12 @@ async def transform_image(
             "negative_prompt": negative_prompt
         }
 
+        # Async Dispatch (Celery)
         task = transform_character_task.delay(
             image_b64, character_name, feature_prompt, resolution_anchor, hyper_params
         )
 
+        # Acquire Lock
         redis_client.set(SYSTEM_LOCK_KEY, task.id, ex=LOCK_TIMEOUT)
         return {"task_id": task.id, "status": "QUEUED"}
     except Exception as e:
@@ -138,8 +146,9 @@ async def animate_image(
 ):
     """
     Dispatches a temporal synthesis task (Video).
-    Utilizes the same Hardware Mutex to protect VRAM on 6GB cards.
+    Utilizes the same Hardware Mutex to protect VRAM.
     """
+    # Hardware Lock Check
     if redis_client.exists(SYSTEM_LOCK_KEY):
         raise HTTPException(status_code=429, detail="HARDWARE_LOCK: CUDA Engine Busy.")
 
@@ -157,9 +166,10 @@ async def animate_image(
             "seed": seed
         }
 
-        # Dispatch specialized video task
+        # Async Dispatch (Celery)
         task = animate_character_task.delay(image_b64, character_name, video_params)
 
+        # Acquire Lock
         redis_client.set(SYSTEM_LOCK_KEY, task.id, ex=LOCK_TIMEOUT)
         return {"task_id": task.id, "status": "QUEUED_TEMPORAL"}
     except Exception as e:
@@ -169,7 +179,13 @@ async def animate_image(
 # --- 6. TELEMETRY & SYSTEM CONTROL ---
 @app.get("/status/{task_id}")
 async def get_task_status(task_id: str):
+    """
+    Retrieves the real-time status of a task from the Redis Broker.
+    Auto-releases the hardware lock upon task completion.
+    """
     task_result = AsyncResult(task_id, app=celery_app)
+    
+    # Auto-Unlock Logic
     if task_result.ready():
         current_lock = redis_client.get(SYSTEM_LOCK_KEY)
         if current_lock and current_lock.decode('utf-8') == task_id:
@@ -182,11 +198,17 @@ async def get_task_status(task_id: str):
 
 @app.get("/result/{task_id}")
 async def get_task_result(task_id: str):
+    """
+    Retrieves the final payload (Image/Video Base64 + Metrics).
+    """
     task_result = AsyncResult(task_id, app=celery_app)
     if not task_result.ready(): raise HTTPException(status_code=202)
     return JSONResponse(content=task_result.result)
 
 @app.post("/system/unlock")
 async def manual_unlock():
+    """
+    Emergency override to release the GPU Mutex.
+    """
     redis_client.delete(SYSTEM_LOCK_KEY)
     return {"message": "Hardware Mutex Released."}

@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- 
-  path: src/presentation-custom/image-lab.html
-  description: Static Fusion Module v20.2 - Neural Image Research Lab.
+  path: src/presentation/image-lab.html
+  description: Static Fusion Module v21.1 - Neural Image Research Lab.
   
   ABSTRACT:
-  This module provides a specialized workspace for transforming 2D character
-  manifolds into photorealistic stills. It implements the v19.1 Fidelity 
-  Protocol, ensuring structural and chromatic integrity through dual-stage 
-  conditioning.
+  This module provides a specialized research workspace for the synthesis of 
+  photorealistic stills from 2D character manifolds. It integrates the 
+  Heuristic DNA Analyzer and the Stable Diffusion inference engine.
   
-  REFACTORING NOTE (v20.2):
-  - Removed hardcoded navigation for modular js/nav.js injection.
-  - Integrated js/footer.js for global site consistency.
-  - Maintained the Advanced Configuration Manifold for high-res research.
+  ARCHITECTURAL ROLE (Presentation Layer):
+  Acts as the primary interface for Static Neural Transformation. It handles 
+  asynchronous task orchestration and real-time visual telemetry.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -22,10 +20,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Z-REALISM | Static Fusion Lab</title>
 
-    <!-- FAVICON -->
+    <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     
-    <!-- Link to the design system and laboratory layouts -->
+    <!-- Design System & Laboratory Orchestration -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/lab.css">
 </head>
@@ -34,23 +32,23 @@
     <div class="grid-overlay"></div>
 
     <!-- 
-      NAV INJECTION POINT: 
-      The <nav> is automatically injected here by js/nav.js 
+      DYNAMIC NAVIGATION INJECTION: 
+      The <nav> is automatically injected by js/nav.js.
     -->
 
-    <!-- Main Laboratory Interface -->
+    <!-- Main Laboratory Workspace -->
     <div class="lab-layout">
         
-        <!-- LEFT COLUMN: Neural Control Manifold -->
+        <!-- LEFT COLUMN: Neural Control Manifold (Sidebar) -->
         <aside class="control-panel">
             
-            <!-- 1. SUBJECT IDENTITY (LORE ANCHOR) -->
+            <!-- 1. SUBJECT IDENTITY (METADATA ANCHOR) -->
             <div class="control-group">
-                <label for="char-name">SUBJECT DNA</label>
-                <input type="text" id="char-name" class="modern-input" placeholder="e.g., Beerus, Vegeta, Android 18">
+                <label for="char-name">SUBJECT DNA NAME</label>
+                <input type="text" id="char-name" class="modern-input" placeholder="e.g., Vegeta, Android 18, Beerus">
             </div>
             
-            <!-- 2. SOURCE DATA INGESTION (UPLOAD) -->
+            <!-- 2. SOURCE DATA INGESTION -->
             <div class="upload-zone" id="drop-zone">
                 <input type="file" id="file-upload" hidden accept="image/*">
                 <div id="file-label">
@@ -59,10 +57,10 @@
                 </div>
             </div>
 
-            <!-- 3. SEMANTIC GUIDANCE (PROMPT) -->
+            <!-- 3. SEMANTIC GUIDANCE (STOCHASTIC PROMPT) -->
             <div class="control-group">
-                <label for="prompt-input">FEATURE PROMPT</label>
-                <textarea id="prompt-input" class="modern-textarea" placeholder="Describe textures, materials, and lighting guidance...">cinematic film still, high detail skin texture, hyper-realistic, 8k, sharp focus</textarea>
+                <label for="prompt-input">FEATURE PROMPT GUIDANCE</label>
+                <textarea id="prompt-input" class="modern-textarea" placeholder="Describe materials, lighting, and textures...">cinematic lighting, photorealistic skin pores, 8k uhd, masterpiece</textarea>
             </div>
 
             <!-- 4. PRIMARY NEURAL WEIGHTS -->
@@ -71,15 +69,15 @@
                 <input type="range" id="input-strength" min="0.1" max="1.0" step="0.05" value="0.65">
             </div>
 
-            <div class="control-group" style="margin-bottom: 10px;">
+            <div class="control-group">
                 <label>CN DEPTH WEIGHT <span id="val-depth">0.75</span></label>
                 <input type="range" id="input-depth" min="0.0" max="1.5" step="0.05" value="0.75">
             </div>
 
-            <!-- 5. ADVANCED CONFIGURATION MANIFOLD (ACCORDION) -->
+            <!-- 5. ADVANCED CONFIGURATION (ACCORDION) -->
             <div class="advanced-accordion">
                 <button type="button" class="accordion-trigger" id="adj-trigger">
-                    <span>⚙️ ADVANCED MANIFOLD</span>
+                    <span>⚙️ ADVANCED METADATA</span>
                     <span class="arrow">▼</span>
                 </button>
                 
@@ -108,44 +106,47 @@
                 </div>
             </div>
 
-            <!-- 6. EXECUTION INTERFACE -->
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 5px;">
+            <!-- 6. EXECUTION TRIGGERS -->
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
                 <button id="btn-generate" class="btn btn-primary">
                     INITIATE NEURAL FUSION
                 </button>
                 
                 <button id="btn-analyze" class="btn btn-secondary">
-                    🔍 ANALYZE DNA STRATEGY
+                    🔍 SEQUENCE DNA STRATEGY
                 </button>
             </div>
 
-            <!-- SYSTEM STATUS TAG -->
-            <div id="essence-tag" style="font-family: var(--font-code); font-size: 0.6rem; color: var(--accent); text-align: center; margin-top: 15px; opacity: 0.6; letter-spacing: 1px;">
-                SYSTEM_READY // WAITING_FOR_DATA
+            <!-- SYSTEM STATUS TELEMETRY -->
+            <div id="essence-tag" style="font-family: var(--font-code); font-size: 0.6rem; color: var(--accent); text-align: center; margin-top: 15px; opacity: 0.7; letter-spacing: 1.5px;">
+                SYSTEM_STABLE // WAITING_FOR_INPUT
             </div>
         </aside>
 
-        <!-- RIGHT COLUMN: Neural Workspace (Viewports) -->
+        <!-- RIGHT COLUMN: Neural Workspace (Manifold Viewports) -->
         <main class="viewport-area">
             
+            <!-- SOURCE INPUT MONITOR -->
             <div class="viewport-card" id="source-preview">
-                <span class="viewport-label">SOURCE_INPUT_MANIFOLD</span>
-                <div style="color: rgba(255,255,255,0.03); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; user-select: none; letter-spacing: 10px;">
+                <span class="viewport-label">SOURCE_MANIFOLD_INPUT</span>
+                <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
                     NO_DATA
                 </div>
             </div>
 
+            <!-- RESULT OUTPUT MONITOR -->
             <div class="viewport-card" id="result-display">
-                <span class="viewport-label">ACTIVE_CANDIDATE_MONITOR</span>
+                <span class="viewport-label">ACTIVE_INFERENCE_MONITOR</span>
                 
+                <!-- PROGRESS OVERLAY -->
                 <div id="progress-overlay" class="progress-overlay hidden">
-                    <div class="status-message" id="status-text">INITIALIZING_SEQUENCE...</div>
+                    <div class="status-message" id="status-text">CALCULATING_LATENTS...</div>
                     <div class="progress-container">
                         <div class="progress-fill" id="progress-bar"></div>
                     </div>
                 </div>
 
-                <div style="color: rgba(255,255,255,0.03); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; user-select: none; letter-spacing: 10px;">
+                <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
                     OFFLINE
                 </div>
             </div>
@@ -154,7 +155,7 @@
     </div>
 
     <!-- 
-      SHARED COMPONENTS 
+      SHARED ARCHITECTURAL COMPONENTS 
     -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>

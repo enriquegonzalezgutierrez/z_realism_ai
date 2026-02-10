@@ -1,16 +1,11 @@
-# path: z_realism_ai/src/infrastructure/sd_generator.py
-# description: Neural Core v20.2 - Hybrid CPU/GPU Support.
+# path: src/infrastructure/sd_generator.py
+# description: Static Neural Core v21.6 - Contrast & Chromatic Fix.
+#              Optimized for high-fidelity Subject DNA synthesis.
 #
-# ABSTRACT:
-# This module implements the Stable Diffusion pipeline for Static Image Generation.
-# It acts as the definitive "Photorealism Engine" (restoring v19.1 logic).
-#
-# CRITICAL LOGIC (v20.2):
-# 1. Hardware Agnostic: Automatically detects if CUDA is available.
-# 2. Conditional Optimization: 
-#    - GPU: Enables xFormers and Model CPU Offloading for 6GB VRAM support.
-#    - CPU: Disables xFormers (incompatible) and uses standard execution.
-# 3. Precision Management: Switches between float16 (GPU) and float32 (CPU).
+# ARCHITECTURAL ROLE (Infrastructure Adapter):
+# This module implements the 'ImageGeneratorPort'. It acts as the primary 
+# synthesis engine, transforming stylized 2D manifolds into high-entropy 
+# cinematic environments while preserving structural and chromatic DNA.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -33,42 +28,38 @@ from diffusers import (
 )
 from src.domain.ports import ImageGeneratorPort
 
-# Linear Latent-to-RGB projection factors for real-time visual telemetry.
-# Enables the UI to show the de-noising progress in real-time.
-LATENT_RGB_FACTORS = [[0.298, 0.187, -0.158],[0.207, 0.286, 0.189],[0.208, 0.189, 0.266],[-0.149, -0.071, -0.045]]
+# Linear Latent-to-RGB projection factors for high-performance telemetry.
+LATENT_RGB_FACTORS = [
+    [0.298, 0.187, -0.158],
+    [0.207, 0.286, 0.189],
+    [0.208, 0.189, 0.266],
+    [-0.149, -0.071, -0.045]
+]
 
 class StableDiffusionGenerator(ImageGeneratorPort):
     """
     Advanced Multi-Conditioning Engine for Photorealistic Character Synthesis.
     
-    A hybrid Img2Img + Dual ControlNet pipeline optimized for transforming 
-    stylized anime inputs into cinematic realism.
+    Optimized for high-fidelity transformation of stylized manifolds via 
+    context-aware pre-processing and VRAM-efficient orchestration.
     """
 
     def __init__(self, device: str = "cpu"):
         self._offline = os.getenv("OFFLINE_MODE", "false").lower() == "true"
-        
-        # --- 1. INTELLIGENT HARDWARE DETECTION ---
-        # We verify if CUDA is actually available on the host.
         self._device = "cuda" if torch.cuda.is_available() and device == "cuda" else "cpu"
-        
-        # --- 2. PRECISION SELECTION ---
-        # GPU (GTX 1060): float16 (Standard for Stable Diffusion on GPU).
-        # CPU (PC): float32. PyTorch operations on CPU often fail or are slow with float16.
         self._torch_dtype = torch.float16 if self._device == "cuda" else torch.float32
 
         try:
             print(f"INFRA_AI: Deploying Static Engine on [{self._device.upper()}]...")
             
-            # Load VAE (Variational Auto-Encoder)
-            # ft-mse is crucial for realistic eyes and faces.
+            # 1. Load Vision Components
             vae = AutoencoderKL.from_pretrained(
                 "stabilityai/sd-vae-ft-mse", 
                 torch_dtype=self._torch_dtype, 
                 local_files_only=self._offline
             )
 
-            # Load ControlNet Weights: Depth (Geometry) + OpenPose (Anatomy).
+            # 2. Load ControlNet Adapters (Geometry + Anatomy)
             depth_net = ControlNetModel.from_pretrained(
                 "lllyasviel/control_v11f1p_sd15_depth", 
                 torch_dtype=self._torch_dtype, 
@@ -80,11 +71,10 @@ class StableDiffusionGenerator(ImageGeneratorPort):
                 local_files_only=self._offline
             )
             
-            # Load Pre-processors (Midas & OpenPose)
             self.depth_estimator = MidasDetector.from_pretrained('lllyasviel/ControlNet')
             self.openpose_detector = OpenposeDetector.from_pretrained('lllyasviel/ControlNet')
 
-            # Pipeline Assembly: Realistic_Vision_V5.1
+            # 3. Assemble Pipeline: Realistic_Vision_V5.1
             self._pipe = StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
                 "SG161222/Realistic_Vision_V5.1_noVAE", 
                 vae=vae, 
@@ -94,43 +84,30 @@ class StableDiffusionGenerator(ImageGeneratorPort):
                 local_files_only=self._offline
             )
             
-            # Explicitly move pipe to device (Required for CPU execution too)
             self._pipe.to(self._device)
-            
-            # Scheduler Configuration
             self._pipe.scheduler = DPMSolverMultistepScheduler.from_config(
                 self._pipe.scheduler.config, 
                 use_karras_sigmas=True, 
                 algorithm_type="dpmsolver++"
             )
             
-            # --- 3. HARDWARE-SPECIFIC OPTIMIZATIONS ---
+            # --- 4. HARDWARE ORCHESTRATION (GTX 1060 Candidate) ---
             if self._device == "cuda":
-                # NVIDIA GPU Optimization (Laptop)
                 try:
-                    # xFormers is a specific library for NVIDIA GPUs. 
-                    # If tried on CPU, it crashes the app.
                     self._pipe.enable_xformers_memory_efficient_attention()
-                except Exception:
-                    print("INFRA_AI: xFormers library not found, skipping optimization.")
+                except Exception: pass
                 
-                # Model CPU Offload: Moves inactive components to RAM. Critical for 6GB VRAM.
+                # Model CPU Offload: Streams weights layer-by-layer to VRAM.
                 self._pipe.enable_model_cpu_offload() 
                 self._pipe.enable_vae_tiling()
                 
-            else:
-                # CPU Optimization (PC)
-                # We do NOT enable offloading or xformers.
-                # Standard execution is safer for CPU.
-                print("INFRA_AI: CPU Mode active. Disabling GPU-specific memory hacks.")
-                
-            print(f"INFRA_AI: Static Engine Online. v20.2 Ready.")
+            print(f"INFRA_AI: Static Engine Online v21.6.")
         except Exception as e:
             print(f"INFRA_AI_BOOT_FAILURE: {e}")
             raise e
 
     def _decode_preview(self, latents: torch.Tensor) -> str:
-        """Linear approximation of the VAE decoding for intermediate UI feedback."""
+        """Linear latent projection for real-time visual telemetry."""
         with torch.no_grad():
             latent_img = latents[0].permute(1, 2, 0).cpu() 
             factors = torch.tensor(LATENT_RGB_FACTORS, dtype=latent_img.dtype)
@@ -150,43 +127,44 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         progress_callback: Optional[Callable[[int, int, str], None]] = None
     ) -> Tuple[Image.Image, str, str]:
         """
-        Main inference entry point. Executes character transformation.
+        Executes Subject Transformation with context-aware pre-processing.
         """
         
-        # --- 1. TACTICAL PARAMETER EXTRACTION ---
+        # --- 1. PARAMETER EXTRACTION ---
         strength = float(hyper_params.get("strength", 0.65))
         nominal_steps = int(hyper_params.get("steps", 30))
         effective_steps = math.floor(nominal_steps * strength)
         
-        cn_depth = float(hyper_params.get("cn_depth", 0.60))
-        cn_pose = float(hyper_params.get("cn_pose", 0.75))
+        cn_depth = float(hyper_params.get("cn_depth", 0.75))
+        cn_pose = float(hyper_params.get("cn_pose", 0.40))
         
-        # --- 2. MANIFOLD PRE-PROCESSING (White Background Restoration) ---
+        # --- 2. MANIFOLD PRE-PROCESSING (Context-Aware Fix) ---
         target_w, target_h = self._calculate_proportional_dimensions(
             source_image.width, source_image.height, resolution_anchor
         )
         
-        if source_image.mode in ('P', 'LA', 'RGBA'):
+        # FIX v21.6: Only apply background restoration for transparent manifolds (RGBA).
+        # This prevents desaturation leaks on characters with naturally black backgrounds.
+        if source_image.mode == 'RGBA':
             source_image = source_image.convert("RGBA")
-            # RESTORED: Pasting on solid white prevents muddy colors on transparent subjects.
             background = Image.new("RGB", source_image.size, (255, 255, 255))
             background.paste(source_image, mask=source_image.split()[3])
             input_image = background.convert("RGB")
         else:
+            # Respect the original contrast of the Subject (e.g., pure black void).
             input_image = source_image.convert("RGB")
             
         input_image = input_image.resize((target_w, target_h), Image.Resampling.LANCZOS)
 
-        # --- 3. NEURAL MAP GENERATION ---
-        # Note: Pre-processors usually run on CPU or GPU automatically depending on installation
+        # --- 3. NEURAL CONDITIONING ---
         depth_map = self.depth_estimator(input_image)
         openpose_map = self.openpose_detector(input_image)
 
-        # --- 4. PROMPT SYNTHESIS (Restored Original Architecture) ---
-        final_prompt = f"{prompt_guidance}, {feature_prompt}, high detailed skin, 8k uhd, cinematic lighting, dslr, soft bokeh"
-        neg_prompt = hyper_params.get("negative_prompt", "anime, cartoon, drawing, illustration, plastic")
+        # --- 4. SEMANTIC SYNTHESIS ---
+        # Identity Anchor + Textural Guidance
+        final_prompt = f"{prompt_guidance}, {feature_prompt}, highly detailed textures, 8k, cinematic lighting"
+        neg_prompt = hyper_params.get("negative_prompt", "anime, drawing, plastic, low quality")
 
-        # Telemetry linkage
         def internal_callback(pipe, i, t, callback_kwargs):
             if progress_callback and i % 2 == 0:
                 preview_b64 = self._decode_preview(callback_kwargs["latents"])
@@ -194,33 +172,26 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             return callback_kwargs
 
         # --- 5. NEURAL INFERENCE ---
-        
-        # Determine generator device (CPU generator is safer for reproducibility across hardware)
-        # But for performance on GPU, we can use the GPU device.
-        generator_device = self._device
-        if self._device == "cpu":
-             generator_device = "cpu"
-
         with torch.inference_mode():
             output = self._pipe(
                 prompt=final_prompt, 
                 negative_prompt=neg_prompt,
-                image=input_image,              # Starting manifold
+                image=input_image, 
                 control_image=[depth_map, openpose_map], 
-                strength=strength,              # Fidelity factor
+                strength=strength, 
                 height=target_h, 
                 width=target_w,
                 guidance_scale=float(hyper_params.get("cfg_scale", 7.5)), 
                 controlnet_conditioning_scale=[cn_depth, cn_pose],
                 num_inference_steps=nominal_steps,
-                generator=torch.Generator(device=generator_device).manual_seed(int(hyper_params.get("seed", 42))),
+                generator=torch.Generator(device="cpu").manual_seed(int(hyper_params.get("seed", 42))),
                 callback_on_step_end=internal_callback
             ).images[0]
 
         return output, final_prompt, neg_prompt
 
     def _calculate_proportional_dimensions(self, width: int, height: int, resolution_anchor: int) -> Tuple[int, int]:
-        """Calculates dimensions proportional to the anchor, divisible by 8."""
+        """Calculates dimensions divisible by 8 for latent manifold consistency."""
         aspect = width / height
         if width >= height:
             new_w = resolution_anchor

@@ -1,10 +1,12 @@
 # path: z_realism_ai/Makefile
-# description: Ultimate Orchestrator v9.0 - Full Stack Management.
-#              Manages: Custom UI (80), Expert Dashboard (8501), API (8000), 
-#              Worker (Inference), Broker (Redis), and Remote Sharing (Ngrok).
-#
-# NEW FEATURE (v9.0): 
-# - Added 'make share' to expose the local lab to the internet via Ngrok.
+# description: Production Automation v21.0 - Thesis Defense Edition.
+#              Standardizes the DevOps lifecycle for the Z-Realism ecosystem.
+#              
+# AUTOMATION SCOPE:
+# 1. Hardware Detection: Automatically selects the correct Docker Compose override
+#    file based on the presence of NVIDIA GPUs.
+# 2. Lifecycle Management: Build, Start, Stop, and Restart microservices.
+# 3. Telemetry Access: Real-time log streaming for the API and Worker nodes.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -12,7 +14,6 @@
 # Configuration & Service Names
 # -----------------------------------------------------------------------------
 UI_SERVICE        = z-realism-ui
-DASHBOARD_SERVICE = z-realism-dashboard
 APP_SERVICE       = z-realism-api
 WORKER_SERVICE    = z-realism-worker
 BROKER_SERVICE    = z-realism-broker
@@ -21,14 +22,18 @@ MODEL_CACHE_VOL   = hf_cache
 # -----------------------------------------------------------------------------
 # Hardware Detection Logic
 # -----------------------------------------------------------------------------
+# Checks for the presence of the 'nvidia-smi' binary to determine if CUDA
+# acceleration is available on the host machine.
 HAS_GPU := $(shell nvidia-smi > /dev/null 2>&1 && echo "yes" || echo "no")
 
 ifeq ($(HAS_GPU),yes)
+    # GPU DETECTED: Apply the hardware acceleration override file.
     DOCKER_COMPOSE_CMD = docker-compose -f docker-compose.yml -f docker-compose.gpu.yml
-    HW_STATUS = "SYSTEM: [NVIDIA GPU] detected. Activating CUDA acceleration."
+    HW_STATUS = "SYSTEM: [NVIDIA GPU] detected. Activating CUDA acceleration layer."
 else
+    # CPU ONLY: Run in compatibility mode (Slow inference).
     DOCKER_COMPOSE_CMD = docker-compose -f docker-compose.yml
-    HW_STATUS = "SYSTEM: [CPU ONLY] detected. Running in legacy mode."
+    HW_STATUS = "SYSTEM: [CPU ONLY] detected. Running in legacy compatibility mode."
 endif
 
 # -----------------------------------------------------------------------------
@@ -46,11 +51,10 @@ CLR_BOLD    = \033[1m
 # -----------------------------------------------------------------------------
 .PHONY: help
 help: ## Display this help message
-	@printf "$(CLR_BOLD)Z-Realism AI - Full Stack Management v9.0$(CLR_RESET)\n"
+	@printf "$(CLR_BOLD)Z-Realism AI - Thesis Defense Automation v21.0$(CLR_RESET)\n"
 	@printf "Detected Environment: $(CLR_GREEN)$(HW_STATUS)$(CLR_RESET)\n"
-	@printf "Custom UI (8080):    $(CLR_CYAN)http://localhost:8080$(CLR_RESET)\n"
-	@printf "Expert Dashboard:    $(CLR_CYAN)http://localhost:8501$(CLR_RESET)\n"
-	@printf "Backend API (8000):  $(CLR_CYAN)http://localhost:8000$(CLR_RESET)\n\n"
+	@printf "Presentation Layer (UI): $(CLR_CYAN)http://localhost:8080$(CLR_RESET)\n"
+	@printf "Application Layer (API): $(CLR_CYAN)http://localhost:8000/docs$(CLR_RESET)\n\n"
 	@printf "Usage: make $(CLR_CYAN)[target]$(CLR_RESET)\n\n"
 	
 	@printf "$(CLR_CYAN)$(CLR_BOLD)CORE LIFECYCLE:$(CLR_RESET)\n"
@@ -71,10 +75,10 @@ build: ## CORE Build images using the detected hardware profile
 	$(DOCKER_COMPOSE_CMD) build
 
 .PHONY: up
-up: ## CORE Start the entire ecosystem (UI, Dashboard, API, Worker, Redis)
+up: ## CORE Start the entire ecosystem (UI, API, Worker, Redis)
 	@echo $(HW_STATUS)
 	$(DOCKER_COMPOSE_CMD) up -d
-	@printf "\n$(CLR_GREEN)System Online at http://localhost:8080 and http://localhost:8501$(CLR_RESET)\n"
+	@printf "\n$(CLR_GREEN)System Online at http://localhost:8080$(CLR_RESET)\n"
 
 .PHONY: down
 down: ## CORE Stop and remove all active containers
@@ -82,7 +86,7 @@ down: ## CORE Stop and remove all active containers
 
 .PHONY: restart
 restart: ## CORE Restart all core services to apply changes
-	$(DOCKER_COMPOSE_CMD) restart $(UI_SERVICE) $(DASHBOARD_SERVICE) $(APP_SERVICE) $(WORKER_SERVICE)
+	$(DOCKER_COMPOSE_CMD) restart $(UI_SERVICE) $(APP_SERVICE) $(WORKER_SERVICE)
 
 # -----------------------------------------------------------------------------
 # Development & Monitoring

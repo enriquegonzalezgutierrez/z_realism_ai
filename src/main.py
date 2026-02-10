@@ -1,73 +1,69 @@
 # path: z_realism_ai/src/main.py
-# description: System Entry Point & ASGI Server Orchestrator v18.0.
+# description: System Entry Point & ASGI Server Orchestrator v21.0.
 #
-# ABSTRACT:
-# This script initializes the production-grade Uvicorn server to host the 
-# FastAPI application. It serves as the process entry point for the 
-# Docker container, managing the transition from static code to a 
-# stateful, network-accessible service.
+# ARCHITECTURAL ROLE (Hexagonal/DDD):
+# This script acts as the "Bootstrapper" for the Z-Realism ecosystem. Its sole 
+# responsibility is to initialize the Primary Driving Adapter (FastAPI) and 
+# bind it to the network layer via the Uvicorn ASGI server.
 #
-# ARCHITECTURAL ROLE:
-# 1. Environment Parsing: Loads runtime configurations (Host, Port, Mode) 
-#    from the container's environment variables.
-# 2. Dependency Resolution: Imports the 'app' instance from the 
-#    Infrastructure layer, fulfilling the ASGI specification.
-# 3. Server Management: Configures the Uvicorn engine with optimal 
-#    concurrency and logging parameters for high-latency AI workloads.
+# DESIGN PHILOSOPHY:
+# 1. Environment-Awareness: Dynamically maps network interfaces based on Docker context.
+# 2. Production Stability: Disables debugging overhead in production mode.
+# 3. Network Resilience: Configures keep-alive durations for large AI data transfers.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 import uvicorn
 import os
 
-# --- 1. CORE COMPONENT IMPORT ---
-# We import 'app' from the infrastructure layer. This instance is the 
-# primary driving adapter that contains all route registrations and 
-# middleware configurations.
+# --- 1. DRIVING ADAPTER IMPORT ---
+# We import the 'app' instance from the Infrastructure Layer.
+# In Hexagonal terms, this is the 'Primary Adapter' that translates
+# HTTP protocol into Application Layer commands.
 from src.infrastructure.api import app
 
 # --- 2. RUNTIME CONFIGURATION ---
-# These parameters are extracted from the Environment Variables, 
-# allowing the same code to behave differently across Development, 
-# Staging, and Production environments without modification.
+# These parameters are injected via Environment Variables in the Docker layer.
 
-# HOST: 0.0.0.0 is critical for Docker networking, as it tells the 
-# server to listen on all available network interfaces within the container.
+# HOST: '0.0.0.0' instructs Uvicorn to listen on all available network interfaces.
+# This is mandatory for Docker networking to allow the Nginx container to 
+# communicate with the API container via the bridge network.
 HOST = os.getenv("APP_HOST", "0.0.0.0")
 
-# PORT: The internal network port for the API gateway.
+# PORT: The internal listening port (standard research port: 8000).
 PORT = int(os.getenv("APP_PORT", 8000))
 
-# RELOAD: Determines if the server should monitor source files for 
-# changes and restart automatically (Hot-Reload). Disabled in production 
-# for performance and stability.
-RELOAD = os.getenv("ENVIRONMENT", "development") == "development"
+# RELOAD: Controls the Hot-Reload watcher.
+# - Enabled: For active code refactoring in development.
+# - Disabled: For immutable process execution in production.
+RELOAD = os.getenv("ENVIRONMENT", "production").lower() == "development"
 
 if __name__ == "__main__":
     """
     Main Execution Block.
     
-    Invoked when the container starts via 'python src/main.py'.
-    Initializes the Uvicorn event loop with the following specifications:
-    - app: The FastAPI ASGI application.
-    - host/port: Network binding configuration.
-    - log_level: Information density for system telemetry.
+    Triggered when the Docker entrypoint executes 'python src/main.py'.
+    Initializes the Uvicorn engine with a standard ASGI configuration.
     """
     
-    # System Initialization Log
-    print(f"SYSTEM_BOOT: Z-Realism AI Service initialized.")
-    print(f"NETWORK_BIND: Attempting to host on {HOST}:{PORT}")
-    print(f"EXECUTION_MODE: {'DEBUG/RELOAD' if RELOAD else 'STABLE/PRODUCTION'}")
+    # Telemetry: System Boot Log
+    print(f"SYSTEM_BOOT: Z-Realism AI Service v21.0 initialized.")
+    print(f"NETWORK_BIND: Binding to interface [{HOST}:{PORT}]")
+    print(f"EXECUTION_MODE: {'DEBUG/RELOAD_ACTIVE' if RELOAD else 'STABLE/IMMUTABLE_MODE'}")
     
     # Launch the ASGI Server
-    # We use the string reference "src.main:app" to support Uvicorn's 
-    # internal multi-process worker management if necessary.
+    # Note: We use the string path "src.main:app" to allow Uvicorn's
+    # master process to manage worker lifecycles and reload signals.
     uvicorn.run(
         "src.main:app",
         host=HOST,
         port=PORT,
         reload=RELOAD,
         log_level="info",
-        # Increase timeout-keep-alive for heavy neural inference traffic
+        
+        # TIMEOUT CONFIGURATION:
+        # High-fidelity synthesis results (Images/Videos) generate large 
+        # Base64 payloads. We increase the keep-alive timeout to prevent 
+        # early termination during the transmission of these manifolds.
         timeout_keep_alive=65
     )

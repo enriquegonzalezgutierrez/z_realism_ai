@@ -1,0 +1,192 @@
+/* 
+ * path: src/presentation/css/main.css
+ * description: Global Design System v21.3 - Thesis Candidate.
+ *
+ * ABSTRACT:
+ * This module orchestrates the visual identity of the Z-Realism ecosystem.
+ * Version 21.3 introduces a dedicated Form Engine for high-fidelity 
+ * data entry and reinforces the Cyber-Grid background structure.
+ *
+ * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+ */
+
+/* --- 1. DESIGN TOKENS --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    /* Palette: High-Contrast Scientific Dark */
+    --bg-dark: #050505;
+    --bg-panel: rgba(15, 15, 20, 0.85);
+    --primary: #3b82f6;
+    --accent: #8b5cf6;
+    --accent-video: #10b981;
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    
+    /* Geometry & Glassmorphism */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+    --input-bg: rgba(0, 0, 0, 0.65);
+    --radius-lg: 16px;
+    --radius-md: 8px;
+    
+    /* Typography */
+    --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-code: 'JetBrains Mono', monospace;
+    
+    /* Header Safe-Zones */
+    --nav-height-desktop: 80px;
+    --nav-height-mobile: 140px; 
+    --body-padding-top-offset: var(--nav-height-desktop); 
+    --content-gap: 40px; 
+}
+
+/* --- 2. GLOBAL BASE & CYBER-GRID --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--body-padding-top-offset) + 20px); 
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-ui);
+    overflow-x: hidden;
+    min-height: 100vh;
+    padding-top: var(--body-padding-top-offset); 
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Iconic Video-Game Background Grid */
+.grid-overlay {
+    position: fixed; 
+    inset: 0; 
+    z-index: -1;
+    background-image: linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+}
+
+/* --- 3. MAIN NAVIGATION (FIXED) --- */
+.main-nav {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 40px; 
+    height: var(--nav-height-desktop); 
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: var(--glass-border);
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    z-index: 2000; 
+}
+
+.nav-logo {
+    font-family: var(--font-code); font-weight: 700; color: white; text-decoration: none; 
+    display: flex; align-items: center; gap: 12px; font-size: 1.1rem;
+}
+.nav-logo span { color: var(--accent); filter: drop-shadow(0 0 8px var(--accent)); }
+
+.nav-links { display: flex; gap: 30px; }
+.nav-item {
+    color: var(--text-muted); text-decoration: none; font-size: 0.75rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s;
+}
+.nav-item:hover, .nav-item.active { color: white; }
+.nav-item.active { border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
+
+/* --- 4. FORM ENGINE (SCIENTIFIC INSTRUMENTATION) --- */
+.modern-input, .modern-textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    color: #fff;
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-textarea {
+    min-height: 100px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+/* Focus State: The "Neural Activation" Glow */
+.modern-input:focus, .modern-textarea:focus {
+    border-color: var(--accent);
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.15), 
+                inset 0 0 10px rgba(139, 92, 246, 0.1);
+}
+
+/* Placeholder Styling */
+::placeholder {
+    color: var(--text-muted);
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- 5. GLOBAL FOOTER --- */
+.site-footer {
+    background: rgba(0, 0, 0, 0.98);
+    border-top: var(--glass-border);
+    padding: 80px 40px 40px 40px;
+    margin-top: 100px;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-grid {
+    max-width: 1400px; margin: 0 auto 60px auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px;
+}
+
+.footer-brand h3 { font-family: var(--font-code); color: white; margin-bottom: 20px; letter-spacing: 2px; }
+.footer-col h4 { font-family: var(--font-code); color: var(--accent); font-size: 0.8rem; margin-bottom: 25px; text-transform: uppercase; }
+
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: 0.3s; }
+.footer-links a:hover { color: white; padding-left: 5px; }
+
+.footer-bottom {
+    max-width: 1400px; margin: 0 auto; padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+}
+
+.footer-copy { font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-code); text-transform: uppercase; }
+
+/* --- 6. BUTTONS --- */
+.btn {
+    padding: 12px 26px; border-radius: var(--radius-md); font-family: var(--font-code); 
+    font-weight: 700; font-size: 0.75rem; text-transform: uppercase; cursor: pointer;
+    transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+}
+
+.btn-primary { background: var(--accent); color: white; border: none; box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+
+.btn-secondary { background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); }
+.btn-secondary:hover { border-color: white; color: white; }
+
+/* --- 7. RESPONSIVE --- */
+@media (max-width: 850px) {
+    :root { --body-padding-top-offset: var(--nav-height-mobile); }
+    .main-nav { flex-direction: column; height: var(--nav-height-mobile); padding: 15px; }
+    .nav-links { gap: 15px; }
+}
+
+.hidden { display: none !important; }

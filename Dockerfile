@@ -1,36 +1,48 @@
 # path: z_realism_ai/Dockerfile
-# description: Production-grade container definition for the Z-Realism AI Service.
-#              UPDATED: Added system-level FFmpeg support for video synthesis.
-#              Optimized for CUDA-enabled environments and GTX 1060 support.
+# description: Production-grade Container Definition v21.8 - Final Candidate.
+#              Defines the immutable runtime environment for the Z-Realism engine.
+#
+# ARCHITECTURAL ROLE:
+# This Dockerfile encapsulates the entire research ecosystem. It provides the 
+# necessary system-level libraries for Computer Vision (OpenCV) and Neural 
+# Hand Tracking/Face Detection (Mediapipe), while ensuring the Python 
+# environment is isolated and reproducible.
+#
+# KEY OPTIMIZATIONS:
+# 1. Vision Support: Includes X11 and GLib extensions for headless processing.
+# 2. Performance: Configured for high-latency neural workloads (CUDA-ready).
+# 3. Size: Based on python:3.10-slim to balance compatibility and footprint.
+#
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 # -----------------------------------------------------------------------------
-# Base Image
+# Base Image Selection
 # -----------------------------------------------------------------------------
-# Using python:3.10-slim to keep the image size manageable while maintaining
-# compatibility with standard PyTorch wheels.
 FROM python:3.10-slim
 
 # -----------------------------------------------------------------------------
 # Environment Configuration
 # -----------------------------------------------------------------------------
-# PYTHONDONTWRITEBYTECODE: Prevents Python from writing .pyc files to disk.
+# Prevents Python from writing .pyc files to the container filesystem.
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# PYTHONUNBUFFERED: Ensures Python output is sent straight to terminal logs.
+# Ensures terminal logs are delivered in real-time without buffering.
 ENV PYTHONUNBUFFERED=1
 
-# HF_HOME: Defines where Hugging Face libraries save downloaded models.
+# Defines the persistent model cache location for Hugging Face weights.
 ENV HF_HOME=/app/model_cache
 
-# Set the working directory
+# Set the working directory for the application lifecycle.
 WORKDIR /app
 
 # -----------------------------------------------------------------------------
-# System Dependencies
+# System Dependencies (Linux OS Layer)
 # -----------------------------------------------------------------------------
-# Install system libraries required by OpenCV (libgl1, libglib) and build tools.
-# ADDED: 'ffmpeg' to enable MP4 encoding and video manifold processing.
+# Install essential build tools and visual processing libraries.
+# - gcc/g++/build-essential: Required for compiling native Python extensions.
+# - libgl1/libglib2.0-0: Core requirements for OpenCV manifold analysis.
+# - libsm6/libxext6/libxrender-dev: MANDATORY for Mediapipe and ONNX Runtime.
+# - ffmpeg: Required for the Temporal Fusion (MP4) encoding pipeline.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
@@ -38,28 +50,36 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     libgl1 \
     libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # -----------------------------------------------------------------------------
-# Application Dependencies
+# Application Dependencies (Python Layer)
 # -----------------------------------------------------------------------------
-# Copy requirements first to leverage Docker Layer Caching.
+# Copy the dependency manifest first to utilize Docker's cache.
+# This prevents re-downloading PyTorch (2GB+) unless requirements.txt changes.
 COPY requirements.txt .
 
 # Install Python packages.
-# --timeout 1000: PyTorch downloads are huge; increased timeout prevents failures.
+# --timeout 1000: Prevents failures during large neural weight downloads.
+# --no-cache-dir: Reduces final image size by not storing the wheel cache.
 RUN pip install --no-cache-dir -r requirements.txt --timeout 1000
 
 # -----------------------------------------------------------------------------
-# Source Code & Execution
+# Source Code Injection
 # -----------------------------------------------------------------------------
-# Copy the application source code into the container.
+# Copy the refactored source code into the container filesystem.
 COPY src/ ./src/
 
-# Expose port 8000 (API) and 8501 (Streamlit) capabilities.
+# -----------------------------------------------------------------------------
+# Network Exposure & Execution
+# -----------------------------------------------------------------------------
+# Expose the API Gateway port (RESTful interface).
 EXPOSE 8000
-EXPOSE 8501
 
-# Default command launches the API.
+# Default command launches the ASGI Server (Uvicorn).
+# The --host 0.0.0.0 is critical for Docker bridge networking.
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

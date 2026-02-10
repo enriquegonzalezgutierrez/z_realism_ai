@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- 
-  path: src/presentation-custom/index.html
-  description: Gateway / Landing Page v20.5 - Modular Research Architecture.
+  path: src/presentation/index.html
+  description: System Gateway / Landing Page v21.1 - Thesis Candidate.
   
   ABSTRACT:
-  The cinematic entry point to the Z-Realism Research Institute. 
-  Decoupled from navigation and footer components for high maintainability.
-  Serves as the router for Static and Temporal research modules.
+  The cinematic entry point to the Z-Realism Research Institute. This module 
+  serves as the primary router, directing researchers to either the Static 
+  Fusion (Img2Img) or Temporal Fusion (Video) laboratories.
   
+  ARCHITECTURAL ROLE (Presentation Layer):
+  Acts as the high-level orchestrator for the laboratory modules. It utilizes 
+  modular component injection (Nav/Footer) to ensure architectural consistency 
+  across the entire research ecosystem.
+
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
 <head>
@@ -19,7 +24,7 @@
     <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     
-    <!-- Link to the global design system and landing-specific layout -->
+    <!-- Design System & Layout Orchestration -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/landing.css">
 </head>
@@ -30,17 +35,18 @@
     <!-- 
       DYNAMIC NAVIGATION INJECTION: 
       The <nav> element is automatically injected by js/nav.js 
+    injected at the top of the document flow.
     -->
 
-    <!-- Hero Section: Primary Visual Impact Area -->
+    <!-- Hero Section: Neural Impact Area -->
     <header class="hero-section">
         <div class="hero-content">
-            <span class="hero-tag">V20.5 NEURAL RESEARCH MODULE</span>
+            <span class="hero-tag">V21.1 NEURAL RESEARCH MODULE</span>
             <h1 class="hero-title">FROM INK<br>TO LIFE</h1>
             <p class="hero-desc">
                 The advanced research platform for photorealistic character synthesis. 
-                Utilizing state-of-the-art Latent Diffusion and Temporal Consistency protocols 
-                to bring 2D subjects into cinematic realism.
+                Utilizing state-of-the-art Latent Diffusion and Temporal Consistency 
+                protocols to transform 2D subject DNA into cinematic realism.
             </p>
             <div class="hero-actions">
                 <a href="image-lab.html" class="btn btn-primary">
@@ -53,52 +59,52 @@
         </div>
     </header>
 
-    <!-- Research Modules Grid -->
+    <!-- Research Modules: Functional Gateways -->
     <main class="modules-container">
         <div class="modules-grid">
             
-            <!-- Module 1: Image Generation (Static Fusion) -->
+            <!-- Module 1: Static Fusion (Img2Img) -->
             <a href="image-lab.html" class="module-card">
                 <div class="module-icon">🖼️</div>
                 <h3>Static Fusion</h3>
                 <p>
-                    Transform 2D characters into 8K photorealistic stills. 
-                    Employs strict structural conditioning and the v19.1 Original Fidelity Protocol 
-                    to preserve identity and color accuracy.
+                    Synthesize 8K photorealistic stills from 2D character manifolds. 
+                    Employs strict structural conditioning to preserve identity 
+                    and chromatic integrity during high-entropy denoising.
                 </p>
-                <div class="module-link">LAUNCH MODULE &rarr;</div>
+                <div class="module-link">LAUNCH STATIC MODULE &rarr;</div>
             </a>
 
-            <!-- Module 2: Video Generation (Temporal Fusion) -->
+            <!-- Module 2: Temporal Fusion (Img2Video) -->
             <a href="video-lab.html" class="module-card temporal">
                 <div class="module-icon" style="filter: drop-shadow(0 0 15px var(--accent-video));">🎥</div>
                 <h3>Temporal Fusion</h3>
                 <p>
-                    Infuse life into your generated stills. Apply cinematic movement, 
-                    realistic breathing, and fluid expressions using the AnimateDiff 
-                    Temporal Engine optimized for local hardware.
+                    Inject cinematic motion into neural stills. Implements the 
+                    AnimateDiff temporal engine with sequential weight offloading, 
+                    optimized for high-resolution output on local hardware.
                 </p>
-                <div class="module-link">LAUNCH MODULE &rarr;</div>
+                <div class="module-link">LAUNCH TEMPORAL MODULE &rarr;</div>
             </a>
 
-            <!-- Module 3: DNA Analysis Metadata -->
+            <!-- Module 3: Metadata Intelligence (DNA Analysis) -->
             <div class="module-card">
                 <div class="module-icon">🧬</div>
-                <h3>DNA Analysis</h3>
+                <h3>Metadata Analysis</h3>
                 <p>
-                    Autonomous feature extraction from source manifolds. 
-                    The analyzer extracts semantic metadata and recommends 
-                    optimal hyperparameters for the diffusion loop.
+                    Heuristic feature extraction from source manifolds. 
+                    The analyzer sequences visual DNA and recommends optimal 
+                    stochastic parameters for the diffusion loop.
                 </p>
-                <div class="module-link" style="color: var(--text-muted);">INTEGRATED IN LABS</div>
+                <div class="module-link" style="color: var(--text-muted);">SYSTEM INTEGRATED</div>
             </div>
 
         </div>
     </main>
 
     <!-- 
-      SHARED COMPONENTS INJECTION
-      These scripts dynamically render the site-wide Nav and Footer components.
+      SHARED ARCHITECTURAL COMPONENTS 
+      Injected at the end of the body to ensure DOM availability.
     -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>

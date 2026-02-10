@@ -1,15 +1,15 @@
-# path: z_realism_ai/src/domain/ports.py
-# description: Domain Boundary Interfaces v20.0 - Temporal Expansion Protocol.
+# path: src/domain/ports.py
+# description: Domain Boundary Interfaces v21.4 - Thesis Candidate.
+#              Defines the abstract contracts for the Z-Realism ecosystem.
 #
-# ABSTRACT:
-# This module defines the formal specifications for the Z-Realism ecosystem.
+# ARCHITECTURAL ROLE (Hexagonal / DDD):
+# This module defines the formal specifications for the Z-Realism engine.
 # It utilizes Hexagonal Architecture principles to decouple core domain logic
 # from specific infrastructure implementations (Stable Diffusion, FFmpeg, etc.).
 #
-# ARCHITECTURAL EVOLUTION (v20.0):
-# 1. Introduced 'VideoGeneratorPort' to handle Img2Video synthesis.
-# 2. Added 'AnimationReport' for structured temporal telemetry.
-# 3. Maintained backward compatibility for all v19.1 Image/DNA analysis ports.
+# NOMENCLATURE REFACTOR (v21.4):
+# Purged all "Lore" terminology. Replaced with "Subject Metadata" to align with 
+# informatics engineering standards for structured data management.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -22,6 +22,9 @@ from PIL import Image
 class AssessmentReport:
     """
     Multivariate data container for post-inference quality quantification.
+    
+    Provides objective scientific metrics regarding structural, chromatic, 
+    and informational fidelity gain.
     """
     structural_similarity: float
     identity_preservation: float
@@ -35,6 +38,8 @@ class AssessmentReport:
 class AnimationReport:
     """
     Data container for temporal synthesis (Video) results.
+    
+    Encapsulates the resulting MP4 manifold and associated telemetry.
     """
     video_b64: str
     inference_time: float
@@ -46,6 +51,9 @@ class AnimationReport:
 class AnalysisResult:
     """
     Heuristic Strategy Manifold containing recommended hyperparameters.
+    
+    Bridging the gap between raw pixel data and the subject DNA 
+    retrieved from the Metadata Knowledge Base.
     """
     recommended_steps: int
     recommended_cfg: float
@@ -76,15 +84,14 @@ class VideoGeneratorPort(ABC):
     """
     Abstract contract for the Temporal Synthesis Engine (Video Animation).
     
-    Implementation must support 'Sequential CPU Offloading' to accommodate 
-    environments with limited VRAM (e.g., GTX 1060 6GB).
+    NOMENCLATURE: Uses 'subject_metadata' to anchor identity during motion.
     """
     @abstractmethod
     def animate_image(
         self,
         source_image: Image.Image,
         motion_prompt: str,
-        character_lore: Dict[str, Any],
+        subject_metadata: Dict[str, Any],
         duration_frames: int,
         fps: int,
         hyper_params: Dict[str, Any],
@@ -95,6 +102,7 @@ class VideoGeneratorPort(ABC):
 class ImageAnalyzerPort(ABC):
     """
     Abstract contract for the Heuristic Intelligence Layer.
+    Responsible for retrieving Subject DNA from the Metadata Knowledge Base.
     """
     @abstractmethod
     def analyze_source(self, image: Image.Image, character_name: str) -> AnalysisResult:

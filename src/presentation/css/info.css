@@ -1,16 +1,16 @@
 /* 
- * path: src/presentation-custom/css/info.css
- * description: Documentation & Information Layout System v20.12 - Definitive Layout Fix.
+ * path: src/presentation/css/info.css
+ * description: Documentation & Information Layout System v21.1 - Thesis Candidate.
  *
  * ABSTRACT:
- * Provides a highly readable and structured layout for long-form content. 
- * This revision ensures the content is correctly positioned below the
- * fixed navigation bar by leveraging the global body's padding-top.
+ * Provides a highly readable and structured layout for long-form research content. 
+ * This module orchestrates the presentation of the scientific thesis, 
+ * architectural blueprints, and legal protocols.
  *
  * KEY IMPROVEMENTS:
- * 1. Precision Positioning: Content starts correctly below the navigation.
- * 2. DRY Compliance: Eliminates redundant padding rules.
- * 3. Responsive Robustness: Consistent layout behavior across all screen sizes.
+ * 1. Safe-Zone Integration: Fully respects the global fixed-header offset.
+ * 2. Academic Typography: Optimized line-heights and font-pairings for readability.
+ * 3. Structured Data: Custom callouts for technical specifications and DNA metrics.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -22,12 +22,11 @@
     margin: 0 auto;
     
     /* 
-       THE DEFINITIVE FIX (v20.12):
-       - The body's padding-top (from main.css) pushes this entire element down.
-       - This padding is now for *internal* content spacing within the container,
-         including a buffer at the top.
+       THE LAYOUT FIX:
+       Inherits the body's padding-top offset and adds internal 
+       content spacing for a professional buffer.
     */
-    padding: var(--content-gap) 20px 100px 20px; /* Top, Right, Bottom, Left internal padding */
+    padding: var(--content-gap) 20px 100px 20px; 
     
     animation: infoFadeIn 0.8s ease-out;
 }
@@ -45,6 +44,7 @@
 }
 
 .info-title {
+    /* Responsive title sizing */
     font-size: clamp(2rem, 8vw, 3.5rem);
     font-weight: 800;
     margin-bottom: 24px;
@@ -105,7 +105,7 @@
     letter-spacing: 1px;
 }
 
-/* --- 4. DATA LISTS --- */
+/* --- 4. DATA LISTS (SCIENTIFIC STYLE) --- */
 .info-list {
     list-style: none;
     margin-bottom: 30px;
@@ -121,7 +121,7 @@
 }
 
 .info-list li::before {
-    content: '🧬';
+    content: '🧬'; /* DNA Icon for a scientific aesthetic */
     position: absolute;
     left: 0;
     font-size: 0.85rem;
@@ -148,7 +148,7 @@
     transform: translateX(-5px);
 }
 
-/* --- 6. TECHNICAL DIAGRAMS --- */
+/* --- 6. TECHNICAL DIAGRAMS (MERMAID OVERRIDES) --- */
 .mermaid {
     background: rgba(0, 0, 0, 0.3) !important;
     padding: 20px;
@@ -157,10 +157,17 @@
     overflow-x: auto;
     display: flex;
     justify-content: center;
+    border: var(--glass-border);
 }
 
 /* --- 7. ANIMATIONS --- */
 @keyframes infoFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }

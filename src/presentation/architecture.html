@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  path: src/presentation/architecture.html
+  description: Technical Documentation - System Design & Engineering Patterns v21.1.
+  
+  ABSTRACT:
+  Detailed engineering overview of the Z-Realism ecosystem. Covers the 
+  Hexagonal Architecture, SOLID implementation, and Hardware Resource 
+  Management strategies for the doctoral thesis in Informatics Engineering.
+  
+  ARCHITECTURAL ROLE (Presentation Layer):
+  Acts as the technical blueprint documentation. It provides the mathematical 
+  and structural justification for the system's modularity and hardware resilience.
+
+  author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCHITECTURE | Z-Realism Research Institute</title>
+
+    <!-- FAVICON CONFIGURATION -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Design System & Documentation Styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/info.css">
+    
+    <!-- Mermaid.js for architectural diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true, theme:'dark'});</script>
+</head>
+<body>
+    <!-- Persistent Ambient Cyber-Grid -->
+    <div class="grid-overlay"></div>
+
+    <!-- 
+      DYNAMIC NAVIGATION INJECTION: 
+      The <nav> is automatically injected by js/nav.js.
+    -->
+
+    <!-- Documentation Container -->
+    <main class="info-container container">
+        
+        <a href="index.html" class="back-link">&larr; BACK TO GATEWAY</a>
+
+        <header class="info-section">
+            <span class="info-subtitle">SYSTEM DESIGN & DDD</span>
+            <h1 class="info-title">The Engineering Blueprint</h1>
+            <div class="info-content">
+                <p>
+                    Z-Realism v21.1 is architected using the <strong>Hexagonal Architecture</strong> 
+                    (Ports & Adapters) pattern. This decoupling ensures that the core domain 
+                    logic—the synthesis and evaluation of character DNA—remains independent of 
+                    volatile infrastructure, such as specific web frameworks (FastAPI) or 
+                    Generative AI libraries (Diffusers).
+                </p>
+            </div>
+        </header>
+
+        <section class="info-section info-content">
+            <h2>Hexagonal Implementation</h2>
+            <p>
+                By defining strict <strong>Ports</strong> (Interfaces) within the Domain Layer, 
+                infrastructure adapters can be swapped without affecting the business logic. 
+                For instance, the system can toggle between the <code>StableDiffusionGenerator</code> 
+                and a <code>MockGenerator</code> (for non-GPU testing) seamlessly, adhering 
+                strictly to the <strong>Liskov Substitution Principle (SOLID)</strong>.
+            </p>
+
+            <!-- Mermaid Diagram: Hexagonal Structure -->
+            <div class="info-card">
+                <div class="mermaid">
+                    graph LR
+                    A[Presentation Layer] --> B[Application Layer]
+                    B --> C[Domain Layer]
+                    C --> D[Infrastructure Layer]
+                    
+                    subgraph Domain Boundary
+                    C{Ports / Interfaces}
+                    B(Use Cases / Orchestration)
+                    end
+                    
+                    subgraph Adapters
+                    D --> D1[Inference: CUDA]
+                    D --> D2[Broker: Redis]
+                    D --> D3[CV: Analytics]
+                    end
+                </div>
+            </div>
+
+            <h2>Hardware Tenancy (GPU Mutex)</h2>
+            <p>
+                To support high-resolution neural inference on consumer-grade research 
+                laptops (GTX 1060 6GB), the architecture implements a <strong>Hardware 
+                Tenancy Protocol</strong>. This is managed via a distributed Redis-based 
+                Mutex at the API Gateway level.
+            </p>
+
+            <div class="info-card">
+                <h4>Resource Management Logic:</h4>
+                <ul class="info-list">
+                    <li><strong>Single-Task Mutex:</strong> Prevents concurrent GPU requests that would trigger OOM (Out of Memory) crashes.</li>
+                    <li><strong>Aggressive Cache Purging:</strong> The Worker explicitly purges VRAM and invokes garbage collection during context switches between Static and Temporal models.</li>
+                    <li><strong>Weight Streaming:</strong> Model layers are streamed from System RAM (32GB) to VRAM (6GB) only during active computation cycles.</li>
+                </ul>
+            </div>
+
+            <h2>Asynchronous Task Orchestration</h2>
+            <p>
+                The lifecycle of a neural transformation is entirely asynchronous. We utilize 
+                <strong>Celery</strong> as the task orchestrator and <strong>Redis</strong> 
+                as the message broker. This ensures that the Application Layer remains responsive 
+                while the Infrastructure Layer executes high-latency CUDA computations.
+            </p>
+
+            <!-- Mermaid Diagram: Asynchronous Flow -->
+            <div class="info-card">
+                <div class="mermaid">
+                    sequenceDiagram
+                    participant UI as Client Laboratory
+                    participant API as FastAPI Gateway
+                    participant Q as Redis Broker
+                    participant W as Inference Worker
+                    
+                    UI->>API: POST /transform
+                    API->>API: Acquire VRAM Mutex
+                    API->>Q: Dispatch Task Manifold
+                    Q->>W: Pull Neural Task
+                    loop Denoising Cycle
+                        W->>Q: Publish Visual Telemetry
+                        API-->>UI: Poll State / Preview
+                    end
+                    W->>Q: Push Final Manifold + Metrics
+                    API->>UI: Return Candidate Result
+                    API->>API: Release VRAM Mutex
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 
+      SHARED ARCHITECTURAL COMPONENTS 
+    -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/cookie-consent.js"></script>
+
+</body>
+</html>

@@ -1,17 +1,16 @@
 # path: z_realism_ai/src/infrastructure/evaluator.py
-# description: Advanced Scientific Evaluation Engine v18.2 - Robust Multivariate Analysis.
+# description: Scientific Assessment Engine v21.0 - Multivariate Analytics.
+#              Provides objective quantification of generative fidelity.
 #
-# ABSTRACT:
-# This module implements the ScientificEvaluatorPort using OpenCV-based heuristics.
-# It provides objective metrics to measure the success of the "Anime-to-Realism" 
-# transition by analyzing structural, chromatic, and informational changes.
+# ARCHITECTURAL ROLE (Infrastructure Adapter):
+# This module implements the 'ScientificEvaluatorPort'. It provides the 
+# empirical evidence required to validate the transformation success.
+# It measures the delta between stylized source and photorealistic output.
 #
-# CHANGES v18.2:
-# 1. ELEVATED: Textural Realism. The 'realism_score' (relative entropy) is now 
-#    returned as a primary numeric field 'textural_realism' instead of a string.
-# 2. REFINED: Pre-processing pipeline ensures consistent LANCZOS resampling 
-#    for all comparison tensors.
-# 3. DOCUMENTED: Detailed explanation of the edge, color, and entropy logic.
+# SCIENTIFIC METRICS:
+# 1. Structural Fidelity: Laplacian variance for edge preservation.
+# 2. Chromatic Identity: Euclidean distance in the CIELAB color space.
+# 3. Information Density: Relative Shannon Entropy gain (Textural Realism).
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -23,40 +22,43 @@ from src.domain.ports import ScientificEvaluatorPort, AssessmentReport
 
 class ComputerVisionEvaluator(ScientificEvaluatorPort):
     """
-    Robust Multivariate Assessment Engine for Generative Synthesis.
+    Expert Multivariate Evaluation Engine for Neural Synthesis.
 
-    Provides objective scientific metrics for "Realism" and "Identity"
-    by comparing structural, chromatic, and informational fidelity.
+    Quantifies the "Realism" and "Identity Preservation" of a subject 
+    by comparing structural, chromatic, and informational tensors.
     """
 
     def _preprocess(self, pil_image: Image.Image, target_size=(512, 512)) -> np.ndarray:
         """Standardizes input tensors into BGR domain for consistent CV analysis."""
+        # Using LANCZOS (high-quality) to avoid aliasing artifacts during evaluation
         img = pil_image.convert('RGB').resize(target_size, Image.LANCZOS)
         return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
     def _calculate_edge_fidelity(self, src: np.ndarray, gen: np.ndarray) -> float:
         """
-        Structural Edge Retention using Laplacian variance.
+        Structural Edge Retention using Laplacian Variance.
         
-        This measures how well the high-frequency structural elements (outlines) 
-        from the anime source are preserved in the photorealistic output.
+        Evaluates the preservation of high-frequency structural elements 
+        (outlines and silhouettes). It measures if the 'skeleton' of the 
+        anime character survived the diffusion process.
         """
         gray_src = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
         gray_gen = cv2.cvtColor(gen, cv2.COLOR_BGR2GRAY)
 
+        # Calculate variance of the Laplacian (measures focus/edge strength)
         edge_src = cv2.Laplacian(gray_src, cv2.CV_64F).var()
         edge_gen = cv2.Laplacian(gray_gen, cv2.CV_64F).var()
 
-        # Avoid division by zero and normalize
         max_edge = max(edge_src, edge_gen, 1e-6)
         return min(edge_src, edge_gen) / max_edge
 
     def _calculate_color_dna(self, src: np.ndarray, gen: np.ndarray) -> float:
         """
-        Perceptual Color DNA via LAB moments.
+        Perceptual Color DNA via CIELAB Moments.
         
-        Calculates the distance between the source and result in the CIELAB 
-        color space, which is designed to be perceptually uniform to human vision.
+        Measures the chromatic distance in the LAB color space, which is 
+        designed to mimic human visual perception. High scores indicate 
+        that the character's primary color palette remained intact.
         """
         lab_src = cv2.cvtColor(src, cv2.COLOR_BGR2LAB)
         lab_gen = cv2.cvtColor(gen, cv2.COLOR_BGR2LAB)
@@ -64,23 +66,27 @@ class ComputerVisionEvaluator(ScientificEvaluatorPort):
         mu_src, sigma_src = cv2.meanStdDev(lab_src)
         mu_gen, sigma_gen = cv2.meanStdDev(lab_gen)
 
-        # Euclidean distance of Mean and StdDev across L, A, and B channels
+        # Distance between means and standard deviations across L, A, and B
         dist = np.linalg.norm(mu_src - mu_gen) + np.linalg.norm(sigma_src - sigma_gen)
+        
+        # Normalize to a 0.0-1.0 scale (higher is better)
         return 1.0 / (1.0 + (dist / 100.0))
 
     def _calculate_entropy(self, image: np.ndarray) -> float:
         """
-        Normalized Shannon entropy (0.0–1.0) over grayscale channel.
+        Normalized Shannon Entropy (Information Density).
         
-        Entropy represents the "Information Density" of the image. Real-world 
-        photographs have higher entropy than flat-shaded anime drawings due to 
-        skin pores, fabric textures, and complex lighting.
+        Quantifies the randomness and complexity of the image data. 
+        Photorealistic outputs should exhibit significantly higher entropy 
+        than flat-shaded source drawings due to micro-textures (skin pores, 
+        hair strands, fabric weave).
         """
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         hist = np.histogram(gray.ravel(), bins=256)[0] / gray.size
         hist = hist[hist > 0]
         entropy = -np.sum(hist * np.log2(hist))
-        return entropy / 8.0  # Normalized for 8-bit depth
+        
+        return entropy / 8.0  # Normalized for 8-bit signal depth
 
     def assess_quality(
         self, 
@@ -89,25 +95,26 @@ class ComputerVisionEvaluator(ScientificEvaluatorPort):
         measure_time: bool = True
     ) -> AssessmentReport:
         """
-        Performs a robust multivariate evaluation of generative fidelity.
+        Primary entry point for multivariate scientific evaluation.
         
-        Calculates Structural Similarity, Identity Preservation, and Textural 
-        Realism (Information Density Gain).
+        RETURNS:
+            AssessmentReport: A structured manifold of objective metrics.
         """
         start_time = time.time() if measure_time else None
 
+        # Standardize manifolds
         img_src = self._preprocess(original_image)
         img_gen = self._preprocess(generated_image)
 
-        # 1. Structural Fidelity (Outlines and Geometry)
+        # 1. Analyze Geometry (Structural Fidelity)
         edge_fidelity = self._calculate_edge_fidelity(img_src, img_gen)
 
-        # 2. Identity Preservation (Color palette and Tone)
+        # 2. Analyze Chromatics (Identity Preservation)
         color_fidelity = self._calculate_color_dna(img_src, img_gen)
 
-        # 3. Textural Realism (Relative entropy gain)
-        # We compare the information density of the result against the source.
-        # A score > 1.0 usually indicates successful injection of photorealistic detail.
+        # 3. Analyze Information Density (Textural Realism)
+        # We calculate the gain: Entropy(Result) / Entropy(Source)
+        # A ratio > 1.0 indicates a successful injection of real-world detail.
         entropy_src = self._calculate_entropy(img_src)
         entropy_gen = self._calculate_entropy(img_gen)
         realism_score = entropy_gen / max(entropy_src, 1e-6) 
@@ -117,8 +124,8 @@ class ComputerVisionEvaluator(ScientificEvaluatorPort):
         return AssessmentReport(
             structural_similarity=round(float(edge_fidelity), 4),
             identity_preservation=round(float(color_fidelity), 4),
-            textural_realism=round(float(realism_score), 4), # Elevated to primary field
+            textural_realism=round(float(realism_score), 4),
             inference_time=round(elapsed_time, 4),
             is_mock=False,
-            full_prompt="Scientific analysis complete. Multivariate metrics synchronized."
+            full_prompt="Scientific analysis finalized. Metrics synchronized to domain."
         )

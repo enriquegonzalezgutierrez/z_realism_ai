@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  path: src/presentation/about.html
+  description: Research Mission & Technical Thesis Page v21.1.
+  
+  ABSTRACT:
+  This document outlines the scientific goals of the Z-Realism project, 
+  focusing on the methodology used to bridge the gap between stylized 
+  2D manifolds and high-fidelity photorealistic environments.
+  
+  ARCHITECTURAL ROLE (Presentation Layer):
+  Acts as the primary documentation for the research thesis. It provides 
+  context for the technical implementations found in the laboratories.
+
+  author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABOUT | Z-Realism Research Institute</title>
+
+    <!-- FAVICON CONFIGURATION -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Design System & Documentation Styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/info.css">
+</head>
+<body>
+    <!-- Persistent Ambient Cyber-Grid -->
+    <div class="grid-overlay"></div>
+
+    <!-- 
+      DYNAMIC NAVIGATION INJECTION: 
+      The <nav> is automatically injected by js/nav.js.
+    -->
+
+    <!-- Main Research Container -->
+    <main class="info-container container">
+        
+        <a href="index.html" class="back-link">&larr; BACK TO GATEWAY</a>
+
+        <!-- Thesis Header: Core Scientific Objective -->
+        <header class="info-section">
+            <span class="info-subtitle">RESEARCH MISSION</span>
+            <h1 class="info-title">Bridging Latent Dimensions</h1>
+            <div class="info-content">
+                <p>
+                    Z-Realism AI is a professional-grade research ecosystem engineered for the 
+                    photorealistic synthesis of 2D character manifolds. Our primary scientific 
+                    objective is to solve the <strong>Structural and Chromatic Drift Problems</strong>—a 
+                    prevalent challenge in neural style transfer where the geometric identity 
+                    and color integrity of the source are often compromised during 
+                    high-entropy denoising pipelines.
+                </p>
+            </div>
+        </header>
+
+        <!-- Technical Content Section -->
+        <section class="info-section info-content">
+            <h2>The Scientific Thesis</h2>
+            <p>
+                Our methodology relies on the surgical control of the stochastic denoising 
+                process. By utilizing hierarchical conditioning via <strong>Dual ControlNet 
+                (Depth + OpenPose)</strong>, the system anchors the underlying geometry 
+                before injecting high-resolution cinematic textures. This approach allows 
+                for the generation of photorealistic results without sacrificing the core 
+                essence of the original <strong>Subject DNA</strong>.
+            </p>
+
+            <div class="info-card">
+                <h4>Core Research Pillars:</h4>
+                <ul class="info-list">
+                    <li><strong>Original Fidelity Protocol:</strong> A hybrid prompt-anchoring logic that mitigates chromatic saturation loss.</li>
+                    <li><strong>Temporal Consistency:</strong> Stable Video Diffusion protocols adapted for high-resolution output on limited hardware.</li>
+                    <li><strong>Heuristic Metadata:</strong> An intelligence layer that sequences visual DNA into optimal latent parameters.</li>
+                </ul>
+            </div>
+
+            <h2>Hardware Orchestration</h2>
+            <p>
+                A critical contribution of this project is the optimization of high-latency 
+                neural workloads for consumer-grade hardware. The <strong>Z-Realism v21.1 Engine</strong> 
+                implements an aggressive VRAM resource manager and <strong>Sequential CPU-VRAM 
+                Offloading</strong>. This allows for the synthesis of 1024px video frames on 
+                NVIDIA GPUs with only 6GB of VRAM, effectively utilizing system RAM as a massive 
+                latent buffer.
+            </p>
+
+            <h2>Authorship & Clean Code</h2>
+            <p>
+                The Z-Realism project is conceptualized and developed by <strong>Enrique González Gutiérrez</strong> 
+                as part of a doctoral thesis in Informatics Engineering. The ecosystem is 
+                architected under <strong>SOLID principles</strong> and <strong>Domain-Driven Design (DDD)</strong>, 
+                ensuring that the neural engine remains modular, testable, and resilient to 
+                technological shifts in the generative AI landscape.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- 
+      SHARED ARCHITECTURAL COMPONENTS 
+    -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/cookie-consent.js"></script>
+
+</body>
+</html>

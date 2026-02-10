@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- 
-  path: src/presentation-custom/contact.html
-  description: Contact Information & Contribution Protocol v20.2 - Refactored.
+  path: src/presentation/contact.html
+  description: Contact Information & Contribution Protocol v21.1.
   
   ABSTRACT:
   Provides a specialized channel for peer review, technical support, 
   and open-source contributions to the Z-Realism Research Institute.
   
-  REFACTORING NOTE (v20.2):
-  - Decoupled from hardcoded UI components.
-  - Utilizes js/nav.js for dynamic header rendering.
-  - Utilizes js/footer.js for dynamic sitemap rendering.
+  ARCHITECTURAL ROLE (Presentation Layer):
+  Acts as the primary communication gateway for the research ecosystem. 
+  It facilitates the exchange of technical metadata and collaborative 
+  neural research.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -20,10 +20,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CONTACT | Z-Realism Research Institute</title>
 
-    <!-- FAVICON -->
+    <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     
-    <!-- Linkage to core design system and info-specific styles -->
+    <!-- Design System & Documentation Styles -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
 </head>
@@ -32,8 +32,8 @@
     <div class="grid-overlay"></div>
 
     <!-- 
-      NAV INJECTION POINT: 
-      The <nav> is automatically injected here by js/nav.js 
+      DYNAMIC NAVIGATION INJECTION: 
+      The <nav> is automatically injected by js/nav.js.
     -->
 
     <!-- Main Content Container -->
@@ -46,57 +46,61 @@
             <h1 class="info-title">Connect with the Institute</h1>
             <div class="info-content">
                 <p>
-                    The Z-Realism Research Institute is an open-source initiative. We welcome technical inquiries, 
-                    peer reviews of our neural protocols, and collaborations from the AI research community.
+                    The Z-Realism Research Institute is an open-source initiative. We welcome 
+                    technical inquiries, peer reviews of our neural protocols, and 
+                    collaborations from the global informatics engineering community.
                 </p>
             </div>
         </header>
 
         <section class="info-section info-content">
             
-            <!-- 1. PRIMARY CONTACT -->
-            <h2>Technical Inquiries</h2>
+            <!-- 1. PRIMARY TECHNICAL CONTACT -->
+            <h2>Research & Inquiries</h2>
             <p>
                 For high-level architectural questions or specific inquiries regarding the 
-                <strong>Hybrid Hardware Orchestration</strong> logic, you can reach the lead architect directly:
+                <strong>Hybrid Hardware Orchestration</strong> logic or the <strong>Subject DNA 
+                Metadata</strong> structure, you can reach the lead architect directly:
             </p>
             <div class="info-card">
                 <ul class="info-list" style="margin-bottom: 0;">
                     <li><strong>Lead Architect:</strong> Enrique González Gutiérrez</li>
                     <li><strong>Email:</strong> <a href="mailto:enrique.gonzalez.gutierrez@gmail.com" style="color: var(--accent); text-decoration: none;">enrique.gonzalez.gutierrez@gmail.com</a></li>
-                    <li><strong>Location:</strong> Madrid, Spain // Remote Neural Node</li>
+                    <li><strong>Research Node:</strong> Madrid, Spain // Distributed Lab</li>
                 </ul>
             </div>
 
             <!-- 2. CONTRIBUTION PROTOCOL -->
             <h2>Contribution Protocol</h2>
             <p>
-                As an MIT-licensed project, we encourage developers to fork the repository and propose improvements. 
-                Whether it's optimizing the <strong>AnimateDiff</strong> temporal loop or enhancing the 
-                <strong>Cyber-Capsule UI</strong>, your contributions help push the boundaries of 2D-to-Realism synthesis.
+                As an MIT-licensed project, we encourage developers and researchers to fork the 
+                repository and propose technical improvements. Whether it's optimizing the 
+                <strong>AnimateDiff</strong> temporal loop or enhancing the <strong>CIELAB 
+                evaluation heuristics</strong>, your contributions help push the boundaries 
+                of photorealistic character synthesis.
             </p>
             
             <div class="info-card">
                 <h4>How to Contribute:</h4>
                 <ol class="info-list">
-                    <li><strong>Fork the Repository:</strong> Create a local manifold of the source code.</li>
-                    <li><strong>Apply Clean Code Patterns:</strong> Ensure your changes adhere to SOLID principles and DDD architecture.</li>
-                    <li><strong>Pull Request:</strong> Submit your changes for peer review. Please include detailed telemetry data if you are modifying generative weights.</li>
+                    <li><strong>Fork the Repository:</strong> Establish a local research manifold of the source code.</li>
+                    <li><strong>Apply Clean Code Patterns:</strong> Ensure your changes adhere to SOLID principles and the established Hexagonal Architecture.</li>
+                    <li><strong>Submit for Peer Review:</strong> Open a Pull Request with detailed telemetry data if you are modifying generative weights or neural parameters.</li>
                 </ol>
             </div>
 
-            <!-- 3. REPOSITORIES -->
+            <!-- 3. DIGITAL MANIFOLDS (REPOSITORIES) -->
             <h2>Digital Manifolds</h2>
             <p>
-                Follow the evolution of the protocol and access the latest stable releases through our official 
-                version control nodes.
+                Follow the evolution of the Z-Realism protocol and access the latest stable 
+                releases through our official version control nodes.
             </p>
-            <div style="display: flex; gap: 20px; margin-top: 20px;">
+            <div style="display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
                 <a href="https://github.com/egonzalez" target="_blank" class="btn btn-secondary">
                     GITHUB REPOSITORY
                 </a>
                 <a href="architecture.html" class="btn btn-primary">
-                    VIEW ARCHITECTURE
+                    VIEW SYSTEM BLUEPRINT
                 </a>
             </div>
 
@@ -105,7 +109,7 @@
     </main>
 
     <!-- 
-      SHARED COMPONENTS 
+      SHARED ARCHITECTURAL COMPONENTS 
     -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>

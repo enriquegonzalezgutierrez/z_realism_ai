@@ -1,5 +1,5 @@
 # path: z_realism_ai/docker-compose.gpu.yml
-# description: Hardware Acceleration Layer v20.1 - NVIDIA GPU Enablement.
+# description: Hardware Acceleration Layer v21.0 - NVIDIA GPU Enablement.
 #              This override file configures the Docker container to access the
 #              host's NVIDIA GPU via the Nvidia Container Toolkit.
 #
@@ -9,8 +9,13 @@
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
+version: '3.8'
+
 services:
+  # --- Infrastructure Layer (Inference Worker) ---
+  # Target: The specific service requiring hardware acceleration.
   z-realism-worker:
+    
     # --- GPU Resource Allocation ---
     # The 'deploy' section instructs the Docker daemon to reserve specific
     # hardware resources for this container. This requires the NVIDIA Container
@@ -24,13 +29,15 @@ services:
               
               # Capabilities needed:
               # - 'gpu': General access to the GPU device.
+              # - 'compute': Required for CUDA compute capability.
+              # - 'utility': Required for nvidia-smi telemetry.
               capabilities: [gpu]
 
     # --- Hardware-Specific Environment Variables ---
     environment:
       # NVIDIA_VISIBLE_DEVICES:
       # Explicitly tells the container which GPUs it can see. 'all' is standard
-      # for single-GPU setups like laptops.
+      # for single-GPU setups like research laptops.
       - NVIDIA_VISIBLE_DEVICES=all
 
       # NVIDIA_DRIVER_CAPABILITIES:

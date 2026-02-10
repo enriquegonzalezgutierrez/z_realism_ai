@@ -1,0 +1,13 @@
+{
+    "id": "android16",
+    "aliases": ["16", "android 16"],
+    "essence": "species_android_full",
+    "prompt_base": "massive muscular humanoid, realistic ginger orange hair mohawk, intense blue eyes, green heavy industrial bio-mechanical armor",
+    "feature_prompt": "scratched olive green metal plates, exposed hydraulic joints, carbon fiber textures, realistic human skin pores, highly detailed mechanical suit",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, flat color, deformed, watermark, low quality, (bright white background:1.5)",
+    "weights": { 
+        "depth": 0.85, 
+        "openpose": 0.45
+    },
+    "denoising_strength": 0.75
+}

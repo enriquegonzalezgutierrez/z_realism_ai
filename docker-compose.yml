@@ -1,10 +1,20 @@
 # path: z_realism_ai/docker-compose.yml
-# description: Orchestration v9.0 - Stability & Silenced Warnings.
-#              Added C_FORCE_ROOT to silence Celery security warnings.
+# description: Production Orchestration v21.3 - Thesis Candidate.
+#              Defines the microservices topology for the Z-Realism ecosystem.
+#              
+# ARCHITECTURAL ROLE (Hexagonal / DDD):
+# 1. Presentation Layer (Nginx): Delivers static assets and the Cyber-Lab UI.
+# 2. Application Layer (FastAPI): Manages the RESTful Gateway and Task Dispatch.
+# 3. Domain/Infrastructure (Worker): Executes high-latency CUDA neural synthesis.
+# 4. Event Bus (Redis): Facilitates asynchronous communication via Celery.
+#
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
+version: '3.8'
+
 services:
-  # --- Message Broker ---
+  # --- 1. Event Bus (Message Broker) ---
+  # Role: Decouples the API Producer from the Worker Consumer.
   z-realism-broker:
     image: redis:7-alpine
     container_name: z_realism_redis
@@ -15,45 +25,35 @@ services:
       timeout: 5s
       retries: 5
 
-  # --- Custom Web Interface (Nginx) ---
+  # --- 2. Presentation Layer (Nginx Frontend) ---
+  # Role: Serves the laboratory interface at port 8080.
   z-realism-ui:
     image: nginx:alpine
-    container_name: z_realism_custom_ui
+    container_name: z_realism_ui
     ports:
       - "8080:80"
     volumes:
-      - ./src/presentation-custom:/usr/share/nginx/html
+      # Maps the refactored presentation directory to the web server root.
+      - ./src/presentation:/usr/share/nginx/html
     depends_on:
       - z-realism-api
 
-  # --- Expert Dashboard (Streamlit) ---
-  z-realism-dashboard:
-    build: .
-    container_name: z_realism_dashboard
-    command: streamlit run src/presentation/dashboard.py --server.port=8501 --server.address=0.0.0.0
-    ports:
-      - "8501:8501"
-    volumes:
-      - ./src:/app/src
-    environment:
-      - API_URL=http://z-realism-api:8000
-    depends_on:
-      - z-realism-api
-
-  # --- FastAPI Backend ---
+  # --- 3. Application Layer (Backend API Gateway) ---
+  # Role: Routes HTTP requests and manages the GPU Mutex.
   z-realism-api:
     build: .
-    container_name: z_realism_container
+    container_name: z_realism_api
     ports:
       - "8000:8000"
     volumes:
+      # Mounts the source code including the 'domain/metadata' knowledge base.
       - ./src:/app/src
-      - ./src/domain/lore:/app/src/domain/lore
+      # Persistent cache for neural weights.
       - hf_cache:/app/model_cache
     environment:
       - APP_HOST=0.0.0.0
       - APP_PORT=8000
-      - ENVIRONMENT=development
+      - ENVIRONMENT=production
       - HF_HOME=/app/model_cache
       - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
       - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
@@ -61,10 +61,12 @@ services:
       z-realism-broker:
         condition: service_healthy
 
-  # --- AI Inference Worker (Celery) ---
+  # --- 4. Infrastructure Layer (Inference Worker) ---
+  # Role: Consumes and executes neural manifold transformation tasks.
   z-realism-worker:
     build: .
     container_name: z_realism_worker
+    # Command: Solo pool ensures single-task GPU processing for VRAM safety.
     command: celery -A src.infrastructure.worker worker --loglevel=info --pool=solo
     volumes:
       - ./src:/app/src
@@ -74,12 +76,13 @@ services:
       - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
       - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
       - OFFLINE_MODE=false
-      # SILENCE WARNING: Tells Celery to run as root without nagging.
+      # Security flag for Celery root execution within the isolated container.
       - C_FORCE_ROOT=true
     depends_on:
       z-realism-broker:
         condition: service_healthy
 
+# --- Persistent Storage Manifolds ---
 volumes:
   hf_cache:
     driver: local

@@ -1,19 +1,19 @@
 # path: z_realism_ai/src/infrastructure/mock_generator.py
-# description: Resilient Fallback Engine v18.0 - Simulation Adapter.
+# description: Resilient Fallback Engine v21.0 - Simulation Adapter.
 #
-# ABSTRACT:
-# This module implements the ImageGeneratorPort as a deterministic fallback 
-# mechanism. It is architected to ensure the "Graceful Degradation" of the 
+# ARCHITECTURAL ROLE (Infrastructure Adapter):
+# This module implements the 'ImageGeneratorPort' as a deterministic fallback 
+# mechanism. It is architected to ensure "Graceful Degradation" of the 
 # system, allowing researchers to test the application lifecycle and UI 
 # telemetry without the presence of a CUDA-enabled neural environment.
 #
-# ARCHITECTURAL ROLE:
+# KEY PRINCIPLES:
 # 1. System Resilience: Decouples the Application Layer from strict hardware 
-#    dependencies during testing or restricted deployments.
-# 2. Visual Transparency: Employs procedural grayscale filters and technical 
-#    watermarking to communicate the "Engine Offline" status to the end user.
-# 3. Protocol Alignment: Adheres strictly to the multi-parameter signature 
-#    of the domain ports, ensuring seamless swap-ability (Liskov Substitution).
+#    dependencies during non-inference testing.
+# 2. Visual Transparency: Employs technical watermarking to communicate the 
+#    "Engine Offline" status to the researcher.
+# 3. Protocol Alignment: Adheres strictly to the Domain Port contracts 
+#    (Liskov Substitution Principle).
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -23,9 +23,9 @@ from typing import Callable, Optional, Dict, Any, Tuple
 
 class MockImageGenerator(ImageGeneratorPort):
     """
-    Simulated Neural Engine (Safe Mode Fallback).
+    Simulated Neural Engine (Deterministic Fallback).
     
-    Provides a procedurally generated visual output that adheres to the 
+    Provides a procedurally generated visual output that satisfies the 
     domain's interface contracts while bypassing GPU-intensive inference.
     """
     
@@ -42,33 +42,34 @@ class MockImageGenerator(ImageGeneratorPort):
         Executes a procedural simulation of the generative pipeline.
         
         Args:
-            source_image: The 2D subject image.
+            source_image: The source character image manifold.
             prompt_guidance: Semantic subject name.
             feature_prompt: Target material descriptors.
             resolution_anchor: Target manifold dimension.
             hyper_params: Numerical hyperparameters.
-            progress_callback: Optional telemetry link for UI synchronization.
+            progress_callback: Telemetry link for UI synchronization.
             
         Returns:
-            Tuple: (Procedurally Modified Image, Positive Prompt Mock, Negative Prompt Mock).
+            Tuple: (Modified Image, Mock Prompt, Mock Negative Prompt).
         """
         
-        print(f"MOCK_SYSTEM: AI Engine is currently OFFLINE. Executing Procedural Simulation Protocol.")
+        print(f"MOCK_SYSTEM: CUDA Engine is OFFLINE. Executing Simulation Protocol.")
         
-        # 1. Telemetry Simulation (Simulating cold-start latency)
-        # We invoke the callback to verify the frontend's polling logic.
+        # 1. Telemetry Simulation
+        # We invoke the callback to verify the frontend's async polling logic.
         if progress_callback:
+            # Simulate a 100% completion event
             progress_callback(100, 100, None)
         
-        # 2. Procedural Transformation (Identity Preservation)
-        # We convert the image to RGB to ensure canvas compatibility.
+        # 2. Procedural Transformation (Visual Indicator)
+        # Convert the image to RGB to ensure canvas compatibility.
         canvas = source_image.convert("RGB")
         
-        # We apply a Grayscale filter as a visual indicator of "Simulation Mode".
+        # Apply a Grayscale filter as a visual indicator of "Simulation Mode".
         processed = ImageOps.grayscale(canvas).convert("RGB")
         
-        # 3. Technical Watermarking (UI Transparency)
-        # This prevents researchers from mistaking the mock for a neural output.
+        # 3. Technical Watermarking (Structural Transparency)
+        # Prevents mistaking mock outputs for actual neural inference.
         draw = ImageDraw.Draw(processed)
         width, height = processed.size
         
@@ -76,23 +77,21 @@ class MockImageGenerator(ImageGeneratorPort):
         bar_height = max(20, height // 12)
         
         # Draw a high-contrast warning banner at the inferior edge
+        # Semantic 'Danger' Red (ef4444)
         draw.rectangle(
             [0, height - bar_height, width, height], 
-            fill=(239, 68, 68) # Semantic 'Danger' Red (ef4444)
+            fill=(239, 68, 68) 
         )
         
         # Inscribe the Warning Text
-        # Note: We use basic drawing for maximum compatibility within Docker images.
-        warning_message = "SIMULATION MODE: NO GPU ENGINE DETECTED"
+        warning_message = "SIMULATION MODE: NO CUDA ENGINE DETECTED"
         text_pos = (15, height - (bar_height // 1.5))
         
-        # Draw text shadow for legibility
+        # Draw text shadow for legibility in basic environments
         draw.text((text_pos[0]+1, text_pos[1]+1), warning_message, fill=(0, 0, 0))
-        # Draw text
         draw.text(text_pos, warning_message, fill=(255, 255, 255))
         
-        # 4. Signature Fulfillment
-        # We return the modified image and placeholder strings to satisfy the port requirements.
+        # 4. Interface Signature Fulfillment
         return (
             processed, 
             "N/A (Simulation Protocol Active)", 
