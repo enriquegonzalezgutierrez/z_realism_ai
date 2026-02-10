@@ -1,16 +1,16 @@
 /* 
  * path: src/presentation-custom/css/lab.css
- * description: Laboratory UI Components & Layouts v20.4 - Responsive Revision.
+ * description: Laboratory UI Components v20.5 - Header Offset Revision.
  *
  * ABSTRACT:
- * Manages the high-fidelity functional workspaces. This revision focuses on 
- * adaptive grid behaviors, ensuring the control panels and neural monitors 
- * scale correctly from ultra-wide monitors to mobile tablets.
+ * Manages the functional workspaces for neural research. This revision 
+ * fixes the height calculation to perfectly align with the fixed 
+ * navigation system and the new global container offsets.
  *
  * KEY IMPROVEMENTS:
- * 1. Mobile Stack Logic: Vertical stacking for sidebar and monitors.
- * 2. Viewport Scaling: Proportional rendering of neural manifolds.
- * 3. Touch Optimization: Refined spacing for mobile interaction.
+ * 1. Precision Height: calculated based on dynamic header tokens.
+ * 2. Independent Scroll: The control panel scrolls while the viewport stays fixed.
+ * 3. Layout Stability: Prevents content shifting behind the navigation bar.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -18,20 +18,31 @@
 /* --- 1. LABORATORY ARCHITECTURE --- */
 .lab-layout {
     display: grid;
-    /* 380px sidebar, fluid result area */
     grid-template-columns: 380px 1fr; 
     gap: 30px;
-    /* Fixed height for desktop to enable independent scrolling panels */
-    height: calc(100vh - 160px); 
-    padding: 0 40px 40px 40px;
+    
+    /* 
+       THE FIX: 
+       We take responsibility for our own positioning.
+       Push down the layout by the height of the nav + a content gap.
+    */
+    padding: calc(var(--nav-height) + var(--content-gap)) 40px 40px 40px;
+    
+    /* 
+       Height is now 100vh because the padding pushes the content area down.
+       This creates a true full-screen app feel.
+    */
+    height: 100vh;
 }
 
-/* Tablet & Mobile Breakpoint (Fluid Stack) */
+/* Tablet & Mobile Breakpoint (Fluid Vertical Stack) */
 @media (max-width: 1200px) {
     .lab-layout {
         grid-template-columns: 1fr;
-        height: auto; /* Natural scroll for vertical layouts */
-        padding: 0 20px 40px 20px;
+        height: auto; /* Let the content flow naturally */
+        padding-top: calc(var(--nav-height) + 20px); /* Adjust for mobile header height */
+        padding-left: 20px;
+        padding-right: 20px;
         gap: 40px;
     }
 }
@@ -47,14 +58,19 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-    overflow-y: auto;
+    
+    /* 
+       Allows the parameters to be scrolled independently 
+       from the result viewports on desktop.
+    */
+    overflow-y: auto; 
     scrollbar-width: thin;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
 }
 
 @media (max-width: 1200px) {
     .control-panel {
-        overflow-y: visible; /* Let the body handle scrolling */
+        overflow-y: visible; 
         padding: 25px;
     }
 }
@@ -89,7 +105,6 @@
 /* --- 3. ADVANCED MANIFOLD (ACCORDION) --- */
 .advanced-accordion {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    margin-top: 10px;
 }
 
 .accordion-trigger {
@@ -117,7 +132,7 @@
 }
 
 .accordion-trigger .arrow {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s ease;
 }
 
 .accordion-trigger.active .arrow {
@@ -141,14 +156,13 @@
     opacity: 1;
 }
 
-/* --- 4. DATA UPLOAD ZONE --- */
+/* --- 4. UPLOAD ZONE --- */
 .upload-zone {
     border: 2px dashed rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-md);
     padding: 30px 20px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.01);
 }
 
@@ -171,7 +185,7 @@
     text-transform: uppercase;
 }
 
-/* --- 5. VISUAL WORKSPACE (VIEWPORTS) --- */
+/* --- 5. VISUAL VIEWPORTS --- */
 .viewport-area {
     display: flex;
     flex-direction: column;
@@ -179,7 +193,6 @@
     height: 100%;
 }
 
-/* Multi-monitor layout on large screens */
 @media (min-width: 1400px) {
     .viewport-area { flex-direction: row; }
 }
@@ -194,8 +207,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 400px; /* Minimum usable area for neural results */
-    box-shadow: inset 0 0 80px rgba(0, 0, 0, 1);
+    min-height: 400px;
 }
 
 .viewport-label {
@@ -219,13 +231,12 @@
     object-fit: contain;
 }
 
-/* --- 6. NEURAL TELEMETRY OVERLAYS --- */
+/* --- 6. TELEMETRY OVERLAYS --- */
 .progress-overlay {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
     z-index: 20;
     display: flex;
     flex-direction: column;
@@ -258,5 +269,4 @@
     background: var(--accent);
     width: 0%;
     transition: width 0.5s ease;
-    box-shadow: 0 0 15px var(--accent);
 }

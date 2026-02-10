@@ -1,37 +1,66 @@
 /* 
  * path: src/presentation-custom/css/landing.css
- * description: Homepage / Landing Styles v20.4 - Responsive Revision.
+ * description: Homepage / Landing Styles v20.5 - Header Offset Revision.
  *
  * ABSTRACT:
- * Manages the high-impact gateway to the Institute. This revision introduces 
- * fluid typography and adaptive grid systems to ensure the cinematic 
- * experience is preserved across all device classes.
+ * Manages the high-impact gateway to the Institute. This revision fixes 
+ * the Hero section's alignment to be fully aware of the fixed navigation bar, 
+ * ensuring content is never obscured.
  *
  * KEY IMPROVEMENTS:
- * 1. Fluid Hero Title: Scales perfectly from mobile to ultra-wide.
- * 2. Performance-Aware BG: Scroll behavior optimized for mobile chips.
- * 3. Smart Module Grid: Proportional card scaling for tablets.
+ * 1. Corrected Hero Centering: Vertical alignment is now perfect.
+ * 2. Proportional Module Overlap: Cards are positioned relative to the Hero.
+ * 3. Mobile Performance Tuning: Performance-aware background attachment.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
 /* --- 1. HERO SECTION (IMPACT AREA) --- */
 .hero-section {
-    min-height: 100vh;
+    /*
+       THE FIX (v20.8):
+       - min-height: Ensures it always fills the visible screen below the nav.
+       - padding-top: Pushes the *content* down, making it start after the nav.
+       - justify-content: center: This will then center the *content* within the *remaining* space.
+       - background-size: cover & background-position: center: Ensures the image always fills the element,
+         but with the padding-top, the visible area of the image will shift down.
+    */
+    min-height: calc(100vh - var(--nav-height)); /* Ensures it fills the screen below the nav */
+    
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     text-align: center;
     position: relative;
-    padding: 100px 20px; /* Safe padding for content */
     
-    /* Background setup */
+    /* PUSH DOWN THE CONTENT inside the hero-section */
+    /* This padding will effectively center the content visually below the nav. */
+    padding: calc(var(--content-gap) * 2) 20px calc(var(--content-gap) * 2) 20px; /* Top, Right, Bottom, Left */
+    
+    /* Background properties remain */
     background: linear-gradient(to bottom, rgba(5, 5, 5, 0.4), rgba(5, 5, 5, 1)), 
                 url('../assets/hero_bg.png');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed; /* Parallax effect for desktop */
+    background-attachment: fixed;
+    
+    /* Aligns the whole section to start right after the nav */
+    margin-top: var(--nav-height); 
+}
+
+/* 
+  Mobile specific adjustments for the hero-section:
+  - Reduce overall padding to prevent content squeeze.
+  - Disable fixed background for performance.
+*/
+@media (max-width: 768px) {
+    .hero-section {
+        background-attachment: scroll; /* Performance fix for mobile parallax */
+        margin-top: var(--nav-height); /* Keep pushing it down based on mobile nav height */
+        padding-top: calc(var(--content-gap) + 20px); /* Slightly less padding on mobile */
+        padding-bottom: calc(var(--content-gap) + 20px);
+    }
 }
 
 .hero-content {
@@ -52,7 +81,6 @@
 }
 
 .hero-title {
-    /* Fluid size: scales between 2.8rem and 5.5rem based on viewport width */
     font-size: clamp(2.8rem, 9vw, 5.5rem);
     font-weight: 800;
     line-height: 1.1;
@@ -63,7 +91,6 @@
 }
 
 .hero-desc {
-    /* Fluid size: scales between 1rem and 1.25rem */
     font-size: clamp(1rem, 2vw, 1.25rem);
     color: var(--text-muted);
     margin-bottom: 50px;
@@ -77,20 +104,19 @@
     display: flex;
     gap: 20px;
     justify-content: center;
-    flex-wrap: wrap; /* Prevents buttons from cutting off */
+    flex-wrap: wrap;
 }
 
 /* --- 2. MODULE GATEWAYS (CARDS) --- */
 .modules-container {
     padding-bottom: 120px;
-    margin-top: -120px; /* Overlaps slightly with hero */
+    margin-top: -120px; /* Overlaps with hero section */
     position: relative;
     z-index: 10;
 }
 
 .modules-grid {
     display: grid;
-    /* Cards will be at least 320px wide or take full width */
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
     padding: 0 40px;
@@ -116,13 +142,11 @@
 .module-card:hover {
     transform: translateY(-15px);
     border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
 }
 
 .module-icon {
     font-size: 3rem;
     margin-bottom: 30px;
-    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
 }
 
 .module-card h3 {
@@ -130,7 +154,6 @@
     margin-bottom: 15px;
     font-family: var(--font-code);
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .module-card p {
@@ -146,9 +169,13 @@
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--accent);
-    display: flex;
-    align-items: center;
-    gap: 12px;
+}
+
+.module-card.temporal:hover {
+    border-color: var(--accent-video);
+}
+.module-card.temporal .module-link {
+    color: var(--accent-video);
 }
 
 /* --- 3. ANIMATIONS --- */
@@ -157,27 +184,25 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 4. GLOBAL RESPONSIVE TWEAKS --- */
+/* --- 4. RESPONSIVE OPTIMIZATIONS --- */
 @media (max-width: 1024px) {
-    .modules-container { margin-top: -60px; }
+    .modules-container { margin-top: -80px; }
 }
 
 @media (max-width: 768px) {
     .hero-section {
         background-attachment: scroll; /* Performance fix for mobile parallax */
-        padding-top: 140px;
+        /*
+          On mobile, the header grows. We remove the padding-top so the
+          browser's natural flow (managed by `.container`) handles the offset.
+          This is handled in main.css's mobile query.
+        */
+        padding-top: 0;
     }
-    .modules-grid {
-        padding: 0 20px;
-        gap: 20px;
-    }
-    .module-card {
-        padding: 35px;
-    }
+    .modules-grid { padding: 0 20px; gap: 20px; }
+    .module-card { padding: 35px; }
 }
 
 @media (max-width: 480px) {
-    .hero-actions .btn {
-        width: 100%; /* Stack buttons on very small screens */
-    }
+    .hero-actions .btn { width: 100%; }
 }

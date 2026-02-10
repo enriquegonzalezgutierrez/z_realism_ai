@@ -1,16 +1,16 @@
 /* 
  * path: src/presentation-custom/css/info.css
- * description: Documentation & Information Layout System v20.4 - Responsive Revision.
+ * description: Documentation & Information Layout System v20.5 - Header Offset Revision.
  *
  * ABSTRACT:
- * Provides a highly readable and structured layout for long-form content. 
- * This revision ensures that technical theses and architectural blueprints 
- * remain accessible on mobile tablets and smartphones.
+ * Provides a highly readable and structured layout for long-form content.
+ * This revision ensures the content is correctly positioned below the
+ * fixed navigation bar, using the global container's padding.
  *
  * KEY IMPROVEMENTS:
- * 1. Fluid Documentation measure: Optimized line lengths for all viewports.
- * 2. Responsive Cards: Adaptive padding for research grouping elements.
- * 3. Mobile Typography: Optimized font sizes and margins for technical reading.
+ * 1. DRY Compliance: Removed redundant padding rules.
+ * 2. Visual Rhythm: Harmonized spacing with the global design system.
+ * 3. Layout Stability: Ensures all documentation is fully visible on load.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -18,31 +18,34 @@
 /* --- 1. CORE DOCUMENTATION CONTAINER --- */
 .info-container {
     width: 100%;
-    max-width: 1000px; /* Standard measure for technical readability */
+    max-width: 1000px;
     margin: 0 auto;
-    /* Responsive padding: Larger on desktop, smaller on mobile */
-    padding: 120px 20px 100px 20px; 
+    
+    /* THE FIX: Removed padding-top. It's now handled by the global .container class. */
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 100px;
+    
     animation: infoFadeIn 0.8s ease-out;
 }
 
 @media (min-width: 768px) {
     .info-container {
-        padding: 140px 40px 100px 40px;
+        padding-left: 40px;
+        padding-right: 40px;
     }
 }
 
-/* --- 2. TYPOGRAPHY HIERARCHY (FLUID) --- */
+/* --- 2. TYPOGRAPHY HIERARCHY --- */
 .info-section {
     margin-bottom: 60px;
 }
 
 .info-title {
-    /* Fluid size: scales between 2rem and 3.5rem */
     font-size: clamp(2rem, 8vw, 3.5rem);
     font-weight: 800;
     margin-bottom: 24px;
     line-height: 1.1;
-    letter-spacing: -1px;
     background: linear-gradient(to right, #ffffff, var(--accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -57,7 +60,6 @@
     letter-spacing: 4px;
     margin-bottom: 35px;
     display: block;
-    opacity: 0.8;
 }
 
 .info-content h2 {
@@ -67,7 +69,6 @@
     color: #fff;
     border-left: 4px solid var(--accent);
     padding-left: 20px;
-    letter-spacing: -0.5px;
 }
 
 .info-content p {
@@ -86,7 +87,7 @@
 .info-card {
     background: rgba(255, 255, 255, 0.03);
     border: var(--glass-border);
-    padding: clamp(20px, 5vw, 40px); /* Fluid padding */
+    padding: clamp(20px, 5vw, 40px);
     border-radius: var(--radius-lg);
     margin: 35px 0;
     backdrop-filter: blur(10px);
@@ -144,13 +145,13 @@
     transform: translateX(-5px);
 }
 
-/* --- 6. TECHNICAL DIAGRAM CONTAINERS --- */
+/* --- 6. TECHNICAL DIAGRAMS --- */
 .mermaid {
     background: rgba(0, 0, 0, 0.3) !important;
     padding: 20px;
     border-radius: var(--radius-md);
     margin: 20px 0;
-    overflow-x: auto; /* Allow horizontal scroll for large diagrams on mobile */
+    overflow-x: auto;
     display: flex;
     justify-content: center;
 }
@@ -159,11 +160,4 @@
 @keyframes infoFadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- 8. MOBILE SPECIFIC TWEAKS --- */
-@media (max-width: 600px) {
-    .info-subtitle { letter-spacing: 2px; }
-    .info-content h2 { padding-left: 15px; }
-    .info-list li { font-size: 0.95rem; }
 }
