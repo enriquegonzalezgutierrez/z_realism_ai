@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  path: src/presentation-custom/contact.html
+  description: Contact Information & Contribution Protocol v20.2 - Refactored.
+  
+  ABSTRACT:
+  Provides a specialized channel for peer review, technical support, 
+  and open-source contributions to the Z-Realism Research Institute.
+  
+  REFACTORING NOTE (v20.2):
+  - Decoupled from hardcoded UI components.
+  - Utilizes js/nav.js for dynamic header rendering.
+  - Utilizes js/footer.js for dynamic sitemap rendering.
+
+  author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTACT | Z-Realism Research Institute</title>
+
+    <!-- FAVICON -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Linkage to core design system and info-specific styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/info.css">
+</head>
+<body>
+    <!-- Persistent Ambient Cyber-Grid -->
+    <div class="grid-overlay"></div>
+
+    <!-- 
+      NAV INJECTION POINT: 
+      The <nav> is automatically injected here by js/nav.js 
+    -->
+
+    <!-- Main Content Container -->
+    <main class="info-container">
+        
+        <a href="index.html" class="back-link">&larr; BACK TO GATEWAY</a>
+
+        <header class="info-section">
+            <span class="info-subtitle">COMMUNICATION CHANNELS</span>
+            <h1 class="info-title">Connect with the Institute</h1>
+            <div class="info-content">
+                <p>
+                    The Z-Realism Research Institute is an open-source initiative. We welcome technical inquiries, 
+                    peer reviews of our neural protocols, and collaborations from the AI research community.
+                </p>
+            </div>
+        </header>
+
+        <section class="info-section info-content">
+            
+            <!-- 1. PRIMARY CONTACT -->
+            <h2>Technical Inquiries</h2>
+            <p>
+                For high-level architectural questions or specific inquiries regarding the 
+                <strong>Hybrid Hardware Orchestration</strong> logic, you can reach the lead architect directly:
+            </p>
+            <div class="info-card">
+                <ul class="info-list" style="margin-bottom: 0;">
+                    <li><strong>Lead Architect:</strong> Enrique González Gutiérrez</li>
+                    <li><strong>Email:</strong> <a href="mailto:enrique.gonzalez.gutierrez@gmail.com" style="color: var(--accent); text-decoration: none;">enrique.gonzalez.gutierrez@gmail.com</a></li>
+                    <li><strong>Location:</strong> Madrid, Spain // Remote Neural Node</li>
+                </ul>
+            </div>
+
+            <!-- 2. CONTRIBUTION PROTOCOL -->
+            <h2>Contribution Protocol</h2>
+            <p>
+                As an MIT-licensed project, we encourage developers to fork the repository and propose improvements. 
+                Whether it's optimizing the <strong>AnimateDiff</strong> temporal loop or enhancing the 
+                <strong>Cyber-Capsule UI</strong>, your contributions help push the boundaries of 2D-to-Realism synthesis.
+            </p>
+            
+            <div class="info-card">
+                <h4>How to Contribute:</h4>
+                <ol class="info-list">
+                    <li><strong>Fork the Repository:</strong> Create a local manifold of the source code.</li>
+                    <li><strong>Apply Clean Code Patterns:</strong> Ensure your changes adhere to SOLID principles and DDD architecture.</li>
+                    <li><strong>Pull Request:</strong> Submit your changes for peer review. Please include detailed telemetry data if you are modifying generative weights.</li>
+                </ol>
+            </div>
+
+            <!-- 3. REPOSITORIES -->
+            <h2>Digital Manifolds</h2>
+            <p>
+                Follow the evolution of the protocol and access the latest stable releases through our official 
+                version control nodes.
+            </p>
+            <div style="display: flex; gap: 20px; margin-top: 20px;">
+                <a href="https://github.com/egonzalez" target="_blank" class="btn btn-secondary">
+                    GITHUB REPOSITORY
+                </a>
+                <a href="architecture.html" class="btn btn-primary">
+                    VIEW ARCHITECTURE
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- 
+      SHARED COMPONENTS 
+    -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+
+</body>
+</html>

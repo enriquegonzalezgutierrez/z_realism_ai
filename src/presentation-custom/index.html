@@ -1,223 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- 
+  path: src/presentation-custom/index.html
+  description: Gateway / Landing Page v20.5 - Modular Research Architecture.
+  
+  ABSTRACT:
+  The cinematic entry point to the Z-Realism Research Institute. 
+  Decoupled from navigation and footer components for high maintainability.
+  Serves as the router for Static and Temporal research modules.
+  
+  author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+-->
 <head>
-    <!-- Basic page needs -->
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z-REALISM | Research Institute</title>
 
-    <!-- Meta tags for responsive behavior -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- FAVICON CONFIGURATION -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     
-    <!-- Title of the document, displayed in the browser tab -->
-    <title>Z-REALISM | Research Laboratory v20.0</title>
-    
-    <!-- Link to the main stylesheet -->
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Link to Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <!-- Link to the global design system and landing-specific layout -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/landing.css">
 </head>
-
 <body>
-
-    <!-- Ambient background elements -->
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
+    <!-- Persistent Ambient Cyber-Grid Background -->
     <div class="grid-overlay"></div>
 
-    <div class="app-container">
+    <!-- 
+      DYNAMIC NAVIGATION INJECTION: 
+      The <nav> element is automatically injected by js/nav.js 
+    -->
 
-        <!-- Application Header -->
-        <header class="glass-header">
-            <div class="logo">
-                <span class="logo-icon">🐉</span>
-                <div class="logo-text">
-                    <h1>Z-REALISM</h1>
-                    <span class="version-badge">v20.0 TEMPORAL</span>
-                </div>
+    <!-- Hero Section: Primary Visual Impact Area -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <span class="hero-tag">V20.5 NEURAL RESEARCH MODULE</span>
+            <h1 class="hero-title">FROM INK<br>TO LIFE</h1>
+            <p class="hero-desc">
+                The advanced research platform for photorealistic character synthesis. 
+                Utilizing state-of-the-art Latent Diffusion and Temporal Consistency protocols 
+                to bring 2D subjects into cinematic realism.
+            </p>
+            <div class="hero-actions">
+                <a href="image-lab.html" class="btn btn-primary">
+                    ENTER STATIC LAB
+                </a>
+                <a href="video-lab.html" class="btn btn-primary" style="background: var(--accent-video); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                    ENTER TEMPORAL LAB
+                </a>
             </div>
-            <div class="status-pill" id="system-status"><span class="status-dot"></span> NEURAL ENGINE: READY</div>
-        </header>
+        </div>
+    </header>
 
-
-        <!-- Main Application Grid -->
-        <main class="main-grid">
-
-            <!-- LEFT COLUMN: Control Panel -->
-            <aside class="control-panel glass-panel">
-                
-                <!-- 1. IDENTITY SOURCE: Image Upload & DNA Analysis -->
-                <fieldset class="panel-section">
-                    <legend>🧬 IDENTITY SOURCE</legend>
-                    <input type="text" id="char-name" class="modern-input" value="Bulma" placeholder="Subject Name">
-                    <div class="upload-zone" id="drop-zone">
-                        <input type="file" id="file-upload" hidden accept="image/*">
-                        <label for="file-upload" class="upload-label" id="file-label">
-                            <span class="icon">📁</span><span class="text">LOAD SUBJECT DATA</span>
-                        </label>
-                    </div>
-                    <button id="btn-analyze" class="btn-secondary">🔍 ANALYZE DNA STRATEGY</button>
-                    <div id="essence-tag" class="essence-display">STANDBY</div>
-                </fieldset>
-                
-                <!-- 2. AUTO-PILOT: Image optimization loop -->
-                <fieldset class="panel-section optimization-panel">
-                    <legend>🤖 AUTO-PILOT (LOOP)</legend>
-                    <div class="autopilot-control">
-                        <span>Enable Optimization</span>
-                        <label class="switch">
-                            <input type="checkbox" id="chk-autotune" checked>
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div id="opt-status" class="hidden opt-status-card">
-                        <div>EVOLUTION: <span id="opt-count">0</span> / 5</div>
-                        <div>BEST SCORE: <span id="opt-score" style="color:var(--success);">0%</span></div>
-                    </div>
-                </fieldset>
-
-                <!-- 3. STATIC GUIDANCE: For Img2Img -->
-                <fieldset class="panel-section">
-                    <legend>🎨 SEMANTIC GUIDANCE</legend>
-                    <textarea id="input-prompt" class="modern-textarea">cinematic film still, high detail skin texture, hyper-realistic, 8k</textarea>
-                </fieldset>
-
-                <!-- 4. TEMPORAL FUSION: Video Animation Controls (NEW) -->
-                <fieldset class="panel-section temporal-section">
-                    <legend>🎥 TEMPORAL FUSION</legend>
-                    <div class="input-group">
-                        <label for="input-motion-prompt">Motion Guidance</label>
-                        <textarea id="input-motion-prompt" class="modern-textarea" placeholder="Describe the movement (e.g., subtle breathing, blinking eyes...)"></textarea>
-                    </div>
-                    
-                    <div class="slider-group">
-                        <label for="input-duration">Duration (<span id="val-duration">24</span> frames)</label>
-                        <input type="range" id="input-duration" min="16" max="48" step="8" value="24">
-                    </div>
-
-                    <div class="slider-group">
-                        <label for="input-fps">Motion Speed (<span id="val-fps">8</span> fps)</label>
-                        <input type="range" id="input-fps" min="8" max="24" step="2" value="8">
-                    </div>
-
-                    <div class="slider-group">
-                        <label for="input-motion-bucket">Motion Intensity (<span id="val-motion-bucket">127</span>)</label>
-                        <input type="range" id="input-motion-bucket" min="1" max="255" step="1" value="127">
-                    </div>
-
-                    <div class="slider-group">
-                        <label for="input-video-denoising">Temporal Denoising (<span id="val-video-denoising">0.20</span>)</label>
-                        <input type="range" id="input-video-denoising" min="0.10" max="0.50" step="0.05" value="0.20">
-                    </div>
-
-                    <button id="btn-animate" class="btn-secondary" style="margin-top: 10px; border-color: var(--accent); color: var(--accent);">🎬 INITIATE TEMPORAL FUSION</button>
-                </fieldset>
-
-                <!-- 5. ADVANCED CONFIGURATION: Hidden parameters -->
-                <div class="accordion-wrapper">
-                    <button class="accordion-trigger" id="acc-trigger">⚙️ ADVANCED IMAGE CONFIG <span class="arrow">▼</span></button>
-                    <div class="accordion-content" id="acc-content">
-                        <div class="slider-group">
-                            <label for="input-strength">Denoising Strength <span id="val-strength">0.70</span></label>
-                            <input type="range" id="input-strength" min="0.1" max="1.0" step="0.01" value="0.70">
-                        </div>
-                        <div class="slider-group">
-                            <label for="input-cn-depth">CN Depth Weight <span id="val-cn-depth">0.75</span></label>
-                            <input type="range" id="input-cn-depth" min="0.0" max="2.0" step="0.05" value="0.75">
-                        </div>
-                        <div class="slider-group">
-                            <label for="input-cn-pose">CN Pose Weight <span id="val-cn-pose">0.40</span></label>
-                            <input type="range" id="input-cn-pose" min="0.0" max="2.0" step="0.05" value="0.40">
-                        </div>
-                        <div class="slider-group">
-                            <label for="input-res">Resolution Anchor <span id="val-res">512</span></label>
-                            <input type="range" id="input-res" min="512" max="1024" step="64" value="512">
-                        </div>
-                        <div class="slider-group">
-                            <label for="input-steps">Inference Steps <span id="val-steps">30</span></label>
-                            <input type="range" id="input-steps" min="10" max="60" step="1" value="30">
-                        </div>
-                        <div class="slider-group">
-                            <label for="input-cfg">CFG Scale <span id="val-cfg">7.5</span></label>
-                            <input type="range" id="input-cfg" min="1" max="20" step="0.5" value="7.5">
-                        </div>
-                        <div class="input-group-enhanced">
-                            <label for="input-seed">Manual Seed</label>
-                            <div class="input-with-button">
-                                <input type="number" id="input-seed" class="modern-input" value="42">
-                                <button id="btn-random-seed" class="btn-icon" title="Generate Random Seed">🎲</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Primary Trigger: For static image fusion -->
-                <button id="btn-generate" class="btn-primary"><span class="btn-text">INITIATE NEURAL FUSION</span></button>
-            </aside>
-
+    <!-- Research Modules Grid -->
+    <main class="modules-container">
+        <div class="modules-grid">
             
-            <!-- RIGHT COLUMN: Visual Workspace -->
-            <section class="visual-workspace">
+            <!-- Module 1: Image Generation (Static Fusion) -->
+            <a href="image-lab.html" class="module-card">
+                <div class="module-icon">🖼️</div>
+                <h3>Static Fusion</h3>
+                <p>
+                    Transform 2D characters into 8K photorealistic stills. 
+                    Employs strict structural conditioning and the v19.1 Original Fidelity Protocol 
+                    to preserve identity and color accuracy.
+                </p>
+                <div class="module-link">LAUNCH MODULE &rarr;</div>
+            </a>
 
-                <div class="dual-viewport-container">
-                    
-                    <!-- Source Image Viewport -->
-                    <div class="visual-card glass-panel viewport-source">
-                        <div class="card-header">SOURCE MANIFOLD (INPUT)</div>
-                        <div class="img-container" id="source-preview">
-                            <div class="placeholder-text">LOAD IMAGE DATA</div>
-                        </div>
-                    </div>
+            <!-- Module 2: Video Generation (Temporal Fusion) -->
+            <a href="video-lab.html" class="module-card temporal">
+                <div class="module-icon" style="filter: drop-shadow(0 0 15px var(--accent-video));">🎥</div>
+                <h3>Temporal Fusion</h3>
+                <p>
+                    Infuse life into your generated stills. Apply cinematic movement, 
+                    realistic breathing, and fluid expressions using the AnimateDiff 
+                    Temporal Engine optimized for local hardware.
+                </p>
+                <div class="module-link">LAUNCH MODULE &rarr;</div>
+            </a>
 
-                    <!-- Result Viewport: Handles both <img> and <video> injections -->
-                    <div class="visual-card glass-panel viewport-result">
-                        <div class="card-header">ACTIVE CANDIDATE MONITOR</div>
-                        <div class="img-container" id="result-display">
-                            <div class="placeholder-text">WAITING FOR NEURAL SEQUENCE...</div>
-                        </div>
-                        
-                        <!-- Scientific Metrics Footer -->
-                        <div id="metrics-panel" class="metrics-strip hidden">
-                            <div class="metric-item"><span class="label">SSIM FIDELITY</span><span class="value" id="metric-ssim">0%</span></div>
-                            <div class="metric-item"><span class="label">IDENTITY DNA</span><span class="value" id="metric-id">0%</span></div>
-                            <div class="metric-item"><span class="label">INFERENCE</span><span class="value" id="metric-time">0s</span></div>
-                        </div>
-                        
-                        <!-- 
-                          Contextual Progress Overlay. 
-                          Managed via style.display = 'none' / 'flex' in app.js.
-                        -->
-                        <div id="progress-container" class="progress-overlay" style="display: none;">
-                            <div class="spinner"></div>
-                            <div id="progress-text" class="status-message">ANALYZING MANIFOLD...</div>
-                            <div class="progress-track">
-                                <div id="progress-bar" class="progress-fill"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Module 3: DNA Analysis Metadata -->
+            <div class="module-card">
+                <div class="module-icon">🧬</div>
+                <h3>DNA Analysis</h3>
+                <p>
+                    Autonomous feature extraction from source manifolds. 
+                    The analyzer extracts semantic metadata and recommends 
+                    optimal hyperparameters for the diffusion loop.
+                </p>
+                <div class="module-link" style="color: var(--text-muted);">INTEGRATED IN LABS</div>
+            </div>
 
-                <!-- Gallery Section -->
-                <div class="gallery-wrapper glass-panel">
-                    <div class="card-header">POPULATION HISTORY (CANDIDATE SELECTION)</div>
-                    <div id="candidate-gallery" class="gallery-strip"></div>
-                </div>
-            </section>
-        </main>
-    </div>
+        </div>
+    </main>
 
-    <!-- Scripts -->
-    <script src="app.js"></script>
-    <script>
-        // Seed Randomizer helper
-        document.getElementById('btn-random-seed').addEventListener('click', () => {
-            const seedInput = document.getElementById('input-seed');
-            seedInput.value = Math.floor(Math.random() * 1000000);
-            seedInput.dispatchEvent(new Event('input', { bubbles: true }));
-        });
-    </script>
+    <!-- 
+      SHARED COMPONENTS INJECTION
+      These scripts dynamically render the site-wide Nav and Footer components.
+    -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+
 </body>
-
 </html>

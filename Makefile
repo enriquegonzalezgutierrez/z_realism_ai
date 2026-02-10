@@ -1,7 +1,11 @@
 # path: z_realism_ai/Makefile
-# description: Ultimate Orchestrator v8.9 - Full Stack Management.
+# description: Ultimate Orchestrator v9.0 - Full Stack Management.
 #              Manages: Custom UI (80), Expert Dashboard (8501), API (8000), 
-#              Worker (Inference), and Broker (Redis).
+#              Worker (Inference), Broker (Redis), and Remote Sharing (Ngrok).
+#
+# NEW FEATURE (v9.0): 
+# - Added 'make share' to expose the local lab to the internet via Ngrok.
+#
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 # -----------------------------------------------------------------------------
@@ -17,7 +21,6 @@ MODEL_CACHE_VOL   = hf_cache
 # -----------------------------------------------------------------------------
 # Hardware Detection Logic
 # -----------------------------------------------------------------------------
-# Checks for nvidia-smi to determine if we inject GPU support.
 HAS_GPU := $(shell nvidia-smi > /dev/null 2>&1 && echo "yes" || echo "no")
 
 ifeq ($(HAS_GPU),yes)
@@ -43,9 +46,9 @@ CLR_BOLD    = \033[1m
 # -----------------------------------------------------------------------------
 .PHONY: help
 help: ## Display this help message
-	@printf "$(CLR_BOLD)Z-Realism AI - Full Stack Management v8.9$(CLR_RESET)\n"
+	@printf "$(CLR_BOLD)Z-Realism AI - Full Stack Management v9.0$(CLR_RESET)\n"
 	@printf "Detected Environment: $(CLR_GREEN)$(HW_STATUS)$(CLR_RESET)\n"
-	@printf "Custom UI (80):      $(CLR_CYAN)http://localhost$(CLR_RESET)\n"
+	@printf "Custom UI (8080):    $(CLR_CYAN)http://localhost:8080$(CLR_RESET)\n"
 	@printf "Expert Dashboard:    $(CLR_CYAN)http://localhost:8501$(CLR_RESET)\n"
 	@printf "Backend API (8000):  $(CLR_CYAN)http://localhost:8000$(CLR_RESET)\n\n"
 	@printf "Usage: make $(CLR_CYAN)[target]$(CLR_RESET)\n\n"
@@ -71,7 +74,7 @@ build: ## CORE Build images using the detected hardware profile
 up: ## CORE Start the entire ecosystem (UI, Dashboard, API, Worker, Redis)
 	@echo $(HW_STATUS)
 	$(DOCKER_COMPOSE_CMD) up -d
-	@printf "\n$(CLR_GREEN)System Online at http://localhost and http://localhost:8501$(CLR_RESET)\n"
+	@printf "\n$(CLR_GREEN)System Online at http://localhost:8080 and http://localhost:8501$(CLR_RESET)\n"
 
 .PHONY: down
 down: ## CORE Stop and remove all active containers
@@ -99,6 +102,12 @@ shell-worker: ## DEV Access the terminal inside the Worker container
 .PHONY: stats
 stats: ## DEV Show resource usage (CPU/GPU/RAM)
 	docker stats
+
+.PHONY: share
+share: ## DEV Expose the Laboratory UI via Ngrok for mobile testing
+	@printf "$(CLR_YELLOW)Initializing Ngrok Tunnel on Port 8080...$(CLR_RESET)\n"
+	@printf "$(CLR_CYAN)ARCHITECT NOTE:$(CLR_RESET) Ensure API_BASE_URL in js/api.js matches your public API tunnel or local IP.\n"
+	ngrok http 8080
 
 # -----------------------------------------------------------------------------
 # Danger Zone (Maintenance)

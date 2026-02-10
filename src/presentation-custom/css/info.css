@@ -1,0 +1,169 @@
+/* 
+ * path: src/presentation-custom/css/info.css
+ * description: Documentation & Information Layout System v20.4 - Responsive Revision.
+ *
+ * ABSTRACT:
+ * Provides a highly readable and structured layout for long-form content. 
+ * This revision ensures that technical theses and architectural blueprints 
+ * remain accessible on mobile tablets and smartphones.
+ *
+ * KEY IMPROVEMENTS:
+ * 1. Fluid Documentation measure: Optimized line lengths for all viewports.
+ * 2. Responsive Cards: Adaptive padding for research grouping elements.
+ * 3. Mobile Typography: Optimized font sizes and margins for technical reading.
+ *
+ * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+ */
+
+/* --- 1. CORE DOCUMENTATION CONTAINER --- */
+.info-container {
+    width: 100%;
+    max-width: 1000px; /* Standard measure for technical readability */
+    margin: 0 auto;
+    /* Responsive padding: Larger on desktop, smaller on mobile */
+    padding: 120px 20px 100px 20px; 
+    animation: infoFadeIn 0.8s ease-out;
+}
+
+@media (min-width: 768px) {
+    .info-container {
+        padding: 140px 40px 100px 40px;
+    }
+}
+
+/* --- 2. TYPOGRAPHY HIERARCHY (FLUID) --- */
+.info-section {
+    margin-bottom: 60px;
+}
+
+.info-title {
+    /* Fluid size: scales between 2rem and 3.5rem */
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-weight: 800;
+    margin-bottom: 24px;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    background: linear-gradient(to right, #ffffff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.info-subtitle {
+    font-family: var(--font-code);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 35px;
+    display: block;
+    opacity: 0.8;
+}
+
+.info-content h2 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin: 45px 0 20px 0;
+    font-family: var(--font-code);
+    color: #fff;
+    border-left: 4px solid var(--accent);
+    padding-left: 20px;
+    letter-spacing: -0.5px;
+}
+
+.info-content p {
+    font-size: clamp(1rem, 1.1vw, 1.15rem);
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+}
+
+.info-content strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* --- 3. RESEARCH CARDS & CALLOUTS --- */
+.info-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: var(--glass-border);
+    padding: clamp(20px, 5vw, 40px); /* Fluid padding */
+    border-radius: var(--radius-lg);
+    margin: 35px 0;
+    backdrop-filter: blur(10px);
+}
+
+.info-card h4 {
+    color: white;
+    margin-bottom: 15px;
+    font-family: var(--font-code);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- 4. DATA LISTS --- */
+.info-list {
+    list-style: none;
+    margin-bottom: 30px;
+}
+
+.info-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 18px;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.info-list li::before {
+    content: '🧬';
+    position: absolute;
+    left: 0;
+    font-size: 0.85rem;
+    top: 4px;
+}
+
+/* --- 5. NAVIGATION --- */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    transition: 0.3s ease;
+    text-transform: uppercase;
+}
+
+.back-link:hover {
+    color: var(--accent);
+    transform: translateX(-5px);
+}
+
+/* --- 6. TECHNICAL DIAGRAM CONTAINERS --- */
+.mermaid {
+    background: rgba(0, 0, 0, 0.3) !important;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin: 20px 0;
+    overflow-x: auto; /* Allow horizontal scroll for large diagrams on mobile */
+    display: flex;
+    justify-content: center;
+}
+
+/* --- 7. ANIMATIONS --- */
+@keyframes infoFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 8. MOBILE SPECIFIC TWEAKS --- */
+@media (max-width: 600px) {
+    .info-subtitle { letter-spacing: 2px; }
+    .info-content h2 { padding-left: 15px; }
+    .info-list li { font-size: 0.95rem; }
+}

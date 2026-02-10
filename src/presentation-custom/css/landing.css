@@ -1,0 +1,183 @@
+/* 
+ * path: src/presentation-custom/css/landing.css
+ * description: Homepage / Landing Styles v20.4 - Responsive Revision.
+ *
+ * ABSTRACT:
+ * Manages the high-impact gateway to the Institute. This revision introduces 
+ * fluid typography and adaptive grid systems to ensure the cinematic 
+ * experience is preserved across all device classes.
+ *
+ * KEY IMPROVEMENTS:
+ * 1. Fluid Hero Title: Scales perfectly from mobile to ultra-wide.
+ * 2. Performance-Aware BG: Scroll behavior optimized for mobile chips.
+ * 3. Smart Module Grid: Proportional card scaling for tablets.
+ *
+ * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+ */
+
+/* --- 1. HERO SECTION (IMPACT AREA) --- */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 100px 20px; /* Safe padding for content */
+    
+    /* Background setup */
+    background: linear-gradient(to bottom, rgba(5, 5, 5, 0.4), rgba(5, 5, 5, 1)), 
+                url('../assets/hero_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Parallax effect for desktop */
+}
+
+.hero-content {
+    z-index: 2;
+    max-width: 950px;
+    animation: fadeInSlideUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hero-tag {
+    font-family: var(--font-code);
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    margin-bottom: 25px;
+    display: block;
+}
+
+.hero-title {
+    /* Fluid size: scales between 2.8rem and 5.5rem based on viewport width */
+    font-size: clamp(2.8rem, 9vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    text-shadow: 0 10px 40px rgba(0, 0, 0, 1);
+}
+
+.hero-desc {
+    /* Fluid size: scales between 1rem and 1.25rem */
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-muted);
+    margin-bottom: 50px;
+    line-height: 1.7;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap; /* Prevents buttons from cutting off */
+}
+
+/* --- 2. MODULE GATEWAYS (CARDS) --- */
+.modules-container {
+    padding-bottom: 120px;
+    margin-top: -120px; /* Overlaps slightly with hero */
+    position: relative;
+    z-index: 10;
+}
+
+.modules-grid {
+    display: grid;
+    /* Cards will be at least 320px wide or take full width */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    padding: 0 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.module-card {
+    background: var(--bg-panel);
+    border: var(--glass-border);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    padding: 50px;
+    border-radius: var(--radius-lg);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-decoration: none;
+    color: white;
+}
+
+.module-card:hover {
+    transform: translateY(-15px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.module-icon {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+}
+
+.module-card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    font-family: var(--font-code);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.module-card p {
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    font-size: 1rem;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.module-link {
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* --- 3. ANIMATIONS --- */
+@keyframes fadeInSlideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 4. GLOBAL RESPONSIVE TWEAKS --- */
+@media (max-width: 1024px) {
+    .modules-container { margin-top: -60px; }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        background-attachment: scroll; /* Performance fix for mobile parallax */
+        padding-top: 140px;
+    }
+    .modules-grid {
+        padding: 0 20px;
+        gap: 20px;
+    }
+    .module-card {
+        padding: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-actions .btn {
+        width: 100%; /* Stack buttons on very small screens */
+    }
+}

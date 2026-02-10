@@ -1,0 +1,219 @@
+/* 
+ * path: src/presentation-custom/css/main.css
+ * description: Core Design System & Global Responsive Architecture v20.4.
+ *
+ * ABSTRACT:
+ * The foundation of the Z-Realism Institute visual identity. 
+ * This file manages the root tokens, the global reset, the standardized 
+ * Form Engine, and the shared UI components (Nav & Footer) with 
+ * full responsive support.
+ *
+ * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+ */
+
+/* --- 1. DESIGN TOKENS --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    --bg-dark: #050505;
+    --bg-panel: rgba(20, 20, 25, 0.75);
+    --primary: #3b82f6;
+    --accent: #8b5cf6;
+    --accent-video: #10b981;
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --input-bg: rgba(0, 0, 0, 0.5);
+    --radius-lg: 16px;
+    --radius-md: 8px;
+    --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-code: 'JetBrains Mono', monospace;
+    --nav-height: 80px;
+}
+
+/* --- 2. GLOBAL RESET & BASE --- */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-ui);
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Cyber-Grid Background */
+.grid-overlay {
+    position: fixed; inset: 0; z-index: -1;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+}
+
+/* --- 3. FORM ENGINE (STABLE & RESPONSIVE) --- */
+.modern-input, .modern-textarea, .modern-select {
+    width: 100%; /* Adapts to container */
+    max-width: 100%;
+    background: var(--input-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    color: #fff;
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+}
+
+.modern-input:focus, .modern-textarea:focus {
+    border-color: var(--accent);
+    background: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+/* Browser Autocomplete Fix */
+input:-webkit-autofill {
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0px 1000px var(--bg-dark) inset !important;
+}
+
+/* --- 4. NAVIGATION (RESPONSIVE) --- */
+.main-nav {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 40px; 
+    height: var(--nav-height);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: var(--glass-border);
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+}
+
+.nav-logo {
+    font-family: var(--font-code); font-weight: 700; font-size: 1.1rem;
+    color: white; text-decoration: none; display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+}
+.nav-logo span { color: var(--accent); }
+
+.nav-links { 
+    display: flex; 
+    gap: 25px; 
+}
+
+.nav-item {
+    color: var(--text-muted); text-decoration: none; font-size: 0.75rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
+    transition: 0.3s; position: relative;
+}
+
+.nav-item:hover, .nav-item.active { color: white; }
+.nav-item.active::after {
+    content: ''; position: absolute; bottom: -6px; left: 0;
+    width: 100%; height: 2px; background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+}
+
+/* Mobile Nav Breakpoint */
+@media (max-width: 850px) {
+    .main-nav {
+        flex-direction: column;
+        height: auto;
+        padding: 15px 20px;
+        gap: 15px;
+    }
+    .nav-links {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .nav-item { font-size: 0.65rem; }
+}
+
+/* --- 5. SHARED SITE FOOTER (RESTORED) --- */
+.site-footer {
+    background: rgba(0, 0, 0, 0.95);
+    border-top: var(--glass-border);
+    padding: 80px 40px 40px 40px;
+    margin-top: 100px;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-grid {
+    max-width: 1400px;
+    margin: 0 auto 60px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+}
+
+.footer-brand h3 {
+    font-family: var(--font-code); color: white; margin-bottom: 20px; font-size: 1.2rem;
+}
+
+.footer-brand p {
+    font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; max-width: 300px;
+}
+
+.footer-col h4 {
+    font-family: var(--font-code); font-size: 0.7rem; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px;
+}
+
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a {
+    color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+}
+.footer-links a:hover { color: white; padding-left: 5px; }
+
+.footer-bottom {
+    max-width: 1400px; margin: 0 auto; padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+}
+
+.footer-copy { font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-code); }
+
+.status-badge {
+    font-size: 0.6rem; font-family: var(--font-code); color: var(--accent-video);
+    background: rgba(16, 185, 129, 0.05); padding: 6px 14px;
+    border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+/* --- 6. BUTTON COMPONENTS --- */
+.btn {
+    padding: 12px 24px; border-radius: var(--radius-md); border: none;
+    cursor: pointer; font-family: var(--font-code); font-weight: 700;
+    font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+    transition: all 0.3s ease; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+}
+
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+.btn-secondary {
+    background: transparent; border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+}
+.btn-secondary:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+
+/* --- 7. UTILITIES --- */
+.container { max-width: 1600px; margin: 0 auto; padding-top: calc(var(--nav-height) + 40px); }
+.hidden { display: none !important; }

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  path: src/presentation-custom/legal.html
+  description: Legal Terms, AI Licenses, and Neural Cache Protocol v20.2.
+  
+  ABSTRACT:
+  A comprehensive legal framework for the Z-Realism ecosystem. 
+  It defines the boundaries of software ownership, ethical AI usage 
+  restrictions, and local data privacy (Cookies).
+  
+  REFACTORING NOTE (v20.2):
+  - Modularized navigation and footer via JS injection.
+  - Consolidated MIT and RAIL-M licensing documentation.
+
+  author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEGAL | Z-Realism Research Institute</title>
+
+    <!-- FAVICON -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Linkage to core design system and info-specific styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/info.css">
+</head>
+<body>
+    <!-- Persistent Ambient Cyber-Grid -->
+    <div class="grid-overlay"></div>
+
+    <!-- 
+      NAV INJECTION POINT: 
+      The <nav> is automatically injected here by js/nav.js 
+    -->
+
+    <!-- Main Content Container -->
+    <main class="info-container">
+        
+        <a href="index.html" class="back-link">&larr; BACK TO GATEWAY</a>
+
+        <header class="info-section">
+            <span class="info-subtitle">LEGAL FRAMEWORK</span>
+            <h1 class="info-title">Terms & Protocols</h1>
+            <div class="info-content">
+                <p>
+                    By accessing the Z-Realism Research Laboratories, you agree to operate within the 
+                    ethical and legal boundaries defined in this document. This platform is a research-oriented 
+                    system and requires responsible interaction with neural generative technologies.
+                </p>
+            </div>
+        </header>
+
+        <section class="info-section info-content">
+            
+            <!-- 1. SOFTWARE LICENSE -->
+            <h2>1. Software License (MIT)</h2>
+            <p>
+                The source code of the Z-Realism AI ecosystem is licensed under the <strong>MIT License</strong>. 
+                Copyright &copy; 2024 Enrique González Gutiérrez. You are free to use, copy, modify, 
+                merge, and distribute the code, provided that the original copyright notice and 
+                this permission notice are included in all copies or substantial portions of the Software.
+            </p>
+
+            <!-- 2. AI MODEL LICENSE -->
+            <h2>2. Neural Model License (RAIL-M)</h2>
+            <p>
+                While the orchestration code is MIT, the underlying neural weights (Stable Diffusion v1.5, 
+                ControlNet, and AnimateDiff) are subject to the <strong>CreativeML Open RAIL-M License</strong>.
+            </p>
+            <div class="info-card">
+                <h4>Mandatory Usage Restrictions:</h4>
+                <ul class="info-list">
+                    <li>You may not use the model to produce or share illegal or harmful content.</li>
+                    <li>You may not use the model to create sexually explicit content without consent or deepfakes intended to deceive.</li>
+                    <li>The user bears full responsibility for the generated manifolds and their subsequent distribution.</li>
+                </ul>
+            </div>
+
+            <!-- 3. NEURAL CACHE (COOKIES) -->
+            <h2>3. Neural Cache Protocol (Cookie Policy)</h2>
+            <p>
+                Z-Realism values data sovereignty. Our "Neural Cache" system operates strictly 
+                at a functional level. We do not use tracking or advertising cookies.
+            </p>
+            <div class="info-card">
+                <p style="font-size: 0.9rem; margin-bottom: 0;">
+                    <strong>Local Session Storage:</strong> We utilize browser session cookies to track 
+                    Neural Task IDs (Celery Tasks). This ensures that if you refresh the page during 
+                    a long inference process, the system can reconnect to the active task and retrieve your result. 
+                    <strong>No personal data is ever collected or transmitted to external servers.</strong>
+                </p>
+            </div>
+
+            <!-- 4. DISCLAIMER -->
+            <h2>4. Disclaimer of Liability</h2>
+            <p>
+                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. 
+                IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES 
+                OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+                OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- 
+      SHARED COMPONENTS 
+    -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+
+</body>
+</html>
