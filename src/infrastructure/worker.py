@@ -1,18 +1,16 @@
 # path: z_realism_ai/src/infrastructure/worker.py
-# description: Distributed Inference Worker v19.0 - Multi-Modal Orchestration.
+# description: Distributed Inference Worker v20.2 - Hybrid Hardware Orchestration.
 #
 # ABSTRACT:
 # This module implements the asynchronous processing consumer for the Z-Realism 
 # ecosystem. It manages two primary pipelines: Static Image Transformation 
-# and Temporal Video Animation. 
+# and Temporal Video Animation.
 #
-# ARCHITECTURAL FEATURES:
-# 1. Dual-Singleton Architecture: Implements lazy-loading for both the 
-#    Static Generator and the Video Generator to optimize VRAM/RAM lifecycle.
-# 2. VRAM Safety: Coordinated with the API Gateway's Redis Mutex to ensure 
-#    the GTX 1060 (6GB) is never over-allocated.
-# 3. Temporal Telemetry: Provides real-time progress updates for multi-frame 
-#    synthesis (Video).
+# CRITICAL FEATURE (v20.2):
+# Implements "Context-Aware Resource Management". 
+# - If NVIDIA Hardware is detected, it enforces strict single-model VRAM usage
+#   and aggressive cache clearing to support 6GB cards.
+# - If CPU-only is detected, it gracefully degrades to standard RAM management.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -21,6 +19,7 @@ import io
 import base64
 import torch
 import time
+import gc  # Standard Python Garbage Collector
 from celery import Celery
 from PIL import Image
 
@@ -37,42 +36,88 @@ RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://z-realism-broker:63
 celery_app = Celery("z_realism_worker", broker=BROKER_URL, backend=RESULT_BACKEND)
 
 celery_app.conf.update(
-    task_track_started=True, 
-    worker_prefetch_multiplier=1, # Strict hardware single-tenancy
+    task_track_started=True,
+    # CRITICAL: 'prefetch_multiplier=1' ensures the worker only takes one task 
+    # at a time. This is vital for GPU workloads where VRAM is a shared resource.
+    worker_prefetch_multiplier=1, 
     task_acks_late=True,
     broker_connection_retry_on_startup=True
 )
 
-# --- 2. SINGLETON INITIALIZATION (Lazy Loading) ---
-_use_case_instance = None
-_video_gen_instance = None
+# --- 2. GLOBAL STATE FOR MEMORY MANAGEMENT ---
+# We track the active model type to avoid reloading if the task type hasn't changed.
+_current_model_instance = None
+_current_model_type = None  # Values: 'STATIC', 'TEMPORAL', or None
 
-def get_use_case(task_instance):
-    """Retrieves or initializes the Static Image Case singleton."""
-    global _use_case_instance
-    if _use_case_instance is None:
-        task_instance.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'LOADING_IMAGE_MODELS'})
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+def manage_hardware_resources(target_type: str):
+    """
+    Hybrid Resource Manager.
+    
+    Dynamically adapts to the underlying hardware (CPU vs GPU) to ensure
+    stability during model switching.
+    
+    Args:
+        target_type (str): 'STATIC' for Image Generation, 'TEMPORAL' for Video.
+        
+    Returns:
+        The requested model instance (initialized or cached).
+    """
+    global _current_model_instance, _current_model_type
+
+    # 1. CACHE HIT: If the requested model is already loaded, return it.
+    if _current_model_instance is not None and _current_model_type == target_type:
+        print(f"WORKER_SYS: Cache Hit. Reusing {target_type} model.")
+        return _current_model_instance
+
+    # 2. CONTEXT SWITCH (CACHE MISS):
+    # We need to unload the current model to free up resources for the new one.
+    if _current_model_instance is not None:
+        print(f"WORKER_SYS: Context Switch ({_current_model_type} -> {target_type}). Releasing memory...")
+        
+        # A. Explicitly delete object references
+        del _current_model_instance
+        _current_model_instance = None
+        
+        # B. Standard RAM Cleanup (CPU/System RAM)
+        # This is necessary on both Laptop and PC to free up main memory.
+        gc.collect()
+        
+        # C. GPU VRAM Cleanup (Conditional)
+        # Only runs if NVIDIA hardware is detected. Prevents "Out of Memory" on the 1060.
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.ipc_collect()
+            print(f"WORKER_SYS: GPU VRAM Purged. Free VRAM: {torch.cuda.mem_get_info()[0] / 1024**3:.2f} GB")
+        else:
+            print(f"WORKER_SYS: System RAM Collected.")
+
+    # 3. INITIALIZATION: Load the new requested model.
+    # Automatic Hardware Detection:
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"WORKER_SYS: Initializing {target_type} engine on [{device.upper()}]...")
+
+    if target_type == 'STATIC':
+        # Initialize Static Pipeline Components
         evaluator = ComputerVisionEvaluator()
         generator = StableDiffusionGenerator(device=device)
-        _use_case_instance = TransformCharacterUseCase(generator, evaluator)
-    return _use_case_instance
+        # Wrap in Use Case
+        _current_model_instance = TransformCharacterUseCase(generator, evaluator)
+        _current_model_type = 'STATIC'
+        
+    elif target_type == 'TEMPORAL':
+        # Initialize Temporal Pipeline Components
+        _current_model_instance = StableVideoAnimateDiffGenerator(device=device)
+        _current_model_type = 'TEMPORAL'
 
-def get_video_generator(task_instance):
-    """Retrieves or initializes the Video Animation Generator singleton."""
-    global _video_gen_instance
-    if _video_gen_instance is None:
-        task_instance.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'LOADING_TEMPORAL_MODELS'})
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        # The Video Generator is specifically tuned for 6GB VRAM offloading
-        _video_gen_instance = StableVideoAnimateDiffGenerator(device=device)
-    return _video_gen_instance
+    return _current_model_instance
 
 # --- 3. TASK DEFINITIONS ---
 
 @celery_app.task(name="transform_character_task", bind=True)
 def transform_character_task(self, image_b64, character_name, feature_prompt, resolution_anchor, hyper_params):
-    """Orchestrates the Image-to-Image photorealism pipeline."""
+    """
+    Orchestrates the Image-to-Image photorealism pipeline.
+    """
     total_steps = int(hyper_params.get("steps", 30))
 
     def on_progress(current, total=total_steps, preview_b64=None):
@@ -81,9 +126,16 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
 
     try:
         self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'INITIALIZING'})
+        
+        # 1. Decode Input
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
-        use_case = get_use_case(self)
+        
+        # 2. Resource Management (Switch to Static Mode)
+        self.update_state(state='PROGRESS', meta={'percent': 5, 'status_text': 'LOADING_STATIC_ENGINE'})
+        # Uses the Hybrid Manager to safely load the model
+        use_case = manage_hardware_resources('STATIC')
 
+        # 3. Execution
         result_pil, report = use_case.execute(
             image_file=source_pil, 
             character_name=character_name,
@@ -96,6 +148,7 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
         self.update_state(state='PROGRESS', meta={'percent': 100, 'status_text': 'FINALIZING'})
         time.sleep(0.5) 
 
+        # 4. Encoding Output
         buffered = io.BytesIO()
         result_pil.save(buffered, format="PNG")
         
@@ -115,7 +168,9 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
 
 @celery_app.task(name="animate_character_task", bind=True)
 def animate_character_task(self, image_b64, character_name, video_params):
-    """Orchestrates the Temporal (Video) synthesis pipeline."""
+    """
+    Orchestrates the Temporal (Video) synthesis pipeline.
+    """
     
     def on_progress(current, total, status_msg="ANIMATING"):
         pct = min(max(int((current / total) * 100), 0), 100)
@@ -123,17 +178,21 @@ def animate_character_task(self, image_b64, character_name, video_params):
 
     try:
         self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'DECODING_SOURCE'})
+        
+        # 1. Decode Input
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
         
-        # Load Video Generator (Supports Sequential CPU Offloading)
-        video_gen = get_video_generator(self)
+        # 2. Resource Management (Switch to Temporal Mode)
+        # Automatically purges VRAM if switching from Static to Temporal
+        self.update_state(state='PROGRESS', meta={'percent': 5, 'status_text': 'LOADING_TEMPORAL_ENGINE'})
+        video_gen = manage_hardware_resources('TEMPORAL')
         
-        # Note: In a production DDD environment, this would go through a Use Case.
-        # For this implementation, we call the Infrastructure Generator directly.
+        # 3. Execution
+        # The logic inside video_gen handles further hardware-specific details (like offloading)
         report = video_gen.animate_image(
             source_image=source_pil,
             motion_prompt=video_params.get("motion_prompt"),
-            character_lore={"name": character_name}, # Simplified lore link
+            character_lore={"name": character_name}, 
             duration_frames=video_params.get("duration_frames", 24),
             fps=video_params.get("fps", 8),
             hyper_params=video_params,

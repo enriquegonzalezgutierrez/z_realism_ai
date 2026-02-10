@@ -1,27 +1,54 @@
 # path: z_realism_ai/docker-compose.gpu.yml
-# description: Hardware Acceleration Layer for NVIDIA GPUs.
-#              Enables CUDA support inside the container via Nvidia Container Toolkit.
+# description: Hardware Acceleration Layer v20.1 - NVIDIA GPU Enablement.
+#              This override file configures the Docker container to access the
+#              host's NVIDIA GPU via the Nvidia Container Toolkit.
+#
+# CRITICAL OPTIMIZATION (GTX 1060 6GB):
+# It includes the 'PYTORCH_CUDA_ALLOC_CONF' environment variable to manage
+# memory fragmentation, essential for high-resolution generation on 6GB cards.
+#
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 services:
   z-realism-worker:
     # --- GPU Resource Allocation ---
-    # The 'deploy' section allows Docker to map the physical GPU 
-    # into the container's namespace.
+    # The 'deploy' section instructs the Docker daemon to reserve specific
+    # hardware resources for this container. This requires the NVIDIA Container
+    # Toolkit to be installed on the host machine.
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
-              # Capabilities needed for Deep Learning (CUDA)
+              count: 1          # Number of GPUs to reserve (1)
+              
+              # Capabilities needed:
+              # - 'gpu': General access to the GPU device.
               capabilities: [gpu]
 
-    # --- Hardware-Specific Environment ---
+    # --- Hardware-Specific Environment Variables ---
     environment:
-      # Ensures the container sees the GPU.
+      # NVIDIA_VISIBLE_DEVICES:
+      # Explicitly tells the container which GPUs it can see. 'all' is standard
+      # for single-GPU setups like laptops.
       - NVIDIA_VISIBLE_DEVICES=all
-      # Enables Compute (CUDA) and Utility (smi) drivers.
+
+      # NVIDIA_DRIVER_CAPABILITIES:
+      # Controls which driver libraries are mounted into the container.
+      # - 'compute': Required for CUDA applications (Neural Networks).
+      # - 'utility': Required for nvidia-smi command (Telemetry).
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
-      # Explicit flag for the internal Python logic to select "cuda" device.
+
+      # DEVICE_TARGET:
+      # Internal application flag (used in worker.py) to confirm we intend
+      # to use CUDA, triggering the loading of fp16 models.
       - DEVICE_TARGET=cuda
+      
+      # --- MEMORY FRAGMENTATION CONTROL (CRITICAL FOR 6GB VRAM) ---
+      # PYTORCH_CUDA_ALLOC_CONF:
+      # This tunes PyTorch's internal memory management. 
+      # 'max_split_size_mb:128' tells the allocator not to split memory blocks
+      # smaller than 128MB. This reduces fragmentation, ensuring that when 
+      # the VRAM is near full (e.g., during Video Decoding), there are large 
+      # enough contiguous blocks available to prevent an "Out of Memory" crash.
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
