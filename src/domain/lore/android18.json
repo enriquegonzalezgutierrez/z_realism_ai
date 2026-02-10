@@ -2,9 +2,9 @@
     "id": "android18",
     "aliases": ["18", "android 18", "lazuli"],
     "essence": "species_human_cyborg",
-    "prompt_base": "cinematic photograph of a beautiful young scandinavian woman, piercing cold blue eyes, short blonde bob hair, blue denim jacket, striped sleeves",
-    "feature_prompt": "hyper-realistic skin texture, visible fabric weave, detailed denim and knit textures, Fujifilm XT3 style",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, doll, exaggerated eyes, flat lighting, low quality, smooth skin, blurry hair",
+    "prompt_base": "beautiful scandinavian woman, piercing cold blue eyes, short straight blonde bob hair, blue denim jacket, black and white striped sleeves",
+    "feature_prompt": "visible denim fabric weave, knitted striped sleeves texture, realistic skin pores, Fujifilm XT3 style",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, doll, exaggerated eyes, low quality, smooth skin, blurry hair",
     "weights": { 
         "depth": 0.60, 
         "openpose": 0.75 

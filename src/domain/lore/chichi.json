@@ -1,0 +1,13 @@
+{
+    "id": "chichi",
+    "aliases": ["chi-chi", "milk"],
+    "essence": "species_human_matriarch",
+    "prompt_base": "photograph of a slender East-Asian woman, long straight black hair in a neat bun, wearing a blue silk qipao and soft pink silk scarf",
+    "feature_prompt": "subtle subsurface scattering, sharp lines on silk embroidery, realistic silk fabric weave, delicate bone structure",
+    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, exaggerated eyes, flat lighting, low quality, messy bun, neon colors",
+    "weights": { 
+        "depth": 0.60,
+        "openpose": 0.75
+    },
+    "denoising_strength": 0.64
+}

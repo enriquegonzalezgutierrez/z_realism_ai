@@ -1,17 +1,18 @@
 # path: z_realism_ai/src/infrastructure/analyzer.py
-# description: Expert Heuristic Analyzer v19.7 - Hierarchical Strategy Synthesis & Token Safety.
+# description: Expert Heuristic Analyzer v20.0 - Multi-Modal Strategy Synthesis.
 #
 # ABSTRACT:
-# This revision centralizes the prompt construction logic. It now retrieves 
-# generic "Realism Fragments" from the default lore configuration, combines 
-# them with the character's specific "prompt_base" (lore), and synthesizes 
-# a single, token-safe final prompt (max ~70 segments) to ensure the 
-# generative engine (SD) receives prioritized instructions.
+# This module serves as the intelligence layer for the Z-Realism ecosystem. 
+# It performs heuristic analysis on pixel manifolds and retrieves character-specific 
+# lore from the JSON library to synthesize optimal generation strategies.
 #
-# TECHNICAL IMPROVEMENTS (v19.7):
-# 1. Prompt Synthesis: Combines Character Lore, Lighting Analysis, and Global Realism Fragments.
-# 2. Token Safety: Ensures the most critical information is placed first.
-# 3. Lore Integration: Loads 'realism_fragments' list from default.json.
+# ARCHITECTURAL EVOLUTION (v20.0):
+# 1. Temporal Lore Support: Refactored lore retrieval to support the 
+#    AnimateCharacterUseCase, ensuring visual consistency in video synthesis.
+# 2. Token Safety (Maintained): Ensures synthesized prompts remain within 
+#    the high-priority CLIP window (max 70 segments).
+# 3. Hierarchical Merging: Character-specific JSONs always override the 
+#    default.json manifold for precision targeting.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -28,26 +29,26 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
     Expert Analytical Engine for Predictive Diffusion Tuning.
     
     Acts as the bridge between raw pixel manifolds and the latent diffusion 
-    hyperparameter space.
+    hyperparameter space for both Stills and Video.
     """
 
     def __init__(self):
         # Path to the Domain-Specific Lore Library
         self.lore_dir = "/app/src/domain/lore/"
-        # Load the global default lore once
+        # Load the global default lore once to optimize performance
         self._default_lore = self._load_default_lore()
 
     def _load_default_lore(self) -> dict:
-        """Loads the global default lore configuration, including realism fragments."""
+        """Loads the global default lore configuration including realism fragments."""
         default_path = os.path.join(self.lore_dir, "default.json")
         if os.path.exists(default_path):
             try:
                 with open(default_path, 'r') as f:
                     return json.load(f)
             except Exception as e:
-                print(f"WARNING: Could not load default lore file. Using hardcoded invariants. Error: {e}")
+                print(f"WARNING: Could not load default lore file. Using invariants. Error: {e}")
         
-        # Emergency Procedural Invariants (matching default.json structure)
+        # Emergency Procedural Invariants (Safety Fallback)
         return {
             "essence": "unknown_entity",
             "prompt_base": "cinematic portrait, realistic human features",
@@ -65,10 +66,10 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
         query = name.lower()
         json_files = glob.glob(os.path.join(self.lore_dir, "*.json"))
         
-        # Start with default lore
+        # Start with a copy of the default lore
         merged_lore = self._default_lore.copy()
 
-        # Phase 1: Search for specific subject manifold
+        # Search for specific subject manifold
         for file_path in json_files:
             if "default.json" in file_path: 
                 continue
@@ -76,6 +77,7 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
             try:
                 with open(file_path, 'r') as f:
                     data = json.load(f)
+                    # Check if the character name matches any alias in the JSON
                     if any(alias in query for alias in data.get("aliases", [])):
                         # Character-specific lore overrides defaults
                         merged_lore.update(data)
@@ -83,26 +85,24 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
             except: 
                 continue
 
-        # If no specific lore found, return the default
+        # If no specific lore found, return the sanitized default
         return merged_lore
 
     def _synthesize_prompt(self, lore: dict, lighting: str) -> str:
         """
         Creates a final, prioritized, and token-safe prompt manifold.
-        
-        Priority Order: Character Lore -> Realism Fragments -> Lighting/Aesthetics
+        Priority: Character Lore -> Realism Fragments -> Contextual Lighting.
         """
-        
-        # 1. CORE IDENTITY & LORE (Highest Priority)
+        # 1. CORE IDENTITY (Highest Priority)
         character_lore = lore.get('prompt_base', '')
 
-        # 2. GLOBAL REALISM FRAGMENTS (Character overrides default if exists)
+        # 2. GLOBAL REALISM (Character overrides default if exists)
         realism_fragments = lore.get('realism_fragments', self._default_lore.get('realism_fragments', []))
         
-        # 3. LIGHTING (Contextual Aesthetic)
-        lighting_fragment = lighting.strip()  # Evita fragmentos vacíos
+        # 3. LIGHTING (Contextual Aesthetic from CV Analysis)
+        lighting_fragment = lighting.strip()
         
-        # Combine in priority order: LORE -> REALISM -> LIGHTING
+        # Combine in priority order
         raw_fragments = [character_lore] + realism_fragments
         if lighting_fragment:
             raw_fragments.append(lighting_fragment)
@@ -115,22 +115,18 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
         seen = set()
         clean_tokens = [w for w in all_words if w and not (w in seen or seen.add(w))]
         
-        # Enforce a soft limit (70 tokens/segments) for safety
-        final_prompt = ", ".join(clean_tokens[:70]) 
-        
-        return final_prompt
+        # Enforce a soft limit (70 tokens) for CLIP safety
+        return ", ".join(clean_tokens[:70]) 
     
     def _detect_background_policy(self, image: Image.Image) -> str:
-        """
-        Determines whether to preserve background or generate new one.
-        """
-        # Transparent background
+        """Determines whether to preserve original background or generate a new one."""
+        # Detect Transparent backgrounds (PNG)
         if image.mode == "RGBA":
             alpha = np.array(image)[..., 3]
-            if np.mean(alpha) < 15:  # Ajustado de 5 a 15
+            if np.mean(alpha) < 15:
                 return "preserve"
 
-        # Nearly black background
+        # Detect nearly black backgrounds
         gray = cv2.cvtColor(np.array(image.convert("RGB")), cv2.COLOR_RGB2GRAY)
         if np.mean(gray) < 15:
             return "preserve"
@@ -139,25 +135,24 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
 
     def analyze_source(self, image: Image.Image, character_name: str) -> AnalysisResult:
         """
-        Performs non-generative feature extraction and synthesizes the 
-        final transformation strategy.
+        Primary entry point for feature extraction and strategy synthesis.
+        Works for both static Image2Image and temporal Video generation.
         """
-        # Pixel Analysis
+        # Pixel-level Computer Vision analysis
         img_np = np.array(image.convert('RGB'))
         gray = cv2.cvtColor(img_np, cv2.COLOR_RGB2GRAY)
-
         background_policy = self._detect_background_policy(image)
         
-        # Lore Ingestion (merging character + default)
+        # Domain Lore Retrieval
         lore = self._get_lore_by_name(character_name)
         weights = lore.get("weights", {})
         
-        # Dynamic Weight Extraction
+        # Hyperparameter Extraction
         cn_depth = float(weights.get("depth", 0.75))
         cn_pose = float(weights.get("openpose", 0.40))
         strength = float(lore.get("denoising_strength", 0.70))
         
-        # Semantic Signal Processing (Lighting)
+        # Semantic Lighting Analysis
         avg_brightness = np.mean(gray)
         lighting = ""
         if background_policy == "generate":
@@ -167,11 +162,11 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
             elif avg_brightness > 180:
                 lighting = "soft studio lighting, professional high-key photography"
 
-        # Prompt Manifold Synthesis
+        # Construct the final synthesized prompt manifold
         final_suggested_prompt = self._synthesize_prompt(lore, lighting)
         
-        # Negative Prompt
-        base_negative = lore.get("negative_prompt", "anime, cartoon, bad proportions")
+        # Negative prompt consolidation
+        base_negative = lore.get("negative_prompt", "anime, cartoon, low quality")
         
         return AnalysisResult(
             recommended_steps=30,

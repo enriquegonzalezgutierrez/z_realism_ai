@@ -2,10 +2,10 @@
     "id": "chiaotzu",
     "aliases": ["chiaotzu", "chaos", "chaoz"],
     "essence": "species_human_mystic",
-    "prompt_base": "cinematic portrait of a small mysterious martial artist, extremely pale porcelain skin with red circular ceremonial makeup on cheeks, wearing a traditional black satin hat with a red button, green imperial outfit",
-    "feature_prompt": "thick white theatrical makeup texture on skin, realistic rosy paint on cheeks, detailed silk embroidery on outfit, single hair strand, expressive eyes",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, doll, toy, clown, joker, horror, scary, porcelain doll, cracks, low quality",
-    "weights": { 
+    "prompt_base": "photograph of a small spectral warrior, white porcelain skin, red circular face paint, buttoned black silk hat, green oriental outfit",
+    "feature_prompt": "thin ghostly skin texture, ritual face art, golden thread embroidery, focused expression, single hair strand",
+    "negative_prompt": "anime, cartoon, plastic, doll, toy, clown, horror, cracks, makeup, youthful, glossy, healthy, vibrant colors",
+    "weights": {
         "depth": 0.60, 
         "openpose": 0.75 
     },

@@ -2,9 +2,12 @@
     "id": "e_honda",
     "aliases": ["honda", "e. honda", "edmond honda"],
     "essence": "human_sumo",
-    "prompt_base": "photorealistic portrait of a massive Japanese sumo wrestler, red kabuki face paint, traditional topknot hair, muscular but heavy build",
-    "feature_prompt": "realistic skin folds, wet skin, detailed face paint texture, sumo stable background",
-    "negative_prompt": "anime, cartoon, drawing, thin body, plastic, clean face",
-    "weights": { "depth": 0.85, "openpose": 0.70 },
-    "denoising_strength": 0.75
+    "prompt_base": "powerful sumo wrestler, red kabuki face paint, traditional topknot hair, full body shot, meaty skin folds",
+    "feature_prompt": "wet surface, stylized lighting, macro photo of the makeup textures, detailed armpit hair",
+    "negative_prompt": "anime, cartoon, drawing, skinny, lean, defined, smooth skin, long neck",
+    "weights": {
+        "depth": 0.85,
+        "openpose": 0.70
+    },
+    "denoising_strength": 0.65
 }

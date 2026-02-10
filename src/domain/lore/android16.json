@@ -2,11 +2,11 @@
     "id": "android16",
     "aliases": ["16", "android 16"],
     "essence": "species_android_full",
-    "prompt_base": "cinematic portrait of a colossal android warrior, vibrant ginger orange mohawk hair, gentle blue eyes, wearing heavy articulated green robotic armor plating",
-    "feature_prompt": "colossal android warrior, orange mohawk, green armor, extreme high fidelity textures, subtle surface imperfections on armor plating, mechanical joints",
+    "prompt_base": "colossal humanoid, ginger orange hair mohawk, blue eyes, green articulated bio-mechanical armor",
+    "feature_prompt": "brushed metal texture, subtle surface scratches, detailed mechanical joints, realistic skin pores",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic, flat color, neon orange, bright green, deformed hands, low quality",
     "weights": { 
-        "depth": 0.65,
+        "depth": 0.65, 
         "openpose": 0.75
     },
     "denoising_strength": 0.64

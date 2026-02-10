@@ -2,9 +2,12 @@
     "id": "blanka",
     "aliases": ["blanka", "jimmy"],
     "essence": "mutant_feral",
-    "prompt_base": "cinematic photo of a feral beast-man, translucent green skin with realistic texture, wild orange mane hair, electrical sparking atmosphere",
-    "feature_prompt": "hyper-realistic skin pores, animalistic features, wet hair texture, Amazon jungle background",
-    "negative_prompt": "anime, cartoon, illustration, neon green, flat colors, plastic skin, toy",
-    "weights": { "depth": 0.75, "openpose": 0.85 },
-    "denoising_strength": 0.80
+    "prompt_base": "feral beast-man, translucent green skin, wild orange mane-like hair, electrical sparking atmosphere",
+    "feature_prompt": "biological skin pores, animalistic features, wet hair texture, Amazon jungle background",
+    "negative_prompt": "anime, cartoon, illustration, drawing, plastic texture, neon green, bright orange, flat color, human skin color, low quality",
+    "weights": { 
+        "depth": 0.60, 
+        "openpose": 0.75 
+    },
+    "denoising_strength": 0.65
 }

@@ -2,12 +2,12 @@
     "id": "gohan",
     "aliases": ["gohan", "ultimate gohan", "beast gohan"],
     "essence": "species_saiyan_hybrid",
-    "prompt_base": "cinematic portrait of a muscular asian man, spiked black hair with one long fringe, wearing silver rimmed glasses, a purple martial arts gi, focused and intelligent expression",
-    "feature_prompt": "visible fabric weave on gi, sharp focus on silver glasses frame, realistic texture on hair strands, hyperdetailed skin texture",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, doll, flat lighting, low quality, blurry glasses, deformed anatomy",
+    "prompt_base": "hyperdetailed portrait of a handsome asian man, intense neutral expression, silver-rimmed glasses, spiky black hair, purple martial arts gi",
+    "feature_prompt": "subtle skin pores, power unleashed, defined arms, dynamic light refracting on glasses, realistic fabric weave",
+    "negative_prompt": "anime, cartoon, drawing, illustration, bad anatomy, human face, plastic texture, flat lighting, low quality",
     "weights": { 
         "depth": 0.65, 
-        "openpose": 0.70 
+        "openpose": 0.60
     },
     "denoising_strength": 0.65
 }

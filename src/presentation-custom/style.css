@@ -1,29 +1,25 @@
 /* 
   path: z_realism_ai/src/presentation-custom/style.css
-  description: Presentation Layer v20.0 - Refined UX Implementation.
+  description: Presentation Layer v20.0 - Multi-Modal Temporal UI.
   
   ABSTRACT:
-  This revision introduces significant UX and UI refinements without altering core 
-  functionality. Key improvements include:
-  1.  Contextual Progress Indicator: The progress overlay is now contained within 
-      the result viewport, preventing a full-screen block.
-  2.  Enhanced Control Panel: <fieldset> and <legend> are used for better visual
-      grouping of controls. Custom components like a toggle switch are introduced.
-  3.  Cohesive Information Display: Metrics are integrated directly into the result
-      card, creating a unified component.
-  4.  Micro-interactions and Polish: Added a randomize button for the seed and
-      improved slider label alignment for better readability.
+  This revision expands the "Cyber-Capsule" UI to support video synthesis.
+  It adds specific styles for the Temporal Fusion manifold while maintaining 
+  the high-fidelity aesthetic of the original laboratory.
+  
+  KEY IMPROVEMENTS:
+  1. Video Portability: Optimized <video> rendering for the result monitor.
+  2. Temporal Controls: Added visual distinction for animation parameters.
+  3. Interactive Safety: Maintained display-based overlay logic to ensure 
+     mouse access to the 'Save' buttons.
   
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 */
 
 /* =============================================================================
-   1. DESIGN TOKENS (ROOT VARIABLES)
-   Centralized variables for colors, spacing, and effects to ensure consistency
-   and facilitate easy theme adjustments.
+   1. DESIGN TOKENS
 ============================================================================= */
 :root {
-    /* Color Palette */
     --bg-dark: #050505;
     --bg-panel: rgba(20, 20, 25, 0.6);
     --primary: #3b82f6;
@@ -33,43 +29,28 @@
     --danger: #ef4444;
     --text-main: #ffffff;
     --text-muted: #94a3b8;
-
-    /* Effects & Borders */
     --glass-border: 1px solid rgba(255, 255, 255, 0.08);
     --blur-intensity: 20px;
-
-    /* Sizing & Spacing */
     --radius-lg: 16px;
     --radius-md: 12px;
     --radius-sm: 8px;
-
-    /* Animation */
     --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
 /* =============================================================================
-   2. GLOBAL RESET & TYPOGRAPHY
-   Basic resets and font settings for a consistent base across all browsers.
+   2. GLOBAL RESET & AMBIENCE
 ============================================================================= */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
-    overflow: hidden; /* Prevents body scrollbars */
+    overflow: hidden;
     -webkit-font-smoothing: antialiased;
 }
 
-/* =============================================================================
-   3. ENVIRONMENTAL AMBIENCE
-   Decorative background elements that create the "sci-fi lab" aesthetic.
-============================================================================= */
 .grid-overlay {
     position: fixed;
     inset: 0;
@@ -90,25 +71,11 @@ body {
     animation: pulse 8s infinite alternate;
 }
 
-.orb-1 {
-    width: 400px;
-    height: 400px;
-    background: var(--primary);
-    top: -100px;
-    left: -100px;
-}
-
-.orb-2 {
-    width: 300px;
-    height: 300px;
-    background: var(--accent);
-    bottom: -50px;
-    right: -50px;
-}
+.orb-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; }
+.orb-2 { width: 300px; height: 300px; background: var(--accent); bottom: -50px; right: -50px; }
 
 /* =============================================================================
-   4. LAYOUT ARCHITECTURE
-   High-level containers that define the application's structure.
+   3. LAYOUT ARCHITECTURE
 ============================================================================= */
 .app-container {
     max-width: 1800px;
@@ -130,19 +97,14 @@ body {
     border: var(--glass-border);
     border-radius: var(--radius-lg);
     z-index: 100;
-    flex-shrink: 0;
 }
 
-.logo {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
+.logo { display: flex; gap: 12px; align-items: center; }
 .logo-icon { font-size: 1.5rem; filter: drop-shadow(0 0 10px var(--accent)); }
-.logo-text h1 { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; font-weight: 700; letter-spacing: -0.5px; }
-.version-badge { font-size: 0.6rem; background: rgba(255, 255, 255, 0.1); padding: 2px 6px; border-radius: 4px; color: var(--accent); font-weight: 700; margin-left: 8px; }
+.logo-text h1 { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; font-weight: 700; }
+.version-badge { font-size: 0.6rem; background: rgba(255, 255, 255, 0.1); padding: 2px 6px; border-radius: 4px; color: var(--accent); margin-left: 8px; }
 
-.status-pill { font-size: 0.75rem; display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); padding: 5px 12px; border-radius: 20px; color: var(--success); font-weight: 600; border: 1px solid rgba(16, 185, 129, 0.2); }
+.status-pill { font-size: 0.75rem; display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); padding: 5px 12px; border-radius: 20px; color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
 .status-dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); }
 
 .main-grid {
@@ -150,30 +112,16 @@ body {
     flex-direction: column;
     gap: 20px;
     flex-grow: 1;
-    overflow: hidden; /* Critical for containing scrolling regions */
+    overflow: hidden;
 }
 
 @media (min-width: 1024px) {
-    .main-grid {
-        display: grid;
-        grid-template-columns: 380px 1fr;
-        align-items: start;
-    }
-    .control-panel,
-    .visual-workspace {
-        height: 100%;
-        overflow-y: auto; /* Enables scrolling within panels on large screens */
-        scrollbar-width: thin;
-    }
-    .visual-workspace {
-        display: flex;
-        flex-direction: column;
-    }
+    .main-grid { display: grid; grid-template-columns: 380px 1fr; align-items: start; }
+    .control-panel, .visual-workspace { height: 100%; overflow-y: auto; scrollbar-width: thin; }
 }
 
 /* =============================================================================
-   5. COMPONENT LIBRARY
-   Styles for reusable UI elements like panels, inputs, buttons, etc.
+   4. COMPONENT LIBRARY
 ============================================================================= */
 .glass-panel {
     background: var(--bg-panel);
@@ -184,197 +132,95 @@ body {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* IMPROVEMENT: Grouping controls with <fieldset> for better semantics and visual hierarchy */
-.panel-section {
-    margin-bottom: 20px;
-    border: none;
-    padding: 0;
-}
-.panel-section legend {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    margin-bottom: 15px;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 0; /* Override browser default padding */
+.panel-section { margin-bottom: 20px; border: none; padding: 0; }
+.panel-section legend { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; }
+
+/* Visual distinction for Temporal Fusion section */
+.temporal-section {
+    padding-left: 15px;
+    border-left: 2px solid var(--accent);
+    background: rgba(139, 92, 246, 0.03);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin-top: 10px;
+    padding-bottom: 10px;
 }
 
-/* IMPROVEMENT: Enhanced slider labels for better alignment and readability */
-.slider-group>label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-    margin-bottom: 8px;
-    color: var(--text-muted);
-    font-weight: 500;
+.slider-group { margin-bottom: 15px; }
+.slider-group>label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; color: var(--text-muted); }
+.slider-group>label span { font-family: 'JetBrains Mono'; color: var(--text-main); background: rgba(0, 0, 0, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; }
+
+.modern-input, .modern-textarea {
+    width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white; padding: 12px; border-radius: var(--radius-sm); font-size: 0.9rem;
 }
-.slider-group>label span {
-    font-family: 'JetBrains Mono';
-    color: var(--text-main);
-    background: rgba(0, 0, 0, 0.3);
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    min-width: 50px;
-    text-align: right;
-}
+.modern-textarea { min-height: 80px; resize: vertical; }
 
-.modern-input,
-.modern-textarea {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 12px;
-    border-radius: var(--radius-sm);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    transition: border-color 0.2s ease;
-}
-.modern-input:focus,
-.modern-textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
-.modern-textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
+.upload-label { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px; border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: var(--radius-md); cursor: pointer; transition: 0.3s; }
+.upload-label:hover { border-color: var(--primary); background: rgba(59, 130, 246, 0.05); }
 
-/* IMPROVEMENT: Enhanced seed input with a side button */
-.input-group-enhanced { margin-top: 15px; }
-.input-group-enhanced label { font-size: 0.8rem; margin-bottom: 8px; color: var(--text-muted); font-weight: 500; display: block; }
-.input-with-button { display: flex; gap: 10px; align-items: center; }
-.input-with-button input { flex-grow: 1; }
-.btn-icon { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); border-radius: var(--radius-sm); width: 44px; height: 44px; cursor: pointer; transition: all 0.2s; }
-.btn-icon:hover { background: rgba(255, 255, 255, 0.2); border-color: var(--primary); }
-
-.upload-zone { margin-bottom: 20px; }
-.upload-label { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px; border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: var(--radius-md); cursor: pointer; transition: all 0.3s var(--ease-out-cubic); background: rgba(255, 255, 255, 0.02); }
-.upload-label:hover { border-color: var(--primary); background: rgba(59, 130, 246, 0.05); transform: translateY(-2px); }
-.upload-label .icon { font-size: 2rem; }
-.upload-label .text { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
-
-/* Sliders */
-input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; }
-input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--primary); margin-top: -6px; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); transition: transform 0.1s; }
-input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-
-/* IMPROVEMENT: Custom Toggle Switch for Auto-Pilot */
-.autopilot-control { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: var(--radius-sm); margin-bottom: 10px; }
-.autopilot-control span { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+/* Switch & Controls */
 .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
 .switch input { opacity: 0; width: 0; height: 0; }
 .switch-slider { position: absolute; cursor: pointer; inset: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 24px; }
 .switch-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
 input:checked+.switch-slider { background-color: var(--accent); }
 input:checked+.switch-slider:before { transform: translateX(20px); }
-.opt-status-card { font-family: 'JetBrains Mono'; font-size: 0.7rem; background: rgba(0, 0, 0, 0.3); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; }
-.opt-status-card div span { color: white; }
-
-/* Accordion */
-.accordion-wrapper { border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 15px; margin-bottom: 20px; }
-.accordion-trigger { width: 100%; display: flex; justify-content: space-between; align-items: center; background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; cursor: pointer; padding: 10px 0; transition: color 0.2s; }
-.accordion-trigger:hover { color: var(--text-main); }
-.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease-out-cubic), opacity 0.4s; opacity: 0; }
-.accordion-content.open { max-height: 1000px; opacity: 1; padding-top: 10px; }
-.arrow { transition: transform 0.3s; font-size: 0.7rem; }
-.arrow.rotate { transform: rotate(180deg); }
 
 /* Buttons */
-.btn-primary { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: var(--radius-md); color: white; font-weight: 800; letter-spacing: 1px; cursor: pointer; position: relative; overflow: hidden; font-family: 'JetBrains Mono', monospace; box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4); transition: transform 0.2s, box-shadow 0.2s; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.6); }
-.btn-primary:active { transform: translateY(0); }
-.btn-primary:disabled { filter: grayscale(1); opacity: 0.7; cursor: not-allowed; transform: none; }
-.btn-secondary { width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; transition: 0.3s; }
-.btn-secondary:hover { border-color: var(--text-muted); color: white; background: rgba(255, 255, 255, 0.05); }
+.btn-primary {
+    width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--accent));
+    border: none; border-radius: var(--radius-md); color: white; font-weight: 800; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+}
+.btn-secondary {
+    width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.75rem; font-weight: 600;
+}
+.btn-secondary:hover { background: rgba(255, 255, 255, 0.05); color: white; border-color: white; }
 
 /* =============================================================================
-   6. VISUALIZATION WORKSPACE (Dual Viewport)
-   Styles for the main content area including viewports and gallery.
+   5. VISUAL WORKSPACE
 ============================================================================= */
-.visual-workspace { gap: 20px; }
 .dual-viewport-container { display: flex; flex-direction: column; gap: 20px; flex-grow: 1; min-height: 400px; }
 @media (min-width: 768px) { .dual-viewport-container { flex-direction: row; } }
-.visual-card { flex: 1 1 50%; display: flex; flex-direction: column; }
-.card-header { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
-.img-container { flex: 1; background: rgba(0, 0, 0, 0.3); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px dashed rgba(255, 255, 255, 0.1); }
-.img-container img { width: 100%; height: 100%; object-fit: contain; }
-.placeholder-text { font-size: 0.8rem; color: var(--text-muted); font-family: 'JetBrains Mono'; opacity: 0.5; }
 
-/* IMPROVEMENT: Result viewport is now a positioning context for its children */
-.viewport-result {
-    position: relative;
+.visual-card { flex: 1 1 50%; display: flex; flex-direction: column; position: relative; }
+.img-container {
+    flex: 1; background: rgba(0, 0, 0, 0.3); border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    position: relative; border: 1px dashed rgba(255, 255, 255, 0.1);
 }
+.img-container img, .img-container video { width: 100%; height: 100%; object-fit: contain; }
 
-/* =============================================================================
-   7. PROGRESS, METRICS & GALLERY
-============================================================================= */
-
-/* 
-  CRITICAL IMPROVEMENT: The progress overlay is now contextual and non-intrusive.
-  By changing from `position: fixed` to `position: absolute`, it is now contained
-  within its parent (`.viewport-result`), showing progress over the generated
-  image without blocking the rest of the application.
-*/
+/* Progress Overlay - Positioned absolute to stay inside the result card */
 .progress-overlay {
-    position: absolute;
-    inset: 0;
-    transform: none;
-    width: 100%;
-    max-width: none;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    z-index: 10;
-    border-radius: var(--radius-lg);
-    animation: fadeIn 0.3s ease-out;
-    padding: 20px;
+    position: absolute; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 20px; z-index: 10; border-radius: var(--radius-lg); animation: fadeIn 0.3s ease-out;
 }
-.progress-track { width: 80%; max-width: 400px; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s linear; box-shadow: 0 0 10px var(--success); }
-.status-message { font-family: 'JetBrains Mono'; font-size: 0.75rem; color: var(--success); letter-spacing: 1px; text-align: center; }
+.progress-track { width: 80%; max-width: 300px; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s linear; }
 .spinner { width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.1); border-top-color: var(--success); border-radius: 50%; animation: spin 1s linear infinite; }
 
-/* 
-  IMPROVEMENT: Metrics are now integrated into the result card's layout.
-  They act as a footer, visually linking the data to the image.
-*/
+/* Metrics */
 .metrics-strip {
-    display: flex;
-    justify-content: space-around;
-    gap: 15px;
-    text-align: center;
-    padding-top: 15px;
-    margin-top: 15px;
+    display: flex; justify-content: space-around; padding-top: 15px; margin-top: 15px;
     border-top: 1px solid var(--glass-border);
 }
-.metric-item { background: none; padding: 0; }
-.metric-item .label { display: block; font-size: 0.6rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.metric-item .value { font-family: 'JetBrains Mono'; font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+.metric-item .label { display: block; font-size: 0.6rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+.metric-item .value { font-family: 'JetBrains Mono'; font-size: 1.2rem; color: var(--primary); }
 
-.gallery-wrapper { flex-shrink: 0; }
+/* Gallery */
 .gallery-strip { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; }
-.gallery-item { flex: 0 0 120px; height: 120px; cursor: pointer; position: relative; padding: 0 !important; border: 2px solid transparent; border-radius: 12px; transition: all 0.3s; }
-.gallery-item:hover { transform: scale(1.05); border-color: var(--primary); }
-.gallery-item.active { border-color: var(--accent); box-shadow: 0 0 15px var(--accent); transform: scale(1.05); }
+.gallery-item { flex: 0 0 120px; height: 120px; cursor: pointer; position: relative; border-radius: 12px; transition: 0.3s; border: 2px solid transparent; }
 .gallery-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
-.gallery-score { position: absolute; bottom: 8px; right: 8px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); color: white; font-family: 'JetBrains Mono'; font-size: 0.65rem; padding: 3px 6px; border-radius: 6px; font-weight: 700; }
+.gallery-item.active { border-color: var(--accent); box-shadow: 0 0 15px var(--accent); transform: scale(1.05); }
+.gallery-score { position: absolute; bottom: 8px; right: 8px; background: rgba(0, 0, 0, 0.7); color: white; font-family: 'JetBrains Mono'; font-size: 0.65rem; padding: 3px 6px; border-radius: 6px; }
 
-/* =============================================================================
-   8. SCROLLBAR STYLING
-   Custom scrollbars to match the application's dark theme.
-============================================================================= */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+/* Utilities */
+.hidden { display: none !important; }
 
-/* =============================================================================
-   9. ANIMATIONS
-   Keyframe animations used throughout the interface.
-============================================================================= */
+/* Animations */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.4; } 50% { transform: scale(1.05); opacity: 0.6; } 100% { transform: scale(0.95); opacity: 0.4; } }

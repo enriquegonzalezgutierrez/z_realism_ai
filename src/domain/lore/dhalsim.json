@@ -2,8 +2,8 @@
     "id": "dhalsim",
     "aliases": ["dhalsim"],
     "essence": "human_yogi",
-    "prompt_base": "photorealistic portrait of a slender Indian ascetic, red ceremonial face paint stripes, necklace of small human skulls, calm spiritual expression",
-    "feature_prompt": "aged weathered skin, visible bone structure, realistic skull texture, matte paint texture on face, fire ambient lighting",
+    "prompt_base": "photorealistic portrait of a emaciated Indian ascetic, ceremonial red face paint, skull necklace, serene expression",
+    "feature_prompt": "aged weathered skin, visible bone structure, rough paint texture on face, natural sunset lighting, sharp focus, high quality",
     "negative_prompt": "anime, cartoon, drawing, plastic, vibrant colors, fat face, smooth skin, blood, wounds, gore, injured",
     "weights": { 
         "depth": 0.70, 

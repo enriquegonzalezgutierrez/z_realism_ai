@@ -2,8 +2,8 @@
     "id": "bulma",
     "aliases": ["bulma", "bulma briefs"],
     "essence": "human_scientist",
-    "prompt_base": "captivating blue eyes, long smooth turquoise teal hair, modern casual attire, yellow jacket, blue pants, black undershirt, orange boots, pink headband",
-    "feature_prompt": "highly detailed skin texture, individual hair strands, natural fabric textures, detailed jacket design, sharp focus on pink headband",
+    "prompt_base": "captivating blue eyes, long smooth turquoise teal hair, yellow jacket, blue pants, orange boots, pink headband",
+    "feature_prompt": "highly detailed skin texture, individual hair strands, natural fabric textures, sharp focus",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic, neon blue, wig, deformed, blurry clothes, dull colors",
     "weights": {
         "depth": 0.60,

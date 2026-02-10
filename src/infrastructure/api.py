@@ -1,16 +1,16 @@
 # path: z_realism_ai/src/infrastructure/api.py
-# description: Expert Gateway v19.0 - High-Fidelity Asynchronous Orchestrator.
+# description: Expert Gateway v20.0 - Temporal Orchestration & Multi-Modal Gateway.
 #
 # ABSTRACT:
 # This module implements the Primary Driving Adapter for the Z-Realism ecosystem. 
 # It manages the ingestion of multi-part form data and marshals complex 
 # hyperparameters into serialized task payloads for the distributed Celery queue.
 #
-# ARCHITECTURAL EVOLUTION (v19.0):
-# The transformation interface has been expanded to support a decoupled 
-# conditioning schema. By explicitly passing 'cn_depth', 'cn_pose', and 
-# 'strength', the API ensures that the Neural Engine remains stateless 
-# and 100% compliant with the Domain Lore's tactical requirements.
+# ARCHITECTURAL EVOLUTION (v20.0):
+# 1. Introduced '/animate' endpoint to support Image-to-Video synthesis.
+# 2. Implemented hardware orchestration for video tasks using the same 
+#    Redis-based Mutex to prevent VRAM overflow on 6GB cards.
+# 3. Maintained decoupled conditioning schema for both static and temporal tasks.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -25,10 +25,10 @@ from celery.result import AsyncResult
 from PIL import Image
 
 # Core Implementation Imports
-from src.infrastructure.worker import transform_character_task, celery_app
+from src.infrastructure.worker import transform_character_task, animate_character_task, celery_app
 from src.infrastructure.analyzer import HeuristicImageAnalyzer
 
-app = FastAPI(title="Z-Realism Expert Gateway", version="19.0")
+app = FastAPI(title="Z-Realism Expert Gateway", version="20.0")
 
 # --- 1. CROSS-ORIGIN RESOURCE SHARING (CORS) ---
 app.add_middleware(
@@ -55,7 +55,7 @@ async def analyze_visual_dna(
 ):
     """
     Invokes the Heuristic Brain to determine the optimal synthesis strategy.
-    Now returns granular weights and stochastic ratios from Lore.
+    Returns granular weights and stochastic ratios from Domain Lore.
     """
     try:
         content = await file.read()
@@ -68,9 +68,9 @@ async def analyze_visual_dna(
             "recommendations": {
                 "steps": analysis.recommended_steps, 
                 "cfg_scale": analysis.recommended_cfg,
-                "cn_scale_depth": analysis.recommended_cn_depth, # Decoupled
-                "cn_scale_pose": analysis.recommended_cn_pose,   # Decoupled
-                "strength": analysis.recommended_strength,       # Img2Img specific
+                "cn_scale_depth": analysis.recommended_cn_depth,
+                "cn_scale_pose": analysis.recommended_cn_pose,
+                "strength": analysis.recommended_strength,
                 "texture_prompt": analysis.suggested_prompt,
                 "negative_prompt": analysis.suggested_negative
             }
@@ -78,7 +78,7 @@ async def analyze_visual_dna(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Analysis Failure: {str(e)}")
 
-# --- 4. TRANSFORMATION ENDPOINT ---
+# --- 4. TRANSFORMATION ENDPOINT (STATIC IMAGE) ---
 @app.post("/transform")
 async def transform_image(
     file: UploadFile = File(...),
@@ -87,9 +87,9 @@ async def transform_image(
     resolution_anchor: int = Form(512),
     steps: int = Form(30),
     cfg_scale: float = Form(7.5),
-    cn_depth: float = Form(0.75),       # NEW: Decoupled weight
-    cn_pose: float = Form(0.40),        # NEW: Decoupled weight
-    strength: float = Form(0.70),       # NEW: Precision stochastic control
+    cn_depth: float = Form(0.75),
+    cn_pose: float = Form(0.40),
+    strength: float = Form(0.70),
     seed: int = Form(42),
     negative_prompt: str = Form("anime, cartoon")
 ):
@@ -104,7 +104,6 @@ async def transform_image(
         content = await file.read()
         image_b64 = base64.b64encode(content).decode('utf-8')
 
-        # Package the full tactical hyper-param manifold
         hyper_params = {
             "steps": steps,
             "cfg_scale": cfg_scale,
@@ -115,20 +114,59 @@ async def transform_image(
             "negative_prompt": negative_prompt
         }
 
-        # Dispatch to Celery Worker
         task = transform_character_task.delay(
             image_b64, character_name, feature_prompt, resolution_anchor, hyper_params
         )
 
-        # Secure the hardware lock
         redis_client.set(SYSTEM_LOCK_KEY, task.id, ex=LOCK_TIMEOUT)
-        
         return {"task_id": task.id, "status": "QUEUED"}
     except Exception as e:
         redis_client.delete(SYSTEM_LOCK_KEY)
         raise HTTPException(status_code=500, detail=str(e))
 
-# --- 5. TELEMETRY & SYSTEM CONTROL ---
+# --- 5. ANIMATION ENDPOINT (VIDEO CLIP) ---
+@app.post("/animate")
+async def animate_image(
+    file: UploadFile = File(...),
+    character_name: str = Form(...),
+    motion_prompt: str = Form("subtle realistic movement, breathing"),
+    duration_frames: int = Form(24),
+    fps: int = Form(8),
+    motion_bucket: int = Form(127),
+    denoising_strength: float = Form(0.20),
+    seed: int = Form(42)
+):
+    """
+    Dispatches a temporal synthesis task (Video).
+    Utilizes the same Hardware Mutex to protect VRAM on 6GB cards.
+    """
+    if redis_client.exists(SYSTEM_LOCK_KEY):
+        raise HTTPException(status_code=429, detail="HARDWARE_LOCK: CUDA Engine Busy.")
+
+    try:
+        content = await file.read()
+        image_b64 = base64.b64encode(content).decode('utf-8')
+
+        # Temporal manifold parameters
+        video_params = {
+            "motion_prompt": motion_prompt,
+            "duration_frames": duration_frames,
+            "fps": fps,
+            "motion_bucket": motion_bucket,
+            "denoising_strength": denoising_strength,
+            "seed": seed
+        }
+
+        # Dispatch specialized video task
+        task = animate_character_task.delay(image_b64, character_name, video_params)
+
+        redis_client.set(SYSTEM_LOCK_KEY, task.id, ex=LOCK_TIMEOUT)
+        return {"task_id": task.id, "status": "QUEUED_TEMPORAL"}
+    except Exception as e:
+        redis_client.delete(SYSTEM_LOCK_KEY)
+        raise HTTPException(status_code=500, detail=str(e))
+
+# --- 6. TELEMETRY & SYSTEM CONTROL ---
 @app.get("/status/{task_id}")
 async def get_task_status(task_id: str):
     task_result = AsyncResult(task_id, app=celery_app)

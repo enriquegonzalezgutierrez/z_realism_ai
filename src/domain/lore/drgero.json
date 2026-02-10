@@ -2,9 +2,9 @@
     "id": "drgero",
     "aliases": ["gero", "dr. gero", "android 20", "a20"],
     "essence": "species_android_cyborg",
-    "prompt_base": "cinematic portrait of an elderly sinister-looking scientist, long white hair, thick grey horseshoe mustache, distinct orange Red Ribbon logo on hat, cybernetic enhancements",
-    "feature_prompt": "extreme detailed aged skin texture, deep wrinkles, visible pores, subtle veins, realistic metallic hand mechanism, brain case detail under hat",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, perfect skin, doll, youthful skin, flat lighting, blurry mustache",
+    "prompt_base": "cinematic photograph of a sinister elderly scientist, long white hair, thick grey mustache, Red Ribbon logo on hat, cybernetic brain enhancements, glowing yellow eyes",
+    "feature_prompt": "extremely wrinkled skin, age spots, veins, realistic metallic hand, visible braincase",
+    "negative_prompt": "anime, cartoon, plastic skin, smooth skin, doll, youthful, flat lighting, blurry",
     "weights": { 
         "depth": 0.65, 
         "openpose": 0.65

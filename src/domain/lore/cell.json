@@ -2,8 +2,8 @@
     "id": "cell",
     "aliases": ["cell", "perfect cell"],
     "essence": "species_bio_android",
-    "prompt_base": "cinematic portrait of a colossal bio-android warrior, **dark emerald green chitinous exoskeleton, black spots, regal head horns, giant black insectoid eyes, intricate biomechanical wings**",
-    "feature_prompt": "extreme texture detail on chitin, wet biological sheen, volumetric rim lighting, realistic segmented plating",
+    "prompt_base": "colossal bio-android, dark emerald green chitinous exoskeleton, black spots, regal head horns, giant insectoid eyes, biomechanical wings",
+    "feature_prompt": "wet biological sheen on chitin, intricate segmented plating, sharp focus on compound eye texture, hyper-realistic bio-armor",
     "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, human face, fleshy skin, toy, doll, flat lighting, blurry wings, yellow skin, smooth shell",
     "weights": { 
         "depth": 0.60, 

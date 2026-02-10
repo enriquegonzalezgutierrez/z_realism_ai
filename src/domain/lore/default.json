@@ -1,10 +1,10 @@
 {
     "essence": "default_humanoid_photorealism",
-    "prompt_base": "photograph of a realistic human, sharp focus, natural anatomy, intense neutral expression",
-    "feature_prompt": "individual hair strands, realistic fabric texture, intricate details",
-    "negative_prompt": "anime, cartoon, illustration, drawing, CGI, plastic texture, smooth skin, doll, toy, flat lighting, bad anatomy, deformed, blurry, 3d render",
+    "prompt_base": "photograph of a person, detailed bone structure, long elegant eyelashes, natural body anatomy, neutral expression",
+    "feature_prompt": "ultra detailed skin pores, subsurface scattering, sharp photo, perfect facial symmetry, realistic fabric texture",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, smooth skin, toy, flat lighting, low quality, body deformation",
     "weights": { 
-        "depth": 0.60,
+        "depth": 0.70,
         "openpose": 0.75
     },
     "denoising_strength": 0.65

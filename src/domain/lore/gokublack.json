@@ -1,12 +1,12 @@
 {
-    "id": "gokublack",
+"id": "gokublack",
     "aliases": ["goku black", "zamasu goku", "black"],
     "essence": "species_saiyan_corrupted",
-    "prompt_base": "cinematic portrait of a muscular asian man, sharp arrogant smirk, single green Potara earring, messy jet-black hair, dark grey tunic, black long sleeves, realistic skin texture",
-    "feature_prompt": "detailed fabric weave on tunic, subtle shadows emphasizing evil expression, hyper-realistic hair strands, hyperdetailed skin texture",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, soft expression, flat lighting, low quality, friendly face",
+    "prompt_base": "realistic photo of a corrupted deity, fierce evil smirk, green Potara earring, long jet black hair, dark flowing gothic robes",
+    "feature_prompt": "hyperdetailed skin pores, malevolent glare in his dark eyes, gold embroidery in robes, visible dark energy veins, flowing wind-swept hair",
+ "negative_prompt": "anime, cartoon, drawing, illustration, smooth skin, flat lighting, friendly face, bright color, soft",
     "weights": { 
-        "depth": 0.60, 
+"depth": 0.60,
         "openpose": 0.75 
     },
     "denoising_strength": 0.65

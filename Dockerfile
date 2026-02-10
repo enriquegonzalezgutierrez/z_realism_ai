@@ -1,5 +1,6 @@
 # path: z_realism_ai/Dockerfile
 # description: Production-grade container definition for the Z-Realism AI Service.
+#              UPDATED: Added system-level FFmpeg support for video synthesis.
 #              Optimized for CUDA-enabled environments and GTX 1060 support.
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -20,7 +21,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # HF_HOME: Defines where Hugging Face libraries save downloaded models.
-# We point this to a specific directory to mount it as a Volume later.
 ENV HF_HOME=/app/model_cache
 
 # Set the working directory
@@ -30,7 +30,7 @@ WORKDIR /app
 # System Dependencies
 # -----------------------------------------------------------------------------
 # Install system libraries required by OpenCV (libgl1, libglib) and build tools.
-# --no-install-recommends: Avoids installing documentation/extras.
+# ADDED: 'ffmpeg' to enable MP4 encoding and video manifold processing.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
@@ -38,6 +38,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     libgl1 \
     libglib2.0-0 \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # -----------------------------------------------------------------------------
@@ -61,5 +62,4 @@ EXPOSE 8000
 EXPOSE 8501
 
 # Default command launches the API.
-# Host 0.0.0.0 is required for container networking.
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -9,12 +9,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <!-- Title of the document, displayed in the browser tab -->
-    <title>Z-REALISM | Research Laboratory v19.9</title>
+    <title>Z-REALISM | Research Laboratory v20.0</title>
     
     <!-- Link to the main stylesheet -->
     <link rel="stylesheet" href="style.css">
     
-    <!-- Link to Google Fonts for the specific typefaces used in the design -->
+    <!-- Link to Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
@@ -22,55 +22,33 @@
 
 <body>
 
-    <!-- ============================================================================== -->
-    <!-- 1. AMBIENT & BACKGROUND ELEMENTS                                               -->
-    <!-- These elements are purely decorative and create the "sci-fi lab" atmosphere.   -->
-    <!-- ============================================================================== -->
+    <!-- Ambient background elements -->
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
     <div class="grid-overlay"></div>
 
-
-    <!-- ============================================================================== -->
-    <!-- 2. MAIN APPLICATION CONTAINER                                                  -->
-    <!-- This is the root container that centers the content and provides overall layout.-->
-    <!-- ============================================================================== -->
     <div class="app-container">
 
-        <!-- ========================================================================== -->
-        <!-- 3. APPLICATION HEADER                                                      -->
-        <!-- Contains branding (logo) and a high-level system status indicator.       -->
-        <!-- ========================================================================== -->
+        <!-- Application Header -->
         <header class="glass-header">
             <div class="logo">
                 <span class="logo-icon">🐉</span>
                 <div class="logo-text">
                     <h1>Z-REALISM</h1>
-                    <span class="version-badge">v19.9 DUAL_VIEW</span>
+                    <span class="version-badge">v20.0 TEMPORAL</span>
                 </div>
             </div>
             <div class="status-pill" id="system-status"><span class="status-dot"></span> NEURAL ENGINE: READY</div>
         </header>
 
 
-        <!-- ========================================================================== -->
-        <!-- 4. MAIN CONTENT GRID                                                       -->
-        <!-- This grid is the core of the application's layout, splitting the screen  -->
-        <!-- into the control panel (left) and the visual workspace (right).          -->
-        <!-- ========================================================================== -->
+        <!-- Main Application Grid -->
         <main class="main-grid">
 
-            <!-- ====================================================================== -->
-            <!-- 4.1. CONTROL PANEL (LEFT COLUMN)                                       -->
-            <!-- Contains all user inputs, parameters, and action buttons.            -->
-            <!-- ====================================================================== -->
+            <!-- LEFT COLUMN: Control Panel -->
             <aside class="control-panel glass-panel">
                 
-                <!-- 
-                  IMPROVEMENT: Sections are now grouped using <fieldset> and <legend>.
-                  This is semantically correct and provides a clear visual grouping for 
-                  related controls, improving scannability and organization.
-                -->
+                <!-- 1. IDENTITY SOURCE: Image Upload & DNA Analysis -->
                 <fieldset class="panel-section">
                     <legend>🧬 IDENTITY SOURCE</legend>
                     <input type="text" id="char-name" class="modern-input" value="Bulma" placeholder="Subject Name">
@@ -84,11 +62,7 @@
                     <div id="essence-tag" class="essence-display">STANDBY</div>
                 </fieldset>
                 
-                <!-- 
-                  IMPROVEMENT: The Auto-Pilot section is redesigned for clarity and aesthetics.
-                  A custom toggle switch replaces the standard checkbox, aligning with the UI's
-                  modern, tech-focused theme.
-                -->
+                <!-- 2. AUTO-PILOT: Image optimization loop -->
                 <fieldset class="panel-section optimization-panel">
                     <legend>🤖 AUTO-PILOT (LOOP)</legend>
                     <div class="autopilot-control">
@@ -104,59 +78,71 @@
                     </div>
                 </fieldset>
 
+                <!-- 3. STATIC GUIDANCE: For Img2Img -->
                 <fieldset class="panel-section">
                     <legend>🎨 SEMANTIC GUIDANCE</legend>
-                    <textarea id="input-prompt"
-                        class="modern-textarea">cinematic film still, high detail skin texture, hyper-realistic, 8k</textarea>
+                    <textarea id="input-prompt" class="modern-textarea">cinematic film still, high detail skin texture, hyper-realistic, 8k</textarea>
                 </fieldset>
 
-                <!-- Accordion for hiding advanced/less-frequently used settings -->
+                <!-- 4. TEMPORAL FUSION: Video Animation Controls (NEW) -->
+                <fieldset class="panel-section temporal-section">
+                    <legend>🎥 TEMPORAL FUSION</legend>
+                    <div class="input-group">
+                        <label for="input-motion-prompt">Motion Guidance</label>
+                        <textarea id="input-motion-prompt" class="modern-textarea" placeholder="Describe the movement (e.g., subtle breathing, blinking eyes...)"></textarea>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label for="input-duration">Duration (<span id="val-duration">24</span> frames)</label>
+                        <input type="range" id="input-duration" min="16" max="48" step="8" value="24">
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="input-fps">Motion Speed (<span id="val-fps">8</span> fps)</label>
+                        <input type="range" id="input-fps" min="8" max="24" step="2" value="8">
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="input-motion-bucket">Motion Intensity (<span id="val-motion-bucket">127</span>)</label>
+                        <input type="range" id="input-motion-bucket" min="1" max="255" step="1" value="127">
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="input-video-denoising">Temporal Denoising (<span id="val-video-denoising">0.20</span>)</label>
+                        <input type="range" id="input-video-denoising" min="0.10" max="0.50" step="0.05" value="0.20">
+                    </div>
+
+                    <button id="btn-animate" class="btn-secondary" style="margin-top: 10px; border-color: var(--accent); color: var(--accent);">🎬 INITIATE TEMPORAL FUSION</button>
+                </fieldset>
+
+                <!-- 5. ADVANCED CONFIGURATION: Hidden parameters -->
                 <div class="accordion-wrapper">
-                    <button class="accordion-trigger" id="acc-trigger">⚙️ ADVANCED CONFIGURATION <span
-                            class="arrow">▼</span></button>
+                    <button class="accordion-trigger" id="acc-trigger">⚙️ ADVANCED IMAGE CONFIG <span class="arrow">▼</span></button>
                     <div class="accordion-content" id="acc-content">
-                        
-                        <!-- 
-                          IMPROVEMENT: Slider groups have an improved label structure.
-                          Using flexbox (justify-content: space-between) on the label cleanly
-                          separates the parameter name from its value, creating a tidy, aligned
-                          column of values for quick reading.
-                        -->
                         <div class="slider-group">
                             <label for="input-strength">Denoising Strength <span id="val-strength">0.70</span></label>
                             <input type="range" id="input-strength" min="0.1" max="1.0" step="0.01" value="0.70">
                         </div>
-
                         <div class="slider-group">
                             <label for="input-cn-depth">CN Depth Weight <span id="val-cn-depth">0.75</span></label>
                             <input type="range" id="input-cn-depth" min="0.0" max="2.0" step="0.05" value="0.75">
                         </div>
-
                         <div class="slider-group">
                             <label for="input-cn-pose">CN Pose Weight <span id="val-cn-pose">0.40</span></label>
                             <input type="range" id="input-cn-pose" min="0.0" max="2.0" step="0.05" value="0.40">
                         </div>
-
                         <div class="slider-group">
                             <label for="input-res">Resolution Anchor <span id="val-res">512</span></label>
                             <input type="range" id="input-res" min="512" max="1024" step="64" value="512">
                         </div>
-
                         <div class="slider-group">
                             <label for="input-steps">Inference Steps <span id="val-steps">30</span></label>
                             <input type="range" id="input-steps" min="10" max="60" step="1" value="30">
                         </div>
-
                         <div class="slider-group">
                             <label for="input-cfg">CFG Scale <span id="val-cfg">7.5</span></label>
                             <input type="range" id="input-cfg" min="1" max="20" step="0.5" value="7.5">
                         </div>
-                        
-                        <!-- 
-                          IMPROVEMENT: The seed input is enhanced with a "randomize" button.
-                          This small addition provides a useful one-click action for users
-                          wanting to explore variations without manually typing a new seed.
-                        -->
                         <div class="input-group-enhanced">
                             <label for="input-seed">Manual Seed</label>
                             <div class="input-with-button">
@@ -167,21 +153,17 @@
                     </div>
                 </div>
 
-                <!-- Primary action button to start the generation process -->
+                <!-- Primary Trigger: For static image fusion -->
                 <button id="btn-generate" class="btn-primary"><span class="btn-text">INITIATE NEURAL FUSION</span></button>
             </aside>
 
             
-            <!-- ====================================================================== -->
-            <!-- 4.2. VISUAL WORKSPACE (RIGHT COLUMN)                                   -->
-            <!-- Displays the source image, the generated result, and the gallery.    -->
-            <!-- ====================================================================== -->
+            <!-- RIGHT COLUMN: Visual Workspace -->
             <section class="visual-workspace">
 
-                <!-- The dual viewport container for side-by-side comparison -->
                 <div class="dual-viewport-container">
                     
-                    <!-- Left card: Displays the user-uploaded source image -->
+                    <!-- Source Image Viewport -->
                     <div class="visual-card glass-panel viewport-source">
                         <div class="card-header">SOURCE MANIFOLD (INPUT)</div>
                         <div class="img-container" id="source-preview">
@@ -189,18 +171,14 @@
                         </div>
                     </div>
 
-                    <!-- Right card: Displays the generated image and related info -->
+                    <!-- Result Viewport: Handles both <img> and <video> injections -->
                     <div class="visual-card glass-panel viewport-result">
                         <div class="card-header">ACTIVE CANDIDATE MONITOR</div>
                         <div class="img-container" id="result-display">
                             <div class="placeholder-text">WAITING FOR NEURAL SEQUENCE...</div>
                         </div>
                         
-                        <!-- 
-                          IMPROVEMENT: The metrics panel is now integrated as the footer of the 
-                          result card. This visually and semantically links the data (SSIM, ID, Time) 
-                          directly to the image it describes, creating a cohesive "result" component.
-                        -->
+                        <!-- Scientific Metrics Footer -->
                         <div id="metrics-panel" class="metrics-strip hidden">
                             <div class="metric-item"><span class="label">SSIM FIDELITY</span><span class="value" id="metric-ssim">0%</span></div>
                             <div class="metric-item"><span class="label">IDENTITY DNA</span><span class="value" id="metric-id">0%</span></div>
@@ -208,12 +186,10 @@
                         </div>
                         
                         <!-- 
-                          CRITICAL IMPROVEMENT: The progress overlay is moved from a global, screen-locking
-                          position (`position: fixed`) to be contained within the result card (`position: absolute`).
-                          This is a major UX win, as it shows progress in context without blocking the rest of
-                          the UI. The user can now inspect the control panel or gallery while a new image generates.
+                          Contextual Progress Overlay. 
+                          Managed via style.display = 'none' / 'flex' in app.js.
                         -->
-                        <div id="progress-container" class="progress-overlay hidden">
+                        <div id="progress-container" class="progress-overlay" style="display: none;">
                             <div class="spinner"></div>
                             <div id="progress-text" class="status-message">ANALYZING MANIFOLD...</div>
                             <div class="progress-track">
@@ -223,7 +199,7 @@
                     </div>
                 </div>
 
-                <!-- Gallery section to display the history of generated candidates -->
+                <!-- Gallery Section -->
                 <div class="gallery-wrapper glass-panel">
                     <div class="card-header">POPULATION HISTORY (CANDIDATE SELECTION)</div>
                     <div id="candidate-gallery" class="gallery-strip"></div>
@@ -232,21 +208,13 @@
         </main>
     </div>
 
-    <!-- ============================================================================== -->
-    <!-- 5. JAVASCRIPTS                                                                 -->
-    <!-- ============================================================================== -->
-    <!-- Main application logic -->
+    <!-- Scripts -->
     <script src="app.js"></script>
-
-    <!-- 
-      A small, inline script for the random seed button. Kept here for simplicity
-      as its functionality is minimal and directly tied to this HTML structure.
-    -->
     <script>
+        // Seed Randomizer helper
         document.getElementById('btn-random-seed').addEventListener('click', () => {
             const seedInput = document.getElementById('input-seed');
             seedInput.value = Math.floor(Math.random() * 1000000);
-            // Optional: Dispatch an input event if other parts of the app need to react to the change
             seedInput.dispatchEvent(new Event('input', { bubbles: true }));
         });
     </script>

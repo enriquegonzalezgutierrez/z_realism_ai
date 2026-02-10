@@ -2,9 +2,9 @@
     "id": "android15",
     "aliases": ["15", "android 15"],
     "essence": "species_android_mechanical",
-    "prompt_base": "short stout humanoid, dark magenta skin tone, large neon green rimless sunglasses, oversized dark felt hat, black tuxedo",
-    "feature_prompt": "reflections on the green glasses, felt texture on hat, high quality tuxedo fabric",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, neon purple skin, bright pink, flat lighting, low quality, human skin color",
+    "prompt_base": "compact sturdy humanoid, dark magenta skin tone, large neon green rimless sunglasses, oversized dark felt hat, black tuxedo",
+    "feature_prompt": "glass reflections, felt texture, wool tuxedo fabric, subtle skin pores",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, neon purple skin, bright pink, flat lighting, low quality, human skin color",
     "weights": { 
         "depth": 0.60,
         "openpose": 0.75

@@ -1,10 +1,11 @@
 # path: z_realism_ai/requirements.txt
-# description: Project dependencies v18.0 - The "Skin & Speed" Update.
-#              UPDATED: Added 'xformers' for massive VRAM optimization.
-#              UPDATED: Added 'mediapipe' for facial geometry.
-#              This configuration turns a consumer GPU into a workstation.
+# description: Project dependencies v20.0 - Full Multi-Modal Temporal Support.
+#              FIXED: Added 'peft' for AnimateDiff module compatibility.
+#              FIXED: Corrected 'av' package name for video stream processing.
+#              OPTIMIZED: Balanced for GTX 1060 (6GB) + System RAM (32GB).
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
+# --- Web Server & Framework ---
 fastapi==0.109.0
 uvicorn==0.27.0
 pydantic==2.6.0
@@ -12,32 +13,40 @@ python-multipart==0.0.9
 requests==2.31.0
 pillow==10.2.0
 
-# AI Core
+# --- AI Core & Latent Diffusion ---
 torch==2.3.0
 diffusers==0.31.0
 transformers==4.46.1
 accelerate==1.1.0
+peft==0.12.0
 scipy==1.12.0
 huggingface-hub==0.26.2
 safetensors==0.4.5
 
-# CRITICAL OPTIMIZATION: Memory Efficient Attention
-# Allows 1024x1024 generation on 6GB/8GB cards.
+# --- Hardware Optimization ---
+# Critical for calculating cross-frame attention without VRAM overflow.
 xformers==0.0.26.post1
 
-# Identity & Structural Tools
+# --- Identity & Computer Vision Tools ---
 insightface==0.7.3
 onnxruntime-gpu==1.17.1
 opencv-python-headless==4.9.0.80
 numpy==1.26.4
 
-# Geometry & Preprocessors
+# --- Geometry & Preprocessors ---
 controlnet_aux==0.0.9
 mediapipe==0.10.9
 
-# Async Queue
+# --- Async Task Orchestration ---
 celery==5.3.6
 redis==5.0.1
 
-# Frontend
+# --- Laboratory Frontend ---
 streamlit==1.30.0
+
+# --- Temporal Extension (Video Support) ---
+# Used for MP4 container management and frame-to-video synthesis.
+imageio==2.34.0
+imageio-ffmpeg==0.4.9
+av==12.0.0
+moviepy==1.0.3

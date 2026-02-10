@@ -2,9 +2,9 @@
     "id": "caulifla",
     "aliases": ["caulifla"],
     "essence": "species_saiyan_u6_punk",
-    "prompt_base": "cinematic portrait of a rebellious East-Asian woman, messy spiky black hair, confident smirk, wearing a **tight ribbed purple tube top, and loose-fit magenta canvas cargo pants**",
-    "feature_prompt": "hyper-realistic skin texture, individual hair strands, detailed fabric weave on tube top, robust canvas texture on cargo pants",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, doll, neon purple, flat lighting, low quality, blurry face, delicate features, over-polished, no uniform, plain clothes",
+    "prompt_base": "rebellious East-Asian woman, spiky black hair, confident smirk, tight ribbed purple tube top, loose-fit magenta cargo pants",
+    "feature_prompt": "realistic skin pores, individual hair strands, detailed fabric weave on tube top, robust canvas texture on pants",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, doll, neon purple, flat lighting, low quality, blurry face, delicate features, over-polished, no uniform",
     "weights": { 
         "depth": 0.60, 
         "openpose": 0.75 

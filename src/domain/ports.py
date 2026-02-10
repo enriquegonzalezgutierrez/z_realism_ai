@@ -1,22 +1,20 @@
 # path: z_realism_ai/src/domain/ports.py
-# description: Domain Boundary Interfaces v19.1 - Extended Evaluation Metrics.
+# description: Domain Boundary Interfaces v20.0 - Temporal Expansion Protocol.
 #
 # ABSTRACT:
-# This module represents the formal specification of the system's operational 
-# boundaries. It defines the schemas required for cross-domain communication 
-# in a Hexagonal Architecture. 
+# This module defines the formal specifications for the Z-Realism ecosystem.
+# It utilizes Hexagonal Architecture principles to decouple core domain logic
+# from specific infrastructure implementations (Stable Diffusion, FFmpeg, etc.).
 #
-# ARCHITECTURAL EVOLUTION (v19.1):
-# 1. Expanded AssessmentReport to include 'textural_realism' (relative entropy),
-#    allowing the system to quantify the information density gain between 
-#    stylized and photorealistic manifolds.
-# 2. Maintained decoupled structural conditioning (Depth vs. Pose) for 
-#    total synthesis engine authority.
+# ARCHITECTURAL EVOLUTION (v20.0):
+# 1. Introduced 'VideoGeneratorPort' to handle Img2Video synthesis.
+# 2. Added 'AnimationReport' for structured temporal telemetry.
+# 3. Maintained backward compatibility for all v19.1 Image/DNA analysis ports.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 from abc import ABC, abstractmethod
-from typing import Callable, Any, Optional, Dict, Tuple
+from typing import Callable, Any, Optional, Dict, Tuple, List
 from dataclasses import dataclass
 from PIL import Image
 
@@ -27,29 +25,27 @@ class AssessmentReport:
     """
     structural_similarity: float
     identity_preservation: float
-    textural_realism: float  # NEW: Quantifies information density/texture gain
+    textural_realism: float
     inference_time: float
     is_mock: bool = False
     full_prompt: str = ""
     negative_prompt: str = ""
 
 @dataclass
+class AnimationReport:
+    """
+    Data container for temporal synthesis (Video) results.
+    """
+    video_b64: str
+    inference_time: float
+    total_frames: int
+    fps: int
+    status: str = "success"
+
+@dataclass
 class AnalysisResult:
     """
-    Heuristic Strategy Manifold.
-    
-    Contains the recommended hyperparameters derived from the subject's 
-    visual DNA and domain lore.
-    
-    Attributes:
-        recommended_steps: Optimal iteration count for the de-noising schedule.
-        recommended_cfg: Classifier-Free Guidance scale for prompt adherence.
-        recommended_cn_depth: Conditioning intensity for the geometric depth map.
-        recommended_cn_pose: Conditioning intensity for the anatomical pose map.
-        recommended_strength: Stochastic refinement ratio (Img2Img Strength).
-        detected_essence: Semantic classification of the subject.
-        suggested_prompt: Canonical positive prompt synthesized from lore.
-        suggested_negative: Customized exclusion tokens to prevent artifacts.
+    Heuristic Strategy Manifold containing recommended hyperparameters.
     """
     recommended_steps: int
     recommended_cfg: float
@@ -62,7 +58,7 @@ class AnalysisResult:
 
 class ImageGeneratorPort(ABC):
     """
-    Abstract contract for the Neural Computational Engine.
+    Abstract contract for the Neural Computational Engine (Static Images).
     """
     @abstractmethod
     def generate_live_action(
@@ -74,6 +70,26 @@ class ImageGeneratorPort(ABC):
         hyper_params: Dict[str, Any],
         progress_callback: Optional[Callable[[int, int, str], None]] = None
     ) -> Tuple[Image.Image, str, str]: 
+        pass
+
+class VideoGeneratorPort(ABC):
+    """
+    Abstract contract for the Temporal Synthesis Engine (Video Animation).
+    
+    Implementation must support 'Sequential CPU Offloading' to accommodate 
+    environments with limited VRAM (e.g., GTX 1060 6GB).
+    """
+    @abstractmethod
+    def animate_image(
+        self,
+        source_image: Image.Image,
+        motion_prompt: str,
+        character_lore: Dict[str, Any],
+        duration_frames: int,
+        fps: int,
+        hyper_params: Dict[str, Any],
+        progress_callback: Optional[Callable[[int, int, str], None]] = None
+    ) -> AnimationReport:
         pass
 
 class ImageAnalyzerPort(ABC):
