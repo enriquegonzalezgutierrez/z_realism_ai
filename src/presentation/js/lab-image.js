@@ -1,17 +1,12 @@
 /**
  * path: src/presentation/js/lab-image.js
- * description: Static Fusion Controller v21.2 - Neural Image Research Lab.
+ * description: Static Fusion Controller v21.10 - DOM Integrity & Telemetry Fix.
  *
  * ABSTRACT:
  * Orchestrates the neural transformation of 2D character manifolds into 
- * photorealistic stills. This script manages the state of the Laboratory UI, 
- * handles heuristic DNA analysis, and coordinates asynchronous inference 
- * tasks with the FastAPI gateway.
- *
- * ARCHITECTURAL ROLE (Presentation Layer):
- * Acts as the Primary Controller for the Image-to-Image research hub. 
- * It ensures the "Advanced Metadata" manifold is correctly encapsulated 
- * and maintains the integrity of the neural synthesis lifecycle.
+ * photorealistic stills. This version ensures that the real-time telemetry 
+ * (progress bar) remains consistently visible by manipulating only the 
+ * dynamic content viewport.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -22,20 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. UI ELEMENT MAPPING (Neural Control Manifold)
     // =========================================================================
     const ui = {
-        // Identity & Guidance
         charName: document.getElementById('char-name'),
         fileInput: document.getElementById('file-upload'),
         dropZone: document.getElementById('drop-zone'),
         promptInput: document.getElementById('prompt-input'),
         essenceTag: document.getElementById('essence-tag'),
-        
-        // Primary Research Sliders
         strengthSlider: document.getElementById('input-strength'),
         strengthVal: document.getElementById('val-strength'),
         depthSlider: document.getElementById('input-depth'),
         depthVal: document.getElementById('val-depth'),
-
-        // Advanced Configuration (Accordion)
         adjTrigger: document.getElementById('adj-trigger'),
         adjContent: document.getElementById('adj-content'),
         resSlider: document.getElementById('input-res'),
@@ -45,17 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
         stepsSlider: document.getElementById('input-steps'),
         stepsVal: document.getElementById('val-steps'),
         seedInput: document.getElementById('input-seed'),
-
-        // Visual Workspace (Viewports)
         sourcePreview: document.getElementById('source-preview'),
         resultDisplay: document.getElementById('result-display'),
-        
-        // Inference Telemetry
+        dynamicContentViewport: document.getElementById('dynamic-content-viewport'), // NEW: Dynamic content target
         progressOverlay: document.getElementById('progress-overlay'),
         progressBar: document.getElementById('progress-bar'),
         statusText: document.getElementById('status-text'),
-
-        // Primary Action Triggers
         btnGenerate: document.getElementById('btn-generate'),
         btnAnalyze: document.getElementById('btn-analyze')
     };
@@ -66,121 +51,114 @@ document.addEventListener('DOMContentLoaded', () => {
     const state = {
         selectedFile: null,
         isProcessing: false,
-        lastTaskId: null
+        lastTaskId: null,
+        currentLatentPreview: null // Keep track of the preview image element
     };
 
     // =========================================================================
-    // 3. UI INTERACTION LOGIC (ACCORDION & SLIDERS)
+    // 3. UTILITY & UI HANDLERS
     // =========================================================================
 
     /**
-     * Toggles the Advanced Metadata Accordion.
-     * Manages the transition from closed (max-height 0) to expanded.
+     * Resets the laboratory workspace to its initial state before a new task.
+     * CRITICAL FIX: Ensures telemetry overlays remain in the DOM.
      */
+    const resetWorkspace = () => {
+        // 1. Sanitize ONLY the dynamic content viewport
+        ui.dynamicContentViewport.innerHTML = `
+            <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
+                OFFLINE
+            </div>
+        `;
+        state.currentLatentPreview = null; // Reset the reference
+
+        // 2. Reactivate and Reset Telemetry Overlay (it's always in the DOM)
+        ui.progressOverlay.classList.remove('hidden');
+        ui.progressBar.style.width = '0%';
+        ui.statusText.innerText = "INITIALIZING...";
+        
+        console.log("LAB_UI: Workspace sanitized for new synthesis task.");
+    };
+    
+    // Accordion Logic
     if (ui.adjTrigger && ui.adjContent) {
         ui.adjTrigger.onclick = () => {
-            const isOpen = ui.adjContent.classList.toggle('open');
-            ui.adjTrigger.classList.toggle('active', isOpen);
-            
-            // Visual feedback for the researcher
-            console.log(`LAB_UI: Advanced Metadata Manifold ${isOpen ? 'Expanded' : 'Collapsed'}.`);
+            ui.adjContent.classList.toggle('open');
+            ui.adjTrigger.classList.toggle('active');
         };
     }
 
-    /**
-     * Utility to synchronize range sliders with their numeric value displays.
-     */
+    // Slider Synchronization
     const syncSlider = (slider, label, isFloat = true) => {
         if (!slider || !label) return;
         slider.oninput = (e) => {
-            const val = e.target.value;
-            label.innerText = isFloat ? parseFloat(val).toFixed(2) : val;
+            label.innerText = isFloat ? parseFloat(e.target.value).toFixed(2) : e.target.value;
         };
     };
 
-    // Binding laboratory instrumentation
     syncSlider(ui.strengthSlider, ui.strengthVal);
     syncSlider(ui.depthSlider, ui.depthVal);
-    syncSlider(ui.resSlider, ui.resVal, false); 
+    syncSlider(ui.resSlider, ui.resVal, false);
     syncSlider(ui.cfgSlider, ui.cfgVal);
     syncSlider(ui.stepsSlider, ui.stepsVal, false);
 
     // =========================================================================
-    // 4. DATA INGESTION (FILE HANDLING)
+    // 4. CORE WORKFLOWS
     // =========================================================================
 
+    // File Handling
     ui.dropZone.onclick = () => ui.fileInput.click();
-
     ui.fileInput.onchange = (e) => {
         const file = e.target.files[0];
         if (file) {
             state.selectedFile = file;
             ui.dropZone.classList.add('has-file');
-            
-            // Render source preview URL
             const url = URL.createObjectURL(file);
             ui.sourcePreview.innerHTML = `
                 <span class="viewport-label">SOURCE_INPUT_MANIFOLD</span>
-                <img src="${url}" style="width:100%; height:100%; object-fit:contain; animation: fadeIn 0.5s ease-out;">
+                <img src="${url}" style="width:100%; height:100%; object-fit:contain;">
             `;
-            ui.essenceTag.innerText = "SOURCE_SYNCED // READY_FOR_ANALYSIS";
+            ui.essenceTag.innerText = "SOURCE_SYNCED // READY";
         }
     };
 
-    // =========================================================================
-    // 5. SUBJECT DNA ANALYSIS (HEURISTICS)
-    // =========================================================================
-
+    // DNA Analysis
     ui.btnAnalyze.onclick = async () => {
         if (!state.selectedFile || state.isProcessing) return;
-
         ui.essenceTag.innerText = "SEQUENCING_DNA...";
-        
         const formData = new FormData();
         formData.append('file', state.selectedFile);
         formData.append('character_name', ui.charName.value || "Unknown");
-
-        // Request strategy from the Heuristic Analyzer (api.js bridge)
         const data = await postToGateway('/analyze', formData);
-        
         if (data && data.status === 'success') {
             const rec = data.recommendations;
-            
-            // Dynamic UI Synchronization
             ui.strengthSlider.value = rec.strength;
             ui.strengthVal.innerText = rec.strength.toFixed(2);
             ui.depthSlider.value = rec.cn_scale_depth;
             ui.depthVal.innerText = rec.cn_scale_depth.toFixed(2);
             ui.promptInput.value = rec.texture_prompt;
-            
-            // Advanced parameters sync
             ui.cfgSlider.value = rec.cfg_scale;
             ui.cfgVal.innerText = rec.cfg_scale.toFixed(1);
             ui.stepsSlider.value = rec.steps;
             ui.stepsVal.innerText = rec.steps;
-
             ui.essenceTag.innerText = `STRATEGY_FOUND: ${data.detected_essence}`;
         }
     };
 
-    // =========================================================================
-    // 6. NEURAL FUSION WORKFLOW (INFERENCE)
-    // =========================================================================
-
+    // Neural Fusion (Main Generation Task)
     ui.btnGenerate.onclick = async () => {
         if (!state.selectedFile || state.isProcessing) {
-            alert("SYSTEM_ERROR: Please upload a source manifold input first.");
+            alert("SYSTEM_ERROR: Please upload a source manifold.");
             return;
         }
 
-        // Initialize inference UI state
+        // --- STATE RESET PROTOCOL ---
+        resetWorkspace(); 
+
         state.isProcessing = true;
         ui.btnGenerate.disabled = true;
-        ui.btnGenerate.innerText = "FUSING_SEQUENCE...";
-        ui.progressOverlay.classList.remove('hidden');
-        ui.progressBar.style.width = '0%';
+        ui.btnGenerate.innerText = "FUSING...";
         
-        // Dispatch transformation task
         const formData = new FormData();
         formData.append('file', state.selectedFile);
         formData.append('character_name', ui.charName.value || "Unknown");
@@ -197,44 +175,34 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data && data.task_id) {
             state.lastTaskId = data.task_id;
             
-            // Polling Loop for telemetry and result retrieval
             pollNeuralTask(data.task_id, 
-                // PROGRESS: Intermediate Latent Previewing
+                // Progress Callback
                 (progress) => {
                     ui.progressBar.style.width = `${progress.percent}%`;
                     ui.statusText.innerText = progress.status_text.replace(/_/g, ' ');
                     
                     if (progress.preview_b64) {
-                        let latentImg = ui.resultDisplay.querySelector('img.latent-preview');
-                        if (!latentImg) {
-                            latentImg = document.createElement('img');
-                            latentImg.className = 'latent-preview';
-                            latentImg.style.cssText = "position:absolute; inset:0; width:100%; height:100%; object-fit:contain; filter:blur(6px); z-index:1; opacity:0.6;";
-                            ui.resultDisplay.appendChild(latentImg);
+                        if (!state.currentLatentPreview) {
+                            state.currentLatentPreview = document.createElement('img');
+                            state.currentLatentPreview.className = 'latent-preview';
+                            state.currentLatentPreview.style.cssText = "position:absolute; inset:0; width:100%; height:100%; object-fit:contain; filter:blur(6px); opacity:0.6; z-index:1;";
+                            ui.dynamicContentViewport.appendChild(state.currentLatentPreview); // Insert into dynamic viewport
                         }
-                        latentImg.src = `data:image/jpeg;base64,${progress.preview_b64}`;
+                        state.currentLatentPreview.src = `data:image/jpeg;base64,${progress.preview_b64}`;
                     }
                 }, 
-                // SUCCESS: Masterwork Rendering
+                // Completion Callback
                 (result) => {
                     state.isProcessing = false;
                     ui.btnGenerate.disabled = false;
                     ui.btnGenerate.innerText = "INITIATE NEURAL FUSION";
-                    ui.progressOverlay.classList.add('hidden');
+                    ui.progressOverlay.classList.add('hidden'); // Hide progress overlay
                     
                     if (result && result.result_image_b64) {
-                        ui.resultDisplay.innerHTML = `
-                            <span class="viewport-label">ACTIVE_CANDIDATE_MONITOR</span>
+                        ui.dynamicContentViewport.innerHTML = `
                             <img src="data:image/png;base64,${result.result_image_b64}" style="width:100%; height:100%; object-fit:contain; z-index:5; position:relative;">
-                            
-                            <button id="btn-save" class="btn btn-secondary" style="position:absolute; bottom:20px; right:20px; z-index:10; font-size:0.75rem; border-color:var(--accent);">💾 SAVE PNG</button>
-                            
-                            <div class="metrics-overlay" style="position:absolute; bottom:20px; left:20px; font-family:var(--font-code); font-size:0.65rem; color:rgba(255,255,255,0.5); z-index:6; background:rgba(0,0,0,0.4); padding:5px 10px; border-radius:4px;">
-                                SSIM: ${(result.metrics.structural_similarity * 100).toFixed(0)}% | 
-                                INF_TIME: ${result.metrics.inference_time}s
-                            </div>
+                            <button id="btn-save" class="btn btn-secondary" style="position:absolute; bottom:20px; right:20px; z-index:10;">💾 SAVE</button>
                         `;
-                        
                         document.getElementById('btn-save').onclick = () => {
                             const link = document.createElement('a');
                             link.href = `data:image/png;base64,${result.result_image_b64}`;

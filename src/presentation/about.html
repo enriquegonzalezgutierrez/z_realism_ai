@@ -48,11 +48,18 @@
             <div class="info-content">
                 <p>
                     Z-Realism AI is a professional-grade research ecosystem engineered for the 
-                    photorealistic synthesis of 2D character manifolds. Our primary scientific 
-                    objective is to solve the <strong>Structural and Chromatic Drift Problems</strong>—a 
-                    prevalent challenge in neural style transfer where the geometric identity 
-                    and color integrity of the source are often compromised during 
-                    high-entropy denoising pipelines.
+                    photorealistic synthesis of 2D character manifolds into coherent, high-fidelity 
+                    visual representations. The platform explores the intersection between 
+                    generative diffusion models, perceptual continuity, and structural identity 
+                    preservation across stochastic transformations.
+                </p>
+                <p>
+                    Our primary scientific objective is to solve the <strong>Structural and Chromatic Drift Problems</strong>—a 
+                    prevalent challenge in neural style transfer and image-to-image diffusion systems. 
+                    These issues arise when the geometric identity, anatomical coherence, or color 
+                    integrity of the source subject is progressively degraded during high-entropy 
+                    denoising pipelines. Z-Realism introduces controlled intervention layers designed 
+                    to stabilize these variables throughout the generative process.
                 </p>
             </div>
         </header>
@@ -61,40 +68,80 @@
         <section class="info-section info-content">
             <h2>The Scientific Thesis</h2>
             <p>
-                Our methodology relies on the surgical control of the stochastic denoising 
-                process. By utilizing hierarchical conditioning via <strong>Dual ControlNet 
-                (Depth + OpenPose)</strong>, the system anchors the underlying geometry 
-                before injecting high-resolution cinematic textures. This approach allows 
-                for the generation of photorealistic results without sacrificing the core 
-                essence of the original <strong>Subject DNA</strong>.
+                The core thesis of Z-Realism is that photorealism is not a function of raw model 
+                capacity, but of constraint precision. Our methodology relies on the surgical 
+                control of the stochastic denoising process, treating diffusion not as a black box, 
+                but as a sequence of interpretable and steerable transformations.
+            </p>
+            <p>
+                By utilizing hierarchical conditioning via <strong>Dual ControlNet 
+                (Depth + OpenPose)</strong>, the system anchors the underlying spatial geometry 
+                and skeletal intent of the subject before injecting high-resolution cinematic 
+                textures. This layered conditioning strategy ensures that structural priors are 
+                resolved early in the diffusion timeline, dramatically reducing deformation artifacts.
+            </p>
+            <p>
+                This approach allows for the generation of photorealistic results without sacrificing 
+                the core essence of the original <strong>Subject DNA</strong>, a term used to describe 
+                the invariant visual traits that define identity across style, resolution, and context.
             </p>
 
             <div class="info-card">
                 <h4>Core Research Pillars:</h4>
                 <ul class="info-list">
-                    <li><strong>Original Fidelity Protocol:</strong> A hybrid prompt-anchoring logic that mitigates chromatic saturation loss.</li>
-                    <li><strong>Temporal Consistency:</strong> Stable Video Diffusion protocols adapted for high-resolution output on limited hardware.</li>
-                    <li><strong>Heuristic Metadata:</strong> An intelligence layer that sequences visual DNA into optimal latent parameters.</li>
+                    <li>
+                        <strong>Original Fidelity Protocol:</strong> A hybrid prompt-anchoring logic 
+                        combined with latent-space weighting strategies that actively mitigate 
+                        chromatic saturation loss, facial drift, and identity collapse during 
+                        aggressive style amplification.
+                    </li>
+                    <li>
+                        <strong>Temporal Consistency:</strong> Stable Video Diffusion protocols 
+                        adapted and re-sequenced for high-resolution output, enabling frame-to-frame 
+                        coherence on limited consumer hardware without relying on external interpolation.
+                    </li>
+                    <li>
+                        <strong>Heuristic Metadata:</strong> An intelligence layer that extracts, 
+                        classifies, and sequences visual DNA into optimal latent parameters, 
+                        allowing reproducible results across sessions and controlled variation 
+                        without loss of identity.
+                    </li>
                 </ul>
             </div>
 
             <h2>Hardware Orchestration</h2>
             <p>
                 A critical contribution of this project is the optimization of high-latency 
-                neural workloads for consumer-grade hardware. The <strong>Z-Realism v21.1 Engine</strong> 
-                implements an aggressive VRAM resource manager and <strong>Sequential CPU-VRAM 
-                Offloading</strong>. This allows for the synthesis of 1024px video frames on 
-                NVIDIA GPUs with only 6GB of VRAM, effectively utilizing system RAM as a massive 
-                latent buffer.
+                neural workloads for consumer-grade hardware environments. Rather than assuming 
+                access to enterprise GPUs, Z-Realism is explicitly designed to operate under 
+                constrained VRAM conditions while maintaining research-grade output quality.
+            </p>
+            <p>
+                The <strong>Z-Realism v21.1 Engine</strong> implements an aggressive VRAM resource 
+                manager and <strong>Sequential CPU-VRAM Offloading</strong> architecture. This 
+                system dynamically streams latent tensors between GPU memory and system RAM, 
+                effectively transforming conventional memory limitations into a scalable 
+                compute pipeline.
+            </p>
+            <p>
+                As a result, the engine enables the synthesis of 1024px video frames on 
+                NVIDIA GPUs with only 6GB of VRAM, utilizing system RAM as a massive latent buffer 
+                without compromising numerical stability or output fidelity.
             </p>
 
             <h2>Authorship & Clean Code</h2>
             <p>
-                The Z-Realism project is conceptualized and developed by <strong>Enrique González Gutiérrez</strong> 
-                as part of a doctoral thesis in Informatics Engineering. The ecosystem is 
-                architected under <strong>SOLID principles</strong> and <strong>Domain-Driven Design (DDD)</strong>, 
-                ensuring that the neural engine remains modular, testable, and resilient to 
-                technological shifts in the generative AI landscape.
+                The Z-Realism project is conceptualized and developed by 
+                <strong>Enrique González Gutiérrez</strong> as part of a doctoral thesis in 
+                Informatics Engineering. The research is positioned at the convergence of 
+                software architecture, applied machine learning, and computational aesthetics.
+            </p>
+            <p>
+                The entire ecosystem is architected under <strong>SOLID principles</strong> and 
+                <strong>Domain-Driven Design (DDD)</strong>, ensuring that the neural engine remains 
+                modular, testable, and resilient to technological shifts in the generative AI 
+                landscape. This architectural rigor allows experimental components to evolve 
+                independently while preserving the integrity of the core system.
             </p>
         </section>
 

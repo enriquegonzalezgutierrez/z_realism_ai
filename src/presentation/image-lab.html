@@ -2,16 +2,17 @@
 <html lang="en">
 <!-- 
   path: src/presentation/image-lab.html
-  description: Static Fusion Module v21.1 - Neural Image Research Lab.
+  description: Static Fusion Module v21.10 - DOM Integrity & Telemetry Fix.
   
   ABSTRACT:
-  This module provides a specialized research workspace for the synthesis of 
-  photorealistic stills from 2D character manifolds. It integrates the 
-  Heuristic DNA Analyzer and the Stable Diffusion inference engine.
+  This module provides a specialized research workspace for transforming 
+  2D character manifolds into photorealistic stills. This version ensures 
+  the dynamic content (latent preview, final image) does not interfere 
+  with the static telemetry overlays (progress bar, viewport label).
   
   ARCHITECTURAL ROLE (Presentation Layer):
-  Acts as the primary interface for Static Neural Transformation. It handles 
-  asynchronous task orchestration and real-time visual telemetry.
+  Acts as the primary interface for Static Neural Transformation. It manages 
+  asynchronous task orchestration and visually robust real-time telemetry.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -138,16 +139,19 @@
             <div class="viewport-card" id="result-display">
                 <span class="viewport-label">ACTIVE_INFERENCE_MONITOR</span>
                 
-                <!-- PROGRESS OVERLAY -->
-                <div id="progress-overlay" class="progress-overlay hidden">
+                <!-- NEW: This div will hold all dynamic image content (latent preview, final image) -->
+                <div id="dynamic-content-viewport" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1;">
+                    <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
+                        OFFLINE
+                    </div>
+                </div>
+
+                <!-- The progress overlay is now a sibling and is ALWAYS in the DOM -->
+                <div id="progress-overlay" class="progress-overlay hidden" style="z-index:20;">
                     <div class="status-message" id="status-text">CALCULATING_LATENTS...</div>
                     <div class="progress-container">
                         <div class="progress-fill" id="progress-bar"></div>
                     </div>
-                </div>
-
-                <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
-                    OFFLINE
                 </div>
             </div>
 

@@ -15,7 +15,8 @@
     display: grid;
     grid-template-columns: 380px 1fr; 
     gap: 30px;
-    height: calc(100vh - var(--body-padding-top-offset)); 
+    min-height: calc(100vh - var(--body-padding-top-offset));
+    height: auto; 
     padding: var(--content-gap); 
     overflow: hidden; 
 }
@@ -63,7 +64,7 @@
 .upload-zone {
     border: 2px dashed rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-md);
-    padding: 40px 20px;
+    padding: 50px 20px;
     text-align: center;
     background: rgba(255, 255, 255, 0.02);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -140,7 +141,7 @@
     display: flex; flex-direction: column; gap: 20px;
 }
 
-.accordion-content.open { max-height: 800px; margin-top: 20px; padding-bottom: 10px; opacity: 1; }
+.accordion-content.open { max-height: 1200px; margin-top: 20px; padding-bottom: 10px; opacity: 1; }
 
 /* --- 5. VISUAL VIEWPORTS --- */
 .viewport-area { display: flex; flex-direction: column; gap: 20px; height: 100%; }
@@ -149,7 +150,7 @@
 .viewport-card {
     flex: 1; background: #000; border: var(--glass-border); border-radius: var(--radius-lg);
     position: relative; overflow: hidden; display: flex; align-items: center;
-    justify-content: center; min-height: 400px; box-shadow: inset 0 0 40px rgba(0,0,0,1);
+    justify-content: center; min-height: 450px; box-shadow: inset 0 0 40px rgba(0,0,0,1);
 }
 
 .viewport-label {

@@ -2,17 +2,18 @@
 <html lang="en">
 <!-- 
   path: src/presentation/video-lab.html
-  description: Temporal Fusion Module v21.1 - Neural Video Research Lab.
+  description: Temporal Fusion Module v21.10 - DOM Integrity & Telemetry Fix.
   
   ABSTRACT:
   This module provides a specialized workspace for transforming static 
-  photorealistic manifolds into fluid cinematic sequences. It utilizes the 
-  AnimateDiff Temporal Engine with hardware-aware orchestration.
+  photorealistic manifolds into fluid cinematic sequences. This version ensures 
+  the dynamic video content does not interfere with the static telemetry 
+  overlays (progress bar, viewport label).
   
   ARCHITECTURAL ROLE (Presentation Layer):
   Acts as the primary interface for Temporal Neural Synthesis. It manages 
-  high-latency video tasks and handles the rendering of MP4 containers 
-  directly within the neural monitor.
+  high-latency video tasks and handles the robust rendering of MP4 containers 
+  directly within a DOM-stable neural monitor.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -131,16 +132,19 @@
             <div class="viewport-card" id="result-display">
                 <span class="viewport-label">TEMPORAL_OUTPUT_MONITOR</span>
                 
-                <!-- PROGRESS OVERLAY -->
-                <div id="progress-overlay" class="progress-overlay hidden">
+                <!-- NEW: This div will hold all dynamic video content -->
+                <div id="dynamic-content-viewport" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1;">
+                    <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
+                        WAITING
+                    </div>
+                </div>
+
+                <!-- The progress overlay is now a sibling and is ALWAYS in the DOM -->
+                <div id="progress-overlay" class="progress-overlay hidden" style="z-index:20;">
                     <div class="status-message" id="status-text">INITIALIZING TEMPORAL ENGINE...</div>
                     <div class="progress-container">
                         <div class="progress-fill" id="progress-bar"></div>
                     </div>
-                </div>
-
-                <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
-                    WAITING
                 </div>
             </div>
 
