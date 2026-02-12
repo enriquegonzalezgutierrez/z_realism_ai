@@ -82,6 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.progressOverlay.classList.remove('hidden');
         ui.progressBar.style.width = '0%';
         ui.statusText.innerText = "INITIALIZING...";
+
+        const telemetryHud = document.getElementById('telemetry-hud');
+        if (telemetryHud) {
+            telemetryHud.classList.add('hidden');
+        }
         
         console.log("LAB_UI: Workspace sanitized for new synthesis task.");
     };

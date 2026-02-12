@@ -2,12 +2,13 @@
     "id": "vegeta",
     "aliases": ["vegeta", "prince of all saiyans"],
     "essence": "species_saiyan_elite",
-    "prompt_base": "cinematic portrait of a muscular man, intense cold blue eyes, short, rigid, spiky dark blue hair, wearing highly detailed and segmented Saiyan battle armor over a dark bodysuit, fierce battle expression", 
-    "feature_prompt": "hyperdetailed human skin texture, highly reflective metallic texture on armor, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth armor, toy, doll, bright yellow hair, flat lighting, low quality",
+    "prompt_base": "muscular saiyan warrior, fierce intense blue eyes, short rigid spiky dark blue hair, powerful physique, confident expression, 8k cinematic photo, dramatic lighting",
+    "feature_prompt": "hyperdetailed skin texture, individual hair strands, highly reflective metallic texture on segmented battle armor, subtle weathering on face, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth armor, toy, doll, bright yellow hair, flat lighting, low quality, (long hair:1.1), (human face:1.2)",
     "weights": { 
-        "depth": 0.65,
-        "openpose": 0.75
+        "depth": 0.98,
+        "canny": 0.85
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [60, 160],
+    "denoising_strength": 0.50
 }

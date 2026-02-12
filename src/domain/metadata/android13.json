@@ -1,13 +1,14 @@
 {
     "id": "android13",
     "aliases": ["13", "android 13"],
-    "essence": "species_human_android",    
-    "prompt_base": "muscular man, white trucker hat with red RR logo, long flowing white hair, orange vest, green pants, blue eyes",    
-    "feature_prompt": "rugged fabric texture, canvas hat material, individual hair strands, detailed skin pores",    
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, smooth hair, deformed, low quality",    
+    "essence": "species_human_android",
+    "prompt_base": "muscular man, piercing blue eyes, long flowing white hair, rugged facial features, determined expression, 8k cinematic photo, outdoor lighting",
+    "feature_prompt": "visible skin texture, subtle scars, individual flowing hair strands, detailed fabric weave on clothing, canvas hat material, metal buckle texture",
+    "negative_prompt": "anime, cartoon, drawing, plastic, doll, smooth hair, deformed, low quality, blurry face, (deformed hat:1.2), too soft skin, feminine",
     "weights": { 
-        "depth": 0.60, 
-        "openpose": 0.75
+        "depth": 0.88, 
+        "canny": 0.78
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [70, 170],
+    "denoising_strength": 0.55
 }

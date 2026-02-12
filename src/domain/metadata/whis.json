@@ -2,12 +2,13 @@
     "id": "whis",
     "aliases": ["whis", "uis", "angel"],
     "essence": "species_celestial_angel",
-    "prompt_base": "hyperdetailed portrait of an elegant celestial being, tall stature, pale light-blue skin tone, impossibly tall vertical white hair structure, serene intelligent eyes, wearing a regal maroon silk garment, gold neck ring",
-    "feature_prompt": "hyperrealistic texture on the silk fabric, delicate subsurface scattering on the pale skin, detailed structure of the white hair",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, helmet hair, humanoid proportions, flat lighting, low quality",
+    "prompt_base": "elegant celestial being, slender physique, pale light-blue alien skin, long flowing white hair, serene intelligent eyes, slender staff, divine presence, 8k cinematic photo, ethereal lighting",
+    "feature_prompt": "smooth skin texture, iridescent sheen, individual flowing hair strands, intricate fabric weave on robes, sharp focus on staff crystal, otherworldly details",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, human, smooth hair, low quality, blurry, (muscular:1.2), deformed anatomy, jewelry",
     "weights": { 
-        "depth": 0.60,
-        "openpose": 0.75
+        "depth": 0.95,
+        "canny": 0.85
     },
-    "denoising_strength": 0.62
+    "canny_thresholds": [60, 150],
+    "denoising_strength": 0.48
 }

@@ -2,12 +2,13 @@
     "id": "dyspo",
     "aliases": ["dyspo"],
     "essence": "species_alien_feline_rabbit",
-    "prompt_base": "photograph of an agile rabbit warrior, pale lavender skin, long rabbit ears, black and red uniform, confident stare",
-    "feature_prompt": "athletic body, skin pores, slight fur sheen, fabric weave pattern",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, human, fat, neon, jpeg artifacts",
+    "prompt_base": "agile rabbit-like warrior, lean muscular physique, pale lavender skin, long pointed rabbit ears, determined confident stare, black and red uniform, 8k cinematic photo, dynamic lighting",
+    "feature_prompt": "alien skin texture, subtle fur sheen, individual hair strands, athletic body, realistic fabric weave on uniform, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, human face, fat, neon, low quality, blurry face, (human ears:1.3), too soft, small build",
     "weights": { 
-        "depth": 0.60,
-        "openpose": 0.80
+        "depth": 0.95,
+        "canny": 0.85
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [60, 160],
+    "denoising_strength": 0.50
 }

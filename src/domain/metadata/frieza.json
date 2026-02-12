@@ -2,12 +2,13 @@
     "id": "frieza",
     "aliases": ["frieza", "freezer", "golden frieza"],
     "essence": "species_frost_demon",
-    "prompt_base": "realistic sculpture of an alien overlord, gleaming white bio-armor, crystalline purple gems, menacing red eyes, visible tail",
-    "feature_prompt": "polished surface texture, high-gloss reflections, volumetric rim lighting, sharp focus on the gems, smooth organic texture on body",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, dull surface, matte skin, fleshy texture, human proportions, bulky, flat lighting",
-    "weights": { 
-        "depth": 0.70,
-        "openpose": 0.75
+    "prompt_base": "menacing alien overlord, gleaming white bio-armor, crystalline purple gems, piercing red eyes, visible tail, intimidating expression, 8k photorealistic rendering",
+    "feature_prompt": "polished surface texture, high-gloss reflections, sharp focus on gems, smooth organic texture on body, detailed segments, volumetric rim lighting",
+    "negative_prompt": "anime, cartoon, drawing, plastic, dull surface, matte skin, fleshy texture, human proportions, bulky, low quality, deformed, furry, soft body",
+    "weights": {
+        "depth": 0.98,
+        "canny": 0.90
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [30, 100],
+    "denoising_strength": 0.40
 }

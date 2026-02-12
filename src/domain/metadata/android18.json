@@ -2,12 +2,13 @@
     "id": "android18",
     "aliases": ["18", "android 18", "lazuli"],
     "essence": "species_human_cyborg",
-    "prompt_base": "young woman, piercing cold blue eyes, short straight blonde hair, realistic facial features, cinematic lighting, professional photography",
-    "feature_prompt": "highly detailed skin pores, individual hair strands, realistic fabric texture, natural skin folds, subsurface scattering, 8k uhd",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, exaggerated eyes, low quality, makeup, long hair, jewelry",
+    "prompt_base": "young woman, cold blue eyes, short straight blonde bob hair, realistic facial features, cinematic lighting, professional photography",
+    "feature_prompt": "individual hair strands, denim fabric, striped knit sleeves, realistic skin pores, subsurface scattering, fujifilm xt3",
+    "negative_prompt": "anime, cartoon, drawing, plastic, doll, messy hair, low quality, (makeup:1.2), tanned skin, long hair, jewelry",
     "weights": { 
-        "depth": 0.90, 
-        "canny": 0.80 
+        "depth": 0.95, 
+        "canny": 0.85 
     },
-    "denoising_strength": 0.52
+    "canny_thresholds": [30, 100],
+    "denoising_strength": 0.48
 }

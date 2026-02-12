@@ -22,7 +22,7 @@ from PIL import Image
 
 from controlnet_aux import MidasDetector, CannyDetector
 from diffusers import (
-    StableDiffusionControlNetImg2ImgPipeline, 
+    StableDiffusionControlNetImg2ImgPipeline,
     ControlNetModel, 
     DPMSolverMultistepScheduler,
     AutoencoderKL
@@ -58,7 +58,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
 
             self._pipe = StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
                 "SG161222/Realistic_Vision_V5.1_noVAE", 
-                vae=vae, controlnet=[depth_net, canny_net], 
+                vae=vae, controlnet=[depth_net, canny_net],
                 torch_dtype=self._torch_dtype, safety_checker=None, local_files_only=self._offline
             )
             
@@ -80,24 +80,17 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         hyper_params: Dict[str, Any], 
         progress_callback: Optional[Callable[[int, int, str], None]] = None
     ) -> Tuple[Image.Image, str, str]:
-        """
-        Executes synthesis with dynamic, metadata-driven structural anchoring.
-        """
         
-        # --- 1. FULL PARAMETER EXTRACTION (No Hardcoded Values) ---
         strength = float(hyper_params.get("strength", 0.55))
         nominal_steps = int(hyper_params.get("steps", 30))
         effective_steps = math.floor(nominal_steps * strength)
         
-        # Dynamic ControlNet Weights
         cn_depth_weight = float(hyper_params.get("cn_depth", 0.80))
-        cn_canny_weight = float(hyper_params.get("cn_pose", 0.70)) # Maps legacy 'cn_pose' to Canny
+        cn_canny_weight = float(hyper_params.get("cn_pose", 0.70)) # Mapped from 'cn_pose'
         
-        # Dynamic Canny Sensitivity Thresholds
         canny_low = int(hyper_params.get("canny_low", 100))
         canny_high = int(hyper_params.get("canny_high", 200))
         
-        # --- 2. MANIFOLD PRE-PROCESSING ---
         target_w, target_h = self._calculate_proportional_dimensions(source_image.width, source_image.height, resolution_anchor)
         
         if source_image.mode == 'RGBA':
@@ -109,28 +102,21 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             
         input_image = input_image.resize((target_w, target_h), Image.Resampling.LANCZOS)
 
-        # --- 3. DYNAMIC NEURAL CONDITIONING ---
         depth_map = self.depth_estimator(input_image).resize((target_w, target_h))
-        canny_map = self.canny_detector(
-            input_image, 
-            low_threshold=canny_low, 
-            high_threshold=canny_high
-        ).resize((target_w, target_h))
+        canny_map = self.canny_detector(input_image, low_threshold=canny_low, high_threshold=canny_high).resize((target_w, target_h))
 
-        # --- 4. SEMANTIC & TELEMETRY ---
-        final_prompt = f"photorealistic cinematic photo, {prompt_guidance}, {feature_prompt}, highly detailed, 8k"
-        neg_prompt = hyper_params.get("negative_prompt", "anime, cartoon, plastic, blurry")
+        final_prompt = f"photorealistic cinematic photo, {prompt_guidance}, {feature_prompt}, highly detailed, 8k, realistic lighting"
+        neg_prompt = hyper_params.get("negative_prompt", "anime, drawing, plastic, low quality, illustration")
 
         def internal_callback(pipe, i, t, callback_kwargs):
             if progress_callback: progress_callback(i + 1, effective_steps, None)
             return callback_kwargs
 
-        # --- 5. NEURAL INFERENCE ---
         with torch.inference_mode():
             output = self._pipe(
                 prompt=final_prompt, 
                 negative_prompt=neg_prompt,
-                image=input_image, 
+                image=input_image,
                 control_image=[depth_map, canny_map], 
                 strength=strength, 
                 height=target_h, 
@@ -147,7 +133,9 @@ class StableDiffusionGenerator(ImageGeneratorPort):
     def _calculate_proportional_dimensions(self, width: int, height: int, resolution_anchor: int) -> Tuple[int, int]:
         aspect = width / height
         if width >= height:
-            new_w, new_h = resolution_anchor, int(resolution_anchor / aspect)
+            new_w = resolution_anchor
+            new_h = int(resolution_anchor / aspect)
         else:
-            new_w, new_h = int(resolution_anchor * aspect), resolution_anchor
+            new_h = resolution_anchor
+            new_w = int(resolution_anchor * aspect)
         return (new_w // 64) * 64, (new_h // 64) * 64

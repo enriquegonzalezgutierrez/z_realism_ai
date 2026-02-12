@@ -2,12 +2,13 @@
     "id": "zamasu",
     "aliases": ["zamasu", "fused zamasu"],
     "essence": "species_shinjin_deity",
-    "prompt_base": "cinematic portrait of a slender green alien man, mohawk white hair, pointed ears, divine shinjin robes, arrogant expression, gold earrings",
-    "feature_prompt": "subtle green skin texture, realistic fabric texture on robes, sharp focus on gold earrings",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, human skin color, flat lighting, low quality, blurry robes",
+    "prompt_base": "cinematic portrait of a slender green alien man, cold piercing eyes, white mohawk hair, pointed ears, divine shinjin robes, powerful aura, 8k realistic photo, dramatic lighting",
+    "feature_prompt": "alien skin texture with subtle veins, sharp mohawk, detailed embroidery on robes, heavy ornate gold earrings, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, human skin tone, smooth skin, doll, flat lighting, low quality, blurry robes, kind face, jewelry",
     "weights": { 
-        "depth": 0.60, 
-        "openpose": 0.75 
+        "depth": 0.95,
+        "canny": 0.80
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [60, 160],
+    "denoising_strength": 0.52
 }

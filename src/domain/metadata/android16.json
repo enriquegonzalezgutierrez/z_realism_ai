@@ -1,13 +1,14 @@
 {
     "id": "android16",
-    "aliases": ["16", "android 16"],
+    "aliases": ["16", "android 16", "c-16"],
     "essence": "species_android_full",
-    "prompt_base": "massive muscular humanoid, realistic ginger orange hair mohawk, intense blue eyes, green heavy industrial bio-mechanical armor",
-    "feature_prompt": "scratched olive green metal plates, exposed hydraulic joints, carbon fiber textures, realistic human skin pores, highly detailed mechanical suit",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, flat color, deformed, watermark, low quality, (bright white background:1.5)",
+    "prompt_base": "towering muscular android, ginger orange hair mohawk, intense blue eyes, stoic expression, powerful physique, 8k cinematic photo",
+    "feature_prompt": "hard surface modeling, metallic reflections, scuffed armor plating, exposed hydraulic joints, carbon fiber textures, synthetic skin accents, detailed mechanical suit",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, deformed, organic skin, human flesh, soft fabric, low quality, (bright white background:1.5)",
     "weights": { 
-        "depth": 0.85, 
-        "openpose": 0.45
+        "depth": 0.95, 
+        "canny": 0.60
     },
-    "denoising_strength": 0.75
+    "canny_thresholds": [50, 150],
+    "denoising_strength": 0.58
 }

@@ -2,9 +2,13 @@
     "id": "sagat",
     "aliases": ["sagat", "muay thai king"],
     "essence": "human_muay_thai",
-    "prompt_base": "cinematic portrait of a giant Thai kickboxer, massive vertical scar on chest, eyepatch over one eye, stoic and intimidating",
-    "feature_prompt": "realistic scar tissue, weathered skin, hyper-detailed muscles, rugged skin texture",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth chest, small build, two eyes, blurry scar",
-    "weights": { "depth": 0.65, "openpose": 0.75 },
-    "denoising_strength": 0.65
+    "prompt_base": "giant Thai kickboxer, massive vertical scar, broad muscular physique, shaved head, eyepatch over one eye, stoic and intimidating, 8k cinematic photo, dynamic lighting",
+    "feature_prompt": "realistic scar tissue texture, weathered skin, hyper-detailed muscles definition, rugged rough skin texture, visible sweat, piercing gaze, tribal tattoos",
+    "negative_prompt": "anime, cartoon, drawing, plastic, smooth chest, small build, two eyes, blurry scar, low quality, baby face, child",
+    "weights": { 
+        "depth": 0.95,
+        "canny": 0.80
+    },
+    "canny_thresholds": [60, 170],
+    "denoising_strength": 0.50
 }

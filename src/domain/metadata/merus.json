@@ -2,12 +2,13 @@
     "id": "merus",
     "aliases": ["merus", "agent 1"],
     "essence": "species_angel_trainee",
-    "prompt_base": "cinematic portrait of an elegant man, pale light-blue skin tone, short silver hair, wearing realistic Galactic Patrol armor, serene expression",
-    "feature_prompt": "subtle sheen on blue skin, realistic metallic texture on armor, sharp focus on silver hair",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, human skin color, flat lighting, low quality",
+    "prompt_base": "cinematic portrait of an ethereal man, pale light-blue alien skin, short silver hair, serene expression, 8k professional photo, soft light",
+    "feature_prompt": "subtle bioluminescence on skin, sharp details on Galactic Patrol armor, realistic metallic texture, individual silver hair strands, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, plastic, human, smooth skin, flat lighting, low quality, blurry face, helmet hair",
     "weights": { 
-        "depth": 0.60, 
-        "openpose": 0.75 
+        "depth": 0.90,
+        "canny": 0.80
     },
-    "denoising_strength": 0.63
+    "canny_thresholds": [70, 180],
+    "denoising_strength": 0.50
 }

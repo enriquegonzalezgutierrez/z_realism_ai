@@ -2,12 +2,13 @@
     "id": "beerus",
     "aliases": ["beerus", "god_of_destruction"],
     "essence": "species_alien_deity",
-    "prompt_base": "slender feline deity, dusty purple skin, large pointed ears, yellow eyes, maroon silk robe, wide gold obi belt",
-    "feature_prompt": "natural skin texture, detailed silk fabric folds, intricate gold trim, subsurface scattering on ears",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic skin, human face, cat ears, flat lighting, low quality, bare legs, exposed lower body, shorts",
+    "prompt_base": "slender purple-skinned feline deity, large pointed ears, piercing yellow eyes, stern expression, realistic alien anatomy, 8k cinematic photo",
+    "feature_prompt": "dusty purple wrinkled skin texture, detailed silk fabric folds, intricate gold trim, subsurface scattering on ears, alien biology, sharp focus",
+    "negative_prompt": "human face, human nose, cat head, human skin, generic furry, anime, cartoon, drawing, illustration, plastic, low quality, flat lighting, bare legs, exposed lower body, shorts",
     "weights": { 
-        "depth": 0.70,
-        "openpose": 0.75
+        "depth": 0.98, 
+        "canny": 0.90
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [40, 120],
+    "denoising_strength": 0.40
 }

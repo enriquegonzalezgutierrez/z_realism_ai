@@ -2,12 +2,13 @@
     "id": "moro",
     "aliases": ["moro", "planet-eater moro"],
     "essence": "species_ancient_wizard",
-    "prompt_base": "hyperdetailed cinematic portrait of an imposing elder wizard, massive curved demonic horns, long flowing white beard and hair, wrinkled pale blue skin, menacing red eyes, wearing ancient, tattered mystical robes",
-    "feature_prompt": "extreme detail on skin texture and wrinkles, realistic white beard and hair strands, textured ancient fabric, sharp focus on horns",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth skin, blue fur, blurry beard, youthful skin, low quality, simple robes",
+    "prompt_base": "imposing elder wizard, gaunt face, massive curved demonic horns, long flowing white beard and hair, wrinkled pale blue skin, menacing red eyes, 8k cinematic photo, dramatic lighting",
+    "feature_prompt": "intricate demonic skin texture, extreme detail on facial wrinkles, realistic white beard and hair strands, textured ancient fabric, sharp focus on horns, otherworldly energy",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, human skin, smooth skin, baby face, low quality, blurry beard, youthful skin, simple robes, soft lighting",
     "weights": { 
-        "depth": 0.70,
-        "openpose": 0.75
+        "depth": 0.98,
+        "canny": 0.85
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [30, 100],
+    "denoising_strength": 0.40
 }

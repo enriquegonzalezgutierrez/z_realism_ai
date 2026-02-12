@@ -65,8 +65,8 @@ async def analyze_visual_dna(
                 "cn_scale_depth": analysis.recommended_cn_depth,
                 "cn_scale_pose": analysis.recommended_cn_pose, # This is mapped to Canny
                 "strength": analysis.recommended_strength,
-                "canny_low": analysis.canny_low,   # --- NEW: Recommended low threshold ---
-                "canny_high": analysis.canny_high, # --- NEW: Recommended high threshold ---
+                "canny_low": analysis.canny_low,
+                "canny_high": analysis.canny_high,
                 "texture_prompt": analysis.suggested_prompt,
                 "negative_prompt": analysis.suggested_negative
             }
@@ -109,10 +109,10 @@ async def transform_image(
             "steps": steps,
             "cfg_scale": cfg_scale,
             "cn_depth": cn_depth,
-            "cn_pose": cn_pose, # Mapped to Canny weight
+            "cn_pose": cn_pose,
             "strength": strength,
-            "canny_low": canny_low,   # --- INJECTED ---
-            "canny_high": canny_high, # --- INJECTED ---
+            "canny_low": canny_low,
+            "canny_high": canny_high,
             "seed": seed,
             "negative_prompt": negative_prompt
         }

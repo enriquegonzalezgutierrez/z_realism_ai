@@ -1,0 +1,14 @@
+{
+    "id": "bart_simpson",
+    "aliases": ["bart", "bart simpson"],
+    "essence": "species_simpson_humanoid",
+    "prompt_base": "cheeky 10-year-old boy, yellow humanoid skin, short spiky hair, mischievous expression, 8k realistic photo, daylight",
+    "feature_prompt": "visible skin pores, individual hair strands, high quality fabric texture on red shirt and blue shorts, subtle cartoon shading, skateboarding",
+    "negative_prompt": "anime, cartoon, drawing, plastic, human skin tone, smooth skin, doll, clean clothing, flat lighting, low quality, friendly, makeup",
+    "weights": { 
+        "depth": 0.80,
+        "canny": 0.75
+    },
+    "canny_thresholds": [70, 180],
+    "denoising_strength": 0.58
+}

@@ -49,8 +49,10 @@ class AnalysisResult:
     recommended_steps: int
     recommended_cfg: float
     recommended_cn_depth: float
-    recommended_cn_pose: float  # Mapped to Canny weight for API stability
+    recommended_cn_pose: float
     recommended_strength: float
+    canny_low: int
+    canny_high: int
     
     # --- NEW: Doctoral Metadata Extension ---
     canny_low: int

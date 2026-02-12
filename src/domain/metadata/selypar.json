@@ -2,12 +2,13 @@
     "id": "selypar",
     "aliases": ["celipa", "fasha", "selypa"],
     "essence": "species_saiyan_warrior",
-    "prompt_base": "cinematic portrait of a tough female Saiyan warrior, short spiky black bob hair, wearing battle-damaged white Saiyan armor with shoulder pads over a reddish-pink bodysuit, confident ruthless expression",
-    "feature_prompt": "battle-worn metal texture on armor, realistic spandex fabric weave, sweat on skin, defined athletic musculature, sharp gaze, subtle dirt and grit",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, cosplay, clean armor, doll, soft features, neon pink, makeup, lipstick, delicate",
+    "prompt_base": "cinematic portrait of a tough female Saiyan warrior, muscular physique, short spiky black bob hair, confident ruthless expression, 8k realistic photo, dynamic lighting",
+    "feature_prompt": "battle-worn metal texture on Saiyan armor, realistic spandex fabric weave, sweat on skin, defined athletic musculature, sharp gaze, subtle dirt and grit, combat damage",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, cosplay, clean armor, doll, soft features, neon pink, makeup, lipstick, delicate, low quality",
     "weights": { 
-        "depth": 0.65, 
-        "openpose": 0.75
+        "depth": 0.90,
+        "canny": 0.82
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [70, 180],
+    "denoising_strength": 0.55
 }

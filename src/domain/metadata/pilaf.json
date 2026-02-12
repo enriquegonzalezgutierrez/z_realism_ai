@@ -2,12 +2,13 @@
     "id": "pilaf",
     "aliases": ["pilaf", "emperor pilaf"],
     "essence": "species_alien_imp",
-    "prompt_base": "cinematic portrait of a tiny blue alien creature, large pointed ears, blue and red jester hat, blue imperial tunic with frills, wide face, smooth skin, tiny stature",
-    "feature_prompt": "rubbery biological blue skin, realistic fabric texture on jester hat and tunic, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, illustration, human face, regular human height, plastic, doll, low quality, deformed hat",
+    "prompt_base": "cinematic portrait of a tiny blue alien creature, sinister facial expression, large pointed ears, blue and red jester hat, regal blue imperial tunic with frills, smooth skin, sharp focus",
+    "feature_prompt": "rubbery biological blue skin texture, detailed seams and stitching on tunic, sharp focus on face, shiny hat fabric",
+    "negative_prompt": "anime, cartoon, drawing, plastic, human face, regular human height, organic skin, low quality, blurry, (deformed hat:1.3), short ears, friendly expression",
     "weights": { 
-        "depth": 0.60, 
-        "openpose": 0.75 
+        "depth": 0.90,
+        "canny": 0.80
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [60, 150],
+    "denoising_strength": 0.50
 }

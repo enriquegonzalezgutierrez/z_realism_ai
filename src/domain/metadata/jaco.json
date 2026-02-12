@@ -2,12 +2,13 @@
     "id": "jaco",
     "aliases": ["jaco", "galactic patrolman"],
     "essence": "species_alien_patrolman",
-    "prompt_base": "photograph of a slender alien, smooth silver and purple skin, large luminous yellow bug-like eyes, galactic patrol armor, radio antenna on head, futuristic aesthetic",
-    "feature_prompt": "high gloss texture on silver armor, detailed lens texture on eyes, visible seams on helmet",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, human eyes, flat color, low quality, blurry antennae",
+    "prompt_base": "photograph of a slender alien, smooth silver and purple skin, large luminous yellow bug-like eyes, radio antenna on head, futuristic aesthetic, determined expression, 8k cinematic photo",
+    "feature_prompt": "high gloss texture on silver armor, detailed lens texture on eyes, visible seams on armor, subtle organic texture on purple skin, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, human eyes, flat color, low quality, blurry antennae, (human face:1.3), messy, dull",
     "weights": { 
-        "depth": 0.60, 
-        "openpose": 0.75 
+        "depth": 0.95, 
+        "canny": 0.88 
     },
-    "denoising_strength": 0.63
+    "canny_thresholds": [50, 150],
+    "denoising_strength": 0.45
 }

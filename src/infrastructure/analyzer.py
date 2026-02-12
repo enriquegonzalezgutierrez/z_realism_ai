@@ -129,7 +129,7 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
             recommended_steps=30,
             recommended_cfg=7.5,
             recommended_cn_depth=float(weights.get("depth", 0.75)),
-            recommended_cn_pose=float(weights.get("canny", 0.50)), # Map 'canny' to 'cn_pose'
+            recommended_cn_pose=float(weights.get("canny", 0.40)), # Map 'canny' to 'cn_pose'
             recommended_strength=float(metadata.get("denoising_strength", 0.70)),
             
             # --- Passing new parameters to the DTO ---

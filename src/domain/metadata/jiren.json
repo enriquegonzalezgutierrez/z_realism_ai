@@ -2,12 +2,13 @@
     "id": "jiren",
     "aliases": ["jiren", "the gray", "pride trooper"],
     "essence": "species_alien_warrior",
-    "prompt_base": "cinematic portrait of a massive, imposing gray alien warrior, smooth yet highly textured gray skin, giant black void eyes, wearing red and black Pride Trooper combat suit",
-    "feature_prompt": "extreme muscle definition, visible veins, subtle wet sheen on the gray skin, detailed texture on the suit fabric",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic texture, smooth gray skin, human skin color, doll, flat lighting, bad anatomy",
+    "prompt_base": "cinematic portrait of a massive, imposing gray alien warrior, smooth yet highly textured gray skin, giant black void eyes, stoic determined expression, 8k cinematic photo, dramatic lighting",
+    "feature_prompt": "extreme muscle definition, visible veins, subtle wet sheen on the gray skin, detailed texture on the combat suit fabric, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth gray skin, human skin color, doll, flat lighting, bad anatomy, low quality, blurry, friendly expression, small build",
     "weights": { 
-        "depth": 0.65,
-        "openpose": 0.75
+        "depth": 0.95,
+        "canny": 0.85
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [60, 160],
+    "denoising_strength": 0.50
 }

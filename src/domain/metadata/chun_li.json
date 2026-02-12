@@ -2,12 +2,13 @@
     "id": "chun_li",
     "aliases": ["chun-li", "chunli"],
     "essence": "human_interpol_officer",
-    "prompt_base": "realistic photo of a Chinese interpol officer, black ox-horn buns with white silk ribbons, blue silk brocade qipao, sharp determined expression",
-    "feature_prompt": "athletic build, detailed silk fabric folds and trims, photorealistic eyes, muscular legs",
-    "negative_prompt": "anime, cartoon, drawing, illustration, smooth skin, doll, low quality, deformed anatomy, exposed legs",
+    "prompt_base": "athletic Chinese interpol officer, muscular legs, determined focused expression, black ox-horn buns with white silk ribbons, 8k cinematic photo, dynamic lighting",
+    "feature_prompt": "highly detailed skin texture, visible muscle definition, individual hair strands, realistic blue silk brocade qipao fabric, intricate gold trims, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, plastic, doll, smooth skin, low quality, blurry face, deformed anatomy, exposed legs, short skirt, (thin build:1.2), messy hair",
     "weights": { 
-        "depth": 0.60, 
-        "openpose": 0.75 
+        "depth": 0.92, 
+        "canny": 0.82 
     },
-    "denoising_strength": 0.64
+    "canny_thresholds": [70, 180],
+    "denoising_strength": 0.58
 }

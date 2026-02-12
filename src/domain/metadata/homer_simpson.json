@@ -1,13 +1,14 @@
 {
-    "id": "m_bison",
-    "aliases": ["bison", "dictator", "vega jp"],
-    "essence": "human_dictator",
-    "prompt_base": "cinematic portrait of an imposing military leader, sharp red officer uniform with silver plates, large officer cap, glowing white eyes, intense expression",
-    "feature_prompt": "high quality wool texture on uniform, realistic metallic plates, weathered face, intimidating presence",
-    "negative_prompt": "anime, cartoon, illustration, plastic, friendly, bright colors, toy, smooth uniform",
+    "id": "homer_simpson",
+    "aliases": ["homer", "homer simpson"],
+    "essence": "species_simpson_humanoid",
+    "prompt_base": "overweight middle-aged man, yellow humanoid skin, almost completely bald head, five o'clock shadow, 8k realistic photo, studio lighting",
+    "feature_prompt": "visible pores on face, stubble and skin imperfections, detailed collar fabric on white shirt, detailed neck fat texture, subtle sweat",
+    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, perfect skin, clean shaven, flat lighting, low quality, messy clothing, handsome, muscular",
     "weights": { 
-        "depth": 0.65, 
-        "openpose": 0.75 
+        "depth": 0.90,
+        "canny": 0.70
     },
-    "denoising_strength": 0.65
+    "canny_thresholds": [70, 180],
+    "denoising_strength": 0.55
 }
