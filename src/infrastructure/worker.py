@@ -1,16 +1,11 @@
 # path: src/infrastructure/worker.py
-# description: Distributed Inference Worker v21.4 - Hybrid Hardware Orchestration.
-#              Consumes tasks from the Redis Queue and executes Neural Workloads.
+# description: Distributed Inference Worker v22.0 - Doctoral Thesis Candidate.
+#              FIXED: Temporal task now correctly invokes AnimateCharacterUseCase.
 #
 # ARCHITECTURAL ROLE (Infrastructure Layer):
 # This component acts as the primary computational node. It manages the 
 # lifecycle of the GPU and implements the "Context-Aware Resource Management" 
 # pattern to support multi-modal inference on limited hardware (6GB VRAM).
-#
-# KEY FEATURES:
-# 1. Dynamic Engine Loading: Switches between Static and Temporal generators.
-# 2. Aggressive VRAM Purging: Explicitly clears CUDA cache during context switches.
-# 3. Metadata Integration: Coordinates the injection of Subject DNA into tasks.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -23,13 +18,14 @@ import gc
 from celery import Celery
 from PIL import Image
 
-# Domain & Infrastructure Layer Imports
-from src.application.use_cases import TransformCharacterUseCase
+# Domain & Application Layer Imports
+from src.application.use_cases import TransformCharacterUseCase, AnimateCharacterUseCase # <-- Added AnimateCharacterUseCase
 from src.infrastructure.sd_generator import StableDiffusionGenerator
 from src.infrastructure.video_generator import StableVideoAnimateDiffGenerator
 from src.infrastructure.evaluator import ComputerVisionEvaluator
+from src.infrastructure.analyzer import HeuristicImageAnalyzer # <-- Added HeuristicImageAnalyzer
 
-# --- 1. CELERY INFRASTRUCTURE CONFIGURATION ---
+# --- CELERY INFRASTRUCTURE CONFIGURATION ---
 BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://z-realism-broker:6379/0")
 RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://z-realism-broker:6379/0")
 
@@ -37,14 +33,12 @@ celery_app = Celery("z_realism_worker", broker=BROKER_URL, backend=RESULT_BACKEN
 
 celery_app.conf.update(
     task_track_started=True,
-    # worker_prefetch_multiplier=1: Vital for GPU safety. Prevents the worker
-    # from pulling multiple CUDA tasks simultaneously.
     worker_prefetch_multiplier=1, 
     task_acks_late=True,
     broker_connection_retry_on_startup=True
 )
 
-# --- 2. GLOBAL STATE FOR RESOURCE ORCHESTRATION ---
+# --- GLOBAL STATE FOR RESOURCE ORCHESTRATION ---
 _current_model_instance = None
 _current_model_type = None  # ENUM: 'STATIC' | 'TEMPORAL'
 
@@ -58,48 +52,40 @@ def manage_hardware_resources(target_type: str):
     """
     global _current_model_instance, _current_model_type
 
-    # 1. CACHE HIT: Resume execution with the existing manifold.
     if _current_model_instance is not None and _current_model_type == target_type:
         print(f"WORKER_SYS: Manifold Hit. Reusing {target_type} engine.")
         return _current_model_instance
 
-    # 2. CONTEXT SWITCH (CACHE MISS):
-    # Unload the current engine to liberate VRAM for the incoming manifold.
     if _current_model_instance is not None:
         print(f"WORKER_SYS: Context Switch ({_current_model_type} -> {target_type}).")
-        
-        # Dereference and invoke Python Garbage Collector
         del _current_model_instance
         _current_model_instance = None
         gc.collect()
-        
-        # GPU VRAM Purge (NVIDIA Specific)
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.ipc_collect()
-            free_vram = torch.cuda.mem_get_info()[0] / 1024**3
-            print(f"WORKER_SYS: CUDA VRAM Purged. Available: {free_vram:.2f} GB")
+            print(f"WORKER_SYS: CUDA VRAM Purged.")
 
-    # 3. INITIALIZATION: Deploy the requested engine.
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"WORKER_SYS: Deploying {target_type} engine on [{device.upper()}]...")
 
     if target_type == 'STATIC':
-        # Initialize Static Fusion components (SD1.5 + Heuristics)
         evaluator = ComputerVisionEvaluator()
         generator = StableDiffusionGenerator(device=device)
-        # Encapsulate in Application Use Case
         _current_model_instance = TransformCharacterUseCase(generator, evaluator)
         _current_model_type = 'STATIC'
         
     elif target_type == 'TEMPORAL':
-        # Initialize Temporal Fusion components (AnimateDiff)
-        _current_model_instance = StableVideoAnimateDiffGenerator(device=device)
+        # --- CRITICAL FIX: Instantiate AnimateCharacterUseCase ---
+        # This ensures the Analyzer is called and Subject DNA is injected.
+        video_generator = StableVideoAnimateDiffGenerator(device=device)
+        analyzer = HeuristicImageAnalyzer() # Instantiate the analyzer
+        _current_model_instance = AnimateCharacterUseCase(video_generator, analyzer)
         _current_model_type = 'TEMPORAL'
 
     return _current_model_instance
 
-# --- 3. ASYNCHRONOUS TASK DEFINITIONS ---
+# --- ASYNCHRONOUS TASK DEFINITIONS ---
 
 @celery_app.task(name="transform_character_task", bind=True)
 def transform_character_task(self, image_b64, character_name, feature_prompt, resolution_anchor, hyper_params):
@@ -118,14 +104,8 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
 
     try:
         self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'INITIALIZING'})
-        
-        # Decode Input Manifold
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
-        
-        # Load Application Service
         use_case = manage_hardware_resources('STATIC')
-
-        # Execute Transformation Lifecycle
         result_pil, report = use_case.execute(
             image_file=source_pil, 
             character_name=character_name,
@@ -134,11 +114,8 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
             hyper_params=hyper_params,
             callback=on_progress
         )
-
         self.update_state(state='PROGRESS', meta={'percent': 100, 'status_text': 'FINALIZING'})
         time.sleep(0.5) 
-
-        # Encode Output Manifold
         buffered = io.BytesIO()
         result_pil.save(buffered, format="PNG")
         
@@ -169,22 +146,18 @@ def animate_character_task(self, image_b64, character_name, video_params):
     try:
         self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'DECODING_MANIFOLD'})
         
-        # Decode Input Still
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
         
-        # Deploy Temporal Engine
-        video_gen = manage_hardware_resources('TEMPORAL')
+        # --- CRITICAL FIX: Use the AnimateCharacterUseCase ---
+        # This ensures the Analyzer is called and metadata is properly injected.
+        use_case = manage_hardware_resources('TEMPORAL')
         
-        # Execute Temporal Synthesis
-        # NOMENCLATURE FIX: Passing 'subject_metadata' to match the updated adapter.
-        report = video_gen.animate_image(
-            source_image=source_pil,
-            motion_prompt=video_params.get("motion_prompt"),
-            subject_metadata={"name": character_name}, 
-            duration_frames=video_params.get("duration_frames", 24),
-            fps=video_params.get("fps", 8),
-            hyper_params=video_params,
-            progress_callback=on_progress
+        # The use case will handle fetching metadata and calling the video_generator
+        report = use_case.execute(
+            image_file=source_pil,
+            character_name=character_name,
+            video_params=video_params,
+            callback=on_progress # Pass the progress callback
         )
 
         self.update_state(state='PROGRESS', meta={'percent': 100, 'status_text': 'ENCODING_CONTAINER'})

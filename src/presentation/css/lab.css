@@ -148,9 +148,29 @@
 @media (min-width: 1400px) { .viewport-area { flex-direction: row; } }
 
 .viewport-card {
-    flex: 1; background: #000; border: var(--glass-border); border-radius: var(--radius-lg);
-    position: relative; overflow: hidden; display: flex; align-items: center;
-    justify-content: center; min-height: 450px; box-shadow: inset 0 0 40px rgba(0,0,0,1);
+    flex: 1; 
+    background: #000; 
+    border: var(--glass-border); 
+    border-radius: var(--radius-lg);
+    position: relative; 
+    overflow: hidden; 
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    
+    height: 550px; 
+    width: 100%;
+    box-shadow: inset 0 0 40px rgba(0,0,0,1);
+}
+
+.viewport-card img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+
+    object-fit: contain; 
+    display: block;
 }
 
 .viewport-label {
@@ -178,12 +198,11 @@
 #dynamic-content-viewport {
     position: absolute;
     inset: 0;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1;
-    flex-direction: column;
-    gap: 20px;
 }
 
 /* --- 5.3 VIDEO PREVIEW IMAGE --- */
@@ -211,3 +230,64 @@
 
 .progress-container { width: 80%; max-width: 300px; height: 3px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden; }
 .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; box-shadow: 0 0 15px var(--accent); }
+
+/* --- TELEMETRY HUD DESIGN --- */
+.telemetry-hud {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 3px solid var(--accent);
+    padding: 15px;
+    z-index: 30;
+    font-family: var(--font-code);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    min-width: 200px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    pointer-events: none;
+}
+
+.hud-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.hud-separator {
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 10px 0;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #444; /* Default grey */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.status-ok { background: #10b981; box-shadow: 0 0 12px #10b981; }
+.status-warn { background: #f59e0b; box-shadow: 0 0 12px #f59e0b; }
+.status-error { background: #ef4444; box-shadow: 0 0 12px #ef4444; }
+
+.hud-label {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
+    flex-grow: 1;
+}
+
+.hud-value {
+    font-size: 0.75rem;
+    color: white;
+    font-weight: 800;
+}
+
+.hud-value-alt {
+    font-size: 0.7rem;
+    color: var(--accent);
+}

@@ -75,6 +75,11 @@
                 <input type="range" id="input-depth" min="0.0" max="1.5" step="0.05" value="0.75">
             </div>
 
+            <div class="control-group">
+                <label>CN CANNY WEIGHT <span id="val-canny">0.70</span></label>
+                <input type="range" id="input-canny" min="0.0" max="1.5" step="0.05" value="0.70">
+            </div>
+
             <!-- 5. ADVANCED CONFIGURATION (ACCORDION) -->
             <div class="advanced-accordion">
                 <button type="button" class="accordion-trigger" id="adj-trigger">
@@ -103,6 +108,16 @@
                         <label>STOCHASTIC SEED</label>
                         <input type="number" id="input-seed" class="modern-input" value="42" style="font-family: var(--font-code); font-size: 0.8rem;">
                     </div>
+
+                    <div class="control-group">
+                        <label>CANNY LOW THRESHOLD <span id="val-canny-low">100</span></label>
+                        <input type="range" id="input-canny-low" min="1" max="255" step="1" value="100">
+                    </div>
+
+                    <div class="control-group">
+                        <label>CANNY HIGH THRESHOLD <span id="val-canny-high">200</span></label>
+                        <input type="range" id="input-canny-high" min="1" max="255" step="1" value="200">
+                    </div>
                     
                 </div>
             </div>
@@ -127,7 +142,7 @@
         <!-- RIGHT COLUMN: Neural Workspace (Manifold Viewports) -->
         <main class="viewport-area">
             
-            <!-- SOURCE INPUT MONITOR -->
+            <!-- SOURCE INPUT MONITOR (Este no cambia) -->
             <div class="viewport-card" id="source-preview">
                 <span class="viewport-label">SOURCE_MANIFOLD_INPUT</span>
                 <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
@@ -135,11 +150,35 @@
                 </div>
             </div>
 
-            <!-- RESULT OUTPUT MONITOR -->
+            <!-- RESULT OUTPUT MONITOR (AQUÍ ES DONDE ESTÁ EL CAMBIO) -->
             <div class="viewport-card" id="result-display">
                 <span class="viewport-label">ACTIVE_INFERENCE_MONITOR</span>
                 
-                <!-- NEW: This div will hold all dynamic image content (latent preview, final image) -->
+                <!-- ESTE BLOQUE TELEMETRY_HUD DEBE IR JUSTO AQUÍ, DENTRO DE #result-display -->
+                <div id="telemetry-hud" class="telemetry-hud hidden">
+                    <div class="hud-row" id="stat-structural">
+                        <div class="status-indicator"></div>
+                        <span class="hud-label">STR_FIDELITY</span>
+                        <span class="hud-value">0%</span>
+                    </div>
+                    <div class="hud-row" id="stat-identity">
+                        <div class="status-indicator"></div>
+                        <span class="hud-label">CHR_IDENTITY</span>
+                        <span class="hud-value">0%</span>
+                    </div>
+                    <div class="hud-row" id="stat-realism">
+                        <div class="status-indicator"></div>
+                        <span class="hud-label">TXT_REALISM</span>
+                        <span class="hud-value">0%</span>
+                    </div>
+                    <div class="hud-separator"></div>
+                    <div class="hud-row">
+                        <span class="hud-label">INF_TIME</span>
+                        <span id="hud-time" class="hud-value-alt">0.0s</span>
+                    </div>
+                </div>
+
+                <!-- Y este div dynamic-content-viewport DEBE IR DESPUÉS DEL HUD -->
                 <div id="dynamic-content-viewport" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1;">
                     <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
                         OFFLINE

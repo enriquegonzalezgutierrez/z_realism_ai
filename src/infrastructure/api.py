@@ -1,16 +1,11 @@
 # path: z_realism_ai/src/infrastructure/api.py
-# description: Driving Adapter (FastAPI) v21.0 - Thesis Candidate.
-#              Exposes the Application Layer via a RESTful interface.
+# description: Driving Adapter (FastAPI) v22.0 - Doctoral Thesis Candidate.
+#              This version orchestrates multivariate parameter injection for Canny Sensitivity.
 #
 # ARCHITECTURAL ROLE (Hexagonal/DDD):
 # This module acts as the Primary Adapter. It receives HTTP requests,
 # validates input data (DTOs), and dispatches commands to the
 # Application Layer (via the Celery Worker).
-#
-# KEY FEATURES:
-# 1. Resource Mutex: Redis-based lock to enforce single-tenancy on the GPU.
-# 2. Asynchronous Dispatch: Offloads heavy computation to the Worker node.
-# 3. Multi-Modal Endpoints: Supports both Static and Temporal synthesis.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -28,10 +23,9 @@ from PIL import Image
 from src.infrastructure.worker import transform_character_task, animate_character_task, celery_app
 from src.infrastructure.analyzer import HeuristicImageAnalyzer
 
-app = FastAPI(title="Z-Realism Expert Gateway", version="21.0")
+app = FastAPI(title="Z-Realism Expert Gateway", version="22.1")
 
-# --- 1. CROSS-ORIGIN RESOURCE SHARING (CORS) ---
-# Configured to allow requests from any origin during research phases.
+# --- CORS Configuration ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -40,16 +34,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- 2. HARDWARE RESOURCE COORDINATION (MUTEX) ---
-# Critical for GTX 1060 (6GB VRAM). Prevents concurrent GPU access.
+# --- Hardware Mutex ---
 redis_client = redis.from_url(os.getenv("CELERY_BROKER_URL", "redis://z-realism-broker:6379/0"))
 SYSTEM_LOCK_KEY = "z_realism_v21_mutex"
-LOCK_TIMEOUT = 900  # 15 minutes max lock duration
+LOCK_TIMEOUT = 900
 
-# Neural Strategy Intelligence (Heuristic Analyzer)
+# --- Heuristic Intelligence ---
 image_analyzer = HeuristicImageAnalyzer()
 
-# --- 3. ANALYTICAL ENDPOINT ---
+# --- Analytical Endpoint ---
 @app.post("/analyze")
 async def analyze_visual_dna(
     file: UploadFile = File(...),
@@ -57,13 +50,10 @@ async def analyze_visual_dna(
 ):
     """
     Invokes the Heuristic Brain to determine the optimal synthesis strategy.
-    Returns granular weights and stochastic ratios from Domain Lore.
     """
     try:
         content = await file.read()
         pil_image = Image.open(io.BytesIO(content))
-        
-        # Analyze source manifold (Lore extraction)
         analysis = image_analyzer.analyze_source(pil_image, character_name)
         
         return {
@@ -73,8 +63,10 @@ async def analyze_visual_dna(
                 "steps": analysis.recommended_steps, 
                 "cfg_scale": analysis.recommended_cfg,
                 "cn_scale_depth": analysis.recommended_cn_depth,
-                "cn_scale_pose": analysis.recommended_cn_pose,
+                "cn_scale_pose": analysis.recommended_cn_pose, # This is mapped to Canny
                 "strength": analysis.recommended_strength,
+                "canny_low": analysis.canny_low,   # --- NEW: Recommended low threshold ---
+                "canny_high": analysis.canny_high, # --- NEW: Recommended high threshold ---
                 "texture_prompt": analysis.suggested_prompt,
                 "negative_prompt": analysis.suggested_negative
             }
@@ -82,7 +74,7 @@ async def analyze_visual_dna(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Analysis Failure: {str(e)}")
 
-# --- 4. TRANSFORMATION ENDPOINT (STATIC IMAGE) ---
+# --- Transformation Endpoint (Static Image) ---
 @app.post("/transform")
 async def transform_image(
     file: UploadFile = File(...),
@@ -92,16 +84,19 @@ async def transform_image(
     steps: int = Form(30),
     cfg_scale: float = Form(7.5),
     cn_depth: float = Form(0.75),
-    cn_pose: float = Form(0.40),
+    cn_pose: float = Form(0.40), # This will be the Canny weight
     strength: float = Form(0.70),
+    
+    # --- NEW: Canny Threshold Parameters from UI ---
+    canny_low: int = Form(100),
+    canny_high: int = Form(200),
+    
     seed: int = Form(42),
     negative_prompt: str = Form("anime, cartoon")
 ):
     """
     Dispatches the high-fidelity synthesis job to the CUDA worker.
-    Implements hardware single-tenancy via Redis Mutex.
     """
-    # Hardware Lock Check
     if redis_client.exists(SYSTEM_LOCK_KEY):
         raise HTTPException(status_code=429, detail="HARDWARE_LOCK: CUDA Engine Busy.")
 
@@ -109,23 +104,23 @@ async def transform_image(
         content = await file.read()
         image_b64 = base64.b64encode(content).decode('utf-8')
 
-        # Construct Hyperparameter DTO
+        # Construct the Hyperparameter DTO for the worker
         hyper_params = {
             "steps": steps,
             "cfg_scale": cfg_scale,
             "cn_depth": cn_depth,
-            "cn_pose": cn_pose,
+            "cn_pose": cn_pose, # Mapped to Canny weight
             "strength": strength,
+            "canny_low": canny_low,   # --- INJECTED ---
+            "canny_high": canny_high, # --- INJECTED ---
             "seed": seed,
             "negative_prompt": negative_prompt
         }
 
-        # Async Dispatch (Celery)
         task = transform_character_task.delay(
             image_b64, character_name, feature_prompt, resolution_anchor, hyper_params
         )
 
-        # Acquire Lock
         redis_client.set(SYSTEM_LOCK_KEY, task.id, ex=LOCK_TIMEOUT)
         return {"task_id": task.id, "status": "QUEUED"}
     except Exception as e:
@@ -140,8 +135,8 @@ async def animate_image(
     motion_prompt: str = Form("subtle realistic movement, breathing"),
     duration_frames: int = Form(24),
     fps: int = Form(8),
-    motion_bucket: int = Form(127),
-    denoising_strength: float = Form(0.20),
+    motion_bucket: int = Form(127), # This parameter is specific to AnimateDiff.
+    denoising_strength: float = Form(0.20), # This parameter is specific to AnimateDiff.
     seed: int = Form(42)
 ):
     """
@@ -156,7 +151,7 @@ async def animate_image(
         content = await file.read()
         image_b64 = base64.b64encode(content).decode('utf-8')
 
-        # Temporal manifold parameters
+        # Construct Temporal Manifold Parameters
         video_params = {
             "motion_prompt": motion_prompt,
             "duration_frames": duration_frames,
@@ -176,39 +171,23 @@ async def animate_image(
         redis_client.delete(SYSTEM_LOCK_KEY)
         raise HTTPException(status_code=500, detail=str(e))
 
-# --- 6. TELEMETRY & SYSTEM CONTROL ---
+# --- Telemetry & System Control ---
 @app.get("/status/{task_id}")
 async def get_task_status(task_id: str):
-    """
-    Retrieves the real-time status of a task from the Redis Broker.
-    Auto-releases the hardware lock upon task completion.
-    """
     task_result = AsyncResult(task_id, app=celery_app)
-    
-    # Auto-Unlock Logic
     if task_result.ready():
         current_lock = redis_client.get(SYSTEM_LOCK_KEY)
         if current_lock and current_lock.decode('utf-8') == task_id:
             redis_client.delete(SYSTEM_LOCK_KEY)
-    
-    return {
-        "status": task_result.status,
-        "progress": task_result.info if task_result.status == 'PROGRESS' else None
-    }
+    return {"status": task_result.status, "progress": task_result.info if task_result.status == 'PROGRESS' else None}
 
 @app.get("/result/{task_id}")
 async def get_task_result(task_id: str):
-    """
-    Retrieves the final payload (Image/Video Base64 + Metrics).
-    """
     task_result = AsyncResult(task_id, app=celery_app)
-    if not task_result.ready(): raise HTTPException(status_code=202)
+    if not task_result.ready(): raise HTTPException(status_code=202, detail="Task is still processing.")
     return JSONResponse(content=task_result.result)
 
 @app.post("/system/unlock")
 async def manual_unlock():
-    """
-    Emergency override to release the GPU Mutex.
-    """
     redis_client.delete(SYSTEM_LOCK_KEY)
     return {"message": "Hardware Mutex Released."}

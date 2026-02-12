@@ -42,7 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
         progressBar: document.getElementById('progress-bar'),
         statusText: document.getElementById('status-text'),
         btnGenerate: document.getElementById('btn-generate'),
-        btnAnalyze: document.getElementById('btn-analyze')
+        btnAnalyze: document.getElementById('btn-analyze'),
+        cannySlider: document.getElementById('input-canny'),
+        cannyVal: document.getElementById('val-canny'),
+        cannyLowSlider: document.getElementById('input-canny-low'),
+        cannyLowVal: document.getElementById('val-canny-low'),
+        cannyHighSlider: document.getElementById('input-canny-high'),
+        cannyHighVal: document.getElementById('val-canny-high'),
     };
 
     // =========================================================================
@@ -101,6 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
     syncSlider(ui.resSlider, ui.resVal, false);
     syncSlider(ui.cfgSlider, ui.cfgVal);
     syncSlider(ui.stepsSlider, ui.stepsVal, false);
+    syncSlider(ui.cannySlider, ui.cannyVal);
+    syncSlider(ui.cannyLowSlider, ui.cannyLowVal, false);
+    syncSlider(ui.cannyHighSlider, ui.cannyHighVal, false);
 
     // =========================================================================
     // 4. CORE WORKFLOWS
@@ -116,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const url = URL.createObjectURL(file);
             ui.sourcePreview.innerHTML = `
                 <span class="viewport-label">SOURCE_INPUT_MANIFOLD</span>
-                <img src="${url}" style="width:100%; height:100%; object-fit:contain;">
+                <img src="${url}" alt="Source">
             `;
             ui.essenceTag.innerText = "SOURCE_SYNCED // READY";
         }
@@ -169,6 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('cfg_scale', ui.cfgSlider.value);
         formData.append('steps', ui.stepsSlider.value);
         formData.append('seed', ui.seedInput.value);
+        formData.append('cn_canny', ui.cannySlider.value);
+        formData.append('canny_low', ui.cannyLowSlider.value);
+        formData.append('canny_high', ui.cannyHighSlider.value);
 
         const data = await postToGateway('/transform', formData);
         
@@ -197,10 +209,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     ui.btnGenerate.disabled = false;
                     ui.btnGenerate.innerText = "INITIATE NEURAL FUSION";
                     ui.progressOverlay.classList.add('hidden'); // Hide progress overlay
+
+                    if (result && result.metrics) {
+                        const m = result.metrics;
+                        
+                        const applyMetric = (elementId, value, okThreshold, warnThreshold, isRatio = false) => {
+                            const row = document.getElementById(elementId);
+                            const indicator = row.querySelector('.status-indicator');
+                            const valueDisplay = row.querySelector('.hud-value');
+                            
+                            const percent = (value * 100).toFixed(0) + '%';
+                            valueDisplay.innerText = percent;
+                            
+                            indicator.classList.remove('status-ok', 'status-warn', 'status-error');
+                            
+                            if (value >= okThreshold) {
+                                indicator.classList.add('status-ok');
+                            } else if (value >= warnThreshold) {
+                                indicator.classList.add('status-warn');
+                            } else {
+                                indicator.classList.add('status-error');
+                            }
+                        };
+
+                        applyMetric('stat-structural', m.structural_similarity, 0.70, 0.40);
+                        
+                        applyMetric('stat-identity', m.identity_preservation, 0.80, 0.60);
+                        
+                        applyMetric('stat-realism', m.textural_realism, 1.20, 1.00);
+
+                        document.getElementById('hud-time').innerText = m.inference_time.toFixed(1) + "s";
+
+                        ui.telemetryHud = document.getElementById('telemetry-hud');
+                        ui.telemetryHud.classList.remove('hidden');
+                    }
                     
                     if (result && result.result_image_b64) {
                         ui.dynamicContentViewport.innerHTML = `
-                            <img src="data:image/png;base64,${result.result_image_b64}" style="width:100%; height:100%; object-fit:contain; z-index:5; position:relative;">
+                            <img src="data:image/png;base64,${result.result_image_b64}" alt="Result">
                             <button id="btn-save" class="btn btn-secondary" style="position:absolute; bottom:20px; right:20px; z-index:10;">💾 SAVE</button>
                         `;
                         document.getElementById('btn-save').onclick = () => {

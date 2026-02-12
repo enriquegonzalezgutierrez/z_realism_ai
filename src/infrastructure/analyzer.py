@@ -1,6 +1,6 @@
 # path: src/infrastructure/analyzer.py
-# description: Heuristic Intelligence Layer v21.6 - Contrast & Lighting Fix.
-#              Optimized for high-fidelity Subject DNA synthesis.
+# description: Heuristic Intelligence Layer v22.0 - Doctoral Thesis Candidate.
+#              This version implements adaptive Canny thresholding based on Subject DNA.
 #
 # ARCHITECTURAL ROLE (Infrastructure Adapter):
 # This module implements the 'ImageAnalyzerPort'. It performs a multivariate 
@@ -42,7 +42,8 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
         return {
             "essence": "unknown_entity",
             "prompt_base": "cinematic portrait, realistic features",
-            "weights": {"depth": 0.75, "openpose": 0.45},
+            "weights": {"depth": 0.75, "canny": 0.50},
+            "canny_thresholds": [100, 200],
             "denoising_strength": 0.70,
             "negative_prompt": "anime, cartoon, drawing, plastic, low quality",
             "realism_fragments": ["hyper-realistic, 8k, detailed skin texture"]
@@ -71,9 +72,8 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
             alpha = np.array(image)[..., 3]
             if np.mean(alpha) < 20: return "preserve"
 
-        # Luma Analysis (detecting pure black backgrounds like Android 16's)
         gray = cv2.cvtColor(np.array(image.convert("RGB")), cv2.COLOR_RGB2GRAY)
-        if np.mean(gray) < 25: # Very dark background detection
+        if np.mean(gray) < 25:
             return "preserve"
 
         return "generate"
@@ -89,32 +89,30 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
         metadata = self._get_metadata_by_name(character_name)
         weights = metadata.get("weights", {})
         
-        # --- SEMANTIC LIGHTING ANALYSIS (HEURISTICS) v21.6 ---
-        # Fixed: Prevents desaturation haze on dark-background characters.
+        # --- NEW: Adaptive Canny Thresholding ---
+        # 1. Get thresholds from JSON (Subject DNA).
+        # 2. Fallback to a safe default if not specified.
+        canny_cfg = metadata.get("canny_thresholds", [100, 200])
+        
         avg_brightness = np.mean(gray)
         lighting = ""
 
         if background_policy == "preserve":
-            # If the background is black, we MUST tell the AI to prevent 'haze'
             if avg_brightness < 60:
-                lighting = "dramatic rim lighting, high contrast, pure black background, cinematic shadows"
+                lighting = "dramatic rim lighting, high contrast, pure black background"
             else:
-                lighting = "ambient cinematic lighting, high-fidelity studio environment"
+                lighting = "ambient cinematic lighting, studio environment"
         else:
-            # Policy: Generate new cinematic background
             lighting = "cinematic film lighting"
             if avg_brightness < 80:
-                lighting = "dramatic chiaroscuro lighting, deep shadows, rim light"
+                lighting = "dramatic chiaroscuro lighting, deep shadows"
             elif avg_brightness > 180:
-                lighting = "soft studio lighting, professional high-key photography"
+                lighting = "soft studio lighting, high-key photography"
 
-        # --- MANIFOLD SYNTHESIS ---
         subject_dna = metadata.get('prompt_base', '')
-        realism_fragments = metadata.get('realism_fragments', self._default_metadata.get('realism_fragments', []))
-        
+        realism_fragments = metadata.get('realism_fragments', [])
         raw_prompt = [subject_dna] + realism_fragments + [lighting]
         
-        # Token Deduplication & CLIP Safety
         seen = set()
         clean_tokens = []
         for frag in raw_prompt:
@@ -131,8 +129,13 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
             recommended_steps=30,
             recommended_cfg=7.5,
             recommended_cn_depth=float(weights.get("depth", 0.75)),
-            recommended_cn_pose=float(weights.get("openpose", 0.40)),
+            recommended_cn_pose=float(weights.get("canny", 0.50)), # Map 'canny' to 'cn_pose'
             recommended_strength=float(metadata.get("denoising_strength", 0.70)),
+            
+            # --- Passing new parameters to the DTO ---
+            canny_low=int(canny_cfg[0]),
+            canny_high=int(canny_cfg[1]),
+            
             detected_essence=metadata.get("essence", "unknown").upper(),
             suggested_prompt=final_suggested_prompt,
             suggested_negative=base_negative
