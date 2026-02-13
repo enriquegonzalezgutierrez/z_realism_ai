@@ -131,11 +131,18 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         return output, final_prompt, neg_prompt
 
     def _calculate_proportional_dimensions(self, width: int, height: int, resolution_anchor: int) -> Tuple[int, int]:
+        """
+        Calculates manifold dimensions aligned to a 64-pixel grid while minimizing 
+        aspect ratio distortion through nearest-multiple rounding.
+        """
         aspect = width / height
         if width >= height:
             new_w = resolution_anchor
-            new_h = int(resolution_anchor / aspect)
+            new_h = resolution_anchor / aspect
         else:
             new_h = resolution_anchor
-            new_w = int(resolution_anchor * aspect)
-        return (new_w // 64) * 64, (new_h // 64) * 64
+            new_w = resolution_anchor * aspect
+            
+        # THE DOCTORAL FIX: Using round() instead of floor (//) to reach the 
+        # closest 64-pixel boundary, preserving original proportions.
+        return (int(round(new_w / 64) * 64), int(round(new_h / 64) * 64))

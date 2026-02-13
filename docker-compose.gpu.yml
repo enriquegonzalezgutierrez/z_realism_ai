@@ -9,8 +9,6 @@
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
-version: '3.8'
-
 services:
   # --- Infrastructure Layer (Inference Worker) ---
   # Target: The specific service requiring hardware acceleration.

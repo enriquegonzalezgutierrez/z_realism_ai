@@ -2,13 +2,13 @@
     "id": "akuma",
     "aliases": ["akuma", "gouki"],
     "essence": "human_demonic_martial_artist",
-    "prompt_base": "hyperdetailed portrait of a powerful demonic warrior, full body shot, red skin, black spiky hair, fierce angry expression, fighting stance, dynamic pose, 8k uhd",
-    "feature_prompt": "extreme demonic skin texture, extreme muscle definition, individual spiky hair strands, detailed fabric weave on gi, thick prayer beads texture, sweat, sharp focus, power emanating from body",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, thin build, smooth skin, low quality, blurry face, friendly expression, soft lighting, normal eyes, jpeg artifacts, extra fingers, sitting",
+    "prompt_base": "raw photo, realistic portrait of a powerful weathered warrior, (deep reddish-brown tanned skin:1.2), spiky black hair, fierce intense gaze, 8k professional photo",
+    "feature_prompt": "highly detailed skin texture, visible pores, subtle scars, sweat beads, realistic muscle definition, (natural skin subsurface scattering:1.2), detailed fabric weave on black gi, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, plastic, doll, mannequin, cgi, 3d render, smooth skin, airbrushed, low quality, friendly, bright neon red, saturated pink",
     "weights": { 
-        "depth": 0.95,
-        "canny": 0.88
+        "depth": 0.85, 
+        "canny": 0.65
     },
-    "canny_thresholds": [60, 160],
-    "denoising_strength": 0.50
+    "canny_thresholds": [40, 120],
+    "denoising_strength": 0.62
 }

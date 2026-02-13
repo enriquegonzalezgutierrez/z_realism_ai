@@ -10,8 +10,6 @@
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
-version: '3.8'
-
 services:
   # --- 1. Event Bus (Message Broker) ---
   # Role: Decouples the API Producer from the Worker Consumer.
