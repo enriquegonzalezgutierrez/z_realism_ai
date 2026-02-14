@@ -2,13 +2,10 @@
     "id": "android14",
     "aliases": ["14", "android 14"],
     "essence": "species_android_giant",
-    "prompt_base": "massive muscular giant, pale lavender skin, sharp black mohawk, long braided hair, wide strong jawline, intimidating expression, 8k cinematic photo, dramatic lighting, (facing camera:1.3)",
-    "feature_prompt": "mutated skin texture, subtle oily sheen, detailed hair strands, rugged leather grain, realistic muscle definition, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, smooth skin, human skin tone, organic, low quality, blurry face, deformed, small size, (back turned:2.0), (face hidden:1.8), (side view:1.8), (head turned away:1.5)",
-    "weights": { 
-        "depth": 0.95, 
-        "canny": 0.90
-    },
+    "prompt_base": "8k cinematic photo, massive muscular giant, pale lavender skin, sharp black mohawk, long braided hair, wide strong jawline, facing camera",
+    "feature_prompt": "mutated skin texture, subtle oily sheen, source palette preservation, identical color matching, rugged leather grain, realistic muscle definition",
+    "negative_prompt": "anime, cartoon, drawing, plastic, doll, human skin tone, organic, low quality, blurry face, deformed, small size, (back turned:2.0)",
+    "weights": { "depth": 0.95, "canny": 0.90 },
     "canny_thresholds": [60, 160],
     "denoising_strength": 0.55
 }

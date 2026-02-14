@@ -80,17 +80,26 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         hyper_params: Dict[str, Any], 
         progress_callback: Optional[Callable[[int, int, str], None]] = None
     ) -> Tuple[Image.Image, str, str]:
+        """
+        Executes Subject Transformation with Post-Inference Chromatic Anchoring.
         
+        This version implements a Linear Color Transfer algorithm to synchronize 
+        the generated manifold's color distribution with the source image, 
+        resolving the 'Chromatic Drift' common in photorealistic latent diffusion.
+        """
+        
+        # --- 1. PARAMETER EXTRACTION ---
         strength = float(hyper_params.get("strength", 0.55))
         nominal_steps = int(hyper_params.get("steps", 30))
         effective_steps = math.floor(nominal_steps * strength)
         
         cn_depth_weight = float(hyper_params.get("cn_depth", 0.80))
-        cn_canny_weight = float(hyper_params.get("cn_pose", 0.70)) # Mapped from 'cn_pose'
+        cn_canny_weight = float(hyper_params.get("cn_pose", 0.70))
         
         canny_low = int(hyper_params.get("canny_low", 100))
         canny_high = int(hyper_params.get("canny_high", 200))
         
+        # --- 2. MANIFOLD PRE-PROCESSING ---
         target_w, target_h = self._calculate_proportional_dimensions(source_image.width, source_image.height, resolution_anchor)
         
         if source_image.mode == 'RGBA':
@@ -102,9 +111,11 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             
         input_image = input_image.resize((target_w, target_h), Image.Resampling.LANCZOS)
 
+        # --- 3. NEURAL CONDITIONING ---
         depth_map = self.depth_estimator(input_image).resize((target_w, target_h))
         canny_map = self.canny_detector(input_image, low_threshold=canny_low, high_threshold=canny_high).resize((target_w, target_h))
 
+        # --- 4. SEMANTIC CONSTRUCT ---
         final_prompt = f"photorealistic cinematic photo, {prompt_guidance}, {feature_prompt}, highly detailed, 8k, realistic lighting"
         neg_prompt = hyper_params.get("negative_prompt", "anime, drawing, plastic, low quality, illustration")
 
@@ -112,6 +123,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             if progress_callback: progress_callback(i + 1, effective_steps, None)
             return callback_kwargs
 
+        # --- 5. NEURAL INFERENCE ---
         with torch.inference_mode():
             output = self._pipe(
                 prompt=final_prompt, 
@@ -127,6 +139,23 @@ class StableDiffusionGenerator(ImageGeneratorPort):
                 generator=torch.Generator(device="cpu").manual_seed(int(hyper_params.get("seed", 42))),
                 callback_on_step_end=internal_callback
             ).images[0]
+
+        # --- 6. DOCTORAL CHROMATIC ANCHOR (Linear Histogram Synchronization) ---
+        # We synchronize the statistical color moments (Mean and StdDev) of the 
+        # generated output with the stylized source input.
+        src_arr = np.array(input_image).astype(np.float32)
+        gen_arr = np.array(output).astype(np.float32)
+
+        for i in range(3): # Process R, G, B channels independently
+            mu_src, std_src = src_arr[:,:,i].mean(), src_arr[:,:,i].std()
+            mu_gen, std_gen = gen_arr[:,:,i].mean(), gen_arr[:,:,i].std()
+
+            # Apply the transform: Result = (Gen - MeanGen) * (StdSrc / StdGen) + MeanSrc
+            gen_arr[:,:,i] = (gen_arr[:,:,i] - mu_gen) * (std_src / (std_gen + 1e-6)) + mu_src
+
+        # Clip values to valid 8-bit range and cast back to uint8
+        corrected_arr = np.clip(gen_arr, 0, 255).astype(np.uint8)
+        output = Image.fromarray(corrected_arr)
 
         return output, final_prompt, neg_prompt
 

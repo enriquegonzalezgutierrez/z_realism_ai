@@ -1,14 +1,11 @@
 {
     "id": "android17",
-    "aliases": ["17", "android 17", "lapis"],
+    "aliases": ["17", "android 17"],
     "essence": "species_human_android",    
-    "prompt_base": "athletic young man, long straight jet-black hair, intense serious gaze, masculine facial features, cinematic lighting, 8k",    
-    "feature_prompt": "realistic skin pores, individual hair strands, high-density fabric weave, natural shadows, sharp focus, masterpiece",    
-    "negative_prompt": "anime, cartoon, drawing, plastic, flat color, doll, low quality, smooth fabric, blurry face, (white background:1.3)",    
-    "weights": { 
-        "depth": 0.85, 
-        "canny": 0.75 
-    },
-    "canny_thresholds": [100, 200],
-    "denoising_strength": 0.55
+    "prompt_base": "raw photo, portrait of an athletic young man, long straight jet-black hair, serious intense gaze, realistic masculine facial features",    
+    "feature_prompt": "highly detailed skin pores, source palette preservation, identical color matching, tactical fabric weave, individual hair strands, film grain",    
+    "negative_prompt": "anime, cartoon, drawing, plastic, doll, mannequin, airbrushed, low quality, feminine features, (blonde hair:1.3), messy hair",    
+    "weights": { "depth": 0.85, "canny": 0.45 },
+    "canny_thresholds": [40, 120],
+    "denoising_strength": 0.68
 }

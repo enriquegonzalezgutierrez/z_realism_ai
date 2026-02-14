@@ -2,13 +2,10 @@
     "id": "android15",
     "aliases": ["15", "android 15"],
     "essence": "species_android_mechanical",
-    "prompt_base": "compact sturdy humanoid, dark magenta artificial skin, large neon green rimless sunglasses, oversized dark felt hat, severe expression, 8k professional photo, cinematic lighting",
-    "feature_prompt": "futuristic synthetic skin texture, sharp glass reflections, soft felt texture on hat, fine wool tuxedo fabric, subtle metallic sheen, detailed mechanical joints, subsurface scattering",
-    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, human skin tone, organic, deformed glasses, low quality, blurry face, (deformed hat:1.2), too vibrant, magenta pink",
-    "weights": { 
-        "depth": 0.90, 
-        "canny": 0.70
-    },
+    "prompt_base": "8k professional photo, compact sturdy humanoid, dark magenta artificial skin, neon green rimless sunglasses, oversized dark felt hat",
+    "feature_prompt": "futuristic synthetic skin texture, glass reflections, soft felt texture on hat, source palette preservation, identical color matching, detailed mechanical joints",
+    "negative_prompt": "anime, cartoon, drawing, illustration, plastic, human skin tone, organic, deformed glasses, low quality, blurry face, too vibrant, magenta pink",
+    "weights": { "depth": 0.90, "canny": 0.70 },
     "canny_thresholds": [70, 160],
     "denoising_strength": 0.50
 }
