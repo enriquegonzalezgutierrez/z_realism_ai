@@ -1,14 +1,16 @@
 /**
  * path: src/presentation-custom/js/api.js
- * description: Shared API Bridge v20.5 - Dynamic Discovery Mode.
+ * description: Shared API Bridge v21.0 - External Network Stability Edition.
  * 
  * ABSTRACT:
  * This script orchestrates communication with the FastAPI Gateway.
- * It features "Dynamic Discovery," which automatically adjusts the API 
- * base URL based on the client's access manifold (Localhost, Network IP, or Tunnel).
+ * It features "Dynamic Discovery" for environment-agnostic routing and 
+ * "Tunnel Interstitial Bypass" to ensure connectivity over public Ngrok 
+ * tunnels, specifically resolving 'Fetch Failure' on mobile networks.
  * 
  * ARCHITECTURAL ROLE:
  * - Decouples the frontend from static environment variables.
+ * - Resolves Ngrok browser warnings that block background AJAX requests.
  * - Manages the lifecycle of high-latency neural tasks (Dispatch -> Poll -> Retrieve).
  * 
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
@@ -17,7 +19,7 @@
 /**
  * INTELLIGENT API DISCOVERY
  * Automatically determines the backend location based on the access manifold.
- * UPDATED: Added support for Unified Proxy Gateway (/api).
+ * Supports Unified Proxy Gateway (/api) to maintain Same-Origin policy.
  */
 const getDynamicApiUrl = () => {
     const { hostname, protocol, port } = window.location;
@@ -34,12 +36,19 @@ const getDynamicApiUrl = () => {
 
     // UNIFIED PRODUCTION GATEWAY (Ngrok / Nginx):
     // Use the same host/domain but target the /api route.
-    // This resolves CORS and 'Fetch Failure' by maintaining Same-Origin policy.
     console.log("%cPRODUCTION_INFO: Routing traffic through Unified Gateway (/api)", "color: #10b981; font-weight: bold;");
     return `${protocol}//${hostname}/api`; 
 };
 
 const API_BASE_URL = getDynamicApiUrl();
+
+// MANDATORY HEADERS FOR REMOTE CONNECTIVITY
+// 'ngrok-skip-browser-warning' is required to bypass the Ngrok interstitial 
+// page which otherwise breaks background 'fetch' requests on mobile.
+const SHARED_HEADERS = {
+    "ngrok-skip-browser-warning": "true"
+};
+
 console.log(`%c🐉 Z-REALISM GATEWAY: ${API_BASE_URL}`, "color: #8b5cf6; font-weight: bold;");
 
 /**
@@ -51,7 +60,8 @@ async function postToGateway(endpoint, formData) {
     try {
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: SHARED_HEADERS // Bypasses Ngrok warning
         });
         
         if (!response.ok) {
@@ -78,7 +88,9 @@ async function pollNeuralTask(taskId, onProgress, onComplete) {
 
     const pollingInterval = setInterval(async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/status/${taskId}`);
+            const response = await fetch(`${API_BASE_URL}/status/${taskId}`, {
+                headers: SHARED_HEADERS // Bypasses Ngrok warning during polling
+            });
             const data = await response.json();
 
             if (data.status === 'PROGRESS') {
@@ -87,8 +99,11 @@ async function pollNeuralTask(taskId, onProgress, onComplete) {
             else if (data.status === 'SUCCESS') {
                 clearInterval(pollingInterval);
                 
-                // Retrieve the actual result from the backend
-                const resultResponse = await fetch(`${API_BASE_URL}/result/${taskId}`);
+                // Retrieve the actual result manifold from the backend
+                const resultResponse = await fetch(`${API_BASE_URL}/result/${taskId}`, {
+                    headers: SHARED_HEADERS // Bypasses Ngrok warning during retrieval
+                });
+                
                 if (resultResponse.ok) {
                     const resultData = await resultResponse.json();
                     if (onComplete) onComplete(resultData);
