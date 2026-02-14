@@ -111,7 +111,7 @@ stats: ## DEV Show resource usage (CPU/GPU/RAM)
 share: ## DEV Expose the Unified Gateway via Ngrok for external testing
 	@printf "$(CLR_YELLOW)Initializing Unified Ngrok Tunnel on Port 80...$(CLR_RESET)\n"
 	@printf "$(CLR_CYAN)PRODUCTION NOTE:$(CLR_RESET) All traffic (UI + API) is now routed through a single tunnel.\n"
-	ngrok http 80
+	ngrok http 80 --host-header=rewrite
 
 # -----------------------------------------------------------------------------
 # Danger Zone (Maintenance)
