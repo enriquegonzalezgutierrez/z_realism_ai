@@ -1,17 +1,14 @@
 /* 
  * path: src/presentation/css/info.css
- * description: Documentation & Information Layout System v21.1 - Thesis Candidate.
+ * description: Product & Company Information Layout System v1.0 - Commercial Product.
  *
  * ABSTRACT:
- * Provides a highly readable and structured layout for long-form research content. 
- * This module orchestrates the presentation of the scientific thesis, 
- * architectural blueprints, and legal protocols.
+ * Provides a highly readable and structured layout for company mission, 
+ * technology overview, and product benefits for commercial clients.
  *
  * KEY IMPROVEMENTS:
- * 1. Safe-Zone Integration: Fully respects the global fixed-header offset.
- * 2. Academic Typography: Optimized line-heights and font-pairings for readability.
- * 3. Structured Data: Custom callouts for technical specifications and DNA metrics.
- * 4. Ethical Circles: Visualizes research values with interactive circles.
+ * 1. Streamlined Typography: Optimized for readability and brand clarity.
+ * 2. Client-Centric Content: Custom callouts for key product advantages.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -42,7 +39,7 @@
     font-weight: 800;
     margin-bottom: 24px;
     line-height: 1.1;
-    background: linear-gradient(to right, #ffffff, var(--accent));
+    background: linear-gradient(to right, #ffffff, var(--accent)); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -61,7 +58,7 @@
 .info-content h2 {
     font-size: clamp(1.4rem, 4vw, 2rem);
     margin: 55px 0 20px 0;
-    font-family: var(--font-code);
+    font-family: var(--font-ui); 
     color: #fff;
     border-left: 4px solid var(--accent);
     padding-left: 20px;
@@ -79,7 +76,7 @@
     font-weight: 600;
 }
 
-/* --- 3. RESEARCH CARDS & CALLOUTS --- */
+/* --- 3. PRODUCT ADVANTAGE CARDS & CALLOUTS --- */
 .info-card {
     background: rgba(255, 255, 255, 0.03);
     border: var(--glass-border);
@@ -98,7 +95,7 @@
     letter-spacing: 1px;
 }
 
-/* --- 4. DATA LISTS (SCIENTIFIC STYLE) --- */
+/* --- 4. DATA LISTS (PRODUCT BENEFITS STYLE) --- */
 .info-list {
     list-style: none;
     margin-bottom: 30px;
@@ -114,7 +111,7 @@
 }
 
 .info-list li::before {
-    content: '🧬'; /* DNA Icon for a scientific aesthetic */
+    content: '✨'; 
     position: absolute;
     left: 0;
     font-size: 0.85rem;
@@ -163,58 +160,4 @@
         opacity: 1; 
         transform: translateY(0); 
     }
-}
-
-/* --- 8. ETHICAL CIRCLES --- */
-.ethical-diagram {
-    margin-top: 50px;
-    text-align: center;
-}
-
-.ethical-diagram h2 {
-    margin-bottom: 30px;
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    color: var(--accent);
-    font-family: var(--font-code);
-}
-
-.ethical-circles {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-}
-
-.circle-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 220px;
-    text-align: center;
-}
-
-.circle-label {
-    width: 80px;
-    height: 80px;
-    background: var(--accent);
-    color: white;
-    font-weight: 700;
-    font-family: var(--font-code);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-    transition: transform 0.3s ease;
-}
-
-.circle-item:hover .circle-label {
-    transform: scale(1.1);
-}
-
-.circle-desc {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    line-height: 1.5;
 }

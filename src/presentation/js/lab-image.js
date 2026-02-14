@@ -1,12 +1,12 @@
 /**
  * path: src/presentation/js/lab-image.js
- * description: Static Fusion Controller v21.10 - DOM Integrity & Telemetry Fix.
+ * description: Static Image Production Controller v1.0 - Commercial Product.
  *
  * ABSTRACT:
- * Orchestrates the neural transformation of 2D character manifolds into 
- * photorealistic stills. This version ensures that the real-time telemetry 
- * (progress bar) remains consistently visible by manipulating only the 
- * dynamic content viewport.
+ * Orchestrates the neural transformation of 2D artistic concepts into 
+ * high-fidelity photorealistic still images. This version ensures that 
+ * real-time production feedback and asset intelligence are streamlined 
+ * for commercial users.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -14,7 +14,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================================================
-    // 1. UI ELEMENT MAPPING (Neural Control Manifold)
+    // 1. UI ELEMENT MAPPING (Creative Control Panel)
     // =========================================================================
     const ui = {
         charName: document.getElementById('char-name'),
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         seedInput: document.getElementById('input-seed'),
         sourcePreview: document.getElementById('source-preview'),
         resultDisplay: document.getElementById('result-display'),
-        dynamicContentViewport: document.getElementById('dynamic-content-viewport'), // NEW: Dynamic content target
+        dynamicContentViewport: document.getElementById('dynamic-content-viewport'), 
         progressOverlay: document.getElementById('progress-overlay'),
         progressBar: document.getElementById('progress-bar'),
         statusText: document.getElementById('status-text'),
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedFile: null,
         isProcessing: false,
         lastTaskId: null,
-        currentLatentPreview: null // Keep track of the preview image element
+        currentLatentPreview: null 
     };
 
     // =========================================================================
@@ -66,8 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
 
     /**
-     * Resets the laboratory workspace to its initial state before a new task.
-     * CRITICAL FIX: Ensures telemetry overlays remain in the DOM.
+     * Resets the production workspace to its initial state before a new task.
      */
     const resetWorkspace = () => {
         // 1. Sanitize ONLY the dynamic content viewport
@@ -76,22 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 OFFLINE
             </div>
         `;
-        state.currentLatentPreview = null; // Reset the reference
+        state.currentLatentPreview = null; 
 
-        // 2. Reactivate and Reset Telemetry Overlay (it's always in the DOM)
+        // 2. Reactivate and Reset Progress Overlay
         ui.progressOverlay.classList.remove('hidden');
         ui.progressBar.style.width = '0%';
-        ui.statusText.innerText = "INITIALIZING...";
+        ui.statusText.innerText = "INITIALIZING PRODUCTION RUN..."; // Updated text
 
         const telemetryHud = document.getElementById('telemetry-hud');
         if (telemetryHud) {
             telemetryHud.classList.add('hidden');
         }
         
-        console.log("LAB_UI: Workspace sanitized for new synthesis task.");
+        console.log("PRODUCTION_UI: Workspace sanitized for new synthesis task."); // Updated log
     };
     
-    // Accordion Logic
+    // Accordion Logic remains the same.
     if (ui.adjTrigger && ui.adjContent) {
         ui.adjTrigger.onclick = () => {
             ui.adjContent.classList.toggle('open');
@@ -99,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Slider Synchronization
+    // Slider Synchronization remains the same.
     const syncSlider = (slider, label, isFloat = true) => {
         if (!slider || !label) return;
         slider.oninput = (e) => {
@@ -129,17 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
             ui.dropZone.classList.add('has-file');
             const url = URL.createObjectURL(file);
             ui.sourcePreview.innerHTML = `
-                <span class="viewport-label">SOURCE_INPUT_MANIFOLD</span>
+                <span class="viewport-label">SOURCE_ARTWORK_INPUT</span>
                 <img src="${url}" alt="Source">
             `;
-            ui.essenceTag.innerText = "SOURCE_SYNCED // READY";
+            ui.essenceTag.innerText = "ARTWORK_LOADED // READY FOR ANALYSIS"; // Updated text
         }
     };
 
     // DNA Analysis
     ui.btnAnalyze.onclick = async () => {
         if (!state.selectedFile || state.isProcessing) return;
-        ui.essenceTag.innerText = "SEQUENCING_DNA...";
+        ui.essenceTag.innerText = "ANALYZING_ARTWORK_DNA..."; // Updated text
         const formData = new FormData();
         formData.append('file', state.selectedFile);
         formData.append('character_name', ui.charName.value || "Unknown");
@@ -150,19 +149,27 @@ document.addEventListener('DOMContentLoaded', () => {
             ui.strengthVal.innerText = rec.strength.toFixed(2);
             ui.depthSlider.value = rec.cn_scale_depth;
             ui.depthVal.innerText = rec.cn_scale_depth.toFixed(2);
+            // NEW: Update Canny sliders from analysis recommendations
+            ui.cannySlider.value = rec.cn_scale_pose; // cn_pose is now Canny weight
+            ui.cannyVal.innerText = rec.cn_scale_pose.toFixed(2);
+            ui.cannyLowSlider.value = rec.canny_low;
+            ui.cannyLowVal.innerText = rec.canny_low;
+            ui.cannyHighSlider.value = rec.canny_high;
+            ui.cannyHighVal.innerText = rec.canny_high;
+
             ui.promptInput.value = rec.texture_prompt;
             ui.cfgSlider.value = rec.cfg_scale;
             ui.cfgVal.innerText = rec.cfg_scale.toFixed(1);
             ui.stepsSlider.value = rec.steps;
             ui.stepsVal.innerText = rec.steps;
-            ui.essenceTag.innerText = `STRATEGY_FOUND: ${data.detected_essence}`;
+            ui.essenceTag.innerText = `DNA_PROFILE_LOADED: ${data.detected_essence}`; // Updated text
         }
     };
 
     // Neural Fusion (Main Generation Task)
     ui.btnGenerate.onclick = async () => {
         if (!state.selectedFile || state.isProcessing) {
-            alert("SYSTEM_ERROR: Please upload a source manifold.");
+            alert("SYSTEM_ERROR: Please upload your source artwork."); // Updated text
             return;
         }
 
@@ -171,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         state.isProcessing = true;
         ui.btnGenerate.disabled = true;
-        ui.btnGenerate.innerText = "FUSING...";
+        ui.btnGenerate.innerText = "INITIATING PRODUCTION..."; // Updated text
         
         const formData = new FormData();
         formData.append('file', state.selectedFile);
@@ -196,24 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Progress Callback
                 (progress) => {
                     ui.progressBar.style.width = `${progress.percent}%`;
-                    ui.statusText.innerText = progress.status_text.replace(/_/g, ' ');
-                    
-                    if (progress.preview_b64) {
-                        if (!state.currentLatentPreview) {
-                            state.currentLatentPreview = document.createElement('img');
-                            state.currentLatentPreview.className = 'latent-preview';
-                            state.currentLatentPreview.style.cssText = "position:absolute; inset:0; width:100%; height:100%; object-fit:contain; filter:blur(6px); opacity:0.6; z-index:1;";
-                            ui.dynamicContentViewport.appendChild(state.currentLatentPreview); // Insert into dynamic viewport
-                        }
-                        state.currentLatentPreview.src = `data:image/jpeg;base64,${progress.preview_b64}`;
-                    }
+                    ui.statusText.innerText = progress.status_text.replace(/_/g, ' '); // Keep original status message from backend
                 }, 
                 // Completion Callback
                 (result) => {
                     state.isProcessing = false;
                     ui.btnGenerate.disabled = false;
-                    ui.btnGenerate.innerText = "INITIATE NEURAL FUSION";
-                    ui.progressOverlay.classList.add('hidden'); // Hide progress overlay
+                    ui.btnGenerate.innerText = "INITIATE PRODUCTION"; // Updated text
+                    ui.progressOverlay.classList.add('hidden'); 
 
                     if (result && result.metrics) {
                         const m = result.metrics;
@@ -266,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             state.isProcessing = false;
             ui.btnGenerate.disabled = false;
-            ui.btnGenerate.innerText = "INITIATE NEURAL FUSION";
+            ui.btnGenerate.innerText = "INITIATE PRODUCTION"; // Updated text
             ui.progressOverlay.classList.add('hidden');
         }
     };

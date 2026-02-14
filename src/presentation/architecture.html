@@ -2,23 +2,24 @@
 <html lang="en">
 <!-- 
   path: src/presentation/architecture.html
-  description: Technical Documentation - System Design & Engineering Patterns v21.1.
+  description: Technical Documentation - System Design & Engineering Patterns v1.0.
   
   ABSTRACT:
-  Detailed engineering overview of the Z-Realism ecosystem. Covers the 
-  Hexagonal Architecture, SOLID implementation, and Hardware Resource 
-  Management strategies for the doctoral thesis in Informatics Engineering.
+  Detailed engineering overview of the Z-Realism Production Studio. Covers 
+  the Hexagonal Architecture, SOLID principles, and Robust Hardware 
+  Orchestration strategies designed for high-performance commercial deployment.
   
   ARCHITECTURAL ROLE (Presentation Layer):
-  Acts as the technical blueprint documentation. It provides the mathematical 
-  and structural justification for the system's modularity and hardware resilience.
+  Acts as the technical blueprint documentation for clients and partners. It 
+  provides the structural justification for the system's modularity, 
+  scalability, and hardware efficiency.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCHITECTURE | Z-Realism Research Institute</title>
+    <title>ARCHITECTURE | Z-Realism Studio</title>
 
     <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -43,25 +44,26 @@
     <!-- Documentation Container -->
     <main class="info-container container">
         
-        <a href="index.html" class="back-link">&larr; BACK TO GATEWAY</a>
+        <a href="index.html" class="back-link">&larr; BACK TO HOME</a>
 
         <header class="info-section">
             <span class="info-subtitle">SYSTEM DESIGN & DDD</span>
             <h1 class="info-title">The Engineering Blueprint</h1>
             <div class="info-content">
                 <p>
-                    Z-Realism v21.1 is architected using the <strong>Hexagonal Architecture</strong> 
-                    (Ports & Adapters) pattern as a foundational design decision rather than an 
-                    implementation detail. This architectural choice establishes a strict 
-                    separation between the core domain model and all external concerns, allowing 
-                    the system to evolve without structural erosion.
+                    Z-Realism v1.0 is architected using the <strong>Hexagonal Architecture</strong> 
+                    (Ports & Adapters) pattern as a core design principle. This choice establishes 
+                    a strict separation between the central business logic and all external 
+                    dependencies, guaranteeing a system that is robust, scalable, and adaptable 
+                    to evolving technological landscapes.
                 </p>
                 <p>
-                    This decoupling ensures that the core domain logic—the synthesis, transformation, 
-                    and evaluation of character visual DNA—remains fully independent of volatile 
-                    infrastructure components, such as specific web frameworks (FastAPI), messaging 
-                    systems (Redis), or Generative AI libraries (Diffusers). As a result, technological 
-                    substitutions can occur without propagating refactors across the codebase.
+                    This decoupling ensures that our core value proposition—the high-fidelity 
+                    synthesis, transformation, and evaluation of your original artwork's visual DNA—remains 
+                    fully independent of volatile infrastructure components, such as specific web 
+                    frameworks (FastAPI), messaging systems (Redis), or Generative AI libraries (Diffusers). 
+                    As a result, technological upgrades or substitutions can occur seamlessly, without 
+                    disrupting your creative workflow.
                 </p>
             </div>
         </header>
@@ -69,128 +71,121 @@
         <section class="info-section info-content">
             <h2>Hexagonal Implementation</h2>
             <p>
-                The Hexagonal implementation is enforced by defining strict <strong>Ports</strong> 
-                (Interfaces) within the Domain Layer. These ports express the domain’s intent in 
-                purely semantic terms, avoiding any coupling to implementation mechanics such as 
-                CUDA kernels, file systems, or network protocols.
+                Our Hexagonal implementation is enforced by defining clear <strong>Ports</strong> 
+                (Interfaces) within the Domain Layer. These ports articulate the system’s capabilities 
+                in purely business terms, avoiding any coupling to specific hardware or software mechanics.
             </p>
             <p>
                 Infrastructure adapters implement these ports and are injected at runtime, allowing 
-                the system to swap concrete implementations without impacting business logic. 
-                For example, the inference engine can toggle seamlessly between the 
-                <code>StableDiffusionGenerator</code> and a <code>MockGenerator</code> for non-GPU 
-                testing, validation pipelines, or continuous integration environments.
+                the system to dynamically adapt to different computing environments. This enables us 
+                to maintain consistent output quality whether deployed on high-end servers or 
+                optimized for accessible local hardware.
             </p>
             <p>
-                This behavior adheres strictly to the <strong>Liskov Substitution Principle (SOLID)</strong>, 
+                This design strictly adheres to the <strong>Liskov Substitution Principle (SOLID)</strong>, 
                 guaranteeing that all adapters remain behaviorally consistent with the expectations 
-                of the domain, regardless of performance characteristics or hardware availability.
+                of the core domain, ensuring reliable performance regardless of the underlying infrastructure.
             </p>
 
-            <!-- Mermaid Diagram: Hexagonal Structure -->
+            <!-- Mermaid Diagram: Hexagonal Structure (Simplified for clarity) -->
             <div class="info-card">
                 <div class="mermaid">
                     graph LR
-                    A[Presentation Layer] --> B[Application Layer]
-                    B --> C[Domain Layer]
-                    C --> D[Infrastructure Layer]
+                    A[Client Application] --> B[API Gateway]
+                    B --> C[Application Services]
+                    C --> D[Domain Core]
                     
                     subgraph Domain Boundary
-                    C{Ports / Interfaces}
-                    B(Use Cases / Orchestration)
+                    D{Ports / Interfaces}
                     end
                     
-                    subgraph Adapters
-                    D --> D1[Inference: CUDA]
-                    D --> D2[Broker: Redis]
-                    D --> D3[CV: Analytics]
+                    subgraph Infrastructure Adapters
+                    D --> D1[Generative AI: Diffusers]
+                    D --> D2[Queueing: Celery/Redis]
+                    D --> D3[Vision AI: OpenCV/ControlNet]
                     end
                 </div>
             </div>
 
-            <h2>Hardware Tenancy (GPU Mutex)</h2>
+            <h2>Hardware Orchestration</h2>
             <p>
-                To support high-resolution neural inference on consumer-grade research hardware, 
-                including laptops equipped with legacy GPUs (GTX 1060 6GB), the architecture 
-                introduces a formalized <strong>Hardware Tenancy Protocol</strong>. This protocol 
-                treats GPU access as a scarce, exclusive resource rather than an implicitly shared one.
+                A critical advantage of Z-Realism is its optimization for demanding neural workloads 
+                on accessible, consumer-grade hardware. Rather than requiring expensive, enterprise-level 
+                GPUs, our architecture is explicitly designed to maximize performance under 
+                constrained VRAM conditions while maintaining uncompromised output quality.
             </p>
             <p>
-                Hardware tenancy is enforced via a distributed, Redis-based Mutex implemented at 
-                the API Gateway level. This guarantees that only a single inference workload may 
-                acquire GPU execution rights at any given time, preventing undefined behavior 
-                caused by VRAM contention and CUDA context fragmentation.
+                The **Z-Realism Engine** implements an intelligent <strong>Hardware Tenancy Protocol</strong> 
+                via a distributed, Redis-based Mutex. This protocol treats GPU access as a single, 
+                exclusive resource, preventing concurrent inference requests that would otherwise 
+                lead to system instability or memory overloads.
             </p>
 
             <div class="info-card">
-                <h4>Resource Management Logic:</h4>
+                <h4>Resource Management Principles:</h4>
                 <ul class="info-list">
                     <li>
-                        <strong>Single-Task Mutex:</strong> Enforces exclusive GPU access, preventing 
-                        concurrent inference requests that would otherwise trigger OOM (Out of Memory) 
-                        crashes or silent tensor corruption.
+                        <strong>Exclusive GPU Access:</strong> Ensures stable, high-quality output 
+                        by guaranteeing that only one generative task runs on the GPU at any given time.
                     </li>
                     <li>
-                        <strong>Aggressive Cache Purging:</strong> The inference worker explicitly 
-                        purges VRAM allocations and invokes garbage collection during context switches 
-                        between Static Image and Temporal Video diffusion models, maintaining a clean 
-                        execution state.
+                        <strong>Aggressive Memory Management:</strong> Our worker dynamically purges 
+                        VRAM allocations and invokes garbage collection during model switches, 
+                        maintaining optimal memory headroom for complex workflows.
                     </li>
                     <li>
-                        <strong>Weight Streaming:</strong> Model layers are dynamically streamed from 
-                        System RAM (32GB) to VRAM (6GB) only during active computation cycles, enabling 
-                        large model execution under severe memory constraints.
+                        <strong>Layered Weight Streaming:</strong> Large neural model components are 
+                        dynamically streamed between system RAM and GPU VRAM during active computation, 
+                        enabling high-resolution synthesis within strict memory limits.
                     </li>
                 </ul>
             </div>
 
-            <h2>Asynchronous Task Orchestration</h2>
+            <h2>Asynchronous Production Pipeline</h2>
             <p>
-                The lifecycle of a neural transformation within Z-Realism is designed to be entirely 
-                asynchronous. Given the inherently high latency of diffusion-based inference, all 
-                long-running operations are decoupled from the request-response cycle of the API.
+                The lifecycle of a visual transformation within Z-Realism is designed for efficiency 
+                and responsiveness. Given the computational intensity of AI-driven synthesis, all 
+                long-running operations are decoupled from the immediate user interaction.
             </p>
             <p>
-                The system utilizes <strong>Celery</strong> as the task orchestrator and 
-                <strong>Redis</strong> as the message broker, forming a resilient execution backbone. 
-                This architecture ensures that the Application Layer remains responsive and stateless 
-                while the Infrastructure Layer performs computationally intensive CUDA workloads.
+                The system utilizes <strong>Celery</strong> as its task orchestrator and 
+                <strong>Redis</strong> as the message broker, forming a resilient production backbone. 
+                This architecture ensures that the client application remains responsive and stateless 
+                while the backend performs computationally intensive GPU workloads.
             </p>
             <p>
-                Intermediate telemetry, including denoising state, latent previews, and heuristic 
-                metrics, is streamed back through the broker, allowing the client laboratory to 
-                observe and evaluate the generative process in near real time.
+                Real-time progress updates, including processing status and key metrics, are streamed 
+                back through the broker, allowing clients to monitor and evaluate the production 
+                process in near real time.
             </p>
 
-            <!-- Mermaid Diagram: Asynchronous Flow -->
+            <!-- Mermaid Diagram: Asynchronous Flow (Simplified for clarity) -->
             <div class="info-card">
                 <div class="mermaid">
                     sequenceDiagram
-                    participant UI as Client Laboratory
-                    participant API as FastAPI Gateway
-                    participant Q as Redis Broker
-                    participant W as Inference Worker
+                    participant Client as Your Browser
+                    participant API as Z-Realism API
+                    participant Queue as Task Queue (Redis)
+                    participant Worker as AI Production Worker
                     
-                    UI->>API: POST /transform
-                    API->>API: Acquire VRAM Mutex
-                    API->>Q: Dispatch Task Manifold
-                    Q->>W: Pull Neural Task
-                    loop Denoising Cycle
-                        W->>Q: Publish Visual Telemetry
-                        API-->>UI: Poll State / Preview
+                    Client->>API: Submit Art for Transformation
+                    API->>API: Acquire GPU Lock
+                    API->>Queue: Dispatch Production Task
+                    Queue->>Worker: Pull & Process Task
+                    loop Processing Iterations
+                        Worker->>Queue: Publish Progress Update
+                        API-->>Client: Poll Progress & Status
                     end
-                    W->>Q: Push Final Manifold + Metrics
-                    API->>UI: Return Candidate Result
-                    API->>API: Release VRAM Mutex
+                    Worker->>Queue: Deliver Final Asset + Metrics
+                    API->>Client: Return Finished Artwork
+                    API->>API: Release GPU Lock
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- 
-      SHARED ARCHITECTURAL COMPONENTS 
-    -->
+    <!-- SHARED ARCHITECTURAL COMPONENTS -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>

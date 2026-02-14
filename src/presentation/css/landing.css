@@ -9,7 +9,7 @@
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
-/* --- 1. HERO SECTION (NEURAL IMPACT AREA) --- */
+/* --- 1. HERO SECTION (CREATIVE IMPACT AREA) --- */
 .hero-section {
     min-height: calc(100vh - var(--body-padding-top-offset));
     
@@ -20,11 +20,10 @@
     text-align: center;
     position: relative;
 
-    /* 96px top / 72px bottom (12u / 9u) */
     padding: 96px 32px 72px 32px;
     
     background: linear-gradient(to bottom, rgba(5, 5, 5, 0.4), rgba(5, 5, 5, 1)), 
-                url('../assets/hero_bg.png');
+                url('../assets/hero_bg_commercial.png');
     background-size: cover;
     background-position: center top; 
     background-attachment: fixed;
@@ -52,7 +51,7 @@
     font-weight: 700;
     font-size: 0.7rem;
     letter-spacing: 6px;
-    margin-bottom: 32px; /* 4u */
+    margin-bottom: 32px;
     display: block;
 }
 
@@ -60,7 +59,7 @@
     font-size: clamp(2.8rem, 9vw, 5.5rem);
     font-weight: 800;
     line-height: 1.1;
-    margin-bottom: 32px; /* 4u */
+    margin-bottom: 32px;
     text-transform: uppercase;
     letter-spacing: -2px;
 }
@@ -68,7 +67,7 @@
 .hero-desc {
     font-size: clamp(1rem, 2vw, 1.25rem);
     color: var(--text-muted);
-    margin-bottom: 32px; /* 4u between paragraphs */
+    margin-bottom: 32px;
     line-height: 1.9;
     max-width: 720px;
     margin-left: auto;
@@ -77,20 +76,20 @@
 
 .hero-actions {
     display: flex;
-    gap: 24px; /* 3u */
+    gap: 24px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 48px; /* 6u separation from text block */
+    margin-top: 48px;
 }
 
-/* --- 2. MODULE GATEWAYS (RESEARCH GRID) --- */
+/* --- 2. MODULE GATEWAYS (PRODUCTION GRID) --- */
 .modules-container {
-    padding-top: 96px;   /* 12u */
-    padding-bottom: 160px; /* 20u */
+    padding-top: 96px;
+    padding-bottom: 160px;
     position: relative;
     z-index: 10;
     
-    margin-top: -80px;
+    margin-top: -120px;
 }
 
 @media (max-width: 768px) {
@@ -104,8 +103,8 @@
 .modules-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 48px; /* 6u */
-    padding: 0 64px; /* 8u lateral */
+    gap: 48px;
+    padding: 0 64px;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -115,7 +114,7 @@
     border: var(--glass-border);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    padding: 64px; /* 8u internal breathing */
+    padding: 64px;
     border-radius: var(--radius-lg);
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     display: flex;
@@ -126,14 +125,19 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
+.module-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px var(--accent-hover-shadow);
+}
+
 .module-icon {
     font-size: 3rem;
-    margin-bottom: 32px; /* 4u */
+    margin-bottom: 32px;
 }
 
 .module-card h3 {
     font-size: 1.6rem;
-    margin-bottom: 24px; /* 3u */
+    margin-bottom: 24px;
     font-family: var(--font-code);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -141,14 +145,14 @@
 
 .module-card p {
     color: var(--text-muted);
-    margin-bottom: 24px; /* 3u rhythm */
+    margin-bottom: 24px;
     font-size: 1rem;
     line-height: 1.9;
     flex-grow: 1;
 }
 
 .module-link {
-    margin-top: 32px; /* 4u separation */
+    margin-top: 32px;
     font-family: var(--font-code);
     font-size: 0.8rem;
     font-weight: 700;

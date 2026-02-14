@@ -1,11 +1,11 @@
 /* 
  * path: src/presentation/css/main.css
- * description: Global Design System v21.3 - Thesis Candidate.
+ * description: Global Design System v22.0 - Commercial Product Identity.
  *
  * ABSTRACT:
- * This module orchestrates the visual identity of the Z-Realism ecosystem.
- * Version 21.3 introduces a dedicated Form Engine for high-fidelity 
- * data entry and reinforces the Cyber-Grid background structure.
+ * This module orchestrates the visual identity of the Z-Realism production ecosystem.
+ * Version 22.0 introduces an updated color palette and refined UI elements 
+ * for a premium commercial product aesthetic.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -14,18 +14,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
-    /* Palette: High-Contrast Scientific Dark */
-    --bg-dark: #050505;
-    --bg-panel: rgba(15, 15, 20, 0.85);
+    /* Palette: High-Contrast Deep Space */
+    --bg-dark: #0A0A0E;
+    --bg-panel: rgba(20, 20, 25, 0.85);
     --primary: #3b82f6;
-    --accent: #8b5cf6;
-    --accent-video: #10b981;
+    --accent: #5e45ed;
+    --accent-video: #0ea57e;
+    --accent-hover-shadow: rgba(94, 69, 237, 0.25);
     --text-main: #ffffff;
-    --text-muted: #94a3b8;
+    --text-muted: #a0aec0;
     
     /* Geometry & Glassmorphism */
-    --glass-border: 1px solid rgba(255, 255, 255, 0.12);
-    --input-bg: rgba(0, 0, 0, 0.65);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+    --input-bg: rgba(0, 0, 0, 0.75);
     --radius-lg: 16px;
     --radius-md: 8px;
     
@@ -63,8 +64,8 @@ body {
     position: fixed; 
     inset: 0; 
     z-index: -1;
-    background-image: linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(94, 69, 237, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(94, 69, 237, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
     pointer-events: none;
 }
@@ -76,7 +77,7 @@ body {
     align-items: center;
     padding: 0 40px; 
     height: var(--nav-height-desktop); 
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.98);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: var(--glass-border);
@@ -124,8 +125,8 @@ body {
 .modern-input:focus, .modern-textarea:focus {
     border-color: var(--accent);
     background: rgba(0, 0, 0, 0.8);
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.15), 
-                inset 0 0 10px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 15px rgba(94, 69, 237, 0.15),
+                inset 0 0 10px rgba(94, 69, 237, 0.1);
 }
 
 /* Placeholder Styling */
@@ -176,8 +177,16 @@ body {
     transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
 }
 
-.btn-primary { background: var(--accent); color: white; border: none; box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+.btn-primary { 
+    background: var(--accent); 
+    color: white; 
+    border: none; 
+    box-shadow: 0 0 20px rgba(94, 69, 237, 0.3);
+}
+.btn-primary:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 0 30px rgba(94, 69, 237, 0.5);
+}
 
 .btn-secondary { background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); }
 .btn-secondary:hover { border-color: white; color: white; }

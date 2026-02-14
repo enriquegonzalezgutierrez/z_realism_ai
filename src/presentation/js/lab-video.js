@@ -1,11 +1,11 @@
 /**
  * path: src/presentation/js/lab-video.js
- * description: Temporal Fusion Controller v21.9 - State Management Fix.
+ * description: Temporal Motion Production Controller v1.0 - Commercial Product.
  * 
  * ABSTRACT:
- * Orchestrates the Image-to-Video neural pipeline. This version introduces 
- * a robust State Reset Protocol to ensure the temporal workspace is 
- * sanitized before each new animation synthesis task.
+ * Orchestrates the Image-to-Video neural pipeline. This version ensures 
+ * that production feedback and asset intelligence are streamlined for 
+ * commercial users.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -13,7 +13,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================================================
-    // 1. UI ELEMENT MAPPING
+    // 1. UI ELEMENT MAPPING (Creative Control Panel)
     // =========================================================================
     const ui = {
         charName: document.getElementById('char-name'),
@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         progressBar: document.getElementById('progress-bar'),
         statusText: document.getElementById('status-text'),
 
+        // Telemetry HUD Elements
         telemetryHud: document.getElementById('telemetry-hud'),
         hudFrames: document.getElementById('hud-frames'),
         hudFps: document.getElementById('hud-fps'),
@@ -61,30 +62,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
 
     /**
-     * Resets the temporal laboratory workspace to its initial state.
-     * CRITICAL FIX: Clears previous video results and resets the progress overlay.
+     * Resets the temporal production workspace to its initial state.
+     * Ensures previous video results are cleared and feedback overlays are reset.
      */
     const resetWorkspace = () => {
-        // 1. Sanitize Result Viewport
-        ui.resultDisplay.innerHTML = `
-            <span class="viewport-label">TEMPORAL_OUTPUT_MONITOR</span>
+        // 1. Sanitize ONLY the dynamic content viewport
+        // FIX: Ensure to target dynamic-content-viewport, not resultDisplay for innerHTML
+        ui.dynamicContentViewport.innerHTML = ` 
             <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; user-select: none; letter-spacing: 10px;">
-                WAITING
+                WAITING FOR ASSET
             </div>
         `;
-        // Ensure the background placeholder is visible again, handled by CSS .temporal-lab .viewport-card#result-display
         
-        // 2. Reactivate and Reset Telemetry Overlay
+        // 2. Reactivate and Reset Progress Overlay
         ui.progressOverlay.classList.remove('hidden');
         ui.progressBar.style.width = '0%';
-        ui.statusText.innerText = "INITIALIZING...";
+        ui.statusText.innerText = "INITIALIZING MOTION ENGINE..."; // Updated text
 
         if (ui.telemetryHud) ui.telemetryHud.classList.add('hidden');
         
-        console.log("LAB_UI: Temporal workspace sanitized for new animation task.");
+        console.log("PRODUCTION_UI: Temporal workspace sanitized for new motion task."); // Updated log
     };
 
-    // Slider Synchronization
+    // Slider Synchronization remains the same.
     const syncSlider = (slider, label) => {
         if (!slider || !label) return;
         slider.oninput = (e) => {
@@ -111,29 +111,28 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const url = createPreviewURL(file);
             ui.sourcePreview.innerHTML = `
-                <span class="viewport-label">STILL_INPUT_MANIFOLD</span>
+                <span class="viewport-label">SOURCE_STILL_INPUT</span> {/* Updated text */}
                 <img src="${url}" style="width:100%; height:100%; object-fit:contain;">
             `;
-            console.log("LAB_VIDEO: Still manifold loaded for temporal expansion.");
+            console.log("PRODUCTION_VIDEO: Still asset loaded for motion expansion."); // Updated log
         }
     };
 
     // Temporal Fusion (Main Animation Task)
     ui.btnAnimate.onclick = async () => {
         if (!state.selectedFile || state.isProcessing) {
-            alert("SYSTEM_ERROR: Please load a generated subject still first.");
+            alert("SYSTEM_ERROR: Please upload a source still asset first."); // Updated text
             return;
         }
 
         // --- STATE RESET PROTOCOL ---
         resetWorkspace(); 
 
-        // Initialize UI for temporal synthesis (long latency)
         state.isProcessing = true;
         ui.btnAnimate.disabled = true;
-        ui.btnAnimate.innerText = "ANIMATING...";
+        ui.btnAnimate.innerText = "INITIATING MOTION..."; // Updated text
         
-        // Construct Temporal Manifold Payload
+        // Construct Temporal Asset Payload
         const formData = new FormData();
         formData.append('file', state.selectedFile);
         formData.append('character_name', ui.charName.value || "Unknown");
@@ -159,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 (result) => {
                     state.isProcessing = false;
                     ui.btnAnimate.disabled = false;
-                    ui.btnAnimate.innerText = "INITIATE TEMPORAL FUSION";
+                    ui.btnAnimate.innerText = "INITIATE MOTION PRODUCTION"; // Updated text
                     ui.progressOverlay.classList.add('hidden');
                     
                     if (result && result.video_b64) {
@@ -185,14 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             link.click();
                         };
                     } else {
-                        console.error("LAB_VIDEO: Synthesis error. Consult worker telemetry.");
+                        console.error("PRODUCTION_VIDEO: Motion synthesis error. Consult backend telemetry."); // Updated log
                     }
                 }
             );
         } else {
             state.isProcessing = false;
             ui.btnAnimate.disabled = false;
-            ui.btnAnimate.innerText = "INITIATE TEMPORAL FUSION";
+            ui.btnAnimate.innerText = "INITIATE MOTION PRODUCTION"; // Updated text
             ui.progressOverlay.classList.add('hidden');
         }
     };

@@ -1,11 +1,11 @@
 /**
  * path: src/presentation/js/footer.js
- * description: Global Footer Injector v21.1 - Thesis Candidate.
+ * description: Global Footer Injector v1.0 - Commercial Product.
  * 
  * ABSTRACT:
- * Orchestrates the shared footer component across the Z-Realism ecosystem.
+ * Orchestrates the shared footer component across the Z-Realism production ecosystem.
  * This script ensures architectural consistency and provides a professional 
- * sitemap for the research laboratories.
+ * sitemap for clients and partners.
  * 
  * ARCHITECTURAL ROLE (Presentation Layer):
  * Acts as a Shared Component Injector. It adheres to the DRY principle 
@@ -24,37 +24,36 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="footer-brand">
                 <h3>🐉 Z-REALISM</h3>
                 <p>
-                    The advanced neural research platform for photorealistic character synthesis. 
-                    Utilizing a Subject Metadata Knowledge Base to bridge the gap between 
-                    stylized ink and cinematic life.
+                    The advanced neural production studio for photorealistic content synthesis. 
+                    Empowering artists and designers to bring their original artwork to life.
                 </p>
             </div>
 
-            <!-- Laboratory Nodes -->
+            <!-- Production Services -->
             <div class="footer-col">
-                <h4>LABORATORIES</h4>
+                <h4>SERVICES</h4>
                 <ul class="footer-links">
-                    <li><a href="image-lab.html">Static Fusion Lab</a></li>
-                    <li><a href="video-lab.html">Temporal Fusion Lab</a></li>
+                    <li><a href="image-lab.html">Image Production</a></li>
+                    <li><a href="video-lab.html">Video Production</a></li>
                 </ul>
             </div>
 
-            <!-- Documentation & Research -->
+            <!-- Company & Technology -->
             <div class="footer-col">
-                <h4>RESEARCH</h4>
+                <h4>COMPANY</h4>
                 <ul class="footer-links">
-                    <li><a href="about.html">Our Mission</a></li>
-                    <li><a href="architecture.html">System Architecture</a></li>
-                    <li><a href="contact.html">Peer Review & Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="architecture.html">Technology</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
                 </ul>
             </div>
 
-            <!-- Compliance & Legal -->
+            <!-- Legal & Compliance -->
             <div class="footer-col">
-                <h4>COMPLIANCE</h4>
+                <h4>LEGAL</h4>
                 <ul class="footer-links">
-                    <li><a href="legal.html">Terms & Licensing</a></li>
-                    <li><a href="legal.html#cookies">Neural Cache Policy</a></li>
+                    <li><a href="legal.html">Terms & Privacy</a></li>
+                    <li><a href="legal.html#cookies">Cookie Policy</a></li>
                 </ul>
             </div>
 
@@ -63,19 +62,18 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- Footer Bottom: Legal & System Telemetry -->
         <div class="footer-bottom">
             <div class="footer-copy">
-                &copy; 2024 ENRIQUE GONZÁLEZ GUTIÉRREZ. ARCHITECTED UNDER SOLID PRINCIPLES.
+                &copy; 2026 ENRIQUE GONZÁLEZ GUTIÉRREZ. ALL RIGHTS RESERVED.
             </div>
             
             <!-- Technical Status Badge -->
-            <div class="status-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent); opacity: 0.8;">
-                v21.1 STABLE // CUDA_ORCHESTRATOR_ACTIVE
+            <div class="status-badge" style="font-family: var(--font-code); font-size: 0.65rem; color: var(--accent); opacity: 0.8;">
+                v1.0 PRODUCTION // OPTIMIZED FOR CREATIVES
             </div>
         </div>
     </footer>
     `;
 
     // 2. INJECTION PROTOCOL
-    // Appends the footer at the terminal edge of the body element.
     document.body.insertAdjacentHTML('beforeend', footerHTML);
     
     // Telemetry Log
