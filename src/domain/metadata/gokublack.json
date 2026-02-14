@@ -1,14 +1,21 @@
 {
     "id": "gokublack",
-    "aliases": ["goku black", "zamasu goku", "black"],
+    "aliases": [
+        "goku black",
+        "zamasu goku",
+        "black"
+    ],
     "essence": "species_saiyan_corrupted",
-    "prompt_base": "realistic photo of a corrupted deity, lean muscular build, fierce evil smirk, green Potara earring, long jet black hair, intimidating presence, 8k cinematic photo, dark lighting",
-    "feature_prompt": "hyperdetailed skin texture, malevolent glare in his dark eyes, realistic flowing fabric texture on robes, gold embroidery, visible dark energy veins, wind-swept hair, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, flat lighting, friendly face, bright color, soft, low quality, blurry face, (human-like:1.2), normal hair, short hair",
+    "prompt_base": "raw photo, cinematic film still, portrait of an (intimidating masculine Japanese man:1.1), lean muscular physique, long jet-black hair, evil smirk, malevolent gaze, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle skin imperfections:1.2), individual hair strands, source palette preservation, identical color matching, (matching flowing dark fabric weave:1.2), realistic polished green earring texture, cinematic dark lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, airbrushed, smooth skin, low quality, friendly face, (blonde hair:1.2), short hair",
     "weights": {
-        "depth": 0.90,
-        "canny": 0.80
+        "depth": 0.82,
+        "canny": 0.45
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.70
 }

@@ -1,14 +1,21 @@
 {
     "id": "frieza",
-    "aliases": ["frieza", "freezer", "golden frieza"],
+    "aliases": [
+        "frieza",
+        "freezer",
+        "golden frieza"
+    ],
     "essence": "species_frost_demon",
-    "prompt_base": "menacing alien overlord, gleaming white bio-armor, crystalline purple gems, piercing red eyes, visible tail, intimidating expression, 8k photorealistic rendering",
-    "feature_prompt": "polished surface texture, high-gloss reflections, sharp focus on gems, smooth organic texture on body, detailed segments, volumetric rim lighting",
-    "negative_prompt": "anime, cartoon, drawing, plastic, dull surface, matte skin, fleshy texture, human proportions, bulky, low quality, deformed, furry, soft body",
+    "prompt_base": "raw photo, cinematic film still, portrait of an (imposing alien overlord:1.2), (white biological chitinous shell:1.2), crystalline translucent purple nodes, piercing crimson eyes, chilling expression, 8k uhd",
+    "feature_prompt": "highly detailed organic texture, (weathered bone-like surface:1.2), (wet biological sheen:1.1), source palette preservation, identical color matching, (matching crystalline gemstone depth:1.3), cinematic rim lighting, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human proportions, bulky, low quality, furry, soft fleshy skin, airbrushed",
     "weights": {
-        "depth": 0.98,
-        "canny": 0.90
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [30, 100],
-    "denoising_strength": 0.40
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.70
 }

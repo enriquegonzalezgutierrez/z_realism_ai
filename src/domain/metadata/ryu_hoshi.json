@@ -1,14 +1,20 @@
 {
     "id": "ryu_hoshi",
-    "aliases": ["ryu", "sf2 ryu"],
+    "aliases": [
+        "ryu",
+        "sf2 ryu"
+    ],
     "essence": "human_martial_artist",
-    "prompt_base": "cinematic portrait of a stoic Japanese martial artist, strong facial features, messy black hair, determined intense gaze, red headband, muscular physique, 8k cinematic photo",
-    "feature_prompt": "realistic muscle definition, visible fabric weave on weathered gi, sweat on skin, dirt on bare feet, detailed hair strands, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, glowing eyes, magic effects, perfect teeth, friendly face, low quality, blurry, underwear",
-    "weights": { 
-        "depth": 0.90,
-        "canny": 0.75
+    "prompt_base": "raw photo, cinematic film still, portrait of a (stoic Japanese martial artist:1.2), strong facial features, messy black hair, determined intense gaze, muscular physique, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (facial stubble and sweat:1.2), individual hair strands, source palette preservation, identical color matching, (matching weathered white cotton karate gi:1.2), cinematic lighting, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, airbrushed, low quality, glowing eyes, friendly face, clean",
+    "weights": {
+        "depth": 0.80,
+        "canny": 0.40
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.58
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.72
 }

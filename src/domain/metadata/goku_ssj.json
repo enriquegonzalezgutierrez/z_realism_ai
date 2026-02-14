@@ -1,14 +1,21 @@
 {
     "id": "goku_ssj",
-    "aliases": ["goku", "kakarotto", "super saiyan"],
+    "aliases": [
+        "goku",
+        "kakarotto",
+        "super saiyan"
+    ],
     "essence": "species_saiyan_ultimate",
-    "prompt_base": "cinematic portrait of a muscular Japanese warrior, fierce expression, spiky golden-yellow hair, battle-hardened physique, 8k photorealistic image, dynamic lighting",
-    "feature_prompt": "hyperdetailed skin texture, individual hair strands, realistic fabric weave on gi, sweat and battle damage, sharp focus, subsurface scattering",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, doll, low quality, deformed, blurry, (bright yellow hair:1.2), helmet hair, (friendly smile:1.3), modern clothes",
+    "prompt_base": "raw photo, cinematic film still, portrait of a (massive muscular Japanese warrior:1.2), spiky (messy radiant hair:1.1), fierce battle-hardened expression, intense gaze, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (visible sweat and battle grime:1.2), individual hair strands, source palette preservation, identical color matching, (matching torn fabric weave texture:1.2), cinematic battle lighting, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, airbrushed, low quality, (friendly smile:1.3), modern clothes, clean skin",
     "weights": {
-        "depth": 0.92,
-        "canny": 0.80
+        "depth": 0.82,
+        "canny": 0.40
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.70
 }

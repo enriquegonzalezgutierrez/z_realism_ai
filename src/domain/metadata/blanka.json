@@ -1,14 +1,20 @@
 {
     "id": "blanka",
-    "aliases": ["blanka", "jimmy"],
+    "aliases": [
+        "blanka",
+        "jimmy"
+    ],
     "essence": "mutant_feral",
-    "prompt_base": "feral beast-man, muscular physique, translucent green skin, wild orange mane-like hair, aggressive expression, 8k cinematic photo, dramatic lighting",
-    "feature_prompt": "mutated skin texture, prominent veins, wet hair texture, animalistic features, glowing electrical sparks, sharp claws, realistic eyes",
-    "negative_prompt": "anime, cartoon, drawing, plastic, human skin tone, organic, smooth skin, low quality, blurry face, (cute furry:1.3), (human face:1.2), too soft",
-    "weights": { 
-        "depth": 0.98, 
-        "canny": 0.90
+    "prompt_base": "raw photo, cinematic film still, portrait of a (feral beast-man:1.2), muscular physique, wild mane-like hair, aggressive snarling expression, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (mutated green skin texture with visible veins:1.2), (wet hair texture:1.1), source palette preservation, identical color matching, animalistic features, glowing electrical sparks, sharp claws, cinematic jungle lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, (human face:1.4), (cute furry:1.5), smooth skin, airbrushed, low quality, too soft",
+    "weights": {
+        "depth": 0.80,
+        "canny": 0.40
     },
-    "canny_thresholds": [40, 120],
-    "denoising_strength": 0.45
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.72
 }

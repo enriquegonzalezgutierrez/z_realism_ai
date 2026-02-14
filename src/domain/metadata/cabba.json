@@ -1,14 +1,20 @@
 {
     "id": "cabba",
-    "aliases": ["cabba", "kyabe"],
+    "aliases": [
+        "cabba",
+        "kyabe"
+    ],
     "essence": "species_saiyan_u6",
-    "prompt_base": "youthful East-Asian warrior, lean athletic physique, spiky black hair, calm determined expression, 8k cinematic photo, dramatic lighting",
-    "feature_prompt": "realistic skin pores, subtle sweat, metallic armor texture, detailed leather bodysuit texture, sharp specular highlights, individual hair strands, battle scars",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, muscular bodybuilder, fat, smooth skin, low quality, blurry face, helmet-like hair, (no armor:1.2), green hair, long hair",
-    "weights": { 
-        "depth": 0.90, 
-        "canny": 0.78
+    "prompt_base": "raw photo, cinematic film still, portrait of a (youthful lean East-Asian warrior:1.2), messy spiky black hair, serious determined gaze, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle skin flaws and sweat:1.2), individual hair strands, source palette preservation, identical color matching, (matching weathered metallic armor texture:1.2), (matching dark leather bodysuit grain:1.2), cinematic lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, airbrushed, low quality, muscular bodybuilder, fat, helmet hair",
+    "weights": {
+        "depth": 0.80,
+        "canny": 0.45
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.52
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.68
 }

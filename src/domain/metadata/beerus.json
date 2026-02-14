@@ -1,14 +1,20 @@
 {
     "id": "beerus",
-    "aliases": ["beerus", "god_of_destruction"],
+    "aliases": [
+        "beerus",
+        "god_of_destruction"
+    ],
     "essence": "species_alien_deity",
-    "prompt_base": "slender purple-skinned feline deity, large pointed ears, piercing yellow eyes, stern expression, realistic alien anatomy, 8k cinematic photo",
-    "feature_prompt": "dusty purple wrinkled skin texture, detailed silk fabric folds, intricate gold trim, subsurface scattering on ears, alien biology, sharp focus",
-    "negative_prompt": "human face, human nose, cat head, human skin, generic furry, anime, cartoon, drawing, illustration, plastic, low quality, flat lighting, bare legs, exposed lower body, shorts",
-    "weights": { 
-        "depth": 0.98, 
-        "canny": 0.90
+    "prompt_base": "raw photo, cinematic film still, (imposing purple-skinned feline deity:1.2), slender humanoid anatomy, (weathered Sphynx cat skin texture:1.3), piercing glowing yellow eyes, stern expression, 8k uhd",
+    "feature_prompt": "highly detailed epidermal wrinkles, (organic skin imperfections:1.2), subtle biological sheen, individual fine whiskers, source palette preservation, identical color matching, (matching silk fabric texture on robes:1.2), subsurface scattering on large ears, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human face, human nose, smooth skin, airbrushed, low quality, (furry:1.2), flat lighting",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [40, 120],
-    "denoising_strength": 0.40
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.65
 }

@@ -1,11 +1,20 @@
 {
     "id": "android16",
-    "aliases": ["16", "android 16"],
+    "aliases": [
+        "16",
+        "android 16"
+    ],
     "essence": "species_android_full",
-    "prompt_base": "8k cinematic photo, towering muscular masculine humanoid, ginger orange hair mohawk, intense blue eyes, powerful physique",
-    "feature_prompt": "hard surface modeling, metallic reflections, scuffed armor plates, source palette preservation, identical color matching, detailed mechanical suit",
-    "negative_prompt": "anime, cartoon, drawing, plastic, organic skin, human flesh, soft fabric, low quality, (deformed mohawk:1.2), friendly, small build",
-    "weights": { "depth": 0.95, "canny": 0.55 },
-    "canny_thresholds": [50, 150],
-    "denoising_strength": 0.60
+    "prompt_base": "raw photo, cinematic film still, towering muscular masculine humanoid, ginger orange hair mohawk, intense blue eyes, stoic expression, powerful physique, 8k uhd",
+    "feature_prompt": "(brushed metal texture:1.2), (weathered industrial finish:1.2), scuffed armor plates, source palette preservation, identical color matching, realistic mechanical shadows, oily hydraulic joints, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, organic skin on armor, clean, over-polished, flat lighting, low quality, airbrushed",
+    "weights": {
+        "depth": 0.88,
+        "canny": 0.45
+    },
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.68
 }

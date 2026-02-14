@@ -1,14 +1,20 @@
 {
     "id": "mai_future",
-    "aliases": ["mai", "future mai"],
+    "aliases": [
+        "mai",
+        "future mai"
+    ],
     "essence": "species_human_resistance",
-    "prompt_base": "cinematic portrait of a beautiful woman, long straight black hair, intense determined expression, holding a tactical rifle, 8k realistic photo, dynamic lighting",
-    "feature_prompt": "highly detailed skin texture, subtle facial scars, individual hair strands, realistic fabric weave texture on coat, sharp focus on rifle, leather boots",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, childish face, flat lighting, low quality, blurry, (deformed rifle:1.3), (too young:1.2), pure white hair",
-    "weights": { 
-        "depth": 0.85,
-        "canny": 0.78
+    "prompt_base": "raw photo, cinematic film still, portrait of a (weary beautiful female resistance fighter:1.2), long straight black hair, intense vigilant gaze, holding a tactical weapon, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle grime and sweat:1.2), individual hair strands, source palette preservation, identical color matching, (matching heavy military trench coat texture:1.3), realistic gunmetal texture, sharp focus, film grain, cinematic lighting",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, airbrushed, smooth skin, perfect makeup, clean clothes, (child:1.2), (too young:1.2)",
+    "weights": {
+        "depth": 0.80,
+        "canny": 0.40
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.68
 }

@@ -1,14 +1,21 @@
 {
     "id": "gohan",
-    "aliases": ["gohan", "ultimate gohan", "beast gohan"],
+    "aliases": [
+        "gohan",
+        "ultimate gohan",
+        "beast gohan"
+    ],
     "essence": "species_saiyan_hybrid",
-    "prompt_base": "hyperdetailed portrait of a handsome asian man, muscular build, intense neutral expression, silver-rimmed glasses, spiky black hair, 8k cinematic photo, dramatic lighting",
-    "feature_prompt": "subtle skin pores, defined arms, dynamic light refracting on glasses, realistic fabric weave on gi, individual hair strands, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, flat lighting, low quality, bad anatomy, (human face:1.2), doll, blurry face, (no glasses:1.2), messy hair, long hair",
+    "prompt_base": "raw photo, cinematic film still, portrait of a (serious Asian man:1.1), intense focused gaze, spiky black hair, silver-rimmed glasses, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle skin imperfections:1.1), (realistic lens refraction on glasses:1.2), individual hair strands, source palette preservation, identical color matching, (matching heavy fabric weave on attire:1.2), cinematic lighting, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, airbrushed, low quality, (no glasses:1.5), deformed frame, messy hair, long hair, child",
     "weights": {
-        "depth": 0.90,
-        "canny": 0.85
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [80, 180],
-    "denoising_strength": 0.50
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.68
 }

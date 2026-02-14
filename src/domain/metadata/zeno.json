@@ -1,14 +1,21 @@
 {
     "id": "zeno",
-    "aliases": ["zeno", "zen-oh", "omni-king"],
+    "aliases": [
+        "zeno",
+        "zen-oh",
+        "omni-king"
+    ],
     "essence": "species_cosmic_entity",
-    "prompt_base": "photorealistic render of a floating cosmic deity, radiant skin, spherical head shape, wide innocent eyes, small stature, 8k digital art, volumetric lighting",
-    "feature_prompt": "smooth bioluminescent skin texture, intricate segmented patterns on head, sharp details in each glowing pattern, high quality silk robes fabric, otherworldly presence",
-    "negative_prompt": "anime, cartoon, drawing, human proportions, fleshy skin, nose, mouth, ears, muscular, childish, simple, plastic, flat color, low quality, poorly drawn shape",
-    "weights": { 
-        "depth": 0.95,
-        "canny": 0.70
+    "prompt_base": "raw photo, cinematic film still, portrait of a (mysterious cosmic deity:1.2), small stature, (segmented violet and cyan skin:1.3), large void-like eyes, otherworldly presence, 8k uhd",
+    "feature_prompt": "smooth bioluminescent skin texture, (realistic organic segmentation:1.2), source palette preservation, identical color matching, (matching high quality silk robes:1.3), cinematic volumetric lighting, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human proportions, fleshy skin, nose, mouth, ears, muscular, low quality",
+    "weights": {
+        "depth": 0.90,
+        "canny": 0.50
     },
-    "canny_thresholds": [30, 100],
-    "denoising_strength": 0.45
+    "canny_thresholds": [
+        20,
+        80
+    ],
+    "denoising_strength": 0.60
 }

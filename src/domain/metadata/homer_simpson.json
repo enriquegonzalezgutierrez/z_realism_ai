@@ -1,14 +1,20 @@
 {
     "id": "homer_simpson",
-    "aliases": ["homer", "homer simpson"],
+    "aliases": [
+        "homer",
+        "homer simpson"
+    ],
     "essence": "species_simpson_humanoid",
-    "prompt_base": "overweight middle-aged man, yellow humanoid skin, almost completely bald head, five o'clock shadow, 8k realistic photo, studio lighting",
-    "feature_prompt": "visible pores on face, stubble and skin imperfections, detailed collar fabric on white shirt, detailed neck fat texture, subtle sweat",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, perfect skin, clean shaven, flat lighting, low quality, messy clothing, handsome, muscular",
-    "weights": { 
-        "depth": 0.90,
-        "canny": 0.70
+    "prompt_base": "raw photo, portrait of an (overweight middle-aged man:1.2), (pale yellow human skin tone:1.1), bald head, five o'clock shadow, 8k uhd",
+    "feature_prompt": "visible pores on face, stubble and skin imperfections, detailed collar fabric, detailed neck fat texture, source palette preservation, identical color matching, subtle sweat, studio lighting",
+    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, perfect skin, clean shaven, flat lighting, low quality, messy clothing, handsome, muscular, (normal skin tone:0.5)",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.40
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.65
 }

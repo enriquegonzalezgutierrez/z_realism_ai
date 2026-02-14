@@ -1,14 +1,20 @@
 {
     "id": "champa",
-    "aliases": ["champa", "lord champa"],
+    "aliases": [
+        "champa",
+        "lord champa"
+    ],
     "essence": "species_deity_feline",
-    "prompt_base": "portly barrel-chested feline deity, massive muscular build, dusty purple skin, prominent facial wrinkles, large glowing yellow cat eyes, fierce expression, 8k cinematic photo, dramatic lighting",
-    "feature_prompt": "alien skin texture, subtle sheen, detailed silk fabric folds on robes, intricate gold embroidery, sharp focus, subsurface scattering, powerful presence",
-    "negative_prompt": "anime, cartoon, drawing, plastic, human face, human nose, thin build, small, smooth skin, low quality, blurry face, (friendly smile:1.3), normal eyes, soft lighting, exposed organs, excessive flesh",
-    "weights": { 
-        "depth": 0.98, 
-        "canny": 0.85
+    "prompt_base": "raw photo, cinematic film still, portrait of a (massive portly barrel-chested feline deity:1.2), (weathered purple Sphynx cat skin texture:1.3), piercing yellow feline eyes, stern expression, 8k uhd",
+    "feature_prompt": "highly detailed epidermal wrinkles, (organic skin imperfections:1.2), subtle biological oily sheen, source palette preservation, identical color matching, (matching heavy silk fabric texture on robes:1.2), subsurface scattering on large ears, cinematic lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human face, human nose, smooth skin, airbrushed, low quality, (furry:1.2), (fat rolls:1.1)",
+    "weights": {
+        "depth": 0.82,
+        "canny": 0.40
     },
-    "canny_thresholds": [50, 150],
-    "denoising_strength": 0.45
+    "canny_thresholds": [
+        35,
+        120
+    ],
+    "denoising_strength": 0.70
 }

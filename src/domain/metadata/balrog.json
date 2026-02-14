@@ -1,14 +1,21 @@
 {
     "id": "balrog",
-    "aliases": ["balrog", "boxer", "m. bison jp"],
+    "aliases": [
+        "balrog",
+        "boxer",
+        "m. bison jp"
+    ],
     "essence": "human_boxer",
-    "prompt_base": "powerful African-American boxer, muscular physique, aggressive determined expression, realistic sweat on skin, 8k cinematic photo, dramatic arena lighting",
-    "feature_prompt": "visible skin pores, prominent veins, macro leather texture on boxing gloves, detailed silk fabric folds on robe, sharp focus, subsurface scattering",
-    "negative_prompt": "anime, cartoon, drawing, plastic, thin build, friendly smile, elegant, low quality, blurry face, (deformed gloves:1.2), soft lighting, clean skin",
-    "weights": { 
-        "depth": 0.92, 
-        "canny": 0.78
+    "prompt_base": "raw photo, cinematic film still, portrait of a (powerful African-American boxer:1.2), muscular physique, aggressive determined expression, realistic sweat on skin, 8k uhd",
+    "feature_prompt": "visible skin pores, prominent veins, (matching macro leather texture on boxing gloves:1.2), source palette preservation, identical color matching, (matching silk fabric folds on robe:1.2), sharp focus, subsurface scattering, film grain",
+    "negative_prompt": "anime, cartoon, drawing, plastic, thin build, friendly smile, elegant, low quality, blurry face, (deformed gloves:1.3), soft lighting, clean skin, (doll:1.2)",
+    "weights": {
+        "depth": 0.88,
+        "canny": 0.50
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.58
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.65
 }

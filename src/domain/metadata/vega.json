@@ -1,14 +1,21 @@
 {
     "id": "vega",
-    "aliases": ["vega", "claw", "balrog jp"],
+    "aliases": [
+        "vega",
+        "claw",
+        "balrog jp"
+    ],
     "essence": "human_assassin",
-    "prompt_base": "narcissistic Spanish matador, intense piercing gaze, long blonde hair, sharp silver mask, red and gold flamboyant costume, theatrical lighting, 8k realistic photo",
-    "feature_prompt": "polished metallic mask texture, individual realistic hair strands, detailed silk fabric on costume, visible makeup, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, messy hair, blurry, normal clothing, plain face, plastic mask",
-    "weights": { 
-        "depth": 0.90,
-        "canny": 0.75
+    "prompt_base": "raw photo, cinematic film still, portrait of a (narcissistic Spanish assassin:1.2), intense piercing gaze, long blonde braided hair, sharp silver mask, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (visible skin imperfections:1.1), individual realistic hair strands, source palette preservation, identical color matching, (matching polished metal mask texture:1.3), (matching sharp claw texture:1.2), cinematic theatrical lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, messy hair, blurry, (no mask:1.4), plain face, plastic mask",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.58
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.68
 }

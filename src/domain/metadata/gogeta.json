@@ -1,14 +1,20 @@
 {
     "id": "gogeta",
-    "aliases": ["gogeta", "gogeta blue"],
+    "aliases": [
+        "gogeta",
+        "gogeta blue"
+    ],
     "essence": "species_saiyan_fusion",
-    "prompt_base": "photorealistic asian fusion warrior, muscular build, black spiky hair, intense determined eyes, fierce expression, 8k cinematic photo, dynamic lighting",
-    "feature_prompt": "hyperdetailed skin texture, visible veins, subtle energy aura, realistic fabric weave on vest, fluid blue sash texture, padding texture",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, helmet hair, low quality, deformed anatomy, blurry clothes, (simple background:1.2), normal hair, no fusion earrings",
+    "prompt_base": "raw photo, cinematic film still, portrait of an (intense Asian fusion warrior:1.2), hyper-muscular athletic physique, spiky black hair, serious determined gaze, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle sweat and skin imperfections:1.2), individual spiky hair strands, source palette preservation, identical color matching, (matching heavy fabric weave on vest:1.2), (matching padded texture:1.2), film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, airbrushed, smooth skin, low quality, feminine, (helmet hair:1.2), too soft",
     "weights": {
-        "depth": 0.90,
-        "canny": 0.78
+        "depth": 0.82,
+        "canny": 0.45
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.52
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.70
 }

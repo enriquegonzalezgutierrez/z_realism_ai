@@ -1,14 +1,21 @@
 {
     "id": "chiaotzu",
-    "aliases": ["chiaotzu", "chaos", "chaoz"],
+    "aliases": [
+        "chiaotzu",
+        "chaos",
+        "chaoz"
+    ],
     "essence": "species_human_mystic",
-    "prompt_base": "small spectral warrior, delicate porcelain skin, single hair strand, red circular ritual face paint, stoic expression, 8k cinematic photo, mystical lighting",
-    "feature_prompt": "thin translucent skin texture, intricate ritual face art, fine silk fabric texture on hat, golden thread embroidery on oriental outfit, sharp focus, subtle glowing aura",
-    "negative_prompt": "anime, cartoon, plastic, doll, toy, clown, horror, cracks, makeup, youthful, glossy, healthy, vibrant colors, muscular, large build, ugly face",
-    "weights": { 
-        "depth": 0.95, 
-        "canny": 0.88 
+    "prompt_base": "raw photo, cinematic film still, portrait of a (small-statured mystical warrior:1.2), (extremely pale translucent biological skin:1.2), red circular ritual face paint, single hair strand, stoic expression, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (natural skin subsurface scattering:1.3), (subtle skin imperfections:1.2), source palette preservation, identical color matching, (matching fine silk fabric texture on hat:1.2), cinematic mystical lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.5), mannequin, clown, airbrushed, smooth skin, low quality, cracks, muscular, (large build:1.2)",
+    "weights": {
+        "depth": 0.80,
+        "canny": 0.40
     },
-    "canny_thresholds": [50, 150],
-    "denoising_strength": 0.45
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.68
 }

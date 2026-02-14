@@ -1,14 +1,20 @@
 {
     "id": "bulma",
-    "aliases": ["bulma", "bulma briefs"],
+    "aliases": [
+        "bulma",
+        "bulma briefs"
+    ],
     "essence": "human_scientist",
-    "prompt_base": "intelligent young woman, captivating blue eyes, long smooth turquoise teal hair, determined expression, 8k cinematic photo, laboratory lighting",
-    "feature_prompt": "highly detailed skin texture, individual hair strands, natural fabric textures, subtle reflections on hair, sharp focus, subsurface scattering",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, bad hair, unrealistic hair color, messy hair, low quality, blurry clothes, dull colors, (wig:1.2)",
-    "weights": { 
-        "depth": 0.88, 
-        "canny": 0.75
+    "prompt_base": "raw photo, cinematic film still, portrait of an (intelligent young East-Asian woman:1.2), long smooth (turquoise teal hair:1.1), elegant face, realistic facial features, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (flawless skin texture:1.1), (natural skin subsurface scattering:1.2), individual hair strands, source palette preservation, identical color matching, (matching fabric weave texture:1.2), sharp focus, cinematic lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, airbrushed, low quality, (deformed glasses:1.3), (blurry face:1.2), (unrealistic hair:1.3), (messy hair:1.2), (blue stain on face:1.5)",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.55
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        40,
+        150
+    ],
+    "denoising_strength": 0.60
 }

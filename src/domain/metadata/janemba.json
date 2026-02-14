@@ -1,14 +1,20 @@
 {
     "id": "janemba",
-    "aliases": ["janemba", "super janemba"],
+    "aliases": [
+        "janemba",
+        "super janemba"
+    ],
     "essence": "species_hell_demon",
-    "prompt_base": "cinematic portrait of a colossal red demon, muscular anatomy, purple organic armor segments, yellow horns, long purple sword, glowing yellow eyes, menacing expression, 8k cinematic photo, hellish lighting",
-    "feature_prompt": "extreme demonic skin texture, biological segments, glowing energy effect, sharp focus on horns and sword material, intricate organic details",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, human skin, smooth skin, friendly face, low quality, simple sword, small, soft, dull colors",
-    "weights": { 
-        "depth": 0.98, 
-        "canny": 0.90 
+    "prompt_base": "raw photo, cinematic film still, (colossal menacing red demonic entity:1.2), (weathered crimson biological hide texture:1.2), sharp yellow horns, piercing glowing yellow eyes, 8k uhd",
+    "feature_prompt": "highly detailed demonic skin pores, (matching segmented purple chitinous plates:1.3), (translucent horn material:1.2), realistic obsidian sword texture, source palette preservation, identical color matching, subtle biological secretions, cinematic hellish lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human skin, human face, smooth skin, airbrushed, low quality, friendly face, (clean:1.2)",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [30, 100],
-    "denoising_strength": 0.40
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.70
 }

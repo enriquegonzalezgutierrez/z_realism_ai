@@ -1,14 +1,21 @@
 {
     "id": "whis",
-    "aliases": ["whis", "uis", "angel"],
+    "aliases": [
+        "whis",
+        "uis",
+        "angel"
+    ],
     "essence": "species_celestial_angel",
-    "prompt_base": "elegant celestial being, slender physique, pale light-blue alien skin, long flowing white hair, serene intelligent eyes, slender staff, divine presence, 8k cinematic photo, ethereal lighting",
-    "feature_prompt": "smooth skin texture, iridescent sheen, individual flowing hair strands, intricate fabric weave on robes, sharp focus on staff crystal, otherworldly details",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, human, smooth hair, low quality, blurry, (muscular:1.2), deformed anatomy, jewelry",
-    "weights": { 
-        "depth": 0.95,
-        "canny": 0.85
+    "prompt_base": "raw photo, cinematic film still, portrait of an (elegant celestial being:1.2), tall slender physique, (pale light-blue alien skin:1.2), long flowing white hair, serene intelligent expression, 8k uhd",
+    "feature_prompt": "smooth but detailed skin texture, (subtle iridescent sheen:1.1), individual flowing hair strands, source palette preservation, identical color matching, (matching divine silk robes:1.3), sharp focus, ethereal lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human skin tone, rough skin, low quality, blurry, (muscular:1.2), deformed anatomy",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.50
     },
-    "canny_thresholds": [60, 150],
-    "denoising_strength": 0.48
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.60
 }

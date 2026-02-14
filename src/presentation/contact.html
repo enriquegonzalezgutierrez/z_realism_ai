@@ -2,11 +2,17 @@
 <html lang="en">
 <!-- 
   path: src/presentation/contact.html
-  description: Contact Information & Contribution Protocol v21.1.
+  description: Contact Information & Contribution Protocol v21.2.
   
   ABSTRACT:
   Provides a specialized channel for peer review, technical support, 
   and open-source contributions to the Z-Realism Research Institute.
+  
+  EXTENDED CONTEXT:
+  This document formalizes the communication interfaces between the 
+  research institute and the external academic, engineering, and 
+  open-source communities. It defines collaboration boundaries, 
+  contribution standards, and peer validation pathways.
   
   ARCHITECTURAL ROLE (Presentation Layer):
   Acts as the primary communication gateway for the research ecosystem. 
@@ -20,23 +26,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CONTACT | Z-Realism Research Institute</title>
 
-    <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     
-    <!-- Design System & Documentation Styles -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
 </head>
 <body>
-    <!-- Persistent Ambient Cyber-Grid -->
     <div class="grid-overlay"></div>
 
-    <!-- 
-      DYNAMIC NAVIGATION INJECTION: 
-      The <nav> is automatically injected by js/nav.js.
-    -->
-
-    <!-- Main Content Container -->
     <main class="info-container container">
         
         <a href="index.html" class="back-link">&larr; BACK TO GATEWAY</a>
@@ -58,6 +55,11 @@
                     informatics engineering, computer vision, and applied machine learning 
                     communities.
                 </p>
+                <p>
+                    All communications are expected to maintain a professional, research-oriented 
+                    tone. The institute prioritizes constructive technical dialogue, reproducible 
+                    experimentation, and transparent architectural reasoning.
+                </p>
             </div>
         </header>
 
@@ -71,6 +73,11 @@
                 ecosystem. Topics include, but are not limited to, the 
                 <strong>Hybrid Hardware Orchestration</strong> pipeline, GPU tenancy mechanisms, 
                 and the internal structure of the <strong>Subject DNA Metadata</strong> model.
+            </p>
+            <p>
+                Discussions related to optimization strategies, VRAM allocation policies, 
+                scheduler benchmarking, structural conditioning techniques, or perceptual 
+                validation methodologies are particularly encouraged.
             </p>
             <p>
                 For matters requiring direct technical clarification or research alignment, you 
@@ -98,6 +105,11 @@
                 extensions, including improvements to the <strong>CIELAB evaluation heuristics</strong>, 
                 perceptual loss metrics, or metadata-driven latent sequencing strategies.
             </p>
+            <p>
+                All proposed modifications should demonstrate measurable impact, reproducibility, 
+                and architectural coherence. Submissions lacking benchmarking data, comparative 
+                analysis, or documentation may be returned for revision.
+            </p>
             
             <div class="info-card">
                 <h4>How to Contribute:</h4>
@@ -111,6 +123,11 @@
                         <strong>Apply Clean Code Patterns:</strong> Ensure all modifications adhere 
                         to SOLID principles, Domain-Driven Design constraints, and the established 
                         Hexagonal Architecture boundaries.
+                    </li>
+                    <li>
+                        <strong>Document Experimental Results:</strong> Provide quantitative metrics 
+                        (render time, VRAM consumption, perceptual error rates, identity stability 
+                        deltas) when altering inference behavior.
                     </li>
                     <li>
                         <strong>Submit for Peer Review:</strong> Open a Pull Request with a clear 
@@ -131,6 +148,11 @@
                 These repositories serve both as implementation references and as executable 
                 research artifacts aligned with the accompanying doctoral thesis.
             </p>
+            <p>
+                Version tagging follows semantic versioning principles to ensure consistent 
+                documentation of architectural shifts, inference pipeline adjustments, and 
+                metadata schema refinements.
+            </p>
             <div style="display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
                 <a href="https://github.com/egonzalez" target="_blank" class="btn btn-secondary">
                     GITHUB REPOSITORY
@@ -140,13 +162,29 @@
                 </a>
             </div>
 
+            <!-- 4. COLLABORATION PRINCIPLES -->
+            <h2>Collaboration Principles</h2>
+            <p>
+                The institute values interdisciplinary exchange. Researchers from computer 
+                graphics, perceptual psychology, digital humanities, and visual arts are 
+                encouraged to explore collaborative intersections.
+            </p>
+            <p>
+                All collaborations must respect ethical AI standards, proper attribution 
+                practices, and transparent disclosure of synthetic media origins when 
+                publicly disseminated.
+            </p>
+            <p>
+                By engaging with this communication channel, contributors acknowledge 
+                that all discussions, prototypes, and shared insights are conducted within 
+                a research-first, non-commercial exploratory framework unless explicitly 
+                agreed otherwise.
+            </p>
+
         </section>
 
     </main>
 
-    <!-- 
-      SHARED ARCHITECTURAL COMPONENTS 
-    -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>

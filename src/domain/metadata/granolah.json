@@ -1,14 +1,19 @@
 {
     "id": "granolah",
-    "aliases": ["granolah"],
+    "aliases": [
+        "granolah"
+    ],
     "essence": "species_cerealian",
-    "prompt_base": "cinematic portrait of a handsome man, lean muscular build, long emerald green hair, wide jawline, focused revengeful eyes, mechanical sniper eyepiece, 8k photorealistic image, atmospheric lighting",
-    "feature_prompt": "detailed leather texture on flight jacket, metallic texture on the sniper eyepiece, individual green hair strands, subtle stubble, battle scars, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, helmet hair, flat lighting, low quality, blurry eyepiece, (bright neon green hair:1.2), soft features, normal eyes, smiling",
+    "prompt_base": "raw photo, cinematic film still, portrait of a (rugged handsome man:1.2), long emerald-green hair, mechanical sniper eyepiece covering one eye, intense revengeful gaze, sharp angular jawline, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle stubble:1.2), (visible skin imperfections:1.1), individual hair strands, source palette preservation, identical color matching, (matching weathered leather jacket texture:1.2), (realistic glass lens refraction on eyepiece:1.3), film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, airbrushed, low quality, friendly, (bright neon hair:1.3), messy eyepiece",
     "weights": {
-        "depth": 0.90,
-        "canny": 0.80
+        "depth": 0.82,
+        "canny": 0.40
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.70
 }

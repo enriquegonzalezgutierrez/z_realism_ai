@@ -1,21 +1,16 @@
 /* 
  * path: src/presentation/css/landing.css
- * description: Homepage Layout v21.2 - Thesis Candidate.
+ * description: Homepage Layout v21.4 - Modular Vertical Rhythm System.
  *
  * ABSTRACT:
- * Manages the high-impact gateway to the Z-Realism Lab. 
- * This module orchestrates the Hero impact area and the Research Module grid, 
- * ensuring perfect alignment with the fixed navigation system.
+ * Implements an 8px-based vertical rhythm system for improved
+ * typographic consistency and spatial harmony.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
 /* --- 1. HERO SECTION (NEURAL IMPACT AREA) --- */
 .hero-section {
-    /* 
-       DYNAMIC CALCULATION:
-       Ensures the hero section fills the exact remaining viewport space.
-    */
     min-height: calc(100vh - var(--body-padding-top-offset));
     
     display: flex;
@@ -25,13 +20,9 @@
     text-align: center;
     position: relative;
 
-    /* Custom top and bottom padding */
-    padding: calc(var(--content-gap) * 1.2) 20px calc(var(--content-gap) * 0.8) 20px; 
+    /* 96px top / 72px bottom (12u / 9u) */
+    padding: 96px 32px 72px 32px;
     
-    /* 
-       ASSET INTEGRATION:
-       Utilizes hero_bg.png as a fixed atmospheric background.
-    */
     background: linear-gradient(to bottom, rgba(5, 5, 5, 0.4), rgba(5, 5, 5, 1)), 
                 url('../assets/hero_bg.png');
     background-size: cover;
@@ -42,9 +33,9 @@
 
 @media (max-width: 850px) {
     .hero-section {
-        background-attachment: scroll; /* Performance fix for mobile parallax */
+        background-attachment: scroll;
         min-height: auto;
-        padding: 120px 20px 80px;
+        padding: 120px 24px 96px;
     }
 }
 
@@ -61,16 +52,15 @@
     font-weight: 700;
     font-size: 0.7rem;
     letter-spacing: 6px;
-    margin-bottom: 25px;
+    margin-bottom: 32px; /* 4u */
     display: block;
-    text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }
 
 .hero-title {
     font-size: clamp(2.8rem, 9vw, 5.5rem);
     font-weight: 800;
-    line-height: 1.05;
-    margin-bottom: 24px;
+    line-height: 1.1;
+    margin-bottom: 32px; /* 4u */
     text-transform: uppercase;
     letter-spacing: -2px;
 }
@@ -78,47 +68,44 @@
 .hero-desc {
     font-size: clamp(1rem, 2vw, 1.25rem);
     color: var(--text-muted);
-    margin-bottom: 36px;
-    line-height: 1.7;
-    max-width: 680px;
+    margin-bottom: 32px; /* 4u between paragraphs */
+    line-height: 1.9;
+    max-width: 720px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .hero-actions {
     display: flex;
-    gap: 20px;
+    gap: 24px; /* 3u */
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 12px;
+    margin-top: 48px; /* 6u separation from text block */
 }
 
 /* --- 2. MODULE GATEWAYS (RESEARCH GRID) --- */
 .modules-container {
-    padding-bottom: 120px;
+    padding-top: 96px;   /* 12u */
+    padding-bottom: 160px; /* 20u */
     position: relative;
     z-index: 10;
     
-    /* 
-       DEPTH EFFECT:
-       Negative margin creates the "Video Game" overlap.
-       Disabled on mobile via Media Query below.
-    */
-    margin-top: -100px; 
+    margin-top: -80px;
 }
 
 @media (max-width: 768px) {
     .modules-container {
         margin-top: 0;
-        padding-top: 40px;
+        padding-top: 80px;
+        padding-bottom: 120px;
     }
 }
 
 .modules-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-    padding: 0 40px;
+    gap: 48px; /* 6u */
+    padding: 0 64px; /* 8u lateral */
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -128,7 +115,7 @@
     border: var(--glass-border);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    padding: 50px;
+    padding: 64px; /* 8u internal breathing */
     border-radius: var(--radius-lg);
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     display: flex;
@@ -139,21 +126,14 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.module-card:hover {
-    transform: translateY(-15px);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(139, 92, 246, 0.2);
-}
-
 .module-icon {
     font-size: 3rem;
-    margin-bottom: 30px;
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+    margin-bottom: 32px; /* 4u */
 }
 
 .module-card h3 {
     font-size: 1.6rem;
-    margin-bottom: 15px;
+    margin-bottom: 24px; /* 3u */
     font-family: var(--font-code);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -161,13 +141,14 @@
 
 .module-card p {
     color: var(--text-muted);
-    margin-bottom: 40px;
+    margin-bottom: 24px; /* 3u rhythm */
     font-size: 1rem;
-    line-height: 1.7;
+    line-height: 1.9;
     flex-grow: 1;
 }
 
 .module-link {
+    margin-top: 32px; /* 4u separation */
     font-family: var(--font-code);
     font-size: 0.8rem;
     font-weight: 700;
@@ -175,7 +156,7 @@
     text-transform: uppercase;
 }
 
-/* Specialized interaction for the Temporal Module */
+/* Temporal module refinement */
 .module-card.temporal:hover {
     border-color: var(--accent-video);
     box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(16, 185, 129, 0.2);
@@ -198,7 +179,14 @@
 
 /* --- 4. RESPONSIVE OPTIMIZATIONS --- */
 @media (max-width: 768px) {
-    .modules-grid { padding: 0 20px; gap: 20px; }
-    .module-card { padding: 35px; }
-    .hero-title { letter-spacing: -1px; }
+    .modules-grid { 
+        padding: 0 24px; 
+        gap: 32px; 
+    }
+    .module-card { 
+        padding: 40px; 
+    }
+    .hero-title { 
+        letter-spacing: -1px; 
+    }
 }

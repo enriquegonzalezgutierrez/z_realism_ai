@@ -1,14 +1,20 @@
 {
     "id": "videl",
-    "aliases": ["videl", "videl satan"],
+    "aliases": [
+        "videl",
+        "videl satan"
+    ],
     "essence": "human_martial_artist",
-    "prompt_base": "athletic young woman, sharp blue eyes, short black hair, determined expression, 8k cinematic photo, training field lighting",
-    "feature_prompt": "high quality cotton texture on shirt, realistic spandex texture on shorts, detailed musculature, visible skin pores, subtle dirt and sweat",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, doll, airbrushed skin, exaggerated musculature, unnatural anatomy, flat lighting, low quality, friendly, lipstick, makeup",
-    "weights": { 
-        "depth": 0.88,
-        "canny": 0.75
+    "prompt_base": "raw photo, cinematic film still, portrait of an (athletic young woman:1.2), short black hair, determined serious expression, realistic facial features, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle sweat and dirt:1.2), individual hair strands, source palette preservation, identical color matching, (matching cotton t-shirt texture:1.2), sharp focus, training field lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, airbrushed, low quality, lipstick, makeup, exaggerated musculature",
+    "weights": {
+        "depth": 0.80,
+        "canny": 0.40
     },
-    "canny_thresholds": [70, 170],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.65
 }

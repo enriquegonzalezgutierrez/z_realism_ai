@@ -1,11 +1,20 @@
 {
     "id": "android18",
-    "aliases": ["18", "android 18"],
+    "aliases": [
+        "18",
+        "android 18"
+    ],
     "essence": "species_human_cyborg",
-    "prompt_base": "raw photo, close up portrait of a young woman, piercing cold blue eyes, (short straight hair:1.1), natural skin texture, masterpiece",
-    "feature_prompt": "highly detailed skin pores, source palette preservation, identical color matching, subtle freckles, (matching denim fabric texture:1.2), film grain",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, mannequin, cgi, 3d render, exaggerated eyes, makeup, airbrushed, low quality, (long hair:1.2)",
-    "weights": { "depth": 0.85, "canny": 0.40 },
-    "canny_thresholds": [25, 90],
-    "denoising_strength": 0.65
+    "prompt_base": "raw photo, (unretouched:1.2) portrait of a young woman, piercing cold blue eyes, (short messy blonde hair:1.1), realistic skin anatomy, cinematic lighting, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (visible skin imperfections:1.2), subtle freckles, individual hair strands, source palette preservation, identical color matching, (matching denim weave texture:1.2), film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, barbie, airbrushed, smooth skin, makeup, lipstick, low quality, (long hair:1.2)",
+    "weights": {
+        "depth": 0.75,
+        "canny": 0.35
+    },
+    "canny_thresholds": [
+        20,
+        80
+    ],
+    "denoising_strength": 0.72
 }

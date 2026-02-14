@@ -1,14 +1,20 @@
 {
     "id": "cell",
-    "aliases": ["cell", "perfect cell"],
+    "aliases": [
+        "cell",
+        "perfect cell"
+    ],
     "essence": "species_bio_android",
-    "prompt_base": "colossal bio-android, dark emerald green chitinous exoskeleton, black spots, regal head horns, giant compound insectoid eyes, biomechanical wings, menacing expression, 8k cinematic photo, dramatic lighting",
-    "feature_prompt": "wet biological sheen on chitin, intricate segmented plating, sharp focus on compound eye texture, hyper-realistic bio-armor, detailed alien biology, sharp claws, intimidating presence",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, human face, fleshy skin, organic texture, smooth shell, low quality, blurry wings, deformed, too small",
-    "weights": { 
-        "depth": 0.99, 
-        "canny": 0.95 
+    "prompt_base": "raw photo, cinematic film still, colossal bio-organic creature, emerald-green segmented chitinous exoskeleton, black spotted pattern, menacing insectoid expression, biomechanical anatomy, 8k uhd",
+    "feature_prompt": "highly detailed biological texture, (wet biological sheen:1.2), macro detail on compound eyes, source palette preservation, identical color matching, (matching segmented bio-armor plating:1.2), realistic organic secretions, sharp focus, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human skin, human face, smooth shell, airbrushed, clean, over-polished, too small",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [30, 100],
-    "denoising_strength": 0.40
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.72
 }

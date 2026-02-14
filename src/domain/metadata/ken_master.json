@@ -1,14 +1,20 @@
 {
     "id": "ken_masters",
-    "aliases": ["ken", "ken masters"],
+    "aliases": [
+        "ken",
+        "ken masters"
+    ],
     "essence": "human_martial_artist",
-    "prompt_base": "photorealistic portrait of a handsome American martial artist, lean muscular physique, long blonde hair, confident smile, determined gaze, 8k cinematic photo, dynamic lighting",
-    "feature_prompt": "realistic hair strands, sun-kissed skin texture, detailed cotton fabric weave on karate gi, visible muscle definition, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, flat lighting, messy face, neon red, low quality, blurry, (short hair:1.2), weak, sad expression",
-    "weights": { 
-        "depth": 0.90, 
-        "canny": 0.75
+    "prompt_base": "raw photo, cinematic film still, portrait of a (handsome American martial artist:1.2), lean muscular physique, long blonde hair, confident smile, 8k uhd",
+    "feature_prompt": "realistic hair strands, sun-kissed skin texture, source palette preservation, identical color matching, (matching heavy cotton karate gi fabric:1.2), visible muscle definition, sharp focus, film grain",
+    "negative_prompt": "anime, cartoon, drawing, plastic, doll, flat lighting, messy face, neon red, low quality, blurry, (short hair:1.2), weak, sad expression, mannequin",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.62
 }

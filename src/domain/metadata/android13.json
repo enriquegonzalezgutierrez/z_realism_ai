@@ -1,11 +1,20 @@
 {
     "id": "android13",
-    "aliases": ["13", "android 13"],
+    "aliases": [
+        "13",
+        "android 13"
+    ],
     "essence": "species_human_android",
-    "prompt_base": "8k cinematic photo, muscular man, piercing blue eyes, long flowing white hair, rugged facial features, determined expression, outdoor lighting",
-    "feature_prompt": "visible skin texture, source palette preservation, identical color matching, detailed fabric weave, canvas hat material, individual hair strands",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, smooth hair, deformed, low quality, blurry face, (deformed hat:1.2), feminine",
-    "weights": { "depth": 0.88, "canny": 0.78 },
-    "canny_thresholds": [70, 170],
-    "denoising_strength": 0.55
+    "prompt_base": "raw photo, cinematic film still, portrait of a (rugged muscular middle-aged man:1.2), piercing blue eyes, (long flowing messy hair:1.1), determined expression, outdoor sun lighting",
+    "feature_prompt": "highly detailed skin pores, (weathered sun-damaged skin:1.2), individual hair strands, (matching heavy canvas fabric texture on hat:1.3), source palette preservation, identical color matching, realistic shadows, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth hair, airbrushed, low quality, feminine features, (clean skin:1.2)",
+    "weights": {
+        "depth": 0.82,
+        "canny": 0.55
+    },
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.65
 }

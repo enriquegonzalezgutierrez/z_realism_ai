@@ -1,14 +1,19 @@
 {
     "id": "vados",
-    "aliases": ["vados"],
+    "aliases": [
+        "vados"
+    ],
     "essence": "species_celestial_angel",
-    "prompt_base": "elegant alien woman, slender build, pale light-blue skin tone, long flowing white hair, serene intelligent eyes, 8k cinematic photo, soft lighting",
-    "feature_prompt": "ethereal skin texture, subtle sheen, individual flowing hair strands, intricate texture on divine silk robes, sharp focus, ethereal beauty",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, helmet hair, human, short hair, low quality, deformed, (earthly clothes:1.2)",
-    "weights": { 
-        "depth": 0.95,
-        "canny": 0.75
+    "prompt_base": "raw photo, cinematic film still, portrait of an (elegant alien woman:1.2), slender build, pale light-blue skin tone, long flowing white hair, serene intelligent eyes, 8k uhd",
+    "feature_prompt": "ethereal skin texture, subtle sheen, individual flowing hair strands, intricate texture on divine silk robes, sharp focus, ethereal beauty, source palette preservation, identical color matching",
+    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, helmet hair, human, short hair, low quality, deformed, (earthly clothes:1.2), (human skin color:1.5)",
+    "weights": {
+        "depth": 0.90,
+        "canny": 0.60
     },
-    "canny_thresholds": [60, 150],
-    "denoising_strength": 0.52
+    "canny_thresholds": [
+        40,
+        120
+    ],
+    "denoising_strength": 0.60
 }

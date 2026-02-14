@@ -1,14 +1,20 @@
 {
     "id": "kefla",
-    "aliases": ["kefla", "kafla"],
+    "aliases": [
+        "kefla",
+        "kafla"
+    ],
     "essence": "species_saiyan_fusion_u6",
-    "prompt_base": "cinematic portrait of a muscular young woman, chaotic spiked black and green hair, large green Potara earrings, arrogant smirk, realistic muscle definition, 8k cinematic photo, energetic lighting",
-    "feature_prompt": "individual hair strands visible, detailed fabric texture on crop top and leggings, sharp focus on green earrings, glowing energy aura",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, low quality, helmet hair, flat color, (too masculine:1.2), soft features, dull earrings, long hair",
-    "weights": { 
-        "depth": 0.90, 
-        "canny": 0.78 
+    "prompt_base": "raw photo, cinematic film still, portrait of an (intense athletic East-Asian woman:1.2), hyper-muscular physique, (messy chaotic spiked black and green hair:1.1), arrogant smirk, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle sweat and skin imperfections:1.2), individual hair strands, source palette preservation, identical color matching, (matching ribbed fabric texture on crop top:1.2), realistic green Potara earring glass refraction, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, airbrushed, smooth skin, low quality, feminine, (helmet hair:1.2), too soft, (masculine face:1.1)",
+    "weights": {
+        "depth": 0.82,
+        "canny": 0.42
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.52
+    "canny_thresholds": [
+        35,
+        110
+    ],
+    "denoising_strength": 0.70
 }

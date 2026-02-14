@@ -131,6 +131,24 @@
             <!-- TEMPORAL OUTPUT VIEWPORT (The Neural Video) -->
             <div class="viewport-card" id="result-display">
                 <span class="viewport-label">TEMPORAL_OUTPUT_MONITOR</span>
+
+                <div id="telemetry-hud" class="telemetry-hud hidden" style="border-left-color: var(--accent-video);">
+                    <div class="hud-row">
+                        <div class="status-indicator status-ok"></div>
+                        <span class="hud-label">TOTAL_FRAMES</span>
+                        <span id="hud-frames" class="hud-value">0</span>
+                    </div>
+                    <div class="hud-row">
+                        <div class="status-indicator status-ok"></div>
+                        <span class="hud-label">TARGET_FPS</span>
+                        <span id="hud-fps" class="hud-value">0</span>
+                    </div>
+                    <div class="hud-separator"></div>
+                    <div class="hud-row">
+                        <span class="hud-label">INF_TIME</span>
+                        <span id="hud-time" class="hud-value-alt" style="color: var(--accent-video);">0.0s</span>
+                    </div>
+                </div>
                 
                 <!-- NEW: This div will hold all dynamic video content -->
                 <div id="dynamic-content-viewport" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1;">

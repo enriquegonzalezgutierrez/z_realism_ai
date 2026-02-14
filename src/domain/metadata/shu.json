@@ -1,14 +1,20 @@
 {
     "id": "shu",
-    "aliases": ["shu", "soba"],
+    "aliases": [
+        "shu",
+        "soba"
+    ],
     "essence": "species_anthropomorphic_dog",
-    "prompt_base": "small anthropomorphic Shiba Inu dog ninja, lean athletic physique, realistic brown fur texture, fierce determined expression, katana on back, 8k cinematic photo, dynamic lighting",
-    "feature_prompt": "sharp focus on dog jawline and teeth, subtle snout wrinkles, detailed metallic texture on katana and hilt, high quality fabric weave on ninja outfit, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, human hands, human face, smooth skin, plastic costume, low quality, blurry, friendly, pet, fur doll",
-    "weights": { 
-        "depth": 0.85,
-        "canny": 0.75
+    "prompt_base": "raw photo, cinematic film still, portrait of a (small anthropomorphic Shiba Inu dog ninja:1.3), lean athletic physique, realistic brown fur texture, fierce determined expression, 8k uhd",
+    "feature_prompt": "sharp focus on dog jawline and teeth, subtle snout wrinkles, detailed metallic texture on katana hilt, high quality fabric weave on ninja outfit, individual fur strands, source palette preservation, identical color matching",
+    "negative_prompt": "anime, cartoon, drawing, human hands, human face, smooth skin, plastic costume, low quality, blurry, friendly, pet, fur doll, (human skin:1.5)",
+    "weights": {
+        "depth": 0.88,
+        "canny": 0.60
     },
-    "canny_thresholds": [60, 170],
-    "denoising_strength": 0.52
+    "canny_thresholds": [
+        40,
+        140
+    ],
+    "denoising_strength": 0.60
 }

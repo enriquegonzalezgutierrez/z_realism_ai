@@ -1,11 +1,20 @@
 {
     "id": "akuma",
-    "aliases": ["akuma", "gouki"],
+    "aliases": [
+        "akuma",
+        "gouki"
+    ],
     "essence": "human_demonic_martial_artist",
     "prompt_base": "raw photo, close up portrait of a weathered warrior, (reddish-brown sun-damaged skin:1.2), messy spiky black hair, fierce gaze",
     "feature_prompt": "highly detailed skin pores, source palette preservation, identical color matching, realistic sweat, extreme muscle definition, film grain",
     "negative_prompt": "anime, cartoon, drawing, plastic, doll, mannequin, cgi, 3d render, airbrushed, low quality, friendly, neon red, saturated pink",
-    "weights": { "depth": 0.90, "canny": 0.60 },
-    "canny_thresholds": [40, 120],
+    "weights": {
+        "depth": 0.90,
+        "canny": 0.60
+    },
+    "canny_thresholds": [
+        40,
+        120
+    ],
     "denoising_strength": 0.72
 }

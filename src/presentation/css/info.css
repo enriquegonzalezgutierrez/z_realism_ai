@@ -11,6 +11,7 @@
  * 1. Safe-Zone Integration: Fully respects the global fixed-header offset.
  * 2. Academic Typography: Optimized line-heights and font-pairings for readability.
  * 3. Structured Data: Custom callouts for technical specifications and DNA metrics.
+ * 4. Ethical Circles: Visualizes research values with interactive circles.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -20,14 +21,7 @@
     width: 100%;
     max-width: 1000px; 
     margin: 0 auto;
-    
-    /* 
-       THE LAYOUT FIX:
-       Inherits the body's padding-top offset and adds internal 
-       content spacing for a professional buffer.
-    */
     padding: calc(var(--content-gap) * 1.1) 20px 100px 20px; 
-    
     animation: infoFadeIn 0.8s ease-out;
 }
 
@@ -44,7 +38,6 @@
 }
 
 .info-title {
-    /* Responsive title sizing */
     font-size: clamp(2rem, 8vw, 3.5rem);
     font-weight: 800;
     margin-bottom: 24px;
@@ -170,4 +163,58 @@
         opacity: 1; 
         transform: translateY(0); 
     }
+}
+
+/* --- 8. ETHICAL CIRCLES --- */
+.ethical-diagram {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.ethical-diagram h2 {
+    margin-bottom: 30px;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--accent);
+    font-family: var(--font-code);
+}
+
+.ethical-circles {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.circle-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 220px;
+    text-align: center;
+}
+
+.circle-label {
+    width: 80px;
+    height: 80px;
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    font-family: var(--font-code);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.circle-item:hover .circle-label {
+    transform: scale(1.1);
+}
+
+.circle-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
 }

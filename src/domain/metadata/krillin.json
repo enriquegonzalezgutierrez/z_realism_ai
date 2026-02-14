@@ -1,14 +1,20 @@
 {
     "id": "krillin",
-    "aliases": ["krillin", "kuririn"],
+    "aliases": [
+        "krillin",
+        "kuririn"
+    ],
     "essence": "species_human_monk",
-    "prompt_base": "photograph of a short, highly muscular martial arts monk, completely bald head, six distinct incense burn scars on forehead, determined expression, 8k cinematic photo, dynamic lighting",
-    "feature_prompt": "subtle light reflection on the burn scars, defined muscles, realistic fabric texture on gi, aged weathered skin, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, large nose, six dots missing, perfect skin, smooth head, helmet hair, flat lighting, low quality, blurry, (hair:1.5)",
-    "weights": { 
-        "depth": 0.95,
-        "canny": 0.88
+    "prompt_base": "raw photo, cinematic film still, portrait of a (muscular short-statured Asian monk:1.2), completely bald head, six distinct moxibustion incense burn scars on forehead, determined focused gaze, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (weathered and sun-damaged skin texture:1.2), (indented burn scar tissue:1.3), source palette preservation, identical color matching, (matching heavy cotton fabric weave on gi:1.2), realistic head anatomy, cinematic lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth head, (hair:1.5), (helmet hair:1.3), makeup, lipstick, large nose, low quality",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [60, 160],
-    "denoising_strength": 0.50
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.70
 }

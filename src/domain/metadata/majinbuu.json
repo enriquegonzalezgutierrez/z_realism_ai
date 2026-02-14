@@ -1,14 +1,21 @@
 {
     "id": "majinbuu",
-    "aliases": ["buu", "fat buu", "kid buu"],
+    "aliases": [
+        "buu",
+        "fat buu",
+        "kid buu"
+    ],
     "essence": "species_majin",
-    "prompt_base": "hyperdetailed portrait of a massive rotund alien, vibrant bubblegum pink rubbery texture, short black antennae, large black beady eyes, menacing grin, otherworldly presence, 8k cinematic photo, dramatic lighting",
-    "feature_prompt": "microscopic detail on the matte rubber surface, subtle skin imperfections, sharp focus on eyes and gold buckle, detailed fabric texture on puffy garment, otherworldly aura",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, human proportions, smooth skin, human, friendly face, low quality, overly shiny, flat lighting, (too cute:1.4), baby, tiny",
-    "weights": { 
-        "depth": 0.97,
-        "canny": 0.88
+    "prompt_base": "raw photo, cinematic film still, portrait of a (massive rotund alien creature:1.2), (moist biological pink skin texture:1.3), short black antennae, dead black void eyes, menacing grin, 8k uhd",
+    "feature_prompt": "highly detailed alien skin pores, (organic fleshy wrinkles:1.2), source palette preservation, identical color matching, (matching fabric texture on cape:1.2), sharp focus on eyes, cinematic lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.4), (doll:1.4), mannequin, human skin tone, dry skin, matte, low quality, (too cute:1.5), baby",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.40
     },
-    "canny_thresholds": [40, 140],
-    "denoising_strength": 0.48
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.70
 }

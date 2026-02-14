@@ -1,14 +1,21 @@
 {
     "id": "hit",
-    "aliases": ["hit", "hitman", "legendary assassin"],
+    "aliases": [
+        "hit",
+        "hitman",
+        "legendary assassin"
+    ],
     "essence": "species_alien_assassin",
-    "prompt_base": "cinematic portrait of a stoic, imposing assassin, deep purple skin tone, sharp angular facial features, short dark hair, focused expression, 8k cinematic photo, high contrast lighting",
-    "feature_prompt": "detailed leather/fabric texture of the trench coat, subtle biological texture on the purple skin, sharp focus on the face and collar, intricate folds",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, bright purple, flat color, blurry coat, low quality, human skin color, soft, friendly, long hair",
-    "weights": { 
-        "depth": 0.90, 
-        "canny": 0.80
+    "prompt_base": "raw photo, cinematic film still, portrait of a (stoic lethal alien assassin:1.2), (deep purple-tinted biological skin:1.2), sharp angular facial features, cold focused gaze, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (subtle skin imperfections and veins:1.1), source palette preservation, identical color matching, (matching weathered leather trench coat texture:1.3), sharp focus on face, cinematic low-key lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human skin tone, bright neon purple, airbrushed, smooth skin, low quality, friendly face",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        35,
+        110
+    ],
+    "denoising_strength": 0.72
 }

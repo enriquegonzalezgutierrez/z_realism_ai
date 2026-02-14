@@ -2,16 +2,18 @@
 <html lang="en">
 <!-- 
   path: src/presentation/about.html
-  description: Research Mission & Technical Thesis Page v21.1.
+  description: Research Mission & Technical Thesis Page v21.2.
   
   ABSTRACT:
   This document outlines the scientific goals of the Z-Realism project, 
   focusing on the methodology used to bridge the gap between stylized 
-  2D manifolds and high-fidelity photorealistic environments.
+  2D manifolds and high-fidelity photorealistic environments. 
+  Version 21.2 introduces metric cards and progress telemetry visualization.
   
   ARCHITECTURAL ROLE (Presentation Layer):
-  Acts as the primary documentation for the research thesis. It provides 
-  context for the technical implementations found in the laboratories.
+  Acts as the primary documentation for the research thesis. Provides 
+  context for the technical implementations found in the laboratories 
+  and displays experimental metrics visually.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -30,11 +32,6 @@
 <body>
     <!-- Persistent Ambient Cyber-Grid -->
     <div class="grid-overlay"></div>
-
-    <!-- 
-      DYNAMIC NAVIGATION INJECTION: 
-      The <nav> is automatically injected by js/nav.js.
-    -->
 
     <!-- Main Research Container -->
     <main class="info-container container">
@@ -143,13 +140,59 @@
                 landscape. This architectural rigor allows experimental components to evolve 
                 independently while preserving the integrity of the core system.
             </p>
+
+            <!-- --- METRIC CARDS EXAMPLE --- -->
+            <div class="info-section">
+                <h2>Experimental Metrics</h2>
+                <div class="metric-card">
+                    <h5>Structural Fidelity</h5>
+                    <p>Measurement of geometric identity preservation during diffusion.</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="--bar-value: 92%; width:92%;"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <h5>Chromatic Stability</h5>
+                    <p>Color saturation and consistency over high-entropy transformations.</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="--bar-value: 87%; width:87%;"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <h5>Identity Preservation</h5>
+                    <p>Retention of subject DNA across all inference cycles.</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="--bar-value: 94%; width:94%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- --- ETHICAL DIAGRAM IMPROVED --- -->
+            <div class="info-section ethical-diagram">
+                <h2>Research Ethics & Core Principles</h2>
+                <div class="ethical-circles">
+                    <div class="circle-item">
+                        <div class="circle-label">Integrity</div>
+                        <p class="circle-desc">Ensuring all transformations respect the subject's visual DNA without introducing artificial artifacts.</p>
+                    </div>
+                    <div class="circle-item">
+                        <div class="circle-label">Transparency</div>
+                        <p class="circle-desc">All processes, models, and parameters are fully documented and reproducible for peer review.</p>
+                    </div>
+                    <div class="circle-item">
+                        <div class="circle-label">Reproducibility</div>
+                        <p class="circle-desc">Every result can be reliably reproduced using the same latent input and control layers.</p>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
     </main>
 
-    <!-- 
-      SHARED ARCHITECTURAL COMPONENTS 
-    -->
+    <!-- SHARED ARCHITECTURAL COMPONENTS -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>

@@ -1,14 +1,20 @@
 {
     "id": "tien",
-    "aliases": ["tien", "tenshinhan"],
+    "aliases": [
+        "tien",
+        "tenshinhan"
+    ],
     "essence": "species_human_triclops",
-    "prompt_base": "muscular man, bald head, intense determined expression, three functional eyes clearly visible on forehead, green martial arts gi uniform, 8k cinematic photo, dynamic lighting",
-    "feature_prompt": "defined muscular physique, sharp focus on the third eye structure, detailed realistic fabric weave on gi, slight skin imperfections, realistic proportions",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, perfect face, two eyes only, missing eye, blurry eyes, helmet hair, low quality, doll, sfw",
-    "weights": { 
+    "prompt_base": "raw photo, cinematic film still, portrait of a (muscular bald martial artist:1.2), (three functional realistic eyes on forehead:1.4), intense determined expression, 8k uhd",
+    "feature_prompt": "defined muscular physique, sharp focus on the third eye structure, detailed realistic fabric weave on gi, slight skin imperfections, realistic proportions, source palette preservation, identical color matching",
+    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, perfect face, (two eyes only:1.5), missing eye, blurry eyes, helmet hair, low quality, doll, sfw, (forehead tattoo:1.2)",
+    "weights": {
         "depth": 0.90,
-        "canny": 0.70
+        "canny": 0.75
     },
-    "canny_thresholds": [60, 170],
+    "canny_thresholds": [
+        50,
+        150
+    ],
     "denoising_strength": 0.55
 }

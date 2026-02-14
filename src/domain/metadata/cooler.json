@@ -1,14 +1,21 @@
 {
     "id": "cooler",
-    "aliases": ["cooler", "coora", "final_form_cooler"],
+    "aliases": [
+        "cooler",
+        "coora",
+        "final_form_cooler"
+    ],
     "essence": "species_frost_demon_elite",
-    "prompt_base": "colossal menacing alien, segmented bio-armor, sharp white faceplate, piercing crimson eyes, biomechanical wings, intimidating presence, 8k cinematic photo, high contrast lighting",
-    "feature_prompt": "wet organic material on armor plates, iridescence, sharp gemstone texture, detailed chitin texture, intricate segmented plating, sharp focus",
-    "negative_prompt": "anime, cartoon, smooth armor, metal, chrome, fur, smooth skin, flat lighting, low quality, human face, organic, soft texture, (small size:1.2)",
-    "weights": { 
-        "depth": 0.98,
-        "canny": 0.90
+    "prompt_base": "raw photo, cinematic film still, colossal menacing alien creature, (segmented biological chitinous armor:1.2), sharp white bone-like faceplate, piercing crimson eyes, biomechanical wings, 8k uhd",
+    "feature_prompt": "highly detailed biological texture, (weathered chitin surface:1.2), (wet organic secretions:1.1), source palette preservation, identical color matching, (matching segmented bio-plating:1.2), sharp focus, cinematic lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, human face, smooth skin, metal, chrome, airbrushed, clean, over-polished, too small",
+    "weights": {
+        "depth": 0.85,
+        "canny": 0.45
     },
-    "canny_thresholds": [30, 100],
-    "denoising_strength": 0.40
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.70
 }

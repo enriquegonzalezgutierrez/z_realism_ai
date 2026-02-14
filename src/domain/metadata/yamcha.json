@@ -1,14 +1,19 @@
 {
     "id": "yamcha",
-    "aliases": ["yamcha"],
+    "aliases": [
+        "yamcha"
+    ],
     "essence": "species_human_warrior",
-    "prompt_base": "photograph of a handsome asian man, muscular physique, messy black hair, intense gaze, distinctive cross-shaped scars on cheeks, rugged features, 8k cinematic photo, daylight",
-    "feature_prompt": "realistic skin texture, sharp focus on the scars, detailed fabric texture on gi, strong jawline, visible sweat, desert landscape",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, low quality, blurry face, friendly smile, helmet hair, baby face, makeup",
-    "weights": { 
-        "depth": 0.90,
-        "canny": 0.75
+    "prompt_base": "raw photo, cinematic film still, portrait of a (rugged handsome Asian man:1.2), muscular physique, messy black hair, (distinctive facial scars:1.3), intense gaze, 8k uhd",
+    "feature_prompt": "highly detailed skin pores, (indented scar tissue:1.3), (stubble and sweat:1.2), individual hair strands, source palette preservation, identical color matching, (matching martial arts gi fabric:1.2), sharp focus, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, airbrushed, low quality, blurry face, friendly smile, helmet hair, baby face",
+    "weights": {
+        "depth": 0.80,
+        "canny": 0.40
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.55
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.70
 }

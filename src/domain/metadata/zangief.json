@@ -1,14 +1,20 @@
 {
     "id": "zangief",
-    "aliases": ["zangief", "red cyclone"],
+    "aliases": [
+        "zangief",
+        "red cyclone"
+    ],
     "essence": "human_wrestler",
-    "prompt_base": "cinematic portrait of a colossal Russian wrestler, massive beard, chest hair, shaved head, muscular physique, intense expression, 8k dslr photo, arena lighting",
-    "feature_prompt": "detailed skin wrinkles and pores, extreme visible muscle definition, realistic body hair texture on beard and chest, textured red wrestling trunks fabric, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, baby face, toy, doll, blurry beard, low quality, clothing, two eyes",
-    "weights": { 
-        "depth": 0.98,
-        "canny": 0.85
+    "prompt_base": "raw photo, cinematic film still, portrait of a (colossal Russian wrestler:1.3), massive beard and chest hair, muscular physique, intense expression, 8k uhd",
+    "feature_prompt": "highly detailed skin wrinkles and pores, (realistic coarse body hair texture:1.3), (realistic scar tissue detail:1.2), source palette preservation, identical color matching, (matching fabric on trunks:1.2), cinematic arena lighting, film grain",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, baby face, blurry beard, low quality, (no hair:1.4)",
+    "weights": {
+        "depth": 0.80,
+        "canny": 0.35
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.50
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.75
 }

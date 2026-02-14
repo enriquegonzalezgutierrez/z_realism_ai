@@ -39,7 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Telemetry & Progress Overlays
         progressOverlay: document.getElementById('progress-overlay'),
         progressBar: document.getElementById('progress-bar'),
-        statusText: document.getElementById('status-text')
+        statusText: document.getElementById('status-text'),
+
+        telemetryHud: document.getElementById('telemetry-hud'),
+        hudFrames: document.getElementById('hud-frames'),
+        hudFps: document.getElementById('hud-fps'),
+        hudTime: document.getElementById('hud-time')
     };
 
     // =========================================================================
@@ -73,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.progressOverlay.classList.remove('hidden');
         ui.progressBar.style.width = '0%';
         ui.statusText.innerText = "INITIALIZING...";
+
+        if (ui.telemetryHud) ui.telemetryHud.classList.add('hidden');
         
         console.log("LAB_UI: Temporal workspace sanitized for new animation task.");
     };
@@ -156,18 +163,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     ui.progressOverlay.classList.add('hidden');
                     
                     if (result && result.video_b64) {
-                        ui.resultDisplay.innerHTML = `
-                            <span class="viewport-label">TEMPORAL_OUTPUT_MONITOR</span>
+                        const viewport = ui.resultDisplay.querySelector('#dynamic-content-viewport');
+                        viewport.innerHTML = `
                             <video autoplay loop muted controls style="width:100%; height:100%; object-fit:contain; border-radius:12px; z-index:5; position:relative;">
                                 <source src="data:video/mp4;base64,${result.video_b64}" type="video/mp4">
                             </video>
                             <button id="btn-save-vid" class="btn btn-primary" style="position:absolute; bottom:20px; right:20px; z-index:10; font-size:0.75rem; padding:10px 20px;">🎬 SAVE MP4</button>
-                            <div class="metrics-overlay" style="position:absolute; bottom:20px; left:20px; font-family:var(--font-code); font-size:0.65rem; color:rgba(255,255,255,0.5); z-index:6; background:rgba(0,0,0,0.4); padding:5px 10px; border-radius:4px;">
-                                TOTAL_FRAMES: ${result.metrics.total_frames} | 
-                                FPS: ${result.metrics.fps} | 
-                                INF_TIME: ${result.metrics.inference_time}s
-                            </div>
                         `;
+
+                        if (result.metrics) {
+                            ui.hudFrames.innerText = result.metrics.total_frames;
+                            ui.hudFps.innerText = result.metrics.fps;
+                            ui.hudTime.innerText = result.metrics.inference_time.toFixed(1) + "s";
+                            ui.telemetryHud.classList.remove('hidden');
+                        }
+
                         document.getElementById('btn-save-vid').onclick = () => {
                             const link = document.createElement('a');
                             link.href = `data:video/mp4;base64,${result.video_b64}`;
