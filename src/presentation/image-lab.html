@@ -2,24 +2,22 @@
 <html lang="en">
 <!-- 
   path: src/presentation/image-lab.html
-  description: Static Image Production Module v1.0 - Commercial Product.
+  description: Static Image Production Module v2.0 - i18n & SOLID Edition.
   
   ABSTRACT:
-  This module provides a specialized workspace for transforming 
-  2D artistic concepts into high-fidelity photorealistic still images. 
-  This version ensures dynamic content and production telemetry are 
-  streamlined for commercial users.
+  This module provides a fully localized workspace for transforming 2D artistic 
+  concepts into high-fidelity photorealistic stills. It is synchronized with 
+  the I18nEngine to support international commercial operations.
   
   ARCHITECTURAL ROLE (Presentation Layer):
-  Acts as the primary interface for Static Image Production. It manages 
-  asynchronous task orchestration and visually robust real-time feedback.
+  Acts as the primary interface for Static Image Production. 
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-REALISM | Image Production</title>
+    <title data-i18n="nav_image">Z-REALISM | Image Production</title>
 
     <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -27,15 +25,16 @@
     <!-- Design System & Production Orchestration -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/lab.css">
+
+    <!-- 
+      REQUIRED ARCHITECTURAL ENGINE 
+      Must load before other scripts to handle manifest injection.
+    -->
+    <script src="js/i18n-engine.js"></script>
 </head>
 <body>
     <!-- Persistent Cyber-Grid Ambience -->
     <div class="grid-overlay"></div>
-
-    <!-- 
-      DYNAMIC NAVIGATION INJECTION: 
-      The <nav> is automatically injected by js/nav.js.
-    -->
 
     <!-- Main Production Workspace -->
     <div class="lab-layout">
@@ -45,8 +44,8 @@
             
             <!-- 1. ASSET IDENTITY (ARTWORK DNA) -->
             <div class="control-group">
-                <label for="char-name">ARTWORK DNA PROFILE</label>
-                <input type="text" id="char-name" class="modern-input" placeholder="e.g., Character Name, Product Line, Concept ID">
+                <label for="char-name" data-i18n="lab_artwork_dna">ARTWORK DNA PROFILE</label>
+                <input type="text" id="char-name" class="modern-input" placeholder="e.g., Character Name...">
             </div>
             
             <!-- 2. SOURCE ARTWORK UPLOAD -->
@@ -54,87 +53,85 @@
                 <input type="file" id="file-upload" hidden accept="image/*">
                 <div id="file-label">
                     <span class="upload-icon">📁</span>
-                    <span class="upload-text">UPLOAD SOURCE ARTWORK</span>
+                    <span class="upload-text" data-i18n="lab_upload_artwork">UPLOAD SOURCE ARTWORK</span>
                 </div>
             </div>
 
             <!-- 3. VISUAL GUIDANCE (PROMPT) -->
             <div class="control-group">
-                <label for="prompt-input">VISUAL GUIDANCE PROMPT</label>
-                <textarea id="prompt-input" class="modern-textarea" placeholder="Describe materials, lighting, and textures...">cinematic lighting, photorealistic skin pores, 8k uhd, masterpiece</textarea>
+                <label for="prompt-input" data-i18n="lab_prompt_guidance">VISUAL GUIDANCE PROMPT</label>
+                <textarea id="prompt-input" data-i18n="lab_prompt_placeholder" class="modern-textarea"></textarea>
             </div>
 
             <!-- 4. CORE GENERATION PARAMETERS -->
             <div class="control-group">
-                <label>REALISM STRENGTH <span id="val-strength">0.65</span></label>
+                <label><span data-i18n="lab_realism_strength">REALISM STRENGTH</span> <span id="val-strength">0.65</span></label>
                 <input type="range" id="input-strength" min="0.1" max="1.0" step="0.05" value="0.65">
             </div>
 
             <div class="control-group">
-                <label>DEPTH PRESERVATION <span id="val-depth">0.75</span></label>
+                <label><span data-i18n="lab_depth_preservation">DEPTH PRESERVATION</span> <span id="val-depth">0.75</span></label>
                 <input type="range" id="input-depth" min="0.0" max="1.5" step="0.05" value="0.75">
             </div>
 
             <div class="control-group">
-                <label>EDGE FIDELITY <span id="val-canny">0.70</span></label>
+                <label><span data-i18n="lab_edge_fidelity">EDGE FIDELITY</span> <span id="val-canny">0.70</span></label>
                 <input type="range" id="input-canny" min="0.0" max="1.5" step="0.05" value="0.70">
             </div>
 
             <!-- 5. ADVANCED CONFIGURATION (ACCORDION) -->
             <div class="advanced-accordion">
                 <button type="button" class="accordion-trigger" id="adj-trigger">
-                    <span>⚙️ ADVANCED PRODUCTION SETTINGS</span>
+                    <span data-i18n="lab_advanced_settings">ADVANCED PRODUCTION SETTINGS</span>
                     <span class="arrow">▼</span>
                 </button>
                 
                 <div class="accordion-content" id="adj-content">
                     
                     <div class="control-group">
-                        <label>OUTPUT RESOLUTION <span id="val-res">640</span>px</label>
+                        <label><span data-i18n="lab_resolution">OUTPUT RESOLUTION</span> <span id="val-res">640</span>px</label>
                         <input type="range" id="input-res" min="512" max="1024" step="64" value="640">
                     </div>
 
                     <div class="control-group">
-                        <label>CREATIVE FREEDOM <span id="val-cfg">6.0</span></label>
+                        <label><span data-i18n="lab_creative_freedom">CREATIVE FREEDOM</span> <span id="val-cfg">6.0</span></label>
                         <input type="range" id="input-cfg" min="1.0" max="15.0" step="0.5" value="6.0">
                     </div>
 
                     <div class="control-group">
-                        <label>PROCESSING STEPS <span id="val-steps">30</span></label>
+                        <label><span data-i18n="lab_processing_steps">PROCESSING STEPS</span> <span id="val-steps">30</span></label>
                         <input type="range" id="input-steps" min="10" max="60" step="1" value="30">
                     </div>
 
                     <div class="control-group">
-                        <label>SEED VARIATION</label>
-                        <input type="number" id="input-seed" class="modern-input" value="42" style="font-family: var(--font-code); font-size: 0.8rem;">
+                        <label data-i18n="lab_seed">SEED VARIATION</label>
+                        <input type="number" id="input-seed" class="modern-input" value="42">
                     </div>
 
                     <div class="control-group">
-                        <label>CANNY LOW THRESHOLD <span id="val-canny-low">40</span></label>
+                        <label><span data-i18n="lab_canny_low">CANNY LOW THRESHOLD</span> <span id="val-canny-low">40</span></label>
                         <input type="range" id="input-canny-low" min="1" max="255" step="1" value="40">
                     </div>
 
                     <div class="control-group">
-                        <label>CANNY HIGH THRESHOLD <span id="val-canny-high">120</span></label>
+                        <label><span data-i18n="lab_canny_high">CANNY HIGH THRESHOLD</span> <span id="val-canny-high">120</span></label>
                         <input type="range" id="input-canny-high" min="1" max="255" step="1" value="120">
                     </div>
-                    
                 </div>
             </div>
 
             <!-- 6. PRODUCTION TRIGGERS -->
             <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
-                <button id="btn-generate" class="btn btn-primary">
+                <button id="btn-generate" class="btn btn-primary" data-i18n="btn_initiate">
                     INITIATE PRODUCTION
                 </button>
-                
-                <button id="btn-analyze" class="btn btn-secondary">
-                    🔍 ANALYZE ARTWORK DNA
+                <button id="btn-analyze" class="btn btn-secondary" data-i18n="btn_analyze">
+                    ANALYZE ARTWORK DNA
                 </button>
             </div>
 
             <!-- SYSTEM STATUS FEEDBACK -->
-            <div id="essence-tag" style="font-family: var(--font-code); font-size: 0.6rem; color: var(--accent); text-align: center; margin-top: 15px; opacity: 0.7; letter-spacing: 1.5px;">
+            <div id="essence-tag" data-i18n="status_ready" style="font-family: var(--font-code); font-size: 0.6rem; color: var(--accent); text-align: center; margin-top: 15px; opacity: 0.7; letter-spacing: 1.5px;">
                 SYSTEM_READY // UPLOAD_ARTWORK
             </div>
         </aside>
@@ -144,7 +141,7 @@
             
             <!-- SOURCE ARTWORK MONITOR -->
             <div class="viewport-card" id="source-preview">
-                <span class="viewport-label">SOURCE_ARTWORK_INPUT</span>
+                <span class="viewport-label" data-i18n="lab_viewport_source">SOURCE_ARTWORK_INPUT</span>
                 <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
                     NO_DATA
                 </div>
@@ -152,42 +149,42 @@
 
             <!-- RESULT OUTPUT MONITOR -->
             <div class="viewport-card" id="result-display">
-                <span class="viewport-label">FINAL_PRODUCTION_OUTPUT</span>
+                <span class="viewport-label" data-i18n="lab_viewport_result">FINAL_PRODUCTION_OUTPUT</span>
                 
                 <!-- Production Telemetry HUD -->
                 <div id="telemetry-hud" class="telemetry-hud hidden">
                     <div class="hud-row" id="stat-structural">
                         <div class="status-indicator"></div>
-                        <span class="hud-label">STR_ALIGNMENT</span>
+                        <span class="hud-label" data-i18n="hud_alignment">STR_ALIGNMENT</span>
                         <span class="hud-value">0%</span>
                     </div>
                     <div class="hud-row" id="stat-identity">
                         <div class="status-indicator"></div>
-                        <span class="hud-label">CHR_FIDELITY</span>
+                        <span class="hud-label" data-i18n="hud_fidelity">CHR_FIDELITY</span>
                         <span class="hud-value">0%</span>
                     </div>
                     <div class="hud-row" id="stat-realism">
                         <div class="status-indicator"></div>
-                        <span class="hud-label">MAT_REALISM</span>
+                        <span class="hud-label" data-i18n="hud_realism">MAT_REALISM</span>
                         <span class="hud-value">0%</span>
                     </div>
                     <div class="hud-separator"></div>
                     <div class="hud-row">
-                        <span class="hud-label">PROD_TIME</span>
+                        <span class="hud-label" data-i18n="hud_prod_time">PROD_TIME</span>
                         <span id="hud-time" class="hud-value-alt">0.0s</span>
                     </div>
                 </div>
 
-                <!-- Dynamic content viewport for generated image -->
+                <!-- Dynamic content viewport -->
                 <div id="dynamic-content-viewport" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1;">
                     <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
                         OFFLINE
                     </div>
                 </div>
 
-                <!-- Progress overlay (for loading states) -->
+                <!-- Progress overlay -->
                 <div id="progress-overlay" class="progress-overlay hidden" style="z-index:20;">
-                    <div class="status-message" id="status-text">INITIALIZING PRODUCTION RUN...</div>
+                    <div class="status-message" id="status-text" data-i18n="status_processing">INITIATING PRODUCTION...</div>
                     <div class="progress-container">
                         <div class="progress-fill" id="progress-bar"></div>
                     </div>

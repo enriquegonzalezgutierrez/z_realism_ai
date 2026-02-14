@@ -2,23 +2,11 @@
 <html lang="en">
 <!-- 
   path: src/presentation/index.html
-  description: Commercial Gateway / Landing Page v1.0 - Product Launch Candidate.
+  description: Commercial Gateway / Landing Page v2.0 - i18n & SOLID Edition.
   
   ABSTRACT:
-  The cinematic entry point to the Z-Realism Production Studio. This module 
-  serves as the primary router, directing clients to either the Static 
-  Synthesis (Image) or Temporal Motion (Video) production pipelines.
-  
-  ARCHITECTURAL ROLE (Presentation Layer):
-  Acts as the high-level orchestrator for the production modules. It utilizes 
-  modular component injection (Nav/Footer) to ensure architectural consistency 
-  across the entire commercial ecosystem.
-
-  COMMERCIAL CONTEXT:
-  This landing environment is a conceptual gateway into a streamlined production
-  framework focused on transforming 2D artistic concepts into photorealistic,
-  cinematic-grade imagery and motion sequences. It represents the formal bridge
-  between artistic vision and computational materialization for creative professionals.
+  The cinematic entry point to the Z-Realism Production Studio. This page is
+  fully synchronized with the translation engine to support global creative markets.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -39,50 +27,40 @@
     <div class="grid-overlay"></div>
 
     <!-- 
-      DYNAMIC NAVIGATION INJECTION: 
-      The <nav> element is automatically injected by js/nav.js 
-    injected at the top of the document flow.
+      SHARED ARCHITECTURAL SCRIPTS
+      The i18n-engine must load first to prepare the dictionary.
     -->
+    <script src="js/i18n-engine.js"></script>
 
     <!-- Hero Section: Creative Impact Area -->
     <header class="hero-section">
         <div class="hero-content">
-            <span class="hero-tag">V1.0 NEURAL PRODUCTION SUITE</span>
-            <h1 class="hero-title">BRING YOUR ART<br>TO LIFE</h1>
-            <p class="hero-desc">
+            <span class="hero-tag" data-i18n="hero_tag">V1.0 NEURAL PRODUCTION SUITE</span>
+            <h1 class="hero-title" data-i18n="hero_title">BRING YOUR ART<br>TO LIFE</h1>
+            
+            <p class="hero-desc" data-i18n="hero_desc_1">
                 Z-Realism is an advanced production platform dedicated to the 
                 photorealistic synthesis of characters and concepts from your 
-                2D source artwork. We empower artists and designers to transform 
-                stylized representations into cinematic, high-fidelity realism 
-                with unprecedented efficiency.
+                2D source artwork.
             </p>
-            <p class="hero-desc">
+            <p class="hero-desc" data-i18n="hero_desc_2">
                 Leveraging state-of-the-art Latent Diffusion pipelines and 
-                rigorously controlled identity preservation protocols, our system 
-                translates your <strong>Original Artwork's DNA</strong>—the invariant 
-                visual identity encoded in your source designs—into stunning still 
-                imagery and dynamic motion sequences suitable for prototyping, 
-                marketing, and high-end visual development.
+                rigorously controlled identity preservation protocols.
             </p>
-            <p class="hero-desc">
+            <p class="hero-desc" data-i18n="hero_desc_3">
                 Our platform operates under a flexible, artist-centric philosophy, 
-                where every synthesis stage is streamlined, measurable, and 
-                reproducible. Every output is a step closer to realizing your 
-                creative vision, allowing iterative refinement of material response, 
-                lighting simulation accuracy, and anatomical plausibility.
+                where every synthesis stage is streamlined and measurable.
             </p>
-            <p class="hero-desc">
+            <p class="hero-desc" data-i18n="hero_desc_4">
                 Z-Realism doesn't aim to replace artistic intent; rather, it 
-                augments it by introducing computational power into the transition 
-                from symbolic illustration to physically plausible representation. 
-                The result is a controlled bridge between your imagination and 
-                neural materialization of your intellectual property.
+                augments it by introducing computational power.
             </p>
+
             <div class="hero-actions">
-                <a href="image-lab.html" class="btn btn-primary">
+                <a href="image-lab.html" class="btn btn-primary" data-i18n="nav_image">
                     IMAGE PRODUCTION
                 </a>
-                <a href="video-lab.html" class="btn btn-primary" style="background: var(--accent-video); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                <a href="video-lab.html" class="btn btn-primary" style="background: var(--accent-video); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);" data-i18n="nav_video">
                     VIDEO PRODUCTION
                 </a>
             </div>
@@ -96,90 +74,34 @@
             <!-- Module 1: Static Synthesis (Image) -->
             <a href="image-lab.html" class="module-card">
                 <div class="module-icon">🖼️</div>
-                <h3>Static Synthesis</h3>
-                <p>
-                    Transform your 2D character designs, product concepts, 
-                    or architectural visualizations into ultra high-resolution 
-                    photorealistic stills. Our Image Production pipeline employs 
-                    structural conditioning and advanced material rendering to 
-                    preserve identity and color fidelity.
+                <h3 data-i18n="module_static_title">Static Synthesis</h3>
+                <p data-i18n="module_static_desc">
+                    Transform your 2D character designs into ultra high-resolution 
+                    photorealistic stills using structural conditioning.
                 </p>
-                <p>
-                    This module accelerates your visual development, producing 
-                    ready-to-use imagery for presentations, marketing, or as 
-                    foundational assets for further animation.
-                </p>
-                <p>
-                    Leverage advanced prompt controls to minimize semantic 
-                    deviation and ensure your original artwork's essence is 
-                    maintained throughout the photorealism translation.
-                </p>
-                <p>
-                    Optimized for rapid iteration, allowing artists to explore 
-                    a wide range of stylistic outputs and lighting environments 
-                    for their proprietary designs.
-                </p>
-                <div class="module-link">LAUNCH IMAGE PRODUCTION &rarr;</div>
+                <div class="module-link" data-i18n="module_static_link">LAUNCH IMAGE PRODUCTION &rarr;</div>
             </a>
 
             <!-- Module 2: Temporal Motion (Video) -->
             <a href="video-lab.html" class="module-card temporal">
                 <div class="module-icon" style="filter: drop-shadow(0 0 15px var(--accent-video));">🎥</div>
-                <h3>Temporal Motion</h3>
-                <p>
+                <h3 data-i18n="module_temporal_title">Temporal Motion</h3>
+                <p data-i18n="module_temporal_desc">
                     Animate your static photorealistic outputs into time-coherent 
-                    cinematic video sequences. Our Temporal Motion pipeline 
-                    integrates advanced motion models with frame-to-frame 
-                    stabilization, bringing your characters to life.
+                    cinematic video sequences with high efficiency.
                 </p>
-                <p>
-                    High-efficiency processing enables high-resolution video 
-                    synthesis on accessible hardware, making advanced animation 
-                    prototyping a reality for independent creators and studios 
-                    without expensive render farms.
-                </p>
-                <p>
-                    Maintain consistent character identity, facial expressions, 
-                    and costume details across dynamic movements, ensuring 
-                    your original designs retain their unique visual signature 
-                    in every frame.
-                </p>
-                <p>
-                    Continuously evaluated for flicker reduction, geometry 
-                    stability, and chromatic accuracy, delivering broadcast-quality 
-                    motion sequences for your creative projects.
-                </p>
-                <div class="module-link">LAUNCH VIDEO PRODUCTION &rarr;</div>
+                <div class="module-link" data-i18n="module_temporal_link">LAUNCH VIDEO PRODUCTION &rarr;</div>
             </a>
 
             <!-- Module 3: Asset Intelligence (DNA Analysis) -->
             <div class="module-card">
                 <div class="module-icon">🧬</div>
-                <h3>Asset Intelligence</h3>
-                <p>
-                    Our Asset Intelligence engine performs advanced feature 
-                    extraction on your source artwork. It identifies invariant 
-                    visual traits, structural landmarks, and chromatic signatures 
-                    that collectively define your original design's DNA.
+                <h3 data-i18n="module_intel_title">Asset Intelligence</h3>
+                <p data-i18n="module_intel_desc">
+                    Our engine identifies visual traits and chromatic signatures 
+                    that define your original design's unique DNA.
                 </p>
-                <p>
-                    This intelligent layer sequences the extracted metadata 
-                    into optimized generation parameters, enabling precise 
-                    reproducibility and identity preservation across all 
-                    synthesis stages.
-                </p>
-                <p>
-                    By correlating pixel-space observations with latent-space 
-                    embeddings, we construct a structured identity profile that 
-                    can be re-injected into subsequent generations as a 
-                    stabilization prior for your unique intellectual property.
-                </p>
-                <p>
-                    This metadata-driven architecture facilitates the creation 
-                    of reusable asset templates, accelerating your workflow and 
-                    ensuring brand consistency across diverse creative outputs.
-                </p>
-                <div class="module-link" style="color: var(--text-muted);">INTEGRATED SERVICE</div>
+                <div class="module-link" style="color: var(--text-muted);" data-i18n="module_intel_status">INTEGRATED SERVICE</div>
             </div>
 
         </div>

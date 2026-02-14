@@ -1,11 +1,15 @@
 /**
  * path: src/presentation/js/lab-video.js
- * description: Temporal Motion Production Controller v1.0 - Commercial Product.
+ * description: Temporal Motion Production Controller v2.0 - i18n & SOLID Edition.
  * 
  * ABSTRACT:
- * Orchestrates the Image-to-Video neural pipeline. This version ensures 
- * that production feedback and asset intelligence are streamlined for 
- * commercial users.
+ * Orchestrates the Image-to-Video neural pipeline. This controller manages 
+ * the production of cinematic sequences, handling asset ingestion, 
+ * hyperparameter coordination, and real-time temporal telemetry.
+ * 
+ * SOLID PRINCIPLES:
+ * - SRP: Exclusively handles the Temporal Production UI and task lifecycle.
+ * - DIP: Depends on the I18nEngine for localized string resolution.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -35,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Neural Viewports
         sourcePreview: document.getElementById('source-preview'),
         resultDisplay: document.getElementById('result-display'),
+        dynamicContentViewport: document.getElementById('dynamic-content-viewport'),
         
         // Telemetry & Progress Overlays
         progressOverlay: document.getElementById('progress-overlay'),
@@ -63,11 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Resets the temporal production workspace to its initial state.
-     * Ensures previous video results are cleared and feedback overlays are reset.
+     * Localized status messages are retrieved from the I18nEngine.
      */
     const resetWorkspace = () => {
-        // 1. Sanitize ONLY the dynamic content viewport
-        // FIX: Ensure to target dynamic-content-viewport, not resultDisplay for innerHTML
+        // 1. Sanitize Result Viewport with localized placeholder
         ui.dynamicContentViewport.innerHTML = ` 
             <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; user-select: none; letter-spacing: 10px;">
                 WAITING FOR ASSET
@@ -77,14 +81,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Reactivate and Reset Progress Overlay
         ui.progressOverlay.classList.remove('hidden');
         ui.progressBar.style.width = '0%';
-        ui.statusText.innerText = "INITIALIZING MOTION ENGINE..."; // Updated text
+        ui.statusText.innerText = i18n.translate('status_init_motion');
 
+        // 3. Hide previous telemetry
         if (ui.telemetryHud) ui.telemetryHud.classList.add('hidden');
         
-        console.log("PRODUCTION_UI: Temporal workspace sanitized for new motion task."); // Updated log
+        console.log(`PRODUCTION_UI: Temporal workspace sanitized [${i18n.currentLang.toUpperCase()}]`);
     };
 
-    // Slider Synchronization remains the same.
+    // Standard Slider Synchronization
     const syncSlider = (slider, label) => {
         if (!slider || !label) return;
         slider.oninput = (e) => {
@@ -100,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. CORE WORKFLOWS
     // =========================================================================
 
-    // File Handling
+    // Still Asset Ingestion
     ui.dropZone.onclick = () => ui.fileInput.click();
 
     ui.fileInput.onchange = (e) => {
@@ -109,30 +114,28 @@ document.addEventListener('DOMContentLoaded', () => {
             state.selectedFile = file;
             ui.dropZone.classList.add('has-file');
             
-            const url = createPreviewURL(file);
+            const url = URL.createObjectURL(file);
             ui.sourcePreview.innerHTML = `
-                <span class="viewport-label">SOURCE_STILL_INPUT</span> {/* Updated text */}
+                <span class="viewport-label" data-i18n="lab_viewport_source">${i18n.translate('lab_viewport_source')}</span>
                 <img src="${url}" style="width:100%; height:100%; object-fit:contain;">
             `;
-            console.log("PRODUCTION_VIDEO: Still asset loaded for motion expansion."); // Updated log
+            console.log("PRODUCTION_VIDEO: Still asset synchronized for temporal expansion.");
         }
     };
 
     // Temporal Fusion (Main Animation Task)
     ui.btnAnimate.onclick = async () => {
         if (!state.selectedFile || state.isProcessing) {
-            alert("SYSTEM_ERROR: Please upload a source still asset first."); // Updated text
+            alert(i18n.translate('alert_no_still'));
             return;
         }
 
-        // --- STATE RESET PROTOCOL ---
         resetWorkspace(); 
 
         state.isProcessing = true;
         ui.btnAnimate.disabled = true;
-        ui.btnAnimate.innerText = "INITIATING MOTION..."; // Updated text
+        ui.btnAnimate.innerText = i18n.translate('status_processing');
         
-        // Construct Temporal Asset Payload
         const formData = new FormData();
         formData.append('file', state.selectedFile);
         formData.append('character_name', ui.charName.value || "Unknown");
@@ -146,30 +149,29 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data && data.task_id) {
             state.lastTaskId = data.task_id;
 
-            // Start Polling Loop for temporal status
             pollNeuralTask(data.task_id, 
-                // Progress Callback
+                // Progress Telemetry Callback
                 (progress) => {
                     ui.progressBar.style.width = `${progress.percent}%`;
                     const msg = progress.status_text.replace(/_/g, ' ');
                     ui.statusText.innerText = `${msg} [${progress.percent}%]`;
                 }, 
-                // Completion Callback
+                // Final Delivery Callback
                 (result) => {
                     state.isProcessing = false;
                     ui.btnAnimate.disabled = false;
-                    ui.btnAnimate.innerText = "INITIATE MOTION PRODUCTION"; // Updated text
+                    ui.btnAnimate.innerText = i18n.translate('btn_initiate_motion');
                     ui.progressOverlay.classList.add('hidden');
                     
                     if (result && result.video_b64) {
-                        const viewport = ui.resultDisplay.querySelector('#dynamic-content-viewport');
-                        viewport.innerHTML = `
+                        ui.dynamicContentViewport.innerHTML = `
                             <video autoplay loop muted controls style="width:100%; height:100%; object-fit:contain; border-radius:12px; z-index:5; position:relative;">
                                 <source src="data:video/mp4;base64,${result.video_b64}" type="video/mp4">
                             </video>
                             <button id="btn-save-vid" class="btn btn-primary" style="position:absolute; bottom:20px; right:20px; z-index:10; font-size:0.75rem; padding:10px 20px;">🎬 SAVE MP4</button>
                         `;
 
+                        // Update HUD with Production Telemetry
                         if (result.metrics) {
                             ui.hudFrames.innerText = result.metrics.total_frames;
                             ui.hudFps.innerText = result.metrics.fps;
@@ -183,15 +185,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             link.download = `z_animation_${Date.now()}.mp4`;
                             link.click();
                         };
-                    } else {
-                        console.error("PRODUCTION_VIDEO: Motion synthesis error. Consult backend telemetry."); // Updated log
                     }
                 }
             );
         } else {
             state.isProcessing = false;
             ui.btnAnimate.disabled = false;
-            ui.btnAnimate.innerText = "INITIATE MOTION PRODUCTION"; // Updated text
+            ui.btnAnimate.innerText = i18n.translate('btn_initiate_motion');
             ui.progressOverlay.classList.add('hidden');
         }
     };

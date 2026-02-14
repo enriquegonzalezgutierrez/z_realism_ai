@@ -2,21 +2,12 @@
 <html lang="en">
 <!-- 
   path: src/presentation/contact.html
-  description: Contact Information & Support Channels v1.0 - Commercial Product.
+  description: Contact Information & Support Channels v2.0 - i18n Edition.
   
   ABSTRACT:
-  Provides clear channels for client inquiries, technical support, 
-  and business collaborations with the Z-Realism Production Studio.
-  
-  COMMERCIAL CONTEXT:
-  This document formalizes the communication interfaces between the 
-  production studio and its external clients, partners, and media. 
-  It defines service boundaries and professional engagement pathways.
-  
-  ARCHITECTURAL ROLE (Presentation Layer):
-  Acts as the primary communication gateway for the commercial ecosystem. 
-  It facilitates the exchange of client requirements and collaborative 
-  production engagements.
+  Fully localized communication gateway for the Z-Realism commercial ecosystem.
+  Ensures that global clients can access support and sales information in their 
+  preferred language.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -29,141 +20,84 @@
     
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
+
+    <!-- REQUIRED ARCHITECTURAL ENGINE -->
+    <script src="js/i18n-engine.js"></script>
 </head>
 <body>
     <div class="grid-overlay"></div>
 
     <main class="info-container container">
         
-        <a href="index.html" class="back-link">&larr; BACK TO HOME</a>
+        <a href="index.html" class="back-link">
+            &larr; <span data-i18n="back_to_home">BACK TO HOME</span>
+        </a>
 
         <header class="info-section">
-            <span class="info-subtitle">GET IN TOUCH</span>
-            <h1 class="info-title">Connect with Z-Realism</h1>
+            <span class="info-subtitle" data-i18n="contact_subtitle">COMMUNICATION CHANNELS</span>
+            <h1 class="info-title" data-i18n="contact_title">Connect with Z-Realism</h1>
             <div class="info-content">
-                <p>
-                    Z-Realism is a leading production studio dedicated to transforming your 
-                    2D artistic visions into breathtaking, high-fidelity photorealistic visuals. 
-                    Our communication channels are designed to provide seamless support, facilitate 
-                    product demos, and establish strategic partnerships across the creative industries.
-                </p>
-                <p>
-                    We actively welcome inquiries from artists, designers, game developers, 
-                    marketing agencies, and animation studios seeking to leverage cutting-edge 
-                    generative AI for their projects. Whether you need a product demo, technical 
-                    assistance, or a custom integration, our team is ready to assist.
-                </p>
-                <p>
-                    All communications are expected to maintain a professional and project-oriented 
-                    tone. We prioritize clear requirements, efficient problem-solving, and transparent 
-                    collaboration to bring your creative projects to life.
-                </p>
+                <p data-i18n="contact_header_p1">Z-Realism is a leading production studio...</p>
+                <p data-i18n="contact_header_p2">We actively welcome inquiries from artists...</p>
+                <p data-i18n="contact_header_p3">All communications are expected to maintain a professional tone...</p>
             </div>
         </header>
 
         <section class="info-section info-content">
             
-            <!-- 1. PRIMARY COMMERCIAL CONTACT -->
-            <h2>Sales & Product Demos</h2>
-            <p>
-                This channel is dedicated to inquiries regarding our service offerings, 
-                pricing, product demonstrations, and potential business collaborations. 
-                Discover how Z-Realism can accelerate your visual development pipeline.
-            </p>
-            <p>
-                Discussions related to custom feature integrations, enterprise solutions, 
-                licensing agreements, or large-scale production requirements are particularly encouraged.
-            </p>
-            <p>
-                For direct contact with our sales and product team, please reach out to:
-            </p>
-            <div class="info-card">
-                <ul class="info-list" style="margin-bottom: 0;">
-                    <li><strong>Sales Manager:</strong> Enrique González Gutiérrez</li>
-                    <li><strong>Email:</strong> <a href="mailto:enrique.gonzalez.gutierrez@gmail.com" style="color: var(--accent); text-decoration: none;">enrique.gonzalez.gutierrez@gmail.com</a></li>
-                    <li><strong>Location:</strong> Madrid, Spain // Global Remote Operations</li>
-                </ul>
-            </div>
-
-            <!-- 2. TECHNICAL SUPPORT -->
-            <h2>Technical Support</h2>
-            <p>
-                For any technical issues, platform assistance, or bug reports related to 
-                the Z-Realism platform, please use our dedicated support channel. Our team 
-                is committed to ensuring a smooth and efficient workflow for all our clients.
-            </p>
-            <p>
-                When submitting a support request, please include relevant details such as 
-                the nature of the issue, steps to reproduce it, and any error messages received. 
-                This helps us diagnose and resolve problems faster.
-            </p>
+            <h2 data-i18n="contact_sales_h2">Sales & Product Demos</h2>
+            <p data-i18n="contact_sales_p1">This channel is dedicated to inquiries regarding our service offerings...</p>
+            <p data-i18n="contact_sales_p2">Discussions related to custom feature integrations...</p>
+            <p data-i18n="contact_sales_p3">For direct contact with our sales team, please reach out to:</p>
             
             <div class="info-card">
-                <h4>How to Get Support:</h4>
+                <ul class="info-list" style="margin-bottom: 0;">
+                    <li><strong data-i18n="contact_info_manager">Sales Manager:</strong> Enrique González Gutiérrez</li>
+                    <li><strong>Email:</strong> <a href="mailto:enrique.gonzalez.gutierrez@gmail.com" style="color: var(--accent); text-decoration: none;">enrique.gonzalez.gutierrez@gmail.com</a></li>
+                    <li><strong data-i18n="contact_info_location">Location:</strong> <span data-i18n="contact_info_val_loc">Madrid, Spain // Global Remote Operations</span></li>
+                </ul>
+            </div>
+
+            <h2 data-i18n="contact_support_h2">Technical Support</h2>
+            <p data-i18n="contact_support_p1">For any technical issues, please use our dedicated support channel...</p>
+            <p data-i18n="contact_support_p2">Please include relevant details to help us diagnose problems faster...</p>
+            
+            <div class="info-card">
+                <h4 data-i18n="contact_support_h4">How to Get Support:</h4>
                 <ul class="info-list" style="margin-bottom: 0;">
                     <li>
-                        <strong>Email Support:</strong> <a href="mailto:support@z-realism.com" style="color: var(--accent); text-decoration: none;">support@z-realism.com</a> 
-                        (Expected response time: 24-48 hours)
+                        <strong data-i18n="contact_support_li1_t">Email Support:</strong> <a href="mailto:support@z-realism.com" style="color: var(--accent); text-decoration: none;">support@z-realism.com</a> 
+                        <span data-i18n="contact_support_li1_d">(Expected response time: 24-48 hours)</span>
                     </li>
                     <li>
-                        <strong>Online Documentation:</strong> View our <a href="documentation.html" style="color: var(--accent); text-decoration: none;">API & User Guides</a> 
-                        for self-service troubleshooting.
+                        <strong data-i18n="contact_support_li2_t">Online Documentation:</strong> 
+                        <a href="architecture.html" style="color: var(--accent); text-decoration: none;" data-i18n="contact_support_li2_d">View our API & User Guides</a> 
                     </li>
                     <li>
-                        <strong>Feature Requests:</strong> Suggest new features via our support email.
+                        <span data-i18n="contact_support_li3">Feature Requests</span>
                     </li>
                 </ul>
             </div>
 
-            <!-- 3. COMPANY MANIFOLDS (SOCIAL MEDIA / REPOSITORIES) -->
-            <h2>Company Manifolds</h2>
-            <p>
-                Stay connected with Z-Realism. Follow our journey, discover new product features, 
-                and engage with our community through our official digital channels.
-            </p>
-            <p>
-                These platforms serve as our public interfaces for sharing product updates, 
-                showcasing client work, and providing insights into the future of creative AI.
-            </p>
+            <h2 data-i18n="contact_manifolds_h2">Company Manifolds</h2>
+            <p data-i18n="contact_manifolds_p1">Stay connected with Z-Realism. Follow our journey...</p>
+            
             <div style="display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
-                <a href="#" target="_blank" class="btn btn-secondary">
-                    LINKEDIN PROFILE
-                </a>
-                <a href="#" target="_blank" class="btn btn-secondary">
-                    ARTSTATION SHOWCASE
-                </a>
-                <a href="index.html" class="btn btn-primary">
-                    REQUEST A DEMO
-                </a>
+                <a href="#" target="_blank" class="btn btn-secondary" data-i18n="btn_linkedin">LINKEDIN PROFILE</a>
+                <a href="#" target="_blank" class="btn btn-secondary" data-i18n="btn_artstation">ARTSTATION SHOWCASE</a>
+                <a href="index.html" class="btn btn-primary" data-i18n="btn_demo">REQUEST A DEMO</a>
             </div>
 
-            <!-- 4. COLLABORATION PRINCIPLES (Recontextualized) -->
-            <h2>Partnership Principles</h2>
-            <p>
-                Z-Realism values strategic collaborations across various industries. We believe 
-                in forging strong partnerships to drive innovation and expand the application 
-                of our neural synthesis technology.
-            </p>
-            <p>
-                We collaborate with studios, agencies, and technology providers on projects 
-                that push creative boundaries and solve complex visual development challenges. 
-                All partnerships are founded on mutual respect, clear objectives, and shared 
-                success metrics.
-            </p>
-            <p>
-                By engaging with our communication channels, potential partners acknowledge 
-                that all discussions and shared insights are conducted within a professional, 
-                commercially-focused framework, ensuring mutual benefit and intellectual 
-                property protection.
-            </p>
+            <h2 data-i18n="contact_partners_h2">Partnership Principles</h2>
+            <p data-i18n="contact_partners_p1">Z-Realism values strategic collaborations...</p>
+            <p data-i18n="contact_partners_p2">We collaborate with studios and agencies...</p>
+            <p data-i18n="contact_partners_p3">By engaging with us, partners acknowledge the commercial framework...</p>
 
         </section>
-
     </main>
 
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>
-
 </body>
 </html>

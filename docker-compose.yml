@@ -1,52 +1,51 @@
 # path: z_realism_ai/docker-compose.yml
-# description: Production Orchestration v21.3 - Thesis Candidate.
-#              Defines the microservices topology for the Z-Realism ecosystem.
+# description: Production Orchestration v22.1 - Unified Gateway Edition.
+#              Defines the microservices topology with explicit networking
+#              and resource management for high-fidelity neural inference.
 #              
 # ARCHITECTURAL ROLE (Hexagonal / DDD):
-# 1. Presentation Layer (Nginx): Delivers static assets and the Cyber-Lab UI.
-# 2. Application Layer (FastAPI): Manages the RESTful Gateway and Task Dispatch.
-# 3. Domain/Infrastructure (Worker): Executes high-latency CUDA neural synthesis.
-# 4. Event Bus (Redis): Facilitates asynchronous communication via Celery.
+# 1. Gateway Layer (Proxy): Unified entry point via Nginx Reverse Proxy.
+# 2. Presentation Layer (UI): Delivers localized production interfaces.
+# 3. Application Layer (API): Manages RESTful logic and GPU Mutex.
+# 4. Domain/Infrastructure (Worker): Executes CUDA workloads.
+# 5. Event Bus (Redis): Orchestrates asynchronous tasks.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
 services:
-  # --- 1. Event Bus (Message Broker) ---
-  # Role: Decouples the API Producer from the Worker Consumer.
+  # --- 1. EVENT BUS (MESSAGE BROKER) ---
   z-realism-broker:
     image: redis:7-alpine
     container_name: z_realism_redis
     restart: unless-stopped
+    networks:
+      - z-realism-net
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # --- 2. Presentation Layer (Nginx Frontend) ---
-  # Role: Serves the laboratory interface at port 8080.
+  # --- 2. PRESENTATION LAYER (LOCAL UI) ---
   z-realism-ui:
     image: nginx:alpine
     container_name: z_realism_ui
-    ports:
-      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - z-realism-net
     volumes:
-      # Maps the refactored presentation directory to the web server root.
-      - ./src/presentation:/usr/share/nginx/html
-    depends_on:
-      - z-realism-api
+      - ./src/presentation:/usr/share/nginx/html:ro
+    # Ports removed from external exposure; only accessible via Proxy.
 
-  # --- 3. Application Layer (Backend API Gateway) ---
-  # Role: Routes HTTP requests and manages the GPU Mutex.
+  # --- 3. APPLICATION LAYER (BACKEND API) ---
   z-realism-api:
     build: .
     container_name: z_realism_api
-    ports:
-      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - z-realism-net
     volumes:
-      # Mounts the source code including the 'domain/metadata' knowledge base.
       - ./src:/app/src
-      # Persistent cache for neural weights.
       - hf_cache:/app/model_cache
     environment:
       - APP_HOST=0.0.0.0
@@ -59,12 +58,29 @@ services:
       z-realism-broker:
         condition: service_healthy
 
-  # --- 4. Infrastructure Layer (Inference Worker) ---
-  # Role: Consumes and executes neural manifold transformation tasks.
+  # --- 4. UNIFIED GATEWAY (THE FIX) ---
+  # Role: Resolves 502 Bad Gateway by providing a stable bridge between UI and API.
+  z-realism-proxy:
+    image: nginx:alpine
+    container_name: z-realism-proxy
+    restart: always
+    ports:
+      - "80:80" # Exposed for Ngrok / Public access
+    networks:
+      - z-realism-net
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - z-realism-ui
+      - z-realism-api
+
+  # --- 5. INFRASTRUCTURE LAYER (INFERENCE WORKER) ---
   z-realism-worker:
     build: .
     container_name: z_realism_worker
-    # Command: Solo pool ensures single-task GPU processing for VRAM safety.
+    restart: unless-stopped
+    networks:
+      - z-realism-net
     command: celery -A src.infrastructure.worker worker --loglevel=info --pool=solo
     volumes:
       - ./src:/app/src
@@ -74,13 +90,17 @@ services:
       - CELERY_BROKER_URL=redis://z-realism-broker:6379/0
       - CELERY_RESULT_BACKEND=redis://z-realism-broker:6379/0
       - OFFLINE_MODE=false
-      # Security flag for Celery root execution within the isolated container.
       - C_FORCE_ROOT=true
     depends_on:
       z-realism-broker:
         condition: service_healthy
 
-# --- Persistent Storage Manifolds ---
+# --- VIRTUAL NETWORK MANIFOLD ---
+networks:
+  z-realism-net:
+    driver: bridge
+
+# --- PERSISTENT STORAGE MANIFOLDS ---
 volumes:
   hf_cache:
     driver: local

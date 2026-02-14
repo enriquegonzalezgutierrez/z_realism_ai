@@ -2,181 +2,129 @@
 <html lang="en">
 <!-- 
   path: src/presentation/video-lab.html
-  description: Temporal Motion Production Module v1.0 - Commercial Product.
+  description: Temporal Motion Production Module v2.0 - i18n Edition.
   
   ABSTRACT:
-  This module provides a specialized workspace for transforming static 
-  photorealistic artwork into fluid cinematic video sequences. This version 
-  ensures dynamic content and production telemetry are streamlined for 
-  commercial users.
-  
-  ARCHITECTURAL ROLE (Presentation Layer):
-  Acts as the primary interface for Temporal Motion Production. It manages 
-  high-latency video tasks and handles the robust rendering of MP4 containers 
-  directly within a DOM-stable visual monitor.
+  Fully localized workspace for transforming static photorealistic artwork 
+  into cinematic video sequences. Optimized for international commercial use.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-REALISM | Video Production</title>
+    <title data-i18n="lab_video_title">Z-REALISM | Video Production</title>
 
-    <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
-    <!-- Design System & Production Orchestration -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/lab.css">
 
-    <!-- Temporal Module Aesthetic Override (Emerald Identity) -->
+    <!-- REQUIRED ARCHITECTURAL ENGINE -->
+    <script src="js/i18n-engine.js"></script>
+
     <style>
-        :root {
-            --accent: var(--accent-video); /* Global override for Temporal Lab */
-        }
-        .btn-primary {
-            background: var(--accent-video);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-        .btn-primary:hover {
-            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
-        }
-        .progress-fill {
-            background: var(--accent-video);
-            box-shadow: 0 0 15px var(--accent-video);
-        }
-        .modern-input:focus, .modern-textarea:focus {
-            border-color: var(--accent-video);
-        }
+        :root { --accent: var(--accent-video); }
+        .btn-primary { background: var(--accent-video); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        .btn-primary:hover { box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5); }
+        .progress-fill { background: var(--accent-video); box-shadow: 0 0 15px var(--accent-video); }
+        .modern-input:focus, .modern-textarea:focus { border-color: var(--accent-video); }
     </style>
 </head>
 <body>
-    <!-- Persistent Cyber-Grid Ambience -->
     <div class="grid-overlay"></div>
 
-    <!-- 
-      DYNAMIC NAVIGATION INJECTION: 
-      The <nav> is automatically injected by js/nav.js.
-    -->
-
-    <!-- Main Production Workspace -->
     <div class="lab-layout">
         
-        <!-- LEFT COLUMN: Creative Control Panel (Sidebar) -->
         <aside class="control-panel">
-            
-            <!-- 1. ASSET IDENTITY (ARTWORK DNA) -->
             <div class="control-group">
-                <label for="char-name">ARTWORK DNA PROFILE</label>
-                <input type="text" id="char-name" class="modern-input" placeholder="e.g., Character Name, Product Line, Concept ID">
+                <label for="char-name" data-i18n="lab_artwork_dna">ARTWORK DNA PROFILE</label>
+                <input type="text" id="char-name" class="modern-input" placeholder="Enter subject name...">
             </div>
             
-            <!-- 2. SOURCE STILL UPLOAD -->
             <div class="upload-zone" id="drop-zone">
                 <input type="file" id="file-upload" hidden accept="image/*">
                 <div id="file-label">
                     <span class="upload-icon">🎬</span>
-                    <span class="upload-text">UPLOAD SOURCE STILL</span>
+                    <span class="upload-text" data-i18n="lab_upload_still">UPLOAD SOURCE STILL</span>
                 </div>
             </div>
 
-            <!-- 3. MOTION GUIDANCE (PROMPT) -->
             <div class="control-group">
-                <label for="motion-prompt">MOTION GUIDANCE PROMPT</label>
-                <textarea id="motion-prompt" class="modern-textarea" placeholder="Describe cinematic movement (e.g., hair flowing, subtle breathing, eye blinking...)"></textarea>
+                <label for="motion-prompt" data-i18n="lab_motion_prompt">MOTION GUIDANCE PROMPT</label>
+                <textarea id="motion-prompt" data-i18n="lab_motion_placeholder" class="modern-textarea"></textarea>
             </div>
 
-            <!-- 4. TEMPORAL PRODUCTION PARAMETERS -->
             <div class="control-group">
-                <label>VIDEO DURATION (FRAMES) <span id="val-duration">24</span></label>
+                <label><span data-i18n="lab_duration">VIDEO DURATION (FRAMES)</span> <span id="val-duration">24</span></label>
                 <input type="range" id="input-duration" min="16" max="48" step="8" value="24">
             </div>
 
             <div class="control-group">
-                <label>MOTION INTENSITY <span id="val-bucket">127</span></label>
+                <label><span data-i18n="lab_intensity">MOTION INTENSITY</span> <span id="val-bucket">127</span></label>
                 <input type="range" id="input-bucket" min="1" max="255" step="1" value="127">
             </div>
 
             <div class="control-group">
-                <label>FPS (PLAYBACK RATE) <span id="val-fps">12</span></label>
+                <label><span data-i18n="lab_fps">FPS (PLAYBACK RATE)</span> <span id="val-fps">12</span></label>
                 <input type="range" id="input-fps" min="8" max="24" step="2" value="12">
             </div>
 
-            <!-- 5. EXECUTION TRIGGER -->
-            <button id="btn-animate" class="btn btn-primary" style="margin-top: 10px;">
+            <button id="btn-animate" class="btn btn-primary" style="margin-top: 10px;" data-i18n="btn_initiate_motion">
                 INITIATE MOTION PRODUCTION
             </button>
             
-            <!-- 6. PRODUCTION NOTES -->
             <div style="background: rgba(16, 185, 129, 0.05); padding: 18px; border-radius: 8px; border-left: 3px solid var(--accent-video); margin-top: 10px;">
                 <p style="font-size: 0.65rem; color: var(--text-muted); line-height: 1.5; font-family: var(--font-ui);">
-                    <strong style="color: var(--accent-video);">PRODUCTION INSIGHTS:</strong><br>
-                    Temporal generation utilizes advanced sequential processing. 
-                    Estimated production: ~15s per frame on optimized hardware.
+                    <strong style="color: var(--accent-video);" data-i18n="lab_insights_title">PRODUCTION INSIGHTS:</strong><br>
+                    <span data-i18n="lab_insights_body">Temporal generation utilizes advanced sequential processing...</span>
                 </p>
             </div>
         </aside>
 
-        <!-- RIGHT COLUMN: Production Visualizers (Visualizer) -->
         <main class="viewport-area">
-            
-            <!-- SOURCE STILL MONITOR -->
             <div class="viewport-card" id="source-preview">
-                <span class="viewport-label">SOURCE_STILL_INPUT</span>
-                <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
-                    NO_DATA
-                </div>
+                <span class="viewport-label" data-i18n="lab_viewport_still">SOURCE_STILL_INPUT</span>
+                <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">NO_DATA</div>
             </div>
 
-            <!-- TEMPORAL OUTPUT MONITOR -->
             <div class="viewport-card" id="result-display">
-                <span class="viewport-label">FINAL_MOTION_OUTPUT</span>
+                <span class="viewport-label" data-i18n="lab_viewport_motion">FINAL_MOTION_OUTPUT</span>
 
                 <div id="telemetry-hud" class="telemetry-hud hidden" style="border-left-color: var(--accent-video);">
                     <div class="hud-row">
                         <div class="status-indicator status-ok"></div>
-                        <span class="hud-label">TOTAL_FRAMES</span>
+                        <span class="hud-label" data-i18n="hud_total_frames">TOTAL_FRAMES</span>
                         <span id="hud-frames" class="hud-value">0</span>
                     </div>
                     <div class="hud-row">
                         <div class="status-indicator status-ok"></div>
-                        <span class="hud-label">TARGET_FPS</span>
+                        <span class="hud-label" data-i18n="hud_target_fps">TARGET_FPS</span>
                         <span id="hud-fps" class="hud-value">0</span>
                     </div>
                     <div class="hud-separator"></div>
                     <div class="hud-row">
-                        <span class="hud-label">PROD_TIME</span>
+                        <span class="hud-label" data-i18n="hud_prod_time">PROD_TIME</span>
                         <span id="hud-time" class="hud-value-alt" style="color: var(--accent-video);">0.0s</span>
                     </div>
                 </div>
                 
                 <div id="dynamic-content-viewport" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1;">
-                    <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;">
-                        WAITING FOR ASSET
-                    </div>
+                    <div style="color: rgba(255,255,255,0.02); font-family: var(--font-code); font-size: 2.5rem; font-weight: 800; letter-spacing: 10px;" data-i18n="status_waiting_asset">WAITING FOR ASSET</div>
                 </div>
 
                 <div id="progress-overlay" class="progress-overlay hidden" style="z-index:20;">
-                    <div class="status-message" id="status-text">INITIALIZING MOTION ENGINE...</div>
+                    <div class="status-message" id="status-text" data-i18n="status_init_motion">INITIALIZING MOTION ENGINE...</div>
                     <div class="progress-container">
                         <div class="progress-fill" id="progress-bar"></div>
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 
-    <!-- 
-      SHARED ARCHITECTURAL COMPONENTS 
-    -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>
-
-    <!-- 
-      APPLICATION LOGIC 
-    -->
     <script src="js/api.js"></script>
     <script src="js/lab-video.js"></script>
 </body>

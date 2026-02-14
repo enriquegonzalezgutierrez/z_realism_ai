@@ -2,18 +2,10 @@
 <html lang="en">
 <!-- 
   path: src/presentation/legal.html
-  description: Terms of Service, Privacy Policy, and AI Usage Guidelines v1.0.
+  description: Terms of Service, Privacy Policy, and AI Usage Guidelines v2.0 - i18n Edition.
   
   ABSTRACT:
-  A comprehensive legal and ethical framework for the Z-Realism Production Studio. 
-  It defines service terms, intellectual property rights, data privacy protocols, 
-  and responsible AI usage guidelines for commercial clients and users.
-  
-  COMMERCIAL CONTEXT:
-  This document formalizes the operational, ethical, and legal boundaries 
-  governing the use of Z-Realism's neural synthesis services. It serves as a 
-  critical compliance anchor aligned with industry standards and responsible 
-  AI deployment.
+  Fully localized legal and ethical framework for the Z-Realism Production Studio. 
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -22,160 +14,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LEGAL & PRIVACY | Z-Realism Studio</title>
 
-    <link rel="icon" type="image/x-x-icon" href="favicon.ico">
-    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
+
+    <!-- REQUIRED ARCHITECTURAL ENGINE -->
+    <script src="js/i18n-engine.js"></script>
 </head>
 <body>
     <div class="grid-overlay"></div>
 
     <main class="info-container container">
         
-        <a href="index.html" class="back-link">&larr; BACK TO HOME</a>
+        <a href="index.html" class="back-link">
+            &larr; <span data-i18n="back_to_home">BACK TO HOME</span>
+        </a>
 
         <header class="info-section">
-            <span class="info-subtitle">TERMS OF SERVICE & PRIVACY</span>
-            <h1 class="info-title">Legal & Usage Guidelines</h1>
+            <span class="info-subtitle" data-i18n="legal_subtitle">TERMS OF SERVICE & PRIVACY</span>
+            <h1 class="info-title" data-i18n="legal_title">Legal & Usage Guidelines</h1>
             <div class="info-content">
-                <p>
-                    By accessing or utilizing the Z-Realism Production Studio services, you explicitly 
-                    agree to operate within the ethical and legal framework defined in this document. 
-                    Z-Realism is a commercial platform dedicated to providing advanced photorealistic 
-                    synthesis tools for artists, designers, and creative professionals.
-                </p>
-                <p>
-                    The purpose of this framework is to establish clear responsibilities, ensure 
-                    compliance with applicable data protection laws, and promote the responsible 
-                    and ethical use of generative AI technologies in commercial contexts.
-                </p>
-                <p>
-                    This document serves as a binding agreement between Z-Realism and its users. 
-                    It defines the acceptable use of our platform, the protection of your intellectual 
-                    property, and our commitment to data privacy.
-                </p>
+                <p data-i18n="legal_header_p1">By accessing or utilizing Z-Realism...</p>
+                <p data-i18n="legal_header_p2">The purpose of this framework is to establish clear responsibilities...</p>
+                <p data-i18n="legal_header_p3">This document serves as a binding agreement...</p>
             </div>
         </header>
 
         <section class="info-section info-content">
             
-            <!-- 1. INTELLECTUAL PROPERTY & USAGE RIGHTS -->
-            <h2>1. Intellectual Property & User Content</h2>
-            <p>
-                You retain all rights to the <strong>Original Artwork</strong> you upload to the 
-                Z-Realism platform. Z-Realism does not claim any ownership over your source images 
-                or the synthesized outputs derived directly from your original content.
-            </p>
-            <p>
-                By using our services, you grant Z-Realism a limited, non-exclusive, 
-                royalty-free license to use, reproduce, process, and generate derived content 
-                (i.e., the photorealistic transformations) solely for the purpose of providing 
-                the service to you. This license terminates automatically when you remove your 
-                content from our platform or cease using the service.
-            </p>
-            <p>
-                You represent and warrant that you own or have the necessary licenses, rights, 
-                consents, and permissions to upload and use your content with Z-Realism. You 
-                agree not to upload or generate any content that infringes upon the intellectual 
-                property rights, privacy rights, or any other rights of any third party.
-            </p>
+            <!-- 1. INTELLECTUAL PROPERTY -->
+            <h2 id="terms" data-i18n="legal_ip_h2">1. Intellectual Property & User Content</h2>
+            <p data-i18n="legal_ip_p1">You retain all rights to the Original Artwork...</p>
+            <p data-i18n="legal_ip_p2">By using our services, you grant Z-Realism a limited license...</p>
+            <p data-i18n="legal_ip_p3">You represent and warrant that you own the necessary licenses...</p>
             <div class="info-card">
-                <h4>Your Rights as a User:</h4>
+                <h4 data-i18n="legal_ip_h4">Your Rights as a User:</h4>
                 <ul class="info-list" style="margin-bottom: 0;">
-                    <li>
-                        You own the copyright to your original uploaded artwork.
-                    </li>
-                    <li>
-                        You own the copyright to the photorealistic images and videos generated 
-                        from your original artwork using Z-Realism.
-                    </li>
-                    <li>
-                        Z-Realism will not use your content for training its models, marketing, 
-                        or any other purpose without your explicit consent.
-                    </li>
+                    <li data-i18n="legal_ip_li1">You own the copyright to your artwork.</li>
+                    <li data-i18n="legal_ip_li2">You own the copyright to generated assets.</li>
+                    <li data-i18n="legal_ip_li3">No training on your data without consent.</li>
                 </ul>
             </div>
 
-            <!-- 2. PRIVACY POLICY & DATA HANDLING -->
-            <h2>2. Privacy Policy & Data Handling</h2>
-            <p>
-                Z-Realism is committed to protecting your privacy. Our service is designed around 
-                the principle of local data sovereignty. All inference workflows are executed 
-                within a secure, isolated environment, and **no user-uploaded content or 
-                generated outputs are stored on our servers, transmitted to external services, 
-                or shared with third parties.**
-            </p>
-            <p>
-                The platform utilizes essential session tokens (cookies) to manage your active 
-                session and relate your client interface with ongoing **AI Production Tasks**. 
-                This is a technical requirement for service continuity. 
-                **No personal data, behavioral analytics, or identifying metadata is collected, 
-                stored, or transmitted by Z-Realism for any purpose beyond service delivery.**
-            </p>
-            <p>
-                We do not employ any third-party tracking mechanisms, advertising identifiers, 
-                or data profiling tools. Your creative process and data remain entirely private.
-            </p>
+            <!-- 2. PRIVACY POLICY -->
+            <h2 id="privacy" data-i18n="legal_privacy_h2">2. Privacy Policy & Data Handling</h2>
+            <p data-i18n="legal_privacy_p1">Z-Realism is committed to protecting your privacy...</p>
+            <p data-i18n="legal_privacy_p2">The platform utilizes essential session tokens...</p>
+            <p data-i18n="legal_privacy_p3">We do not employ third-party tracking...</p>
             <div class="info-card">
                 <p style="font-size: 0.9rem; margin-bottom: 0;">
-                    <strong>Data Processing:</strong> Your uploaded images are temporarily processed 
-                    in memory to generate the output. Once the generation is complete and the 
-                    result is delivered to your browser, all related temporary data is immediately 
-                    discarded from our systems. We do not retain any copies of your input or output.
+                    <strong data-i18n="nav_tech">Data Processing:</strong> 
+                    <span data-i18n="legal_privacy_p_proc">Temporary in-memory processing only...</span>
                 </p>
             </div>
 
-            <!-- 3. ACCEPTABLE USE POLICY -->
-            <h2>3. Acceptable Use Policy</h2>
-            <p>
-                You agree not to use the Z-Realism platform to generate, promote, or distribute 
-                any content that is:
-            </p>
+            <!-- 3. ACCEPTABLE USE -->
+            <h2 id="usage" data-i18n="legal_usage_h2">3. Acceptable Use Policy</h2>
+            <p data-i18n="legal_usage_p1">You agree not to generate content that is:</p>
             <ul class="info-list">
-                <li>
-                    Illegal, harmful, or exploitative under any applicable jurisdiction.
-                </li>
-                <li>
-                    Intended to deceive, impersonate, misinform, or infringe upon the identity, 
-                    likeness, or rights of real individuals or copyrighted content.
-                </li>
-                <li>
-                    Hate speech, discriminatory, threatening, or harassing.
-                </li>
-                <li>
-                    Sexually explicit, violent, or promotes self-harm.
-                </li>
+                <li data-i18n="legal_usage_li1">Illegal or harmful.</li>
+                <li data-i18n="legal_usage_li2">Deceptive or infringing.</li>
+                <li data-i18n="legal_usage_li3">Hate speech or harassing.</li>
+                <li data-i18n="legal_usage_li4">Violent or self-harming.</li>
             </ul>
-            <p>
-                Z-Realism reserves the right to suspend or terminate access to our services for 
-                any user found in violation of these terms.
-            </p>
+            <p data-i18n="legal_usage_p2">Z-Realism reserves the right to terminate access...</p>
 
-            <!-- 4. DISCLAIMER & LIMITATION OF LIABILITY -->
-            <h2>4. Disclaimer & Limitation of Liability</h2>
-            <p>
-                THE Z-REALISM SOFTWARE AND SERVICES ARE PROVIDED "AS IS", WITHOUT WARRANTY 
-                OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-                MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
-            </p>
-            <p>
-                IN NO EVENT SHALL Z-REALISM, ITS FOUNDER, OR ASSOCIATED ENTITIES BE LIABLE FOR 
-                ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, 
-                OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE, THE 
-                SERVICES, OR THE USE OR MISUSE OF ANY SYNTHESIZED CONTENT PRODUCED BY THE SYSTEM.
-            </p>
-            <p>
-                By using this platform, you acknowledge full responsibility for 
-                compliance with all applicable laws, regulations, and ethical standards in 
-                your jurisdiction.
-            </p>
+            <!-- 4. DISCLAIMER -->
+            <h2 data-i18n="legal_disclaimer_h2">4. Disclaimer & Limitation of Liability</h2>
+            <p data-i18n="legal_disclaimer_p1">THE SERVICES ARE PROVIDED AS IS...</p>
+            <p data-i18n="legal_disclaimer_p2">IN NO EVENT SHALL Z-REALISM BE LIABLE...</p>
+            <p data-i18n="legal_disclaimer_p3">By using this platform, you acknowledge responsibility...</p>
         </section>
-
     </main>
 
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>
-
 </body>
 </html>

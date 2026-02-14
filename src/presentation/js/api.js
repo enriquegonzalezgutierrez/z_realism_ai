@@ -16,28 +16,27 @@
 
 /**
  * INTELLIGENT API DISCOVERY
- * Automatically determines the backend location to support 'make share' 
- * and mobile testing without manual code changes.
+ * Automatically determines the backend location based on the access manifold.
+ * UPDATED: Added support for Unified Proxy Gateway (/api).
  */
 const getDynamicApiUrl = () => {
-    const { hostname, protocol } = window.location;
+    const { hostname, protocol, port } = window.location;
     
     // Developer Override: Check if a custom API URL is set in LocalStorage
     const override = localStorage.getItem('Z_REALISM_API_OVERRIDE');
     if (override) return override;
 
-    // LOCALHOST / LOCAL IP LOGIC:
-    // If the UI is loaded via a standard IP or localhost, we assume 
-    // the API is on the same host but at port 8000.
-    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.match(/\d+\.\d+\.\d+\.\d+/)) {
+    // LOCAL DEVELOPMENT BYPASS:
+    // If accessing UI directly via port 8080, assume API is on port 8000.
+    if (port === '8080') {
         return `${protocol}//${hostname}:8000`;
     }
 
-    // TUNNEL / PRODUCTION FALLBACK:
-    // If accessed via a domain (like ngrok), the API would normally 
-    // require its own tunnel. 
-    console.warn("DISCOVERY_WARNING: Accessing via non-standard domain. Defaulting to local gateway.");
-    return `http://localhost:8000`; 
+    // UNIFIED PRODUCTION GATEWAY (Ngrok / Nginx):
+    // Use the same host/domain but target the /api route.
+    // This resolves CORS and 'Fetch Failure' by maintaining Same-Origin policy.
+    console.log("%cPRODUCTION_INFO: Routing traffic through Unified Gateway (/api)", "color: #10b981; font-weight: bold;");
+    return `${protocol}//${hostname}/api`; 
 };
 
 const API_BASE_URL = getDynamicApiUrl();

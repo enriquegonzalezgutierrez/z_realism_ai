@@ -108,10 +108,10 @@ stats: ## DEV Show resource usage (CPU/GPU/RAM)
 	docker stats
 
 .PHONY: share
-share: ## DEV Expose the Laboratory UI via Ngrok for mobile testing
-	@printf "$(CLR_YELLOW)Initializing Ngrok Tunnel on Port 8080...$(CLR_RESET)\n"
-	@printf "$(CLR_CYAN)ARCHITECT NOTE:$(CLR_RESET) Ensure API_BASE_URL in js/api.js matches your public API tunnel or local IP.\n"
-	ngrok http 8080
+share: ## DEV Expose the Unified Gateway via Ngrok for external testing
+	@printf "$(CLR_YELLOW)Initializing Unified Ngrok Tunnel on Port 80...$(CLR_RESET)\n"
+	@printf "$(CLR_CYAN)PRODUCTION NOTE:$(CLR_RESET) All traffic (UI + API) is now routed through a single tunnel.\n"
+	ngrok http 80
 
 # -----------------------------------------------------------------------------
 # Danger Zone (Maintenance)

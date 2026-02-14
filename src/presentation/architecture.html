@@ -2,18 +2,7 @@
 <html lang="en">
 <!-- 
   path: src/presentation/architecture.html
-  description: Technical Documentation - System Design & Engineering Patterns v1.0.
-  
-  ABSTRACT:
-  Detailed engineering overview of the Z-Realism Production Studio. Covers 
-  the Hexagonal Architecture, SOLID principles, and Robust Hardware 
-  Orchestration strategies designed for high-performance commercial deployment.
-  
-  ARCHITECTURAL ROLE (Presentation Layer):
-  Acts as the technical blueprint documentation for clients and partners. It 
-  provides the structural justification for the system's modularity, 
-  scalability, and hardware efficiency.
-
+  description: Technical Documentation - System Design & Engineering Patterns v2.0 - i18n Edition.
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
 <head>
@@ -21,84 +10,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCHITECTURE | Z-Realism Studio</title>
 
-    <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
-    <!-- Design System & Documentation Styles -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
     
-    <!-- Mermaid.js for architectural diagrams -->
+    <script src="js/i18n-engine.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true, theme:'dark'});</script>
 </head>
 <body>
-    <!-- Persistent Ambient Cyber-Grid -->
     <div class="grid-overlay"></div>
 
-    <!-- 
-      DYNAMIC NAVIGATION INJECTION: 
-      The <nav> is automatically injected by js/nav.js.
-    -->
-
-    <!-- Documentation Container -->
     <main class="info-container container">
         
-        <a href="index.html" class="back-link">&larr; BACK TO HOME</a>
+        <a href="index.html" class="back-link">
+            &larr; <span data-i18n="back_to_home">BACK TO HOME</span>
+        </a>
 
         <header class="info-section">
-            <span class="info-subtitle">SYSTEM DESIGN & DDD</span>
-            <h1 class="info-title">The Engineering Blueprint</h1>
+            <span class="info-subtitle" data-i18n="tech_subtitle">SYSTEM DESIGN & DDD</span>
+            <h1 class="info-title" data-i18n="tech_title">The Engineering Blueprint</h1>
             <div class="info-content">
-                <p>
-                    Z-Realism v1.0 is architected using the <strong>Hexagonal Architecture</strong> 
-                    (Ports & Adapters) pattern as a core design principle. This choice establishes 
-                    a strict separation between the central business logic and all external 
-                    dependencies, guaranteeing a system that is robust, scalable, and adaptable 
-                    to evolving technological landscapes.
-                </p>
-                <p>
-                    This decoupling ensures that our core value proposition—the high-fidelity 
-                    synthesis, transformation, and evaluation of your original artwork's visual DNA—remains 
-                    fully independent of volatile infrastructure components, such as specific web 
-                    frameworks (FastAPI), messaging systems (Redis), or Generative AI libraries (Diffusers). 
-                    As a result, technological upgrades or substitutions can occur seamlessly, without 
-                    disrupting your creative workflow.
-                </p>
+                <p data-i18n="tech_p1">Z-Realism v1.0 is architected using the Hexagonal Architecture...</p>
+                <p data-i18n="tech_p2">This decoupling ensures that our core value proposition...</p>
             </div>
         </header>
 
         <section class="info-section info-content">
-            <h2>Hexagonal Implementation</h2>
-            <p>
-                Our Hexagonal implementation is enforced by defining clear <strong>Ports</strong> 
-                (Interfaces) within the Domain Layer. These ports articulate the system’s capabilities 
-                in purely business terms, avoiding any coupling to specific hardware or software mechanics.
-            </p>
-            <p>
-                Infrastructure adapters implement these ports and are injected at runtime, allowing 
-                the system to dynamically adapt to different computing environments. This enables us 
-                to maintain consistent output quality whether deployed on high-end servers or 
-                optimized for accessible local hardware.
-            </p>
-            <p>
-                This design strictly adheres to the <strong>Liskov Substitution Principle (SOLID)</strong>, 
-                guaranteeing that all adapters remain behaviorally consistent with the expectations 
-                of the core domain, ensuring reliable performance regardless of the underlying infrastructure.
-            </p>
+            <h2 data-i18n="tech_h2_hex">Hexagonal Implementation</h2>
+            <p data-i18n="tech_hex_p1">Our Hexagonal implementation is enforced by defining clear Ports...</p>
+            <p data-i18n="tech_hex_p2">Infrastructure adapters implement these ports...</p>
+            <p data-i18n="tech_hex_p3">This design strictly adheres to the Liskov Substitution Principle...</p>
 
-            <!-- Mermaid Diagram: Hexagonal Structure (Simplified for clarity) -->
             <div class="info-card">
                 <div class="mermaid">
                     graph LR
                     A[Client Application] --> B[API Gateway]
                     B --> C[Application Services]
                     C --> D[Domain Core]
-                    
                     subgraph Domain Boundary
                     D{Ports / Interfaces}
                     end
-                    
                     subgraph Infrastructure Adapters
                     D --> D1[Generative AI: Diffusers]
                     D --> D2[Queueing: Celery/Redis]
@@ -107,59 +59,33 @@
                 </div>
             </div>
 
-            <h2>Hardware Orchestration</h2>
-            <p>
-                A critical advantage of Z-Realism is its optimization for demanding neural workloads 
-                on accessible, consumer-grade hardware. Rather than requiring expensive, enterprise-level 
-                GPUs, our architecture is explicitly designed to maximize performance under 
-                constrained VRAM conditions while maintaining uncompromised output quality.
-            </p>
-            <p>
-                The **Z-Realism Engine** implements an intelligent <strong>Hardware Tenancy Protocol</strong> 
-                via a distributed, Redis-based Mutex. This protocol treats GPU access as a single, 
-                exclusive resource, preventing concurrent inference requests that would otherwise 
-                lead to system instability or memory overloads.
-            </p>
+            <h2 data-i18n="tech_h2_gpu">Hardware Orchestration</h2>
+            <p data-i18n="tech_gpu_p1">A critical advantage of Z-Realism is its optimization for demanding neural workloads...</p>
+            <p data-i18n="tech_gpu_p2">The Z-Realism Engine implements an intelligent Hardware Tenancy Protocol...</p>
 
             <div class="info-card">
-                <h4>Resource Management Principles:</h4>
+                <h4 data-i18n="tech_h4_res">Resource Management Principles:</h4>
                 <ul class="info-list">
                     <li>
-                        <strong>Exclusive GPU Access:</strong> Ensures stable, high-quality output 
-                        by guaranteeing that only one generative task runs on the GPU at any given time.
+                        <strong data-i18n="tech_res_li1_t">Exclusive GPU Access:</strong> 
+                        <span data-i18n="tech_res_li1_d">Ensures stable, high-quality output...</span>
                     </li>
                     <li>
-                        <strong>Aggressive Memory Management:</strong> Our worker dynamically purges 
-                        VRAM allocations and invokes garbage collection during model switches, 
-                        maintaining optimal memory headroom for complex workflows.
+                        <strong data-i18n="tech_res_li2_t">Aggressive Memory Management:</strong> 
+                        <span data-i18n="tech_res_li2_d">Our worker dynamically purges VRAM allocations...</span>
                     </li>
                     <li>
-                        <strong>Layered Weight Streaming:</strong> Large neural model components are 
-                        dynamically streamed between system RAM and GPU VRAM during active computation, 
-                        enabling high-resolution synthesis within strict memory limits.
+                        <strong data-i18n="tech_res_li3_t">Layered Weight Streaming:</strong> 
+                        <span data-i18n="tech_res_li3_d">Large neural model components are dynamically streamed...</span>
                     </li>
                 </ul>
             </div>
 
-            <h2>Asynchronous Production Pipeline</h2>
-            <p>
-                The lifecycle of a visual transformation within Z-Realism is designed for efficiency 
-                and responsiveness. Given the computational intensity of AI-driven synthesis, all 
-                long-running operations are decoupled from the immediate user interaction.
-            </p>
-            <p>
-                The system utilizes <strong>Celery</strong> as its task orchestrator and 
-                <strong>Redis</strong> as the message broker, forming a resilient production backbone. 
-                This architecture ensures that the client application remains responsive and stateless 
-                while the backend performs computationally intensive GPU workloads.
-            </p>
-            <p>
-                Real-time progress updates, including processing status and key metrics, are streamed 
-                back through the broker, allowing clients to monitor and evaluate the production 
-                process in near real time.
-            </p>
+            <h2 data-i18n="tech_h2_async">Asynchronous Production Pipeline</h2>
+            <p data-i18n="tech_async_p1">The lifecycle of a visual transformation within Z-Realism is designed for efficiency...</p>
+            <p data-i18n="tech_async_p2">The system utilizes Celery as its task orchestrator and Redis as the message broker...</p>
+            <p data-i18n="tech_async_p3">Real-time progress updates are streamed back through the broker...</p>
 
-            <!-- Mermaid Diagram: Asynchronous Flow (Simplified for clarity) -->
             <div class="info-card">
                 <div class="mermaid">
                     sequenceDiagram
@@ -167,7 +93,6 @@
                     participant API as Z-Realism API
                     participant Queue as Task Queue (Redis)
                     participant Worker as AI Production Worker
-                    
                     Client->>API: Submit Art for Transformation
                     API->>API: Acquire GPU Lock
                     API->>Queue: Dispatch Production Task
@@ -182,13 +107,10 @@
                 </div>
             </div>
         </section>
-
     </main>
 
-    <!-- SHARED ARCHITECTURAL COMPONENTS -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>
-
 </body>
 </html>

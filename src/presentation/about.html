@@ -2,17 +2,15 @@
 <html lang="en">
 <!-- 
   path: src/presentation/about.html
-  description: Company Mission & Product Vision Page v1.0 - Commercial Product.
+  description: Company Mission & Product Vision Page v2.0 - i18n & SOLID Edition.
   
   ABSTRACT:
-  This document outlines the core mission of Z-Realism as a production studio, 
-  focusing on the methodology used to bridge the gap between 2D artistic concepts 
-  and high-fidelity photorealistic environments for creative industries.
+  This document outlines the core mission of Z-Realism as a production studio. 
+  It is fully synchronized with the global translation engine to support 
+  international commercial outreach.
   
   ARCHITECTURAL ROLE (Presentation Layer):
   Acts as the primary communication channel for Z-Realism's value proposition. 
-  Provides context for the production pipelines and highlights the benefits 
-  of using our advanced synthesis technology.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -27,6 +25,12 @@
     <!-- Design System & Documentation Styles -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
+
+    <!-- 
+      SHARED ARCHITECTURAL SCRIPTS
+      The i18n-engine must load first to prepare the dictionary manifold.
+    -->
+    <script src="js/i18n-engine.js"></script>
 </head>
 <body>
     <!-- Persistent Ambient Cyber-Grid -->
@@ -35,110 +39,89 @@
     <!-- Main Content Container -->
     <main class="info-container container">
         
-        <a href="index.html" class="back-link">&larr; BACK TO HOME</a>
+        <a href="index.html" class="back-link">
+            &larr; <span data-i18n="back_to_home">BACK TO HOME</span>
+        </a>
 
         <!-- Company Header: Core Vision -->
         <header class="info-section">
-            <span class="info-subtitle">OUR MISSION</span>
-            <h1 class="info-title">Transforming Art Into Reality</h1>
+            <span class="info-subtitle" data-i18n="about_subtitle">OUR MISSION</span>
+            <h1 class="info-title" data-i18n="about_title">Transforming Art Into Reality</h1>
             <div class="info-content">
-                <p>
+                <p data-i18n="about_desc_1">
                     Z-Realism is a professional-grade production studio engineered to transform 
-                    your 2D character designs, concepts, and illustrations into coherent, high-fidelity 
-                    photorealistic visuals. Our platform is at the forefront of generative AI, 
-                    exploring the intersection between advanced diffusion models and artistic intent.
+                    your 2D character designs and illustrations into high-fidelity 
+                    photorealistic visuals.
                 </p>
-                <p>
-                    We specialize in solving the <strong>"Stylization-to-Realism Gap"</strong>—a 
-                    common challenge where artistic designs lose their unique identity, anatomical 
-                    coherence, or original color palette when translated into photorealistic forms. 
-                    Z-Realism introduces precise control mechanisms designed to preserve these 
-                    critical elements throughout the generative process.
+                <p data-i18n="about_desc_2">
+                    We specialize in solving the 'Stylization-to-Realism Gap', 
+                    introducing precise control mechanisms designed to preserve critical identity 
+                    elements throughout the generative process.
                 </p>
             </div>
         </header>
 
         <!-- Product & Technology Section -->
         <section class="info-section info-content">
-            <h2>Our Technology</h2>
-            <p>
+            <h2 data-i18n="about_tech_h2">Our Technology</h2>
+            <p data-i18n="about_tech_p1">
                 Our core technology is built on the principle that photorealism is achieved not 
-                through brute-force model power, but through intelligent, precise control. Our methodology 
-                relies on surgically guiding the generative AI, treating the diffusion process not 
-                as a black box, but as a steerable tool for creative professionals.
+                through brute-force model power, but through intelligent, precise control.
             </p>
-            <p>
-                By utilizing advanced conditioning layers via <strong>Dual ControlNet 
-                (Depth + Canny Edge)</strong>, our system anchors the foundational geometry 
-                and structural intent of your design before seamlessly injecting high-resolution, 
-                cinematic textures. This layered approach ensures that your original artwork's 
-                structure is maintained, dramatically reducing distortion artifacts.
+            <p data-i18n="about_tech_p2">
+                By utilizing advanced conditioning layers via Dual ControlNet (Depth + Canny Edge), 
+                our system anchors the foundational geometry before seamlessly injecting 
+                high-resolution, cinematic textures.
             </p>
-            <p>
+            <p data-i18n="about_tech_p3">
                 This allows us to generate stunning photorealistic results without sacrificing 
-                the core essence of your <strong>Original Artwork's DNA</strong>—the unique visual 
-                traits that define your creation across style, resolution, and context.
+                the core essence of your Original Artwork's DNA.
             </p>
 
             <div class="info-card">
-                <h4>Key Product Advantages:</h4>
+                <h4 data-i18n="about_adv_h4">Key Product Advantages:</h4>
                 <ul class="info-list">
                     <li>
-                        <strong>Identity Preservation:</strong> Our unique hybrid anchoring logic 
-                        actively mitigates chromatic drift, facial distortion, and identity loss, 
-                        ensuring your characters remain instantly recognizable.
+                        <strong data-i18n="about_adv_1_t">Identity Preservation:</strong> 
+                        <span data-i18n="about_adv_1_d">Our hybrid anchoring logic actively mitigates identity loss.</span>
                     </li>
                     <li>
-                        <strong>Temporal Motion Synthesis:</strong> Convert your static photorealistic 
-                        stills into fluid cinematic video sequences. We offer frame-to-frame coherence 
-                        optimized for diverse hardware, making advanced animation accessible.
+                        <strong data-i18n="about_adv_2_t">Temporal Motion Synthesis:</strong> 
+                        <span data-i18n="about_adv_2_d">Convert static stills into fluid cinematic video sequences.</span>
                     </li>
                     <li>
-                        <strong>Asset Intelligence:</strong> An advanced system that extracts, 
-                        classifies, and sequences the visual DNA of your artwork into optimal 
-                        generation parameters, ensuring reproducible and consistent results.
+                        <strong data-i18n="about_adv_3_t">Asset Intelligence:</strong> 
+                        <span data-i18n="about_adv_3_d">An advanced system that classifies visual DNA into optimal parameters.</span>
                     </li>
                     <li>
-                        <strong>Hardware Efficiency:</strong> Our technology is optimized for 
-                        performance on accessible hardware, offering high-quality output without 
-                        the need for expensive enterprise-grade GPUs.
+                        <strong data-i18n="about_adv_4_t">Hardware Efficiency:</strong> 
+                        <span data-i18n="about_adv_4_d">Technology optimized for performance on accessible hardware.</span>
                     </li>
                 </ul>
             </div>
 
-            <h2>Our Team & Vision</h2>
-            <p>
-                Z-Realism is founded by 
-                <strong>Enrique González Gutiérrez</strong>, a leading expert in 
-                Informatics Engineering and Applied Machine Learning. Our vision is to 
-                democratize access to cutting-edge generative AI, empowering artists, 
-                designers, and creative studios to accelerate their visual development workflows.
+            <h2 data-i18n="about_team_h2">Our Team & Vision</h2>
+            <p data-i18n="about_team_p1">
+                Z-Realism is founded by Enrique González Gutiérrez, a leading expert in 
+                Applied Machine Learning. Our vision is to democratize access to 
+                cutting-edge generative AI.
             </p>
-            <p>
-                We are committed to building robust, modular, and ethically-driven AI tools. 
-                Our platform is architected under principles of <strong>reliability and scalability</strong>, 
-                designed to evolve with the needs of the creative industry while preserving 
-                the integrity of artistic intent.
+            <p data-i18n="about_team_p2">
+                We are committed to building robust, modular, and ethically-driven AI tools, 
+                preserving the integrity of artistic intent.
             </p>
 
-            <!-- --- The "Metric Cards" section is removed from a commercial 'About Us' page --- -->
-            <!-- --- The "Ethical Diagram" is moved to a dedicated 'Legal / Ethics' page or integrated subtly --- -->
-
-            <!-- Consider adding a "Call to Action" here -->
             <div class="hero-actions" style="margin-top: 60px;">
-                <a href="contact.html" class="btn btn-primary">
+                <a href="contact.html" class="btn btn-primary" data-i18n="about_cta">
                     CONTACT US FOR A DEMO
                 </a>
             </div>
-
         </section>
-
     </main>
 
     <!-- SHARED ARCHITECTURAL COMPONENTS -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>
-
 </body>
 </html>
