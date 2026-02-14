@@ -1,50 +1,50 @@
 /**
  * path: src/presentation-custom/js/api.js
- * description: Shared API Bridge v21.0 - External Network Stability Edition.
+ * description: Shared API Bridge v22.3 - Robust Path Resolution Edition.
  * 
  * ABSTRACT:
- * This script orchestrates communication with the FastAPI Gateway.
- * It features "Dynamic Discovery" for environment-agnostic routing and 
- * "Tunnel Interstitial Bypass" to ensure connectivity over public Ngrok 
- * tunnels, specifically resolving 'Fetch Failure' on mobile networks.
+ * Orchestrates all client-side communication with the Neural API Gateway.
  * 
- * ARCHITECTURAL ROLE:
- * - Decouples the frontend from static environment variables.
- * - Resolves Ngrok browser warnings that block background AJAX requests.
- * - Manages the lifecycle of high-latency neural tasks (Dispatch -> Poll -> Retrieve).
+ * KEY FIXES (v22.3):
+ * 1. Implemented a robust `joinUrl` helper to prevent malformed API paths 
+ *    (e.g., '/apianalyze') caused by missing slashes during concatenation.
+ * 2. Enhanced error handling to detect HTML responses (404/502 from Nginx) 
+ *    before attempting to parse them as JSON, providing clearer debug info.
+ * 3. Standardized relative path strategy for production deployments.
  * 
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
 /**
  * INTELLIGENT API DISCOVERY
- * Automatically determines the backend location based on the access manifold.
- * Supports Unified Proxy Gateway (/api) to maintain Same-Origin policy.
+ * Automatically determines the backend location based on the access context.
  */
 const getDynamicApiUrl = () => {
-    const { hostname, protocol, port } = window.location;
-    
-    // Developer Override: Check if a custom API URL is set in LocalStorage
+    // 1. Developer Override (localStorage hook for debugging)
     const override = localStorage.getItem('Z_REALISM_API_OVERRIDE');
     if (override) return override;
 
-    // LOCAL DEVELOPMENT BYPASS:
-    // If accessing UI directly via port 8080, assume API is on port 8000.
-    if (port === '8080') {
+    // 2. LOCALHOST DEVELOPMENT (Direct Port 8000 Access)
+    // If running locally without Nginx proxy (e.g., npm start vs uvicorn),
+    // target the API container directly.
+    if (window.location.port === '8080') {
+        const { hostname, protocol } = window.location;
         return `${protocol}//${hostname}:8000`;
     }
 
-    // UNIFIED PRODUCTION GATEWAY (Ngrok / Nginx):
-    // Use the same host/domain but target the /api route.
-    console.log("%cPRODUCTION_INFO: Routing traffic through Unified Gateway (/api)", "color: #10b981; font-weight: bold;");
-    return `${protocol}//${hostname}/api`; 
+    // 3. PRODUCTION / TUNNEL STRATEGY (Port 80 / Reverse Proxy)
+    // Returns a relative path prefix. The browser automatically prepends 
+    // the current protocol and domain. This resolves Mixed Content issues 
+    // and ensures correct routing through the Nginx '/api' location block.
+    console.log("%cPRODUCTION_INFO: Using Relative Path Strategy (/api)", "color: #10b981; font-weight: bold;");
+    return '/api'; 
 };
 
 const API_BASE_URL = getDynamicApiUrl();
 
 // MANDATORY HEADERS FOR REMOTE CONNECTIVITY
-// 'ngrok-skip-browser-warning' is required to bypass the Ngrok interstitial 
-// page which otherwise breaks background 'fetch' requests on mobile.
+// 'ngrok-skip-browser-warning' allows programmatic access to Ngrok tunnels 
+// without tripping the anti-phishing interstitial page.
 const SHARED_HEADERS = {
     "ngrok-skip-browser-warning": "true"
 };
@@ -52,19 +52,43 @@ const SHARED_HEADERS = {
 console.log(`%c🐉 Z-REALISM GATEWAY: ${API_BASE_URL}`, "color: #8b5cf6; font-weight: bold;");
 
 /**
+ * Robust URL Joiner Helper.
+ * Ensures exactly one slash exists between the base URL and the endpoint path,
+ * preventing malformed requests like '/apianalyze'.
+ * 
+ * @param {string} base - The API base URL (e.g., '/api')
+ * @param {string} path - The specific endpoint (e.g., '/analyze')
+ * @returns {string} The correctly formatted URL.
+ */
+function joinUrl(base, path) {
+    const cleanBase = base.replace(/\/$/, ''); // Remove trailing slash if present
+    const cleanPath = path.startsWith('/') ? path : `/${path}`; // Ensure leading slash
+    return `${cleanBase}${cleanPath}`;
+}
+
+/**
  * Sends a multipart/form-data payload to the neural gateway.
- * @param {string} endpoint - Route (e.g., '/transform', '/animate').
- * @param {FormData} formData - Neural parameters and binary manifolds.
+ * @param {string} endpoint - Target route (e.g., '/transform').
+ * @param {FormData} formData - Payload containing assets and parameters.
  */
 async function postToGateway(endpoint, formData) {
     try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        // Construct the target URL using the robust joiner
+        const targetUrl = joinUrl(API_BASE_URL, endpoint);
+
+        const response = await fetch(targetUrl, {
             method: 'POST',
             body: formData,
-            headers: SHARED_HEADERS // Bypasses Ngrok warning
+            headers: SHARED_HEADERS
         });
         
         if (!response.ok) {
+            // Diagnostic check: Did we get an HTML error page (404/502) instead of JSON?
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("text/html")) {
+                throw new Error(`Server returned HTML error (${response.status}). Check URL construction: ${targetUrl}`);
+            }
+
             const errorData = await response.json();
             throw new Error(errorData.detail || `Gateway Error: ${response.status}`);
         }
@@ -88,8 +112,11 @@ async function pollNeuralTask(taskId, onProgress, onComplete) {
 
     const pollingInterval = setInterval(async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/status/${taskId}`, {
-                headers: SHARED_HEADERS // Bypasses Ngrok warning during polling
+            // Construct status endpoint
+            const statusUrl = joinUrl(API_BASE_URL, `/status/${taskId}`);
+            
+            const response = await fetch(statusUrl, {
+                headers: SHARED_HEADERS
             });
             const data = await response.json();
 
@@ -99,16 +126,17 @@ async function pollNeuralTask(taskId, onProgress, onComplete) {
             else if (data.status === 'SUCCESS') {
                 clearInterval(pollingInterval);
                 
-                // Retrieve the actual result manifold from the backend
-                const resultResponse = await fetch(`${API_BASE_URL}/result/${taskId}`, {
-                    headers: SHARED_HEADERS // Bypasses Ngrok warning during retrieval
+                // Construct result endpoint
+                const resultUrl = joinUrl(API_BASE_URL, `/result/${taskId}`);
+                const resultResponse = await fetch(resultUrl, {
+                    headers: SHARED_HEADERS
                 });
                 
                 if (resultResponse.ok) {
                     const resultData = await resultResponse.json();
                     if (onComplete) onComplete(resultData);
                 } else {
-                    console.error("FINAL_RETRIEVAL_ERROR");
+                    console.error("FINAL_RETRIEVAL_ERROR: Unable to fetch result payload.");
                 }
             } 
             else if (data.status === 'FAILURE') {
@@ -117,14 +145,14 @@ async function pollNeuralTask(taskId, onProgress, onComplete) {
                 if (onComplete) onComplete(null);
             }
         } catch (error) {
-            // We don't clear the interval here to allow for temporary network blips
+            // Suppress network jitter errors to keep polling alive
             console.warn("POLLING_RETRY: Connection unstable.");
         }
-    }, 1000); // Frequency: 1Hz
+    }, 1000); // Poll frequency: 1Hz
 }
 
 /**
- * Logic to generate a local preview URL for uploaded files.
+ * Utility: Generates a local preview URL for uploaded files.
  */
 function createPreviewURL(file) {
     return URL.createObjectURL(file);
