@@ -25,7 +25,11 @@ from PIL import Image
 from src.infrastructure.worker import transform_character_task, animate_character_task, celery_app
 from src.infrastructure.analyzer import HeuristicImageAnalyzer
 
-app = FastAPI(title="Z-Realism Expert Gateway", version="23.0")
+app = FastAPI(
+    title="Z-Realism Expert Gateway", 
+    version="23.0",
+    root_path="/api"
+)
 
 # --- CORS Configuration ---
 app.add_middleware(

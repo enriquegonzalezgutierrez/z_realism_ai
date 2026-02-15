@@ -220,5 +220,7 @@
     "status_init_motion": "INICIALIZANDO MOTOR DE MOVIMIENTO...",
     "hud_total_frames": "FRAMES_TOTALES",
     "hud_target_fps": "FPS_OBJETIVO",
-    "alert_no_still": "ERROR_SISTEMA: Por favor, cargue primero una imagen fija original."
+    "alert_no_still": "ERROR_SISTEMA: Por favor, cargue primero una imagen fija original.",
+
+    "status_preparing_control_maps": "PREPARANDO_MAPAS_DE_CONTROL..."
 }

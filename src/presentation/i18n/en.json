@@ -220,5 +220,7 @@
     "status_init_motion": "INITIALIZING MOTION ENGINE...",
     "hud_total_frames": "TOTAL_FRAMES",
     "hud_target_fps": "TARGET_FPS",
-    "alert_no_still": "SYSTEM_ERROR: Please upload an original still image first."
+    "alert_no_still": "SYSTEM_ERROR: Please upload an original still image first.",
+
+    "status_preparing_control_maps": "PREPARING_CONTROL_MAPS..."
 }

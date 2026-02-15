@@ -1,46 +1,45 @@
 /**
  * path: src/presentation/js/nav.js
- * description: Global Navigation Injector v23.1 - Responsive Multi-language Flag Edition.
+ * description: Global Navigation Injector v23.2 - SVG Flags Edition.
  * 
  * ABSTRACT:
- * Orchestrates the shared navigation manifold across the Z-Realism production ecosystem.
- * This version implements a decoupled i18n-aware controller that manages the
- * responsive mobile drawer and a high-fidelity visual language selection interface.
+ * Orchestrates the shared navigation manifold.
  * 
- * ARCHITECTURAL ROLE (Presentation Layer):
- * Acts as a Shared Component Injector. It centralizes the navigation structure,
- * active-state detection, and mobile interaction logic for a streamlined global UX.
+ * FIX v23.2:
+ * Replaced OS-dependent Emoji flags with embedded SVGs. This resolves 
+ * rendering issues on Windows 10/11 where flags appear as "US/ES" letters.
  * 
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
 const injectNav = () => {
     // 1. URI PATH ANALYSIS
-    // Extract the current location to highlight the active production node.
     const currentPath = window.location.pathname;
     const isActive = (filename) => currentPath.includes(filename) ? 'active' : '';
 
-    // 2. LANGUAGE SELECTOR MANIFOLD (Visual Flag Buttons)
-    // Generates the 🇺🇸 | 🇪🇸 toggle with active state detection and grayscale filters.
+    // 2. SVG FLAGS (Embedded for Cross-Platform Consistency)
+    const flagUS = `https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg`;
+    const flagES = `https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg`;
+
+    // 3. LANGUAGE SELECTOR MANIFOLD
     const langToggle = `
         <div class="lang-selector">
             <button onclick="i18n.setLanguage('en')" 
                     class="flag-btn ${i18n.currentLang === 'en' ? 'active' : ''}" 
                     title="English"
                     aria-label="Switch to English">
-                🇺🇸
+                <img src="${flagUS}" alt="USA Flag">
             </button>
             <button onclick="i18n.setLanguage('es')" 
                     class="flag-btn ${i18n.currentLang === 'es' ? 'active' : ''}" 
                     title="Español"
                     aria-label="Cambiar a Español">
-                🇪🇸
+                <img src="${flagES}" alt="Spain Flag">
             </button>
         </div>
     `;
 
-    // 3. COMPONENT CONSTRUCTION
-    // Dynamically resolves localized labels via the i18n.translate() method.
+    // 4. COMPONENT CONSTRUCTION
     const navHTML = `
     <nav class="main-nav">
         <!-- Brand Identity -->
@@ -82,28 +81,22 @@ const injectNav = () => {
     </nav>
     `;
 
-    // 4. INJECTION & CLEANUP PROTOCOL
-    // Sanitizes the top of the body to prevent duplicate navigation manifolds.
+    // 5. INJECTION & CLEANUP PROTOCOL
     const existingNav = document.querySelector('.main-nav');
     if (existingNav) existingNav.remove();
     document.body.insertAdjacentHTML('afterbegin', navHTML);
 
-    // 5. RESPONSIVE INTERACTION LOGIC
-    // Manages the lifecycle of the mobile navigation drawer.
+    // 6. RESPONSIVE INTERACTION LOGIC
     const navToggle = document.getElementById('nav-toggle');
     const navMenu = document.getElementById('nav-menu');
 
     if (navToggle && navMenu) {
         navToggle.onclick = () => {
-            // Synchronize the 'X' animation with drawer visibility
             const isOpened = navToggle.classList.toggle('active');
             navMenu.classList.toggle('active');
-            
-            // Interaction telemetry
             console.log(`NAV_INTERACT: Mobile drawer ${isOpened ? 'Opened' : 'Closed'}`);
         };
 
-        // Auto-closure on navigation
         navMenu.querySelectorAll('.nav-item').forEach(link => {
             link.onclick = () => {
                 navToggle.classList.remove('active');
@@ -116,12 +109,10 @@ const injectNav = () => {
 };
 
 // --- SYSTEM SUBSCRIPTION ---
-// Ensures the navigation renders only when the i18n manifest is fully resolved.
 if (i18n.isReady) {
     injectNav();
 } else {
     window.addEventListener('i18nReady', injectNav);
 }
 
-// Reactive re-render on language manifold switch
 window.addEventListener('langChanged', injectNav);

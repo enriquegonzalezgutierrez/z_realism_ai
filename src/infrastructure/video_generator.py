@@ -1,20 +1,15 @@
 # path: src/infrastructure/video_generator.py
-# description: Neural Temporal Engine v23.0 - Global i18n Telemetry Edition.
+# description: Neural Temporal Engine v28.0 - "Channels Last" Performance Tune.
+#              Mirroring the static generator optimizations for the AnimateDiff pipeline.
 #
 # ARCHITECTURAL ROLE (Infrastructure Adapter):
-# This module implements the 'VideoGeneratorPort'. It extends the static 
-# neural manifold into the temporal dimension, ensuring Subject DNA 
-# consistency across frames while injecting fluid cinematic motion.
+# Implements the 'VideoGeneratorPort'. Focuses on maximizing throughput for
+# temporal tensor operations on GTX 10-series hardware.
 #
-# MODIFICATION LOG v23.0:
-# Replaced raw string status messages with i18n dictionary keys 
-# (status_generating, status_encoding) to support multi-language 
-# progress tracking in the frontend.
-#
-# SCIENTIFIC OPTIMIZATIONS (6GB VRAM Support):
-# 1. Hardware Determinism: Configured CuDNN to prevent execution plan failures.
-# 2. Fragmented Decoding: Decodes the latent video manifold frame-by-frame 
-#    to prevent memory spikes, crucial for 6GB VRAM hardware.
+# MODIFICATION LOG v28.0:
+# - Enabled torch.backends.cudnn.benchmark = True.
+# - Converted 3D UNet and Motion Modules to 'channels_last' format.
+# - Maintained Sequential CPU Offload for VRAM safety.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -29,6 +24,9 @@ import warnings
 from typing import Callable, Optional, Tuple, Dict, Any, List
 from PIL import Image
 
+# Essential for memory efficient attention check
+import xformers
+
 from diffusers import (
     AnimateDiffPipeline, 
     MotionAdapter, 
@@ -41,12 +39,11 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
     """
     Advanced Temporal Synthesis Engine based on the AnimateDiff framework.
     
-    Optimized for high-latency video generation on consumer-grade hardware
+    Optimized for high-latency video generation on consumer-grade hardware (GTX 1060)
     via aggressive memory orchestration and precision management.
     """
 
     def __init__(self, device: str = "cpu"):
-        # Suppress non-critical CuDNN Plan warnings for clean logs
         warnings.filterwarnings("ignore", category=UserWarning, message=".*Plan failed with a cudnnException.*")
         
         self._offline = os.getenv("OFFLINE_MODE", "false").lower() == "true"
@@ -54,13 +51,16 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
         self._torch_dtype = torch.float16 if self._device == "cuda" else torch.float32
 
         try:
-            print(f"INFRA_VIDEO: Deploying Temporal Engine v23.0 on [{self._device.upper()}]...")
+            print(f"INFRA_VIDEO: Deploying Temporal Engine v28.0 [Channels_Last_Optimized] on [{self._device.upper()}]...")
             
+            # --- PERFORMANCE TUNING v28.0 ---
             if self._device == "cuda":
-                torch.backends.cudnn.benchmark = False
-                torch.backends.cudnn.deterministic = True
+                # Benchmark: Allows CuDNN to find the fastest convolution algorithm for your GPU.
+                # First run might be slightly slower (warmup), subsequent runs are faster.
+                torch.backends.cudnn.benchmark = True
+                torch.backends.cudnn.deterministic = False # Relax determinism slightly for speed
 
-            # Load Motion Adapter (Temporal Consistency Weights)
+            # COMPONENT LOADING
             adapter = MotionAdapter.from_pretrained(
                 "guoyww/animatediff-motion-adapter-v1-5-2", 
                 torch_dtype=self._torch_dtype,
@@ -68,7 +68,6 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
                 use_safetensors=True
             )
 
-            # Load VAE (Chromatic Accuracy Model)
             vae = AutoencoderKL.from_pretrained(
                 "stabilityai/sd-vae-ft-mse", 
                 torch_dtype=self._torch_dtype, 
@@ -76,7 +75,7 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
                 use_safetensors=True
             )
 
-            # Assemble Main Temporal Pipeline
+            # PIPELINE ASSEMBLY
             self._pipe = AnimateDiffPipeline.from_pretrained(
                 "SG161222/Realistic_Vision_V5.1_noVAE",
                 vae=vae,
@@ -94,15 +93,31 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
                 steps_offset=1,
             )
 
+            # --- CRITICAL OPTIMIZATION SUITE v28.0 ---
             if self._device == "cuda":
-                # VRAM Orchestration Suite
+                # 1. xFormers (Essential for Temporal Attention)
+                try:
+                    self._pipe.enable_xformers_memory_efficient_attention()
+                    print("INFRA_VIDEO: xFormers Active.")
+                except Exception as e:
+                    print(f"INFRA_VIDEO: WARNING - xFormers failed: {e}")
+
+                # 2. Channels Last Memory Format (Speed Boost)
+                # Applying this to the 3D UNet is tricky but beneficial.
+                self._pipe.unet.to(memory_format=torch.channels_last)
+                print("INFRA_VIDEO: 3D UNet converted to Channels Last format.")
+
+                # 3. Sequential CPU Offload (VRAM Safety Net)
+                # Mandatory for 6GB VRAM. Unloads modules aggressively to RAM.
                 self._pipe.enable_sequential_cpu_offload()
+                
+                # 4. VAE Slicing (Decoding Safety)
                 self._pipe.enable_vae_slicing()
-                self._pipe.enable_vae_tiling() 
+                
             else:
                 self._pipe.to("cpu")
                 
-            print(f"INFRA_VIDEO: Temporal Engine Online v23.0.")
+            print(f"INFRA_VIDEO: v28.0 Online. Performance Tuning Complete.")
         except Exception as e:
             print(f"INFRA_VIDEO_BOOT_FAILURE: {str(e)}")
             raise e
@@ -117,10 +132,7 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
         hyper_params: Dict[str, Any] = {}, 
         progress_callback: Optional[Callable[[int, int, str], None]] = None
     ) -> AnimationReport:
-        """
-        Executes the temporal transformation lifecycle. 
-        Synthesizes a cinematic video sequence anchored by Subject DNA.
-        """
+        
         start_time = time.time()
         
         # 1. Manifold Pre-processing (Enforced 64-px grid)
@@ -129,13 +141,12 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
         target_h = (height // 64) * 64
         input_image = source_image.convert("RGB").resize((target_w, target_h), Image.Resampling.LANCZOS)
 
-        # 2. Metadata-Driven Prompt Synthesis
+        # 2. Prompt Synthesis
         dna_base = subject_metadata.get("prompt_base", "")
         final_prompt = f"photorealistic cinematic video, {dna_base}, {motion_prompt}, high quality, 8k, detailed skin texture, natural light"
         negative_prompt = subject_metadata.get("negative_prompt", "anime, plastic, flicker, low quality, cartoon, drawing")
 
         # 3. Temporal Neural Inference
-        # Update: Using i18n key 'status_generating' for the latent synthesis phase.
         if progress_callback: 
             progress_callback(0, duration_frames, "status_generating")
 
@@ -147,11 +158,11 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
                 guidance_scale=float(hyper_params.get("cfg_scale", 7.5)),
                 num_inference_steps=int(hyper_params.get("steps", 25)),
                 generator=torch.Generator("cpu").manual_seed(int(hyper_params.get("seed", 42))),
-                decode_chunk_size=1, 
+                decode_chunk_size=1, # Decode one frame at a time to save VRAM
             )
             frames = output.frames[0]
 
-        # 4. Container Encoding (MP4 / H.264)
+        # 4. Container Encoding
         video_buffer = io.BytesIO()
         writer = imageio.get_writer(
             video_buffer, 
@@ -161,7 +172,6 @@ class StableVideoAnimateDiffGenerator(VideoGeneratorPort):
             quality=8
         )
         
-        # Update: Using i18n key 'status_encoding' during the frame-to-video process.
         for i, frame in enumerate(frames):
             writer.append_data(np.array(frame))
             if progress_callback:

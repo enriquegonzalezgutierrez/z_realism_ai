@@ -132,7 +132,7 @@ body {
     box-shadow: 0 0 10px var(--accent);
 }
 
-/* --- 3.1 LANGUAGE SELECTOR UI (Flag Edition) --- */
+/* --- 3.1 LANGUAGE SELECTOR UI (Flag Edition - SVG Fix) --- */
 .lang-selector {
     display: flex;
     gap: 15px;
@@ -152,11 +152,17 @@ body {
     border-radius: 50%;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: grayscale(0.8) opacity(0.5);
+    filter: grayscale(1) opacity(0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+}
+
+.flag-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .flag-btn:hover {
@@ -185,7 +191,6 @@ body {
     .flag-btn {
         width: 45px;
         height: 45px;
-        font-size: 2rem;
     }
 }
 
