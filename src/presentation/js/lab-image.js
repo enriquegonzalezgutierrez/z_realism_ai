@@ -1,6 +1,6 @@
 /**
  * path: src/presentation/js/lab-image.js
- * description: Static Image Production Controller v2.0 - i18n & SOLID Edition.
+ * description: Static Image Production Controller v2.1 - i18n & SOLID Edition.
  *
  * ABSTRACT:
  * Orchestrates the neural transformation of 2D artistic concepts into 
@@ -11,6 +11,11 @@
  * SOLID PRINCIPLES:
  * - SRP: Manages only the Image Production UI logic and gateway coordination.
  * - DIP: Depends on the I18nEngine for localized string resolution.
+ * 
+ * MODIFICATION LOG v2.1:
+ * Restored the "FUSING" button state logic. The production button now 
+ * provides visual feedback and prevents concurrent task submission by 
+ * toggling its state and localized label during the neural synthesis lifecycle.
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -181,7 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         resetWorkspace(); 
         state.isProcessing = true;
+
+        // Toggle UI state to FUSING
         ui.btnGenerate.disabled = true;
+        ui.btnGenerate.innerText = i18n.translate('btn_fusing');
         
         const formData = new FormData();
         formData.append('file', state.selectedFile);
@@ -211,7 +219,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Final Manifold Delivery Callback
                 (result) => {
                     state.isProcessing = false;
+                    
+                    // Restore UI state
                     ui.btnGenerate.disabled = false;
+                    ui.btnGenerate.innerText = i18n.translate('btn_initiate');
                     ui.progressOverlay.classList.add('hidden'); 
 
                     if (result && result.metrics) {
@@ -252,6 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             state.isProcessing = false;
             ui.btnGenerate.disabled = false;
+            ui.btnGenerate.innerText = i18n.translate('btn_initiate');
             ui.progressOverlay.classList.add('hidden');
         }
     };

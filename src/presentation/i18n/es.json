@@ -33,6 +33,7 @@
 
     "btn_initiate": "INICIAR PRODUCCIÓN",
     "btn_analyze": "ANALIZAR ADN DEL ARTE",
+    "btn_fusing": "FUSIONANDO...",
     "status_ready": "SISTEMA_LISTO // CARGAR_ARTE",
     "status_processing": "INICIANDO PRODUCCIÓN...",
     "status_finalizing": "FINALIZANDO ACTIVOS...",

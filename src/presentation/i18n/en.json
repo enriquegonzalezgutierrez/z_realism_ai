@@ -33,6 +33,7 @@
 
     "btn_initiate": "INITIATE PRODUCTION",
     "btn_analyze": "ANALYZE ART DNA",
+    "btn_fusing": "FUSING...",
     "status_ready": "SYSTEM_READY // LOAD_ARTWORK",
     "status_processing": "INITIATING PRODUCTION...",
     "status_finalizing": "FINALIZING ASSETS...",

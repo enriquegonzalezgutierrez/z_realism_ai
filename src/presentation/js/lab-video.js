@@ -1,6 +1,6 @@
 /**
  * path: src/presentation/js/lab-video.js
- * description: Temporal Motion Production Controller v2.0 - i18n & SOLID Edition.
+ * description: Temporal Motion Production Controller v2.1 - i18n & SOLID Edition.
  * 
  * ABSTRACT:
  * Orchestrates the Image-to-Video neural pipeline. This controller manages 
@@ -11,6 +11,12 @@
  * - SRP: Exclusively handles the Temporal Production UI and task lifecycle.
  * - DIP: Depends on the I18nEngine for localized string resolution.
  *
+ * MODIFICATION LOG v2.1:
+ * Implemented the "FUSING" state logic for the motion production button. 
+ * The button now disables itself and displays the localized fusing label 
+ * during the asynchronous animation lifecycle to prevent redundant 
+ * requests and improve UX feedback.
+ * 
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
 
@@ -133,8 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
         resetWorkspace(); 
 
         state.isProcessing = true;
+
+        // Toggle UI state to FUSING
         ui.btnAnimate.disabled = true;
-        ui.btnAnimate.innerText = i18n.translate('status_processing');
+        ui.btnAnimate.innerText = i18n.translate('btn_fusing');
         
         const formData = new FormData();
         formData.append('file', state.selectedFile);
@@ -159,6 +167,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Final Delivery Callback
                 (result) => {
                     state.isProcessing = false;
+
+                    // Restore UI state
                     ui.btnAnimate.disabled = false;
                     ui.btnAnimate.innerText = i18n.translate('btn_initiate_motion');
                     ui.progressOverlay.classList.add('hidden');

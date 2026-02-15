@@ -69,14 +69,14 @@
     background: rgba(255, 255, 255, 0.02);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    cursor: pointer; /* FIX: Ahora el cursor es 'mano' */
+    cursor: pointer; /* Interaction: Trigger file browser */
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
 }
 
-/* Interacción: Neural Activation */
+/* Interaction: Neural Activation Hover Effect */
 .upload-zone:hover {
     border-color: var(--accent);
     background: rgba(139, 92, 246, 0.05);
@@ -84,7 +84,7 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(139, 92, 246, 0.1);
 }
 
-/* Estado: Manifold Sync Complete */
+/* Status: Manifold Sync Complete (File Selected) */
 .upload-zone.has-file {
     border-style: solid;
     border-color: var(--accent);
@@ -266,7 +266,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #444; /* Default grey */
+    background: #444; /* Default grey state */
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
