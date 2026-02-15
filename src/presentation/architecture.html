@@ -2,16 +2,21 @@
 <html lang="en">
 <!-- 
   path: src/presentation/architecture.html
-  description: Technical Documentation - System Design & Engineering Patterns v2.1 - i18n Edition.
+  description: Technical Documentation - System Design & Engineering Patterns v2.2.
   
   ABSTRACT:
-  This document provides the technical blueprint of the Z-Realism engine.
-  It utilizes Mermaid.js for architectural diagrams.
-  
-  MODIFICATION LOG v2.1:
-  Synchronized Mermaid.js rendering with the I18nEngine to prevent race conditions 
-  during hard refreshes (CTRL+F5). The diagrams now wait for the translation 
-  manifold to be fully applied before initializing the SVG injection.
+  This document serves as the technical blueprint for the Z-Realism ecosystem.
+  It details the Hexagonal Architecture implementation, Hardware Orchestration,
+  and the Asynchronous Production Pipeline.
+
+  ARCHITECTURAL ROLE (Presentation Layer):
+  Delivers deep-dive technical transparency to stakeholders and engineers. 
+
+  MODIFICATION LOG v2.2:
+  - Integrated Hexagonal Class Diagram (Ports & Adapters logic).
+  - Synchronized Mermaid.js rendering with the I18nEngine lifecycle.
+  - Added Direct API Gateway Documentation (Swagger UI) access.
+  - Aligned all captions with the SOLID i18n dictionary.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -20,78 +25,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="nav_tech">ARCHITECTURE | Z-Realism Studio</title>
 
+    <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Design System Styles -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
-    
-    <!-- REQUIRED ARCHITECTURAL ENGINE -->
+
+    <!-- i18n Engine: Pre-loads the translation manifold -->
     <script src="js/i18n-engine.js"></script>
     
-    <!-- MERMAID DIAGRAM ENGINE CONFIGURATION -->
+    <!-- MERMAID.JS: Architectural Diagram Engine -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
         /**
-         * Orchestrates the synchronization between translation and diagram rendering.
-         * We disable 'startOnLoad' to prevent Mermaid from running before i18n is complete.
+         * MERMAID CONFIGURATION:
+         * We synchronize the rendering with the 'i18nReady' event to ensure 
+         * diagrams are drawn after the page structure is translated.
          */
         mermaid.initialize({
             startOnLoad: false, 
             theme: 'dark',
-            securityLevel: 'loose'
+            securityLevel: 'loose',
+            themeVariables: {
+                primaryColor: '#ef4444', // Z-Realism Red
+                lineColor: '#ffffff',
+                fontFamily: 'Inter, sans-serif'
+            }
         });
 
-        // Subscriber: Wait for the I18nEngine to signal that the DOM is ready.
+        // Global Event Listener: Render diagrams only when translations are active.
         window.addEventListener('i18nReady', () => {
             mermaid.run();
-            console.log("MERMAID_SYNC: Architectural diagrams rendered after i18n manifold.");
+            console.log("MERMAID_SYNC: Technical diagrams initialized.");
         });
     </script>
 </head>
 <body>
+    <!-- Persistent Ambient Cyber-Grid -->
     <div class="grid-overlay"></div>
 
     <main class="info-container container">
         
+        <!-- Navigation Link -->
         <a href="index.html" class="back-link">
             &larr; <span data-i18n="back_to_home">BACK TO HOME</span>
         </a>
 
+        <!-- 1. HEADER: Engineering Philosophy -->
         <header class="info-section">
             <span class="info-subtitle" data-i18n="tech_subtitle">SYSTEM DESIGN & DDD</span>
             <h1 class="info-title" data-i18n="tech_title">The Engineering Blueprint</h1>
             <div class="info-content">
-                <p data-i18n="tech_p1">Z-Realism v1.0 is architected using the Hexagonal Architecture...</p>
-                <p data-i18n="tech_p2">This decoupling ensures that our core value proposition...</p>
+                <p data-i18n="tech_p1">
+                    Z-Realism v1.0 is architected using the Hexagonal Architecture pattern. 
+                    This establishes a strict separation between core business logic and infrastructure.
+                </p>
+                <p data-i18n="tech_p2">
+                    This decoupling ensures that our core value proposition remains independent 
+                    of volatile technological components.
+                </p>
             </div>
         </header>
 
+        <!-- 2. SECTION: Ports & Adapters -->
         <section class="info-section info-content">
             <h2 data-i18n="tech_h2_hex">Hexagonal Implementation</h2>
-            <p data-i18n="tech_hex_p1">Our Hexagonal implementation is enforced by defining clear Ports...</p>
-            <p data-i18n="tech_hex_p2">Infrastructure adapters implement these ports...</p>
-            <p data-i18n="tech_hex_p3">This design strictly adheres to the Liskov Substitution Principle...</p>
+            <p data-i18n="tech_hex_p1">
+                Our implementation defines clear Ports (Interfaces) within the Domain Layer, 
+                avoiding coupling with specific hardware mechanics.
+            </p>
+            <p data-i18n="tech_hex_p2">
+                Infrastructure adapters implement these ports and are injected at runtime, 
+                enabling the system to adapt dynamically to the environment.
+            </p>
 
+            <!-- DIAGRAM: The Hexagon Class Structure -->
             <div class="info-card">
-                <!-- Mermaid logic uses English technical terms as standard industry practice -->
                 <div class="mermaid">
-                    graph LR
-                    A[Client Application] --> B[API Gateway]
-                    B --> C[Application Services]
-                    C --> D[Domain Core]
-                    subgraph Domain Boundary
-                    D{Ports / Interfaces}
-                    end
-                    subgraph Infrastructure Adapters
-                    D --> D1[Generative AI: Diffusers]
-                    D --> D2[Queueing: Celery/Redis]
-                    D --> D3[Vision AI: OpenCV/ControlNet]
-                    end
+                    classDiagram
+                        class UseCase {
+                            +execute(image, params)
+                        }
+                        class DomainPort {
+                            &lt;&lt;Interface&gt;&gt;
+                            +generate_live_action()
+                            +analyze_source()
+                        }
+                        UseCase ..> DomainPort : Depends on
+                        class SD_Adapter {
+                            -pipe: DiffusionPipeline
+                            +generate_live_action() 
+                        }
+                        class MockAdapter {
+                            +generate_live_action()
+                        }
+                        SD_Adapter ..|> DomainPort : Implements
+                        MockAdapter ..|> DomainPort : Implements
                 </div>
+                <p class="fig-caption" data-i18n="tech_fig1_caption">
+                    Fig 1. Logical decoupling between Use Cases and AI Infrastructure Adapters.
+                </p>
             </div>
 
+            <!-- 3. SECTION: Hardware Resilience -->
             <h2 data-i18n="tech_h2_gpu">Hardware Orchestration</h2>
-            <p data-i18n="tech_gpu_p1">A critical advantage of Z-Realism is its optimization for demanding neural workloads...</p>
-            <p data-i18n="tech_gpu_p2">The Z-Realism Engine implements an intelligent Hardware Tenancy Protocol...</p>
+            <p data-i18n="tech_gpu_p1">
+                Z-Realism is optimized for demanding neural workloads on accessible consumer hardware, 
+                maximizing performance under constrained VRAM conditions.
+            </p>
 
             <div class="info-card">
                 <h4 data-i18n="tech_h4_res">Resource Management Principles:</h4>
@@ -106,16 +148,28 @@
                     </li>
                     <li>
                         <strong data-i18n="tech_res_li3_t">Layered Weight Streaming:</strong> 
-                        <span data-i18n="tech_res_li3_d">Large neural model components are dynamically streamed...</span>
+                        <span data-i18n="tech_res_li3_d">Dynamic weights streaming between RAM and VRAM.</span>
                     </li>
                 </ul>
             </div>
 
-            <h2 data-i18n="tech_h2_async">Asynchronous Production Pipeline</h2>
-            <p data-i18n="tech_async_p1">The lifecycle of a visual transformation within Z-Realism is designed for efficiency...</p>
-            <p data-i18n="tech_async_p2">The system utilizes Celery as its task orchestrator and Redis as the message broker...</p>
-            <p data-i18n="tech_async_p3">Real-time progress updates are streamed back through the broker...</p>
+            <!-- 4. SECTION: API & PRODUCTION PIPELINE -->
+            <h2 data-i18n="tech_api_integrity_h2">System Integrity & API</h2>
+            <p data-i18n="tech_async_p1">
+                The lifecycle of a visual transformation is designed for high-concurrency efficiency. 
+                All operations are decoupled via asynchronous task orchestration.
+            </p>
 
+            <!-- API CALL-TO-ACTION CARD -->
+            <div class="api-docs-card">
+                <h4 data-i18n="tech_api_docs_title">API Documentation:</h4>
+                <p data-i18n="tech_api_docs_desc" style="margin-bottom: 20px;">Explore interactive endpoints via Swagger UI</p>
+                <a href="/api/docs" target="_blank" class="btn btn-primary">
+                    <span data-i18n="btn_view_api">VIEW API DOCS</span> &nearr;
+                </a>
+            </div>
+
+            <!-- DIAGRAM: Sequence Workflow -->
             <div class="info-card">
                 <div class="mermaid">
                     sequenceDiagram
@@ -135,6 +189,9 @@
                     API->>Client: Return Finished Artwork
                     API->>API: Release GPU Lock
                 </div>
+                <p class="fig-caption" data-i18n="tech_fig2_caption">
+                    Fig 2. Asynchronous task orchestration and hardware mutex lifecycle.
+                </p>
             </div>
         </section>
     </main>

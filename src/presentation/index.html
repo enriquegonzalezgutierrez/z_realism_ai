@@ -2,11 +2,17 @@
 <html lang="en">
 <!-- 
   path: src/presentation/index.html
-  description: Commercial Gateway / Landing Page v2.0 - i18n & SOLID Edition.
+  description: Commercial Gateway / Landing Page v2.1 - Production Release.
   
   ABSTRACT:
-  The cinematic entry point to the Z-Realism Production Studio. This page is
-  fully synchronized with the translation engine to support global creative markets.
+  The cinematic entry point to the Z-Realism Production Studio. 
+  Optimized for global creative markets with full i18n support and 
+  high-conversion production modules.
+
+  MODIFICATION LOG v2.1:
+  - Added hardware efficiency badge in the hero tag.
+  - Integrated secondary technical action for engineering transparency.
+  - Aligned action colors with the production lab palette.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -28,40 +34,43 @@
 
     <!-- 
       SHARED ARCHITECTURAL SCRIPTS
-      The i18n-engine must load first to prepare the dictionary.
+      The i18n-engine must load first to prepare the dictionary manifold.
     -->
     <script src="js/i18n-engine.js"></script>
 
     <!-- Hero Section: Creative Impact Area -->
     <header class="hero-section">
         <div class="hero-content">
-            <span class="hero-tag" data-i18n="hero_tag">V1.0 NEURAL PRODUCTION SUITE</span>
+            <!-- Hardware-Aware Tag -->
+            <span class="hero-tag" data-i18n="hero_tag">v1.0.0 STABLE // VRAM OPTIMIZED NEURAL ENGINE</span>
+            
             <h1 class="hero-title" data-i18n="hero_title">BRING YOUR ART<br>TO LIFE</h1>
             
-            <p class="hero-desc" data-i18n="hero_desc_1">
-                Z-Realism is an advanced production platform dedicated to the 
-                photorealistic synthesis of characters and concepts from your 
-                2D source artwork.
-            </p>
-            <p class="hero-desc" data-i18n="hero_desc_2">
-                Leveraging state-of-the-art Latent Diffusion pipelines and 
-                rigorously controlled identity preservation protocols.
-            </p>
-            <p class="hero-desc" data-i18n="hero_desc_3">
-                Our platform operates under a flexible, artist-centric philosophy, 
-                where every synthesis stage is streamlined and measurable.
-            </p>
-            <p class="hero-desc" data-i18n="hero_desc_4">
-                Z-Realism doesn't aim to replace artistic intent; rather, it 
-                augments it by introducing computational power.
-            </p>
+            <div class="hero-desc-container">
+                <p class="hero-desc" data-i18n="hero_desc_1">
+                    Z-Realism is an advanced production platform dedicated to the 
+                    photorealistic synthesis of characters and concepts from your 
+                    2D source artwork.
+                </p>
+                <p class="hero-desc" data-i18n="hero_desc_2">
+                    Leveraging state-of-the-art Latent Diffusion pipelines and 
+                    rigorously controlled identity preservation protocols.
+                </p>
+            </div>
 
             <div class="hero-actions">
                 <a href="image-lab.html" class="btn btn-primary" data-i18n="nav_image">
                     IMAGE PRODUCTION
                 </a>
-                <a href="video-lab.html" class="btn btn-primary" style="background: var(--accent-video); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);" data-i18n="nav_video">
+                <a href="video-lab.html" class="btn btn-primary" style="background: var(--accent-video); box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);" data-i18n="nav_video">
                     VIDEO PRODUCTION
+                </a>
+            </div>
+
+            <!-- Technical Credibility Link -->
+            <div style="margin-top: 30px; opacity: 0.6;">
+                <a href="architecture.html" class="back-link" style="margin-bottom: 0; font-size: 0.65rem;">
+                    <span data-i18n="hero_btn_tech">VIEW TECHNICAL BLUEPRINT</span> &rarr;
                 </a>
             </div>
         </div>
@@ -107,9 +116,7 @@
         </div>
     </main>
 
-    <!-- 
-      SHARED ARCHITECTURAL COMPONENTS 
-    -->
+    <!-- SHARED ARCHITECTURAL COMPONENTS -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>

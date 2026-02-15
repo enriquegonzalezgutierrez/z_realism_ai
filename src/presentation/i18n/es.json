@@ -6,7 +6,8 @@
     "nav_contact": "Contacto",
     "nav_legal": "Legal y Privacidad",
 
-    "hero_tag": "SUITE DE PRODUCCIÓN NEURONAL V1.0",
+    "hero_tag": "v1.0.0 ESTABLE // MOTOR NEURONAL OPTIMIZADO PARA VRAM",
+    "hero_btn_tech": "VER PLANO TÉCNICO",
     "hero_title": "DA VIDA A TU<br>ARTE",
     "hero_desc_1": "Z-Realism es una plataforma de producción avanzada dedicada a la síntesis fotorrealista de personajes y conceptos a partir de su obra de arte original en 2D. Potenciamos a artistas y diseñadores para transformar representaciones estilizadas en un realismo cinematográfico de alta fidelidad con una eficiencia sin precedentes.",
     "hero_desc_2": "Aprovechando los pipelines de Difusión Latente de última generación y protocolos de preservación de identidad rigurosamente controlados, nuestro sistema traduce el ADN de su obra original en impresionantes imágenes estáticas y secuencias de movimiento dinámicas.",
@@ -222,5 +223,20 @@
     "hud_target_fps": "FPS_OBJETIVO",
     "alert_no_still": "ERROR_SISTEMA: Por favor, cargue primero una imagen fija original.",
 
-    "status_preparing_control_maps": "PREPARANDO_MAPAS_DE_CONTROL..."
+    "status_preparing_control_maps": "PREPARANDO_MAPAS_DE_CONTROL...",
+    
+    "btn_view_api": "VER DOCUMENTACIÓN API",
+    "tech_api_docs_title": "Documentación de API:",
+    "tech_api_docs_desc": "Explora los puntos finales interactivos a través de Swagger UI",
+    "tech_api_integrity_h2": "Integridad del Sistema y API",
+    "tech_fig1_caption": "Fig 1. Desacoplamiento lógico entre los Casos de Uso y los Adaptadores de Infraestructura de IA.",
+    "tech_fig2_caption": "Fig 2. Orquestación de tareas asíncronas y ciclo de vida del mutex de hardware.",
+
+    "contact_info_email_label": "Email de contacto:",
+    "contact_info_manager_label": "Gerente de Ventas:",
+    "contact_support_email_label": "Soporte por Email:",
+    "contact_support_docs_label": "Documentación Técnica:",
+    "contact_info_val_manager": "Enrique González Gutiérrez",
+
+    "legal_data_processing_label": "Procesamiento de Datos:"
 }

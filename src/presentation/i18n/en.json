@@ -6,7 +6,8 @@
     "nav_contact": "Contact",
     "nav_legal": "Legal & Privacy",
 
-    "hero_tag": "NEURAL PRODUCTION SUITE V1.0",
+    "hero_tag": "v1.0.0 STABLE // VRAM OPTIMIZED NEURAL ENGINE",
+    "hero_btn_tech": "VIEW TECHNICAL BLUEPRINT",
     "hero_title": "BRING YOUR<br>ART TO LIFE",
     "hero_desc_1": "Z-Realism is an advanced production platform dedicated to the photorealistic synthesis of characters and concepts from your original 2D artwork. We empower artists and designers to transform stylized representations into high-fidelity cinematic realism with unprecedented efficiency.",
     "hero_desc_2": "Leveraging state-of-the-art Latent Diffusion pipelines and rigorously controlled identity-preservation protocols, our system translates the DNA of your original artwork into stunning still images and dynamic motion sequences.",
@@ -222,5 +223,20 @@
     "hud_target_fps": "TARGET_FPS",
     "alert_no_still": "SYSTEM_ERROR: Please upload an original still image first.",
 
-    "status_preparing_control_maps": "PREPARING_CONTROL_MAPS..."
+    "status_preparing_control_maps": "PREPARING_CONTROL_MAPS...",
+
+    "btn_view_api": "VIEW API DOCS",
+    "tech_api_docs_title": "API Documentation:",
+    "tech_api_docs_desc": "Explore interactive endpoints via Swagger UI",
+    "tech_api_integrity_h2": "System Integrity & API",
+    "tech_fig1_caption": "Fig 1. Logical decoupling between Use Cases and AI Infrastructure Adapters.",
+    "tech_fig2_caption": "Fig 2. Asynchronous task orchestration and hardware mutex lifecycle.",
+
+    "contact_info_email_label": "Contact Email:",
+    "contact_info_manager_label": "Sales Manager:",
+    "contact_support_email_label": "Email Support:",
+    "contact_support_docs_label": "Technical Documentation:",
+    "contact_info_val_manager": "Enrique González Gutiérrez",
+
+    "legal_data_processing_label": "Data Processing:"
 }

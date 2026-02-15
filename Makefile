@@ -80,6 +80,12 @@ up: ## CORE Start the entire ecosystem (UI, API, Worker, Redis)
 	$(DOCKER_COMPOSE_CMD) up -d
 	@printf "\n$(CLR_GREEN)System Online at http://localhost:8080$(CLR_RESET)\n"
 
+.PHONY: up-cpu
+up-cpu: ## DEV Start the ecosystem forcing CPU mode
+	@echo "SYSTEM: [FORCING CPU MODE] Manual override."
+	docker-compose -f docker-compose.yml up -d
+	@printf "\n$(CLR_GREEN)System Online (CPU ONLY) at http://localhost:8080$(CLR_RESET)\n"
+
 .PHONY: down
 down: ## CORE Stop and remove all active containers
 	$(DOCKER_COMPOSE_CMD) down

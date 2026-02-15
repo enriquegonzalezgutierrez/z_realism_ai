@@ -1,0 +1,22 @@
+{
+    "id": "takuma",
+    "aliases": [
+        "takuma",
+        "sakazaki",
+        "takuma sakazaki",
+        "mr karate"
+    ],
+    "essence": "human_japanese_karate_master",
+    "prompt_base": "raw photo, (unretouched:1.2) portrait of a seasoned middle-aged Japanese man, (stern battle-hardened martial arts master:1.1), weathered facial features, wise but fierce gaze, highly detailed skin anatomy, organic texture",
+    "feature_prompt": "extreme skin detail, deep skin pores and wrinkles, realistic hair follicles, cinematic lighting, fujifilm xt4, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, barbie, smooth skin, airbrushed, lowres, blurry, distorted features, young skin",
+    "weights": {
+        "depth": 1.0,
+        "canny": 0.60
+    },
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.65
+}

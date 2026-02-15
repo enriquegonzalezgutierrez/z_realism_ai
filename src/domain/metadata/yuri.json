@@ -1,0 +1,22 @@
+{
+    "id": "yuri",
+    "aliases": [
+        "yuri",
+        "sakazaki",
+        "yuri sakazaki",
+        "wild rose"
+    ],
+    "essence": "human_japanese_female_martial_artist",
+    "prompt_base": "raw photo, (unretouched:1.2) portrait of a vibrant young Japanese woman, (playful but focused martial artist expression:1.1), youthful and athletic facial features, highly detailed facial anatomy, subsurface scattering, organic skin texture",
+    "feature_prompt": "extreme skin detail, visible pores, realistic hair strands and natural scalp follicles, cinematic lighting, fujifilm xt4, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, barbie, smooth skin, airbrushed, lowres, blurry, distorted features, heavy makeup, lipstick",
+    "weights": {
+        "depth": 1.0,
+        "canny": 0.60
+    },
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.65
+}

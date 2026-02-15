@@ -2,12 +2,11 @@
 <html lang="en">
 <!-- 
   path: src/presentation/contact.html
-  description: Contact Information & Support Channels v2.0 - i18n Edition.
+  description: Contact Information & Support Channels v2.1 - Fully Translated.
   
   ABSTRACT:
-  Fully localized communication gateway for the Z-Realism commercial ecosystem.
-  Ensures that global clients can access support and sales information in their 
-  preferred language.
+  Localized communication gateway for the Z-Realism commercial ecosystem.
+  All labels and values are managed via the i18n-engine.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -17,7 +16,6 @@
     <title data-i18n="nav_contact">CONTACT US | Z-Realism Studio</title>
 
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
 
@@ -47,36 +45,47 @@
             
             <h2 data-i18n="contact_sales_h2">Sales & Product Demos</h2>
             <p data-i18n="contact_sales_p1">This channel is dedicated to inquiries regarding our service offerings...</p>
-            <p data-i18n="contact_sales_p2">Discussions related to custom feature integrations...</p>
-            <p data-i18n="contact_sales_p3">For direct contact with our sales team, please reach out to:</p>
             
             <div class="info-card">
                 <ul class="info-list" style="margin-bottom: 0;">
-                    <li><strong data-i18n="contact_info_manager">Sales Manager:</strong> Enrique González Gutiérrez</li>
-                    <li><strong>Email:</strong> <a href="mailto:enrique.gonzalez.gutierrez@gmail.com" style="color: var(--accent); text-decoration: none;">enrique.gonzalez.gutierrez@gmail.com</a></li>
-                    <li><strong data-i18n="contact_info_location">Location:</strong> <span data-i18n="contact_info_val_loc">Madrid, Spain // Global Remote Operations</span></li>
+                    <li>
+                        <strong data-i18n="contact_info_manager_label">Sales Manager:</strong> 
+                        <span data-i18n="contact_info_val_manager">Enrique González Gutiérrez</span>
+                    </li>
+                    <li>
+                        <strong data-i18n="contact_info_email_label">Contact Email:</strong> 
+                        <a href="mailto:enrique.gonzalez.gutierrez@gmail.com" style="color: var(--accent); text-decoration: none;">enrique.gonzalez.gutierrez@gmail.com</a>
+                    </li>
+                    <li>
+                        <strong data-i18n="contact_info_location">Location:</strong> 
+                        <span data-i18n="contact_info_val_loc">Madrid, Spain // Global Remote Operations</span>
+                    </li>
                 </ul>
             </div>
 
             <h2 data-i18n="contact_support_h2">Technical Support</h2>
             <p data-i18n="contact_support_p1">For any technical issues, please use our dedicated support channel...</p>
-            <p data-i18n="contact_support_p2">Please include relevant details to help us diagnose problems faster...</p>
             
             <div class="info-card">
                 <h4 data-i18n="contact_support_h4">How to Get Support:</h4>
-                <ul class="info-list" style="margin-bottom: 0;">
+                <ul class="info-list" style="margin-bottom: 25px;">
                     <li>
-                        <strong data-i18n="contact_support_li1_t">Email Support:</strong> <a href="mailto:support@z-realism.com" style="color: var(--accent); text-decoration: none;">support@z-realism.com</a> 
+                        <strong data-i18n="contact_support_email_label">Email Support:</strong> 
+                        <a href="mailto:support@z-realism.com" style="color: var(--accent); text-decoration: none;">support@z-realism.com</a> 
                         <span data-i18n="contact_support_li1_d">(Expected response time: 24-48 hours)</span>
                     </li>
                     <li>
-                        <strong data-i18n="contact_support_li2_t">Online Documentation:</strong> 
+                        <strong data-i18n="contact_support_docs_label">Technical Documentation:</strong> 
                         <a href="architecture.html" style="color: var(--accent); text-decoration: none;" data-i18n="contact_support_li2_d">View our API & User Guides</a> 
                     </li>
-                    <li>
-                        <span data-i18n="contact_support_li3">Feature Requests</span>
-                    </li>
                 </ul>
+                
+                <!-- API CTA -->
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-top: 10px;">
+                    <a href="/api/docs" target="_blank" class="btn btn-secondary" style="font-size: 0.7rem; padding: 8px 15px;">
+                        <span data-i18n="btn_view_api">VIEW API DOCS</span> &nearr;
+                    </a>
+                </div>
             </div>
 
             <h2 data-i18n="contact_manifolds_h2">Company Manifolds</h2>
@@ -87,16 +96,9 @@
                 <a href="#" target="_blank" class="btn btn-secondary" data-i18n="btn_artstation">ARTSTATION SHOWCASE</a>
                 <a href="index.html" class="btn btn-primary" data-i18n="btn_demo">REQUEST A DEMO</a>
             </div>
-
-            <h2 data-i18n="contact_partners_h2">Partnership Principles</h2>
-            <p data-i18n="contact_partners_p1">Z-Realism values strategic collaborations...</p>
-            <p data-i18n="contact_partners_p2">We collaborate with studios and agencies...</p>
-            <p data-i18n="contact_partners_p3">By engaging with us, partners acknowledge the commercial framework...</p>
-
         </section>
     </main>
 
-    <!-- SHARED ARCHITECTURAL COMPONENTS -->
     <script src="js/nav.js"></script>
     <script src="js/footer.js"></script>
     <script src="js/cookie-consent.js"></script>

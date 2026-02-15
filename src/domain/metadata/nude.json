@@ -1,0 +1,19 @@
+{
+    "id": "nude",
+    "aliases": [
+        "nude"
+    ],
+    "essence": "human_female_nude",
+    "prompt_base": "raw, completely nude photo, soft cinematic lighting, subtle edge lighting, realistic skin texture with natural imperfections, 85mm lens, shallow depth of field, ultra-sharp focus, 8k detail",
+    "feature_prompt": "Full Nude, no clothes",
+    "negative_prompt": "clothes, dress, underwear",
+    "weights": {
+        "depth": 0.8,
+        "canny": 0.4
+    },
+    "canny_thresholds": [
+        80,
+        200
+    ],
+    "denoising_strength": 0.75
+}

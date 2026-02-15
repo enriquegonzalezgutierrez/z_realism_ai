@@ -1,0 +1,21 @@
+{
+    "id": "ryo",
+    "aliases": [
+        "ryo",
+        "hazuki",
+        "ryo hazuki"
+    ],
+    "essence": "human_japanese_martial_artist",
+    "prompt_base": "raw photo, (unretouched:1.2) portrait of a serious young Japanese man, (intense focused martial artist gaze:1.1), highly detailed facial anatomy, subsurface scattering, organic skin texture",
+    "feature_prompt": "extreme skin detail, visible pores, realistic hair follicles, cinematic lighting, fujifilm xt4, film grain, sharp focus",
+    "negative_prompt": "anime, cartoon, drawing, illustration, (3d render:1.3), (cgi:1.3), (toy:1.4), (plastic:1.3), (doll:1.3), mannequin, smooth skin, airbrushed, lowres, blurry, distorted features",
+    "weights": {
+        "depth": 1.0,
+        "canny": 0.60
+    },
+    "canny_thresholds": [
+        30,
+        100
+    ],
+    "denoising_strength": 0.65
+}

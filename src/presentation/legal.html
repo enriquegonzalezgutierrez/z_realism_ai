@@ -2,10 +2,15 @@
 <html lang="en">
 <!-- 
   path: src/presentation/legal.html
-  description: Terms of Service, Privacy Policy, and AI Usage Guidelines v2.0 - i18n Edition.
+  description: Terms of Service, Privacy Policy, and AI Usage Guidelines v2.1 - i18n Edition.
   
   ABSTRACT:
-  Fully localized legal and ethical framework for the Z-Realism Production Studio. 
+  This document establishes the legal and ethical framework for the Z-Realism 
+  Production Studio. It covers Intellectual Property (IP), Data Privacy, 
+  and Acceptable Use Policies (AUP) for commercial AI synthesis.
+
+  ARCHITECTURAL ROLE (Presentation Layer):
+  Acts as the primary compliance and transparency interface for users and auditors.
 
   author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 -->
@@ -14,7 +19,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="nav_legal">LEGAL & PRIVACY | Z-Realism Studio</title>
 
+    <!-- FAVICON CONFIGURATION -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Design System Styles -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/info.css">
 
@@ -22,19 +30,22 @@
     <script src="js/i18n-engine.js"></script>
 </head>
 <body>
+    <!-- Persistent Ambient Cyber-Grid -->
     <div class="grid-overlay"></div>
 
     <main class="info-container container">
         
+        <!-- Navigation Link -->
         <a href="index.html" class="back-link">
             &larr; <span data-i18n="back_to_home">BACK TO HOME</span>
         </a>
 
+        <!-- Header: Ethical & Legal Framework -->
         <header class="info-section">
             <span class="info-subtitle" data-i18n="legal_subtitle">TERMS OF SERVICE & PRIVACY</span>
             <h1 class="info-title" data-i18n="legal_title">Legal & Usage Guidelines</h1>
             <div class="info-content">
-                <p data-i18n="legal_header_p1">By accessing or utilizing Z-Realism...</p>
+                <p data-i18n="legal_header_p1">By accessing or utilizing Z-Realism services...</p>
                 <p data-i18n="legal_header_p2">The purpose of this framework is to establish clear responsibilities...</p>
                 <p data-i18n="legal_header_p3">This document serves as a binding agreement...</p>
             </div>
@@ -47,6 +58,7 @@
             <p data-i18n="legal_ip_p1">You retain all rights to the Original Artwork...</p>
             <p data-i18n="legal_ip_p2">By using our services, you grant Z-Realism a limited license...</p>
             <p data-i18n="legal_ip_p3">You represent and warrant that you own the necessary licenses...</p>
+            
             <div class="info-card">
                 <h4 data-i18n="legal_ip_h4">Your Rights as a User:</h4>
                 <ul class="info-list" style="margin-bottom: 0;">
@@ -61,9 +73,10 @@
             <p data-i18n="legal_privacy_p1">Z-Realism is committed to protecting your privacy...</p>
             <p data-i18n="legal_privacy_p2">The platform utilizes essential session tokens...</p>
             <p data-i18n="legal_privacy_p3">We do not employ third-party tracking...</p>
+            
             <div class="info-card">
                 <p style="font-size: 0.9rem; margin-bottom: 0;">
-                    <strong data-i18n="nav_tech">Data Processing:</strong> 
+                    <strong data-i18n="legal_data_processing_label">Data Processing:</strong> 
                     <span data-i18n="legal_privacy_p_proc">Temporary in-memory processing only...</span>
                 </p>
             </div>
