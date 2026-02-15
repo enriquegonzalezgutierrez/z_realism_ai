@@ -2,13 +2,13 @@
     "id": "bart_simpson",
     "aliases": ["bart", "el barto"],
     "essence": "mischievous_young_boy",
-    "prompt_base": "raw photo, 10 year old boy, short spiky blonde hair, t-shirt, shorts, mischievous expression",
-    "feature_prompt": "realistic skin texture, freckles, cotton fabric texture, denim texture, 8k uhd, sharp focus, cinematic lighting",
-    "negative_prompt": "yellow skin, cartoon, anime, drawing, illustration, 3d render, plastic, doll, flesh hair, deformed, lowres",
+    "prompt_base": "raw photo, 10 year old caucasian boy, short spiky blonde crew cut, red t-shirt, mischievous smirk, realistic eyes, slightly sun-tanned skin",
+    "feature_prompt": "skin texture, sun freckles, dirt smudges, cotton fabric texture, denim, uneven skin tone, 8k uhd, sharp focus, cinematic lighting, realistic hair roots",
+    "negative_prompt": "yellow skin, flesh hair, cone head, cartoon, anime, 3d render, plastic, doll, toy, smooth skin, perfect skin, lowres, blurry",
     "weights": {
         "depth": 0.95,
-        "canny": 0.55
+        "canny": 0.50
     },
     "canny_thresholds": [50, 150],
-    "denoising_strength": 0.62
+    "denoising_strength": 0.66
 }

@@ -1,25 +1,89 @@
-# path: z_realism_ai/.gitignore
-# description: Specifies intentionally untracked files to ignore.
+# path: .gitignore
+# description: Git Exclusion Manifest v23.0 - Commercial AI Production.
+#
+# ABSTRACT:
+# Defines the exclusion rules for the Z-Realism repository.
+# Ensures that large neural weights, sensitive environment variables,
+# and temporary inference artifacts are not committed to version control.
+#
+# author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
-# Virtual Environments
+# --- 1. PYTHON RUNTIME ARTIFACTS ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / Packaging
+*.egg-info/
+.eggs/
+dist/
+build/
+develop-eggs/
+lib/
+lib64/
+
+# --- 2. VIRTUAL ENVIRONMENTS ---
+# Local python environments
 venv/
 .venv/
-__pycache__
-*.pyc
+env/
+.env_sec/
 
-# Docker Files and Data
-# CRITICAL: Do not commit the large AI model weights (SDXL/IP-Adapter)
-hf_cache/ 
+# --- 3. ENVIRONMENT CONFIGURATION (SECURITY) ---
+# CRITICAL: Never commit secrets, API keys, or local config overrides.
+.env
+.env.local
+.env.*
+.dockerenv
+
+# --- 4. NEURAL NETWORK WEIGHTS & CACHE ---
+# Prevents committing multi-gigabyte model files from Hugging Face or CivitAI.
+hf_cache/
+model_cache/
+data/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+*.h5
+*.onnx
+
+# --- 5. DOCKER & INFRASTRUCTURE DATA ---
+# Persistence volumes and database dumps.
 *.volume.data/
-
-# OS generated files
-.DS_Store
-.vscode/
-
-# Python specific
-*.egg-info/
-dist/
-
-# Logs and temporary files
-*.log
+redis_data/
+dump.rdb
 .coverage
+
+# --- 6. WORKER & QUEUE ARTIFACTS ---
+# Celery logs and schedule pids.
+celerybeat-schedule
+celerybeat.pid
+*.log
+*.log.*
+
+# --- 7. IDE & OS METADATA ---
+# Editor configuration files.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# --- 8. TEMPORARY INFERENCE OUTPUTS ---
+# Ignore generated media files in the root or temp folders during testing.
+# NOTE: We use negation (!) to strictly allow assets required for the UI.
+*.png
+*.jpg
+*.jpeg
+*.mp4
+*.avi
+*.gif
+
+# Exceptions: Do not ignore essential UI assets or Metadata
+!src/presentation/assets/**
+!src/presentation/favicon.ico
+!src/domain/metadata/*.json

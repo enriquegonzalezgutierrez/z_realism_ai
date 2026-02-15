@@ -2,13 +2,13 @@
     "id": "maggie_simpson",
     "aliases": ["maggie"],
     "essence": "infant_baby",
-    "prompt_base": "raw photo, baby, infant, onesie, pacifier in mouth, hair bow, wide curious eyes",
-    "feature_prompt": "soft baby skin texture, cotton fabric, plastic pacifier texture, ribbon texture, 8k uhd, macro photography, soft lighting",
-    "negative_prompt": "yellow skin, cartoon, anime, drawing, illustration, 3d render, plastic skin, doll, scary, distorted, lowres",
+    "prompt_base": "raw macro photo, infant baby girl, blue onesie, plastic pacifier, hair ribbon, wide curious eyes, natural baby skin, chubby cheeks",
+    "feature_prompt": "peach fuzz on skin, visible veins translucency, slight drool, rosy cheeks, fabric texture, intricate iris details, soft window lighting, 8k uhd",
+    "negative_prompt": "yellow skin, porcelain doll, scary, plastic skin, 3d render, cartoon, anime, drawing, smooth, fake, wax, distorted, lowres",
     "weights": {
         "depth": 0.95,
-        "canny": 0.60
+        "canny": 0.55
     },
-    "canny_thresholds": [50, 150],
-    "denoising_strength": 0.60
+    "canny_thresholds": [40, 120],
+    "denoising_strength": 0.62
 }

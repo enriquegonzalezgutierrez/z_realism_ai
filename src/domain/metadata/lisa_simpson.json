@@ -2,13 +2,13 @@
     "id": "lisa_simpson",
     "aliases": ["lisa"],
     "essence": "intelligent_young_girl",
-    "prompt_base": "raw photo, 8 year old girl, spiky textured blonde hair, pearl necklace, strapless dress, intelligent gaze",
-    "feature_prompt": "realistic hair strands, nacre pearl texture, fabric dress texture, detailed skin, soft natural lighting, 8k uhd, sharp focus",
-    "negative_prompt": "yellow skin, cartoon, anime, drawing, illustration, 3d render, plastic, doll, smooth, deformed, weird hair, lowres",
+    "prompt_base": "raw candid photo, 8 year old caucasian girl, (natural textured blonde hair with flyaways:1.2), pearl necklace, orange dress, intelligent inquisitive eyes, natural skin texture",
+    "feature_prompt": "visible skin pores, slight freckles, imperfect hair strands, fabric weave texture, natural lighting, 8k uhd, sharp focus, 50mm lens, bokeh",
+    "negative_prompt": "yellow skin, plastic hair, helmet hair, cartoon, anime, 3d render, doll, mannequin, wax figure, smooth skin, airbrushed, glowing, distorted",
     "weights": {
         "depth": 0.95,
-        "canny": 0.60
+        "canny": 0.50
     },
     "canny_thresholds": [50, 150],
-    "denoising_strength": 0.60
+    "denoising_strength": 0.65
 }

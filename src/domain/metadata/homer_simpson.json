@@ -1,14 +1,20 @@
 {
     "id": "homer_simpson",
-    "aliases": ["homer", "homero"],
-    "essence": "middle_aged_suburban_father",
-    "prompt_base": "raw photo, middle-aged man, overweight, balding with side hair, distinct beard stubble area, white polo shirt, blue pants, expressive eyes",
-    "feature_prompt": "hyper-realistic skin pores, unshaven facial hair texture, cotton fabric texture, soft studio lighting, 8k uhd, sharp focus, fujifilm xt3, bokeh",
-    "negative_prompt": "yellow skin, cartoon, anime, drawing, illustration, 3d render, plastic, doll, smooth skin, lowres, blurry, distorted eyes",
+    "aliases": [
+        "homer",
+        "homero"
+    ],
+    "essence": "middle_aged_blue_collar_father",
+    "prompt_base": "raw candid photograph, heavy set middle-aged caucasian male, (thick five o'clock shadow greyish beard:1.3), balding with wispy side hair, double chin, thick neck, tired realistic eyes, heavy eyelids, white polo shirt",
+    "feature_prompt": "rough skin texture, deep visible pores, wrinkles, sunspots, hyper-realistic, unpolished, sweat, uneven skin tone, 85mm portrait lens, sharp focus, hard lighting",
+    "negative_prompt": "yellow skin, cartoon, anime, 3d render, plastic, doll, wax figure, smooth skin, airbrushed, perfect skin, glowing, shiny, deformed, lowres",
     "weights": {
         "depth": 0.95,
-        "canny": 0.55
+        "canny": 0.45
     },
-    "canny_thresholds": [50, 150],
-    "denoising_strength": 0.62
+    "canny_thresholds": [
+        50,
+        150
+    ],
+    "denoising_strength": 0.68
 }
