@@ -1,20 +1,14 @@
 {
     "id": "bart_simpson",
-    "aliases": [
-        "bart",
-        "bart simpson"
-    ],
-    "essence": "species_simpson_humanoid",
-    "prompt_base": "raw photo, portrait of a (cheeky 10-year-old boy:1.2), (pale yellow human skin tone:1.1), short spiky blonde hair, mischievous expression, 8k uhd",
-    "feature_prompt": "visible skin pores, freckles, individual hair strands, source palette preservation, identical color matching, (matching cotton fabric texture on shirt:1.2), natural lighting, film grain",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, mannequin, cgi, 3d render, smooth skin, clean clothing, flat lighting, low quality, friendly, makeup, (normal skin tone:0.5)",
+    "aliases": ["bart", "el barto"],
+    "essence": "mischievous_young_boy",
+    "prompt_base": "raw photo, 10 year old boy, short spiky blonde hair, t-shirt, shorts, mischievous expression",
+    "feature_prompt": "realistic skin texture, freckles, cotton fabric texture, denim texture, 8k uhd, sharp focus, cinematic lighting",
+    "negative_prompt": "yellow skin, cartoon, anime, drawing, illustration, 3d render, plastic, doll, flesh hair, deformed, lowres",
     "weights": {
-        "depth": 0.75,
-        "canny": 0.40
+        "depth": 0.95,
+        "canny": 0.55
     },
-    "canny_thresholds": [
-        30,
-        100
-    ],
-    "denoising_strength": 0.68
+    "canny_thresholds": [50, 150],
+    "denoising_strength": 0.62
 }

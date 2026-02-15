@@ -1,11 +1,16 @@
 # path: src/infrastructure/sd_generator.py
-# description: Neural Synthesis Core v26.6 - Full Transparency Release.
-#              This version has zero hardcoded values in the inference pipeline.
+# description: Neural Synthesis Core v26.7 - Global i18n Telemetry Release.
+#              This version supports dynamic status reporting for the Sampler 
+#              and Chromatic Post-Processing phases.
 #
 # ARCHITECTURAL ROLE (Infrastructure Adapter):
 # This module implements the 'ImageGeneratorPort', serving as the primary 
-# high-fidelity synthesis engine. It uses a Dual-Anchor conditioning system 
-# (Depth + Canny) with fully dynamic weight and sensitivity balancing.
+# high-fidelity synthesis engine. It utilizes a Dual-Anchor conditioning system 
+# (Depth + Canny) with dynamic i18n-aware telemetry.
+#
+# MODIFICATION LOG v26.7:
+# Replaced 'None' with i18n dictionary keys ('status_processing', 'status_finalizing')
+# in the progress callback to ensure synchronized multi-language UI feedback.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -43,7 +48,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         self._torch_dtype = torch.float16 if self._device == "cuda" else torch.float32
 
         try:
-            print(f"INFRA_AI: Deploying Engine v26.6 [Full_Transparency] on [{self._device.upper()}]...")
+            print(f"INFRA_AI: Deploying Engine v26.7 [Full_Transparency] on [{self._device.upper()}]...")
             
             if self._device == "cuda":
                 torch.backends.cudnn.benchmark = False
@@ -66,7 +71,7 @@ class StableDiffusionGenerator(ImageGeneratorPort):
             if self._device == "cuda":
                 self._pipe.enable_model_cpu_offload() 
                 
-            print(f"INFRA_AI: v26.6 Online. Ready for dynamic Subject DNA injection.")
+            print(f"INFRA_AI: v26.7 Online. Ready for dynamic Subject DNA injection.")
         except Exception as e:
             print(f"INFRA_AI_BOOT_FAILURE: {e}")
             raise e
@@ -82,10 +87,6 @@ class StableDiffusionGenerator(ImageGeneratorPort):
     ) -> Tuple[Image.Image, str, str]:
         """
         Executes Subject Transformation with Post-Inference Chromatic Anchoring.
-        
-        This version implements a Linear Color Transfer algorithm to synchronize 
-        the generated manifold's color distribution with the source image, 
-        resolving the 'Chromatic Drift' common in photorealistic latent diffusion.
         """
         
         # --- 1. PARAMETER EXTRACTION ---
@@ -119,8 +120,10 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         final_prompt = f"photorealistic cinematic photo, {prompt_guidance}, {feature_prompt}, highly detailed, 8k, realistic lighting"
         neg_prompt = hyper_params.get("negative_prompt", "anime, drawing, plastic, low quality, illustration")
 
+        # PROGRESS: Reporting sampling loop using i18n key 'status_processing'
         def internal_callback(pipe, i, t, callback_kwargs):
-            if progress_callback: progress_callback(i + 1, effective_steps, None)
+            if progress_callback: 
+                progress_callback(i + 1, effective_steps, "status_processing")
             return callback_kwargs
 
         # --- 5. NEURAL INFERENCE ---
@@ -140,30 +143,26 @@ class StableDiffusionGenerator(ImageGeneratorPort):
                 callback_on_step_end=internal_callback
             ).images[0]
 
-        # --- 6. DOCTORAL CHROMATIC ANCHOR (Linear Histogram Synchronization) ---
-        # We synchronize the statistical color moments (Mean and StdDev) of the 
-        # generated output with the stylized source input.
+        # --- 6. DOCTORAL CHROMATIC ANCHOR ---
+        # PROGRESS: Reporting post-processing phase using i18n key 'status_finalizing'
+        if progress_callback:
+            progress_callback(effective_steps, effective_steps, "status_finalizing")
+
         src_arr = np.array(input_image).astype(np.float32)
         gen_arr = np.array(output).astype(np.float32)
 
-        for i in range(3): # Process R, G, B channels independently
+        for i in range(3): 
             mu_src, std_src = src_arr[:,:,i].mean(), src_arr[:,:,i].std()
             mu_gen, std_gen = gen_arr[:,:,i].mean(), gen_arr[:,:,i].std()
-
-            # Apply the transform: Result = (Gen - MeanGen) * (StdSrc / StdGen) + MeanSrc
             gen_arr[:,:,i] = (gen_arr[:,:,i] - mu_gen) * (std_src / (std_gen + 1e-6)) + mu_src
 
-        # Clip values to valid 8-bit range and cast back to uint8
         corrected_arr = np.clip(gen_arr, 0, 255).astype(np.uint8)
         output = Image.fromarray(corrected_arr)
 
         return output, final_prompt, neg_prompt
 
     def _calculate_proportional_dimensions(self, width: int, height: int, resolution_anchor: int) -> Tuple[int, int]:
-        """
-        Calculates manifold dimensions aligned to a 64-pixel grid while minimizing 
-        aspect ratio distortion through nearest-multiple rounding.
-        """
+        """Calculates aspect-ratio consistent dimensions aligned to 64px boundary."""
         aspect = width / height
         if width >= height:
             new_w = resolution_anchor
@@ -171,7 +170,4 @@ class StableDiffusionGenerator(ImageGeneratorPort):
         else:
             new_h = resolution_anchor
             new_w = resolution_anchor * aspect
-            
-        # THE DOCTORAL FIX: Using round() instead of floor (//) to reach the 
-        # closest 64-pixel boundary, preserving original proportions.
         return (int(round(new_w / 64) * 64), int(round(new_h / 64) * 64))

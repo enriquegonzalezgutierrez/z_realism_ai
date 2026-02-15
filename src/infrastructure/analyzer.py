@@ -1,11 +1,15 @@
 # path: src/infrastructure/analyzer.py
-# description: Heuristic Intelligence Layer v22.0 - Doctoral Thesis Candidate.
-#              This version implements adaptive Canny thresholding based on Subject DNA.
+# description: Heuristic Intelligence Layer v23.0 - Global i18n Metadata Edition.
+#              This version implements adaptive DNA detection with i18n keys.
 #
 # ARCHITECTURAL ROLE (Infrastructure Adapter):
 # This module implements the 'ImageAnalyzerPort'. It performs a multivariate 
 # analysis of the source manifold to determine the optimal stochastic 
 # parameters and lighting guidance for the diffusion process.
+#
+# MODIFICATION LOG v23.0:
+# Aligned 'detected_essence' fallbacks with global i18n keys (status_unknown)
+# to support localized display in the production HUD.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -40,7 +44,7 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
                 print(f"METADATA_ERROR: Baseline load failure. {e}")
         
         return {
-            "essence": "unknown_entity",
+            "essence": "status_unknown", # Using i18n key for unknown subjects
             "prompt_base": "cinematic portrait, realistic features",
             "weights": {"depth": 0.75, "canny": 0.50},
             "canny_thresholds": [100, 200],
@@ -88,10 +92,6 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
         
         metadata = self._get_metadata_by_name(character_name)
         weights = metadata.get("weights", {})
-        
-        # --- NEW: Adaptive Canny Thresholding ---
-        # 1. Get thresholds from JSON (Subject DNA).
-        # 2. Fallback to a safe default if not specified.
         canny_cfg = metadata.get("canny_thresholds", [100, 200])
         
         avg_brightness = np.mean(gray)
@@ -129,14 +129,12 @@ class HeuristicImageAnalyzer(ImageAnalyzerPort):
             recommended_steps=30,
             recommended_cfg=7.5,
             recommended_cn_depth=float(weights.get("depth", 0.75)),
-            recommended_cn_pose=float(weights.get("canny", 0.40)), # Map 'canny' to 'cn_pose'
+            recommended_cn_pose=float(weights.get("canny", 0.40)),
             recommended_strength=float(metadata.get("denoising_strength", 0.70)),
-            
-            # --- Passing new parameters to the DTO ---
             canny_low=int(canny_cfg[0]),
             canny_high=int(canny_cfg[1]),
-            
-            detected_essence=metadata.get("essence", "unknown").upper(),
+            # Key change: using the status_unknown key if essence is not found
+            detected_essence=metadata.get("essence", "status_unknown"),
             suggested_prompt=final_suggested_prompt,
             suggested_negative=base_negative
         )

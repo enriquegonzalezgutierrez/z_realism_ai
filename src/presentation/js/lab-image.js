@@ -1,21 +1,20 @@
 /**
  * path: src/presentation/js/lab-image.js
- * description: Static Image Production Controller v2.1 - i18n & SOLID Edition.
+ * description: Static Image Production Controller v2.3 - Advanced Telemetry HUD.
  *
  * ABSTRACT:
- * Orchestrates the neural transformation of 2D artistic concepts into 
- * high-fidelity photorealistic still images. This controller manages the 
- * production lifecycle, from asset ingestion and DNA analysis to asynchronous 
- * task polling and telemetry visualization.
+ * Orchestrates the neural transformation of 2D artwork into photorealistic stills.
+ * This version enhances the Telemetry HUD by injecting character-specific DNA 
+ * metadata and detected essence classification alongside neural metrics.
  *
  * SOLID PRINCIPLES:
- * - SRP: Manages only the Image Production UI logic and gateway coordination.
+ * - SRP: Manages Image Production UI logic and HUD telemetry updates.
  * - DIP: Depends on the I18nEngine for localized string resolution.
  * 
- * MODIFICATION LOG v2.1:
- * Restored the "FUSING" button state logic. The production button now 
- * provides visual feedback and prevents concurrent task submission by 
- * toggling its state and localized label during the neural synthesis lifecycle.
+ * MODIFICATION LOG v2.3:
+ * Added support for character DNA projection. The HUD now displays the 
+ * character name and the semantic essence detected by the Asset Intelligence 
+ * engine (e.g., "human_demonic_martial_artist").
  *
  * author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
  */
@@ -23,7 +22,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================================================
-    // 1. UI ELEMENT MAPPING (Creative Control Panel)
+    // 1. UI ELEMENT MAPPING (Control Panel & Telemetry HUD)
     // =========================================================================
     const ui = {
         charName: document.getElementById('char-name'),
@@ -31,12 +30,16 @@ document.addEventListener('DOMContentLoaded', () => {
         dropZone: document.getElementById('drop-zone'),
         promptInput: document.getElementById('prompt-input'),
         essenceTag: document.getElementById('essence-tag'),
+        
+        // Control Sliders
         strengthSlider: document.getElementById('input-strength'),
         strengthVal: document.getElementById('val-strength'),
         depthSlider: document.getElementById('input-depth'),
         depthVal: document.getElementById('val-depth'),
         cannySlider: document.getElementById('input-canny'),
         cannyVal: document.getElementById('val-canny'),
+        
+        // Advanced Settings
         adjTrigger: document.getElementById('adj-trigger'),
         adjContent: document.getElementById('adj-content'),
         resSlider: document.getElementById('input-res'),
@@ -50,13 +53,22 @@ document.addEventListener('DOMContentLoaded', () => {
         cannyLowVal: document.getElementById('val-canny-low'),
         cannyHighSlider: document.getElementById('input-canny-high'),
         cannyHighVal: document.getElementById('val-canny-high'),
+        
+        // Viewports & Overlays
         sourcePreview: document.getElementById('source-preview'),
         resultDisplay: document.getElementById('result-display'),
         dynamicContentViewport: document.getElementById('dynamic-content-viewport'), 
         progressOverlay: document.getElementById('progress-overlay'),
         progressBar: document.getElementById('progress-bar'),
         statusText: document.getElementById('status-text'),
+        
+        // Advanced Telemetry HUD Elements (v2.3)
         telemetryHud: document.getElementById('telemetry-hud'),
+        valHudDna: document.getElementById('val-hud-dna'),
+        valHudEssence: document.getElementById('val-hud-essence'),
+        hudTime: document.getElementById('hud-time'),
+        
+        // Action Triggers
         btnGenerate: document.getElementById('btn-generate'),
         btnAnalyze: document.getElementById('btn-analyze')
     };
@@ -68,7 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedFile: null,
         isProcessing: false,
         lastTaskId: null,
-        currentLatentPreview: null 
+        // Character DNA Metadata
+        detectedName: "UNKNOWN",
+        detectedEssence: "NULL"
     };
 
     // =========================================================================
@@ -76,8 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
 
     /**
-     * Resets the production workspace to its initial state.
-     * Synchronized with the I18nEngine for localized feedback.
+     * Resets the production workspace and hides telemetry.
      */
     const resetWorkspace = () => {
         ui.dynamicContentViewport.innerHTML = `
@@ -85,8 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 OFFLINE
             </div>
         `;
-        state.currentLatentPreview = null; 
-
         ui.progressOverlay.classList.remove('hidden');
         ui.progressBar.style.width = '0%';
         ui.statusText.innerText = i18n.translate('status_processing');
@@ -98,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`PRODUCTION_UI: Workspace sanitized [${i18n.currentLang.toUpperCase()}]`);
     };
     
-    // Accordion Control
+    // Accordion Logic for Advanced Settings
     if (ui.adjTrigger && ui.adjContent) {
         ui.adjTrigger.onclick = () => {
             ui.adjContent.classList.toggle('open');
@@ -106,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // High-Fidelity Slider Synchronization
+    // High-Fidelity Slider Sync
     const syncSlider = (slider, label, isFloat = true) => {
         if (!slider || !label) return;
         slider.oninput = (e) => {
@@ -127,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. CORE WORKFLOWS
     // =========================================================================
 
-    // Source Manifold Ingestion
+    // Asset Ingestion
     ui.dropZone.onclick = () => ui.fileInput.click();
     ui.fileInput.onchange = (e) => {
         const file = e.target.files[0];
@@ -143,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Asset Intelligence (DNA Analysis)
+    // Asset Intelligence: DNA Extraction & DNA Profile Storage (e.g., Akuma)
     ui.btnAnalyze.onclick = async () => {
         if (!state.selectedFile || state.isProcessing) return;
         ui.essenceTag.innerText = "ANALYZING_ARTWORK_DNA..."; 
@@ -156,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data && data.status === 'success') {
             const rec = data.recommendations;
             
-            // Map AI Recommendations to Production Controls
+            // Map AI Recommendations to UI Controls
             ui.strengthSlider.value = rec.strength;
             ui.strengthVal.innerText = rec.strength.toFixed(2);
             ui.depthSlider.value = rec.cn_scale_depth;
@@ -173,6 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ui.stepsSlider.value = rec.steps;
             ui.stepsVal.innerText = rec.steps;
 
+            // Store DNA metadata in local state for HUD projection
+            state.detectedName = ui.charName.value || "UNKNOWN";
+            state.detectedEssence = data.detected_essence;
             ui.essenceTag.innerText = `DNA_PROFILE: ${data.detected_essence}`;
         }
     };
@@ -186,8 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         resetWorkspace(); 
         state.isProcessing = true;
-
-        // Toggle UI state to FUSING
         ui.btnGenerate.disabled = true;
         ui.btnGenerate.innerText = i18n.translate('btn_fusing');
         
@@ -211,16 +223,15 @@ document.addEventListener('DOMContentLoaded', () => {
             state.lastTaskId = data.task_id;
             
             pollNeuralTask(data.task_id, 
-                // Progress Telemetry Callback
+                // Progress & ETA Telemetry Callback
                 (progress) => {
                     ui.progressBar.style.width = `${progress.percent}%`;
-                    ui.statusText.innerText = progress.status_text.replace(/_/g, ' ');
+                    const etaText = progress.eta ? ` | ${i18n.translate('status_eta')} ${progress.eta}` : '';
+                    ui.statusText.innerText = `${progress.status_text}${etaText}`;
                 }, 
-                // Final Manifold Delivery Callback
+                // Completion & HUD Injection Callback
                 (result) => {
                     state.isProcessing = false;
-                    
-                    // Restore UI state
                     ui.btnGenerate.disabled = false;
                     ui.btnGenerate.innerText = i18n.translate('btn_initiate');
                     ui.progressOverlay.classList.add('hidden'); 
@@ -238,11 +249,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             else indicator.classList.add('status-error');
                         };
 
-                        // Apply Analytical Thresholds
+                        // Project Character DNA metadata onto the HUD
+                        ui.valHudDna.innerText = state.detectedName.toUpperCase();
+                        ui.valHudEssence.innerText = state.detectedEssence.toUpperCase();
+
+                        // Apply Analytical Metrics
                         applyMetric('stat-structural', m.structural_similarity, 0.70, 0.40);
                         applyMetric('stat-identity', m.identity_preservation, 0.80, 0.60);
                         applyMetric('stat-realism', m.textural_realism, 1.20, 1.00);
-                        document.getElementById('hud-time').innerText = m.inference_time.toFixed(1) + "s";
+                        ui.hudTime.innerText = m.inference_time.toFixed(1) + "s";
+                        
                         ui.telemetryHud.classList.remove('hidden');
                     }
                     

@@ -10,7 +10,7 @@
     "hero_title": "BRING YOUR<br>ART TO LIFE",
     "hero_desc_1": "Z-Realism is an advanced production platform dedicated to the photorealistic synthesis of characters and concepts from your original 2D artwork. We empower artists and designers to transform stylized representations into high-fidelity cinematic realism with unprecedented efficiency.",
     "hero_desc_2": "Leveraging state-of-the-art Latent Diffusion pipelines and rigorously controlled identity-preservation protocols, our system translates the DNA of your original artwork into stunning still images and dynamic motion sequences.",
-    "hero_desc_3": "Our platform operates under a flexible, artist-centered philosophy, where every synthesis stage is optimized, measurable, and reproducible. Each output is one step closer to materializing your creative vision.",
+    "hero_desc_3": "Our platform operates under a flexible, artist-centric philosophy, where every synthesis stage is optimized, measurable, and reproducible. Each output is one step closer to materializing your creative vision.",
     "hero_desc_4": "Z-Realism does not aim to replace artistic intent; rather, it enhances it by introducing computational power into the transition from symbolic illustration to physically plausible representation.",
 
     "module_static_title": "Static Synthesis",
@@ -35,9 +35,22 @@
     "btn_analyze": "ANALYZE ART DNA",
     "btn_fusing": "FUSING...",
     "status_ready": "SYSTEM_READY // LOAD_ARTWORK",
-    "status_processing": "INITIATING PRODUCTION...",
+    "status_warmup": "LOADING NEURAL ENGINE...",
+    "status_processing": "SYNTHESIZING ASSETS...",
+    "status_generating": "GENERATING NEURAL LATENTS...",
+    "status_encoding": "ENCODING VIDEO CONTAINER...",
     "status_finalizing": "FINALIZING ASSETS...",
+    "status_eta": "ESTIMATED TIME:",
+    "status_calculating": "CALCULATING...",
+    "status_unknown": "UNKNOWN_ENTITY",
 
+    "error_hardware_busy": "HARDWARE_LOCK: CUDA Engine is currently processing another task.",
+    "error_gateway_unreachable": "GATEWAY_ERROR: Neural engine is unreachable. Check connection.",
+    "error_inference_failed": "NEURAL_ENGINE_FAILURE: Inference loop crashed. Please retry.",
+    "error_analysis_failed": "ANALYSIS_FAILURE: Heuristic brain could not process the asset.",
+
+    "hud_dna_profile": "DNA_PROFILE",
+    "hud_detected_essence": "DET_ESSENCE",
     "hud_alignment": "STRUCT_ALIGNMENT",
     "hud_fidelity": "CHROMA_FIDELITY",
     "hud_realism": "MAT_REALISM",
@@ -115,7 +128,7 @@
 
     "tech_subtitle": "SYSTEM DESIGN & DDD",
     "tech_p1": "Z-Realism v1.0 is structured using the Hexagonal Architecture pattern (Ports and Adapters) as its core design principle. This choice establishes a strict separation between core business logic and all external dependencies, ensuring a robust, scalable, and adaptable system in evolving technological landscapes.",
-    "tech_p2": "This decoupling ensures that our core value proposition — the high-fidelity synthesis, transformation, and evaluation of your artwork’s visual DNA — remains fully independent of volatile infrastructure components. As a result, technological upgrades can occur without disrupting your creative workflow.",
+    "tech_p2": "This decoupling ensures que our core value proposition — the high-fidelity synthesis, transformation, and evaluation of your artwork’s visual DNA — remains fully independent of volatile infrastructure components. As a result, technological upgrades can occur without disrupting your creative workflow.",
 
     "tech_h2_hex": "Hexagonal Implementation",
     "tech_hex_p1": "Our hexagonal implementation defines clear Ports (Interfaces) within the Domain Layer. These ports articulate system capabilities in purely business terms, avoiding any coupling with specific hardware or software mechanics.",

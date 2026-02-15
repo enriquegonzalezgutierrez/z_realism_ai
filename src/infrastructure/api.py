@@ -1,11 +1,13 @@
-# path: z_realism_ai/src/infrastructure/api.py
-# description: Driving Adapter (FastAPI) v22.0 - Doctoral Thesis Candidate.
-#              This version orchestrates multivariate parameter injection for Canny Sensitivity.
+# path: src/infrastructure/api.py
+# description: Driving Adapter (FastAPI) v23.0 - Global i18n Error Synchronization.
 #
 # ARCHITECTURAL ROLE (Hexagonal/DDD):
 # This module acts as the Primary Adapter. It receives HTTP requests,
-# validates input data (DTOs), and dispatches commands to the
-# Application Layer (via the Celery Worker).
+# validates input data, and dispatches commands to the Application Layer.
+#
+# MODIFICATION LOG v23.0:
+# Replaced hardcoded English error strings with i18n dictionary keys 
+# to support multi-language error reporting in the presentation layer.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -23,7 +25,7 @@ from PIL import Image
 from src.infrastructure.worker import transform_character_task, animate_character_task, celery_app
 from src.infrastructure.analyzer import HeuristicImageAnalyzer
 
-app = FastAPI(title="Z-Realism Expert Gateway", version="22.1")
+app = FastAPI(title="Z-Realism Expert Gateway", version="23.0")
 
 # --- CORS Configuration ---
 app.add_middleware(
@@ -63,7 +65,7 @@ async def analyze_visual_dna(
                 "steps": analysis.recommended_steps, 
                 "cfg_scale": analysis.recommended_cfg,
                 "cn_scale_depth": analysis.recommended_cn_depth,
-                "cn_scale_pose": analysis.recommended_cn_pose, # This is mapped to Canny
+                "cn_scale_pose": analysis.recommended_cn_pose,
                 "strength": analysis.recommended_strength,
                 "canny_low": analysis.canny_low,
                 "canny_high": analysis.canny_high,
@@ -71,8 +73,9 @@ async def analyze_visual_dna(
                 "negative_prompt": analysis.suggested_negative
             }
         }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Analysis Failure: {str(e)}")
+    except Exception:
+        # Update: Using i18n key for analysis failure
+        raise HTTPException(status_code=500, detail="error_analysis_failed")
 
 # --- Transformation Endpoint (Static Image) ---
 @app.post("/transform")
@@ -84,27 +87,24 @@ async def transform_image(
     steps: int = Form(30),
     cfg_scale: float = Form(7.5),
     cn_depth: float = Form(0.75),
-    cn_pose: float = Form(0.40), # This will be the Canny weight
+    cn_pose: float = Form(0.40),
     strength: float = Form(0.70),
-    
-    # --- NEW: Canny Threshold Parameters from UI ---
     canny_low: int = Form(100),
     canny_high: int = Form(200),
-    
     seed: int = Form(42),
     negative_prompt: str = Form("anime, cartoon")
 ):
     """
     Dispatches the high-fidelity synthesis job to the CUDA worker.
     """
+    # Update: Using i18n key for hardware busy state
     if redis_client.exists(SYSTEM_LOCK_KEY):
-        raise HTTPException(status_code=429, detail="HARDWARE_LOCK: CUDA Engine Busy.")
+        raise HTTPException(status_code=429, detail="error_hardware_busy")
 
     try:
         content = await file.read()
         image_b64 = base64.b64encode(content).decode('utf-8')
 
-        # Construct the Hyperparameter DTO for the worker
         hyper_params = {
             "steps": steps,
             "cfg_scale": cfg_scale,
@@ -135,23 +135,21 @@ async def animate_image(
     motion_prompt: str = Form("subtle realistic movement, breathing"),
     duration_frames: int = Form(24),
     fps: int = Form(8),
-    motion_bucket: int = Form(127), # This parameter is specific to AnimateDiff.
-    denoising_strength: float = Form(0.20), # This parameter is specific to AnimateDiff.
+    motion_bucket: int = Form(127),
+    denoising_strength: float = Form(0.20),
     seed: int = Form(42)
 ):
     """
     Dispatches a temporal synthesis task (Video).
-    Utilizes the same Hardware Mutex to protect VRAM.
     """
-    # Hardware Lock Check
+    # Update: Using i18n key for hardware busy state
     if redis_client.exists(SYSTEM_LOCK_KEY):
-        raise HTTPException(status_code=429, detail="HARDWARE_LOCK: CUDA Engine Busy.")
+        raise HTTPException(status_code=429, detail="error_hardware_busy")
 
     try:
         content = await file.read()
         image_b64 = base64.b64encode(content).decode('utf-8')
 
-        # Construct Temporal Manifold Parameters
         video_params = {
             "motion_prompt": motion_prompt,
             "duration_frames": duration_frames,
@@ -161,10 +159,8 @@ async def animate_image(
             "seed": seed
         }
 
-        # Async Dispatch (Celery)
         task = animate_character_task.delay(image_b64, character_name, video_params)
 
-        # Acquire Lock
         redis_client.set(SYSTEM_LOCK_KEY, task.id, ex=LOCK_TIMEOUT)
         return {"task_id": task.id, "status": "QUEUED_TEMPORAL"}
     except Exception as e:

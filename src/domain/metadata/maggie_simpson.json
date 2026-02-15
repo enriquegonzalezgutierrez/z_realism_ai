@@ -1,14 +1,14 @@
 {
     "id": "maggie_simpson",
-    "aliases": ["maggie", "maggie simpson"],
-    "essence": "species_simpson_humanoid",
-    "prompt_base": "photograph of a cute baby sucking a red pacifier, small body, blue dress, single hair strand, yellow humanoid skin, big expressive eyes, 8k",
-    "feature_prompt": "subtle skin imperfections, peach fuzz, realistic cotton texture on the dress, sharp focus on pacifier",
-    "negative_prompt": "anime, cartoon, drawing, plastic texture, smooth skin, big child, adult, low quality, long hair, extra limbs",
-    "weights": { 
-        "depth": 0.90,
-        "canny": 0.75
+    "aliases": ["maggie"],
+    "essence": "infant_baby",
+    "prompt_base": "raw photo, baby, infant, onesie, pacifier in mouth, hair bow, wide curious eyes",
+    "feature_prompt": "soft baby skin texture, cotton fabric, plastic pacifier texture, ribbon texture, 8k uhd, macro photography, soft lighting",
+    "negative_prompt": "yellow skin, cartoon, anime, drawing, illustration, 3d render, plastic skin, doll, scary, distorted, lowres",
+    "weights": {
+        "depth": 0.95,
+        "canny": 0.60
     },
-    "canny_thresholds": [80, 180],
-    "denoising_strength": 0.45
+    "canny_thresholds": [50, 150],
+    "denoising_strength": 0.60
 }

@@ -35,9 +35,22 @@
     "btn_analyze": "ANALIZAR ADN DEL ARTE",
     "btn_fusing": "FUSIONANDO...",
     "status_ready": "SISTEMA_LISTO // CARGAR_ARTE",
-    "status_processing": "INICIANDO PRODUCCIÓN...",
+    "status_warmup": "CARGANDO MOTOR NEURONAL...",
+    "status_processing": "SINTETIZANDO ACTIVOS...",
+    "status_generating": "GENERANDO LATENTES NEURONALES...",
+    "status_encoding": "CODIFICANDO CONTENEDOR DE VÍDEO...",
     "status_finalizing": "FINALIZANDO ACTIVOS...",
+    "status_eta": "TIEMPO ESTIMADO:",
+    "status_calculating": "CALCULANDO...",
+    "status_unknown": "ENTIDAD_DESCONOCIDA",
 
+    "error_hardware_busy": "BLOQUEO_HARDWARE: El motor CUDA está procesando otra tarea actualmente.",
+    "error_gateway_unreachable": "ERROR_PASARELA: El motor neuronal no responde. Verifique su conexión.",
+    "error_inference_failed": "FALLO_MOTOR_NEURONAL: El bucle de inferencia ha fallado. Reintente.",
+    "error_analysis_failed": "FALLO_ANÁLISIS: El cerebro heurístico no ha podido procesar el activo.",
+
+    "hud_dna_profile": "PERFIL_ADN",
+    "hud_detected_essence": "ESENCIA_DET",
     "hud_alignment": "ALINEACIÓN_ESTR",
     "hud_fidelity": "FIDELIDAD_CROM",
     "hud_realism": "REALISMO_MAT",
@@ -123,7 +136,7 @@
     "tech_hex_p3": "Este diseño se adhiere estrictamente al Principio de Sustitución de Liskov (SOLID), garantizando que todos los adaptadores sigan siendo consistentes con las expectativas del dominio central.",
 
     "tech_h2_gpu": "Orquestación de Hardware",
-    "tech_gpu_p1": "Una ventaja crítica de Z-Realism es su optimización para cargas de trabajo neuronales exigentes en hardware accesible de consumo. Nuestra arquitectura está diseñada explícitamente para maximizar el rendimiento bajo condiciones de VRAM restringidas manteniendo una calidad de salida sin compromisos.",
+    "tech_gpu_p1": "Una ventaja crítica de Z-Realism es su optimización para cargas de trabajo neuronales exigentes en hardware accesible de consumo. Nuestra arquitectura está diseñada explitamente para maximizar el rendimiento bajo condiciones de VRAM restringidas manteniendo una calidad de salida sin compromisos.",
     "tech_gpu_p2": "El motor Z-Realism implementa un protocolo inteligente de Tenencia de Hardware a través de un Mutex distribuido basado en Redis. Este protocolo trata el acceso a la GPU como un recurso único y exclusivo, evitando solicitudes de inferencia concurrentes.",
 
     "tech_h4_res": "Principios de Gestión de Recursos:",

@@ -1,14 +1,14 @@
 {
     "id": "lisa_simpson",
-    "aliases": ["lisa", "lisa simpson"],
-    "essence": "species_simpson_humanoid",
-    "prompt_base": "beautiful precocious 8-year-old girl, yellow humanoid skin, spiky 8-point hairstyle, 8k realistic photo, school lighting, intelligent serene expression",
-    "feature_prompt": "delicate skin texture, detailed 8-point hair texture, subtle reflections, realistic fabric texture, bright pearl necklace texture, sharp focus",
-    "negative_prompt": "anime, cartoon, drawing, plastic, smooth skin, perfect teeth, large round doll eyes, low quality, makeup, blurry hair, (human:1.2)",
-    "weights": { 
-        "depth": 0.80,
-        "canny": 0.85 
+    "aliases": ["lisa"],
+    "essence": "intelligent_young_girl",
+    "prompt_base": "raw photo, 8 year old girl, spiky textured blonde hair, pearl necklace, strapless dress, intelligent gaze",
+    "feature_prompt": "realistic hair strands, nacre pearl texture, fabric dress texture, detailed skin, soft natural lighting, 8k uhd, sharp focus",
+    "negative_prompt": "yellow skin, cartoon, anime, drawing, illustration, 3d render, plastic, doll, smooth, deformed, weird hair, lowres",
+    "weights": {
+        "depth": 0.95,
+        "canny": 0.60
     },
-    "canny_thresholds": [70, 180],
-    "denoising_strength": 0.50
+    "canny_thresholds": [50, 150],
+    "denoising_strength": 0.60
 }

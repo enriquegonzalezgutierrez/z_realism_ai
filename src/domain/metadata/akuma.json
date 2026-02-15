@@ -5,16 +5,16 @@
         "gouki"
     ],
     "essence": "human_demonic_martial_artist",
-    "prompt_base": "raw photo, close up portrait of a weathered warrior, (reddish-brown sun-damaged skin:1.2), messy spiky black hair, fierce gaze",
-    "feature_prompt": "highly detailed skin pores, source palette preservation, identical color matching, realistic sweat, extreme muscle definition, film grain",
-    "negative_prompt": "anime, cartoon, drawing, plastic, doll, mannequin, cgi, 3d render, airbrushed, low quality, friendly, neon red, saturated pink",
+    "prompt_base": "raw photo, japanese martial artist, heavy muscular build, traditional martial arts gi, large wooden prayer beads, thick rope belt and gloves, spiky topknot hairstyle, fierce facial expression",
+    "feature_prompt": "rough fabric texture, wood grain texture, coarse rope texture, hyper-realistic skin pores, vascularity, sweat, 8k uhd, soft natural lighting, sharp focus, fujifilm xt4",
+    "negative_prompt": "anime, cartoon, drawing, illustration, sketch, 3d, cgi, render, plastic, doll, smooth skin, lowres, blurry, oversaturated, neon, painting",
     "weights": {
-        "depth": 0.90,
-        "canny": 0.60
+        "depth": 1.0,
+        "canny": 0.75
     },
     "canny_thresholds": [
-        40,
-        120
+        50,
+        150
     ],
-    "denoising_strength": 0.72
+    "denoising_strength": 0.55
 }

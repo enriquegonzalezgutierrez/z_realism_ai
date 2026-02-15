@@ -1,11 +1,14 @@
 # path: src/infrastructure/worker.py
-# description: Distributed Inference Worker v22.0 - Doctoral Thesis Candidate.
-#              FIXED: Temporal task now correctly invokes AnimateCharacterUseCase.
+# description: Distributed Inference Worker v23.0 - Commercial i18n Edition.
 #
 # ARCHITECTURAL ROLE (Infrastructure Layer):
 # This component acts as the primary computational node. It manages the 
 # lifecycle of the GPU and implements the "Context-Aware Resource Management" 
-# pattern to support multi-modal inference on limited hardware (6GB VRAM).
+# pattern.
+#
+# MODIFICATION LOG v23.0:
+# Aligned 'status_text' values with global i18n dictionary keys to ensure 
+# the frontend displays localized progress messages.
 #
 # author: Enrique González Gutiérrez <enrique.gonzalez.gutierrez@gmail.com>
 
@@ -19,11 +22,11 @@ from celery import Celery
 from PIL import Image
 
 # Domain & Application Layer Imports
-from src.application.use_cases import TransformCharacterUseCase, AnimateCharacterUseCase # <-- Added AnimateCharacterUseCase
+from src.application.use_cases import TransformCharacterUseCase, AnimateCharacterUseCase
 from src.infrastructure.sd_generator import StableDiffusionGenerator
 from src.infrastructure.video_generator import StableVideoAnimateDiffGenerator
 from src.infrastructure.evaluator import ComputerVisionEvaluator
-from src.infrastructure.analyzer import HeuristicImageAnalyzer # <-- Added HeuristicImageAnalyzer
+from src.infrastructure.analyzer import HeuristicImageAnalyzer
 
 # --- CELERY INFRASTRUCTURE CONFIGURATION ---
 BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://z-realism-broker:6379/0")
@@ -45,10 +48,7 @@ _current_model_type = None  # ENUM: 'STATIC' | 'TEMPORAL'
 def manage_hardware_resources(target_type: str):
     """
     Hybrid Resource Manager.
-    
-    Dynamically adapts the worker's memory profile based on the incoming 
-    neural task. It implements a "Warm Start" cache for identical task types 
-    and a "Deep Purge" for context switches.
+    Dynamically adapts the worker's memory profile based on the incoming neural task.
     """
     global _current_model_instance, _current_model_type
 
@@ -76,10 +76,8 @@ def manage_hardware_resources(target_type: str):
         _current_model_type = 'STATIC'
         
     elif target_type == 'TEMPORAL':
-        # --- CRITICAL FIX: Instantiate AnimateCharacterUseCase ---
-        # This ensures the Analyzer is called and Subject DNA is injected.
         video_generator = StableVideoAnimateDiffGenerator(device=device)
-        analyzer = HeuristicImageAnalyzer() # Instantiate the analyzer
+        analyzer = HeuristicImageAnalyzer()
         _current_model_instance = AnimateCharacterUseCase(video_generator, analyzer)
         _current_model_type = 'TEMPORAL'
 
@@ -96,14 +94,16 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
 
     def on_progress(current, total=total_steps, preview_b64=None):
         pct = min(max(int((current / total) * 100), 0), 100)
+        # Using i18n key: status_processing
         self.update_state(state='PROGRESS', meta={
             'percent': pct, 
             'preview_b64': preview_b64, 
-            'status_text': 'SYNTHESIZING_IMAGE'
+            'status_text': 'status_processing'
         })
 
     try:
-        self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'INITIALIZING'})
+        # Using i18n key: status_warmup
+        self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'status_warmup'})
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
         use_case = manage_hardware_resources('STATIC')
         result_pil, report = use_case.execute(
@@ -114,7 +114,8 @@ def transform_character_task(self, image_b64, character_name, feature_prompt, re
             hyper_params=hyper_params,
             callback=on_progress
         )
-        self.update_state(state='PROGRESS', meta={'percent': 100, 'status_text': 'FINALIZING'})
+        # Using i18n key: status_finalizing
+        self.update_state(state='PROGRESS', meta={'percent': 100, 'status_text': 'status_finalizing'})
         time.sleep(0.5) 
         buffered = io.BytesIO()
         result_pil.save(buffered, format="PNG")
@@ -139,28 +140,26 @@ def animate_character_task(self, image_b64, character_name, video_params):
     Orchestrates the Temporal (Video) synthesis pipeline.
     """
     
-    def on_progress(current, total, status_msg="ANIMATING"):
+    def on_progress(current, total, status_msg="status_processing"):
         pct = min(max(int((current / total) * 100), 0), 100)
         self.update_state(state='PROGRESS', meta={'percent': pct, 'status_text': status_msg})
 
     try:
-        self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'DECODING_MANIFOLD'})
+        # Using i18n key: status_warmup
+        self.update_state(state='PROGRESS', meta={'percent': 0, 'status_text': 'status_warmup'})
         
         source_pil = Image.open(io.BytesIO(base64.b64decode(image_b64)))
-        
-        # --- CRITICAL FIX: Use the AnimateCharacterUseCase ---
-        # This ensures the Analyzer is called and metadata is properly injected.
         use_case = manage_hardware_resources('TEMPORAL')
         
-        # The use case will handle fetching metadata and calling the video_generator
         report = use_case.execute(
             image_file=source_pil,
             character_name=character_name,
             video_params=video_params,
-            callback=on_progress # Pass the progress callback
+            callback=on_progress 
         )
 
-        self.update_state(state='PROGRESS', meta={'percent': 100, 'status_text': 'ENCODING_CONTAINER'})
+        # Using i18n key: status_finalizing
+        self.update_state(state='PROGRESS', meta={'percent': 100, 'status_text': 'status_finalizing'})
         time.sleep(0.5)
 
         return {

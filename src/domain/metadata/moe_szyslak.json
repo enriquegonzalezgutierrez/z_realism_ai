@@ -1,0 +1,14 @@
+{
+    "id": "moe_szyslak",
+    "aliases": ["moe"],
+    "essence": "weary_bartender",
+    "prompt_base": "raw photo, ugly middle-aged bartender, curly grey hair, apron, bow tie, tired expression, weary face",
+    "feature_prompt": "rough weathered skin texture, wrinkles, dirty apron fabric, pore details, sweaty, 8k uhd, dim bar lighting, film grain",
+    "negative_prompt": "yellow skin, cartoon, anime, drawing, illustration, 3d render, plastic, doll, smooth, handsome, friendly, lowres",
+    "weights": {
+        "depth": 1.0,
+        "canny": 0.65
+    },
+    "canny_thresholds": [30, 100],
+    "denoising_strength": 0.65
+}
